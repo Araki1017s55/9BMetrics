@@ -300,10 +300,14 @@ class  BLENinebot : NSObject{
         
         let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
         
-        let path : String
+        var path : String = ""
         
         if let dele = appDelegate {
-            path = (dele.applicationDocumentsDirectory()?.path)!
+            let docs = dele.applicationDocumentsDirectory()
+            
+            if let d = docs {
+                path = d.path!
+            }
         }
         else
         {
@@ -779,7 +783,7 @@ class  BLENinebot : NSObject{
     
     func altitude() -> Double{
         
-        let s : Double = Double(data[BLENinebot.kAltitude].value) / 10.0
+        let s : Double = Double(data[BLENinebot.kAltitude].value) / 100.0
         
         return s
     }
@@ -788,7 +792,7 @@ class  BLENinebot : NSObject{
         
         if i < data[BLENinebot.kAltitude].log.count{
             
-            return Double(data[BLENinebot.kAltitude].log[i].value) / 10.0
+            return Double(data[BLENinebot.kAltitude].log[i].value) / 100.0
         }
         else{
             return 0.0
@@ -801,7 +805,7 @@ class  BLENinebot : NSObject{
         let entry = self.value(BLENinebot.kAltitude, forTime: t)
         
         if let e = entry{
-            return Double(e.value) / 10.0
+            return Double(e.value) / 100.0
         }
         else{
             return 0.0
@@ -855,7 +859,7 @@ class  BLENinebot : NSObject{
             let v1 = self.data[v].log[p1]
             
             if v0.time.compare( v1.time) == NSComparisonResult.OrderedSame{   // One more check not to have div/0
-                return DoubleLogEntry(time: v0.time, variable: v0.variable, value: Double(v0.value))
+                return DoubleLogEntry(time: NSDate(timeInterval: x, sinceDate: self.firstDate!), variable: v0.variable, value: Double(v0.value))
             }
             
             let deltax = v1.time.timeIntervalSinceDate(v0.time)
