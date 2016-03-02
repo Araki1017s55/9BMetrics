@@ -9,16 +9,40 @@
 /* Begin PBXBuildFile section */
 		007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57171C85CE49003A2030 /* AppDelegate.swift */; };
 		007A571A1C85CE49003A2030 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57191C85CE49003A2030 /* ViewController.swift */; };
-		007A571D1C85CE49003A2030 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A571B1C85CE49003A2030 /* Main.storyboard */; };
-		007A571F1C85CE49003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A571E1C85CE49003A2030 /* Assets.xcassets */; };
-		007A57221C85CE49003A2030 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A57201C85CE49003A2030 /* LaunchScreen.storyboard */; };
 		007A57271C85CE49003A2030 /* 9BMetrics WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 007A57261C85CE49003A2030 /* 9BMetrics WatchKit App.app */; };
-		007A572D1C85CE49003A2030 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A572B1C85CE49003A2030 /* Interface.storyboard */; };
-		007A572F1C85CE49003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A572E1C85CE49003A2030 /* Assets.xcassets */; };
 		007A57361C85CE49003A2030 /* 9BMetrics WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 007A57351C85CE49003A2030 /* 9BMetrics WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		007A573B1C85CE49003A2030 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A573A1C85CE49003A2030 /* InterfaceController.swift */; };
 		007A573D1C85CE49003A2030 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A573C1C85CE49003A2030 /* ExtensionDelegate.swift */; };
 		007A573F1C85CE49003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A573E1C85CE49003A2030 /* Assets.xcassets */; };
+		007A57551C85CE69003A2030 /* icon_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 007A574F1C85CE69003A2030 /* icon_ipad@2x.png */; };
+		007A57561C85CE69003A2030 /* icon_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 007A57501C85CE69003A2030 /* icon_ipad.png */; };
+		007A57571C85CE69003A2030 /* Ninebot-One-4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 007A57511C85CE69003A2030 /* Ninebot-One-4.jpg */; };
+		007A57581C85CE69003A2030 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = 007A57521C85CE69003A2030 /* about.html */; };
+		007A57591C85CE69003A2030 /* nb_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 007A57531C85CE69003A2030 /* nb_512.png */; };
+		007A575A1C85CE69003A2030 /* License_GPL30.html in Resources */ = {isa = PBXBuildFile; fileRef = 007A57541C85CE69003A2030 /* License_GPL30.html */; };
+		007A575D1C85CEF0003A2030 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A575C1C85CEF0003A2030 /* Main.storyboard */; };
+		007A575F1C85CEFC003A2030 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A575E1C85CEFC003A2030 /* LaunchScreen.storyboard */; };
+		007A57611C85CF0A003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A57601C85CF0A003A2030 /* Assets.xcassets */; };
+		007A57741C85CF39003A2030 /* TMKGraphViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57621C85CF39003A2030 /* TMKGraphViewDataSource.swift */; };
+		007A57751C85CF39003A2030 /* TMKGraphContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57631C85CF39003A2030 /* TMKGraphContentView.swift */; };
+		007A57761C85CF39003A2030 /* TMKGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57641C85CF39003A2030 /* TMKGraphView.swift */; };
+		007A57771C85CF39003A2030 /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57651C85CF39003A2030 /* GraphViewController.swift */; };
+		007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57661C85CF39003A2030 /* PickerActivity.swift */; };
+		007A57791C85CF39003A2030 /* BLENinebot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57671C85CF39003A2030 /* BLENinebot.swift */; };
+		007A577A1C85CF39003A2030 /* BLENinebotMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57681C85CF39003A2030 /* BLENinebotMessage.swift */; };
+		007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */; };
+		007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */; };
+		007A577D1C85CF39003A2030 /* BLEConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576B1C85CF39003A2030 /* BLEConnection.swift */; };
+		007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */; };
+		007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */; };
+		007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */; };
+		007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576F1C85CF39003A2030 /* BLEDeviceSelector.swift */; };
+		007A57821C85CF39003A2030 /* BLEMim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57701C85CF39003A2030 /* BLEMim.swift */; };
+		007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57711C85CF39003A2030 /* SettingsViewController.swift */; };
+		007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57721C85CF39003A2030 /* BLENinebotSettingsViewController.swift */; };
+		007A57851C85CF39003A2030 /* DocController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57731C85CF39003A2030 /* DocController.swift */; };
+		007A57871C85CF80003A2030 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A57861C85CF80003A2030 /* Interface.storyboard */; };
+		007A57891C85CF8D003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A57881C85CF8D003A2030 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,19 +91,44 @@
 		007A57141C85CE49003A2030 /* 9BMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9BMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A57171C85CE49003A2030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		007A57191C85CE49003A2030 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		007A571C1C85CE49003A2030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		007A571E1C85CE49003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		007A57211C85CE49003A2030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		007A57231C85CE49003A2030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		007A57261C85CE49003A2030 /* 9BMetrics WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "9BMetrics WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		007A572C1C85CE49003A2030 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		007A572E1C85CE49003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		007A57301C85CE49003A2030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		007A57351C85CE49003A2030 /* 9BMetrics WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "9BMetrics WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A573A1C85CE49003A2030 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		007A573C1C85CE49003A2030 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		007A573E1C85CE49003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		007A57401C85CE49003A2030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		007A574F1C85CE69003A2030 /* icon_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_ipad@2x.png"; sourceTree = "<group>"; };
+		007A57501C85CE69003A2030 /* icon_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_ipad.png; sourceTree = "<group>"; };
+		007A57511C85CE69003A2030 /* Ninebot-One-4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Ninebot-One-4.jpg"; sourceTree = "<group>"; };
+		007A57521C85CE69003A2030 /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = about.html; sourceTree = "<group>"; };
+		007A57531C85CE69003A2030 /* nb_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nb_512.png; sourceTree = "<group>"; };
+		007A57541C85CE69003A2030 /* License_GPL30.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = License_GPL30.html; sourceTree = "<group>"; };
+		007A575B1C85CE7B003A2030 /* 9BMetrics.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = 9BMetrics.entitlements; sourceTree = "<group>"; };
+		007A575C1C85CEF0003A2030 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		007A575E1C85CEFC003A2030 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		007A57601C85CF0A003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		007A57621C85CF39003A2030 /* TMKGraphViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKGraphViewDataSource.swift; sourceTree = "<group>"; };
+		007A57631C85CF39003A2030 /* TMKGraphContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKGraphContentView.swift; sourceTree = "<group>"; };
+		007A57641C85CF39003A2030 /* TMKGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKGraphView.swift; sourceTree = "<group>"; };
+		007A57651C85CF39003A2030 /* GraphViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViewController.swift; sourceTree = "<group>"; };
+		007A57661C85CF39003A2030 /* PickerActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerActivity.swift; sourceTree = "<group>"; };
+		007A57671C85CF39003A2030 /* BLENinebot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLENinebot.swift; sourceTree = "<group>"; };
+		007A57681C85CF39003A2030 /* BLENinebotMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLENinebotMessage.swift; sourceTree = "<group>"; };
+		007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLENinebotConnectionDelegate.swift; sourceTree = "<group>"; };
+		007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLENinebotServerDelegate.swift; sourceTree = "<group>"; };
+		007A576B1C85CF39003A2030 /* BLEConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEConnection.swift; sourceTree = "<group>"; };
+		007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESimulatedClient.swift; sourceTree = "<group>"; };
+		007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESimulatedServer.swift; sourceTree = "<group>"; };
+		007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLENinebotDashboard.swift; sourceTree = "<group>"; };
+		007A576F1C85CF39003A2030 /* BLEDeviceSelector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEDeviceSelector.swift; sourceTree = "<group>"; };
+		007A57701C85CF39003A2030 /* BLEMim.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMim.swift; sourceTree = "<group>"; };
+		007A57711C85CF39003A2030 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		007A57721C85CF39003A2030 /* BLENinebotSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLENinebotSettingsViewController.swift; sourceTree = "<group>"; };
+		007A57731C85CF39003A2030 /* DocController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocController.swift; sourceTree = "<group>"; };
+		007A57861C85CF80003A2030 /* Interface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Interface.storyboard; sourceTree = "<group>"; };
+		007A57881C85CF8D003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +152,7 @@
 		007A570B1C85CE49003A2030 = {
 			isa = PBXGroup;
 			children = (
+				007A574E1C85CE5D003A2030 /* Resources */,
 				007A57161C85CE49003A2030 /* 9BMetrics */,
 				007A572A1C85CE49003A2030 /* 9BMetrics WatchKit App */,
 				007A57391C85CE49003A2030 /* 9BMetrics WatchKit Extension */,
@@ -123,11 +173,30 @@
 		007A57161C85CE49003A2030 /* 9BMetrics */ = {
 			isa = PBXGroup;
 			children = (
+				007A575B1C85CE7B003A2030 /* 9BMetrics.entitlements */,
+				007A57621C85CF39003A2030 /* TMKGraphViewDataSource.swift */,
+				007A57631C85CF39003A2030 /* TMKGraphContentView.swift */,
+				007A57641C85CF39003A2030 /* TMKGraphView.swift */,
+				007A57651C85CF39003A2030 /* GraphViewController.swift */,
+				007A57661C85CF39003A2030 /* PickerActivity.swift */,
+				007A57671C85CF39003A2030 /* BLENinebot.swift */,
+				007A57681C85CF39003A2030 /* BLENinebotMessage.swift */,
+				007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */,
+				007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */,
+				007A576B1C85CF39003A2030 /* BLEConnection.swift */,
+				007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */,
+				007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */,
+				007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */,
+				007A576F1C85CF39003A2030 /* BLEDeviceSelector.swift */,
+				007A57701C85CF39003A2030 /* BLEMim.swift */,
+				007A57711C85CF39003A2030 /* SettingsViewController.swift */,
+				007A57721C85CF39003A2030 /* BLENinebotSettingsViewController.swift */,
+				007A57731C85CF39003A2030 /* DocController.swift */,
 				007A57171C85CE49003A2030 /* AppDelegate.swift */,
 				007A57191C85CE49003A2030 /* ViewController.swift */,
-				007A571B1C85CE49003A2030 /* Main.storyboard */,
-				007A571E1C85CE49003A2030 /* Assets.xcassets */,
-				007A57201C85CE49003A2030 /* LaunchScreen.storyboard */,
+				007A575C1C85CEF0003A2030 /* Main.storyboard */,
+				007A575E1C85CEFC003A2030 /* LaunchScreen.storyboard */,
+				007A57601C85CF0A003A2030 /* Assets.xcassets */,
 				007A57231C85CE49003A2030 /* Info.plist */,
 			);
 			path = 9BMetrics;
@@ -136,8 +205,8 @@
 		007A572A1C85CE49003A2030 /* 9BMetrics WatchKit App */ = {
 			isa = PBXGroup;
 			children = (
-				007A572B1C85CE49003A2030 /* Interface.storyboard */,
-				007A572E1C85CE49003A2030 /* Assets.xcassets */,
+				007A57861C85CF80003A2030 /* Interface.storyboard */,
+				007A57881C85CF8D003A2030 /* Assets.xcassets */,
 				007A57301C85CE49003A2030 /* Info.plist */,
 			);
 			path = "9BMetrics WatchKit App";
@@ -152,6 +221,19 @@
 				007A57401C85CE49003A2030 /* Info.plist */,
 			);
 			path = "9BMetrics WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		007A574E1C85CE5D003A2030 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				007A574F1C85CE69003A2030 /* icon_ipad@2x.png */,
+				007A57501C85CE69003A2030 /* icon_ipad.png */,
+				007A57511C85CE69003A2030 /* Ninebot-One-4.jpg */,
+				007A57521C85CE69003A2030 /* about.html */,
+				007A57531C85CE69003A2030 /* nb_512.png */,
+				007A57541C85CE69003A2030 /* License_GPL30.html */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,12 +304,23 @@
 				TargetAttributes = {
 					007A57131C85CE49003A2030 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = N72U6DTDRE;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					007A57251C85CE49003A2030 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = N72U6DTDRE;
 					};
 					007A57341C85CE49003A2030 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = N72U6DTDRE;
 					};
 				};
 			};
@@ -256,9 +349,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				007A57221C85CE49003A2030 /* LaunchScreen.storyboard in Resources */,
-				007A571F1C85CE49003A2030 /* Assets.xcassets in Resources */,
-				007A571D1C85CE49003A2030 /* Main.storyboard in Resources */,
+				007A575F1C85CEFC003A2030 /* LaunchScreen.storyboard in Resources */,
+				007A575A1C85CE69003A2030 /* License_GPL30.html in Resources */,
+				007A57561C85CE69003A2030 /* icon_ipad.png in Resources */,
+				007A57591C85CE69003A2030 /* nb_512.png in Resources */,
+				007A57581C85CE69003A2030 /* about.html in Resources */,
+				007A575D1C85CEF0003A2030 /* Main.storyboard in Resources */,
+				007A57551C85CE69003A2030 /* icon_ipad@2x.png in Resources */,
+				007A57611C85CF0A003A2030 /* Assets.xcassets in Resources */,
+				007A57571C85CE69003A2030 /* Ninebot-One-4.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,8 +365,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				007A572F1C85CE49003A2030 /* Assets.xcassets in Resources */,
-				007A572D1C85CE49003A2030 /* Interface.storyboard in Resources */,
+				007A57891C85CF8D003A2030 /* Assets.xcassets in Resources */,
+				007A57871C85CF80003A2030 /* Interface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,8 +385,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				007A577A1C85CF39003A2030 /* BLENinebotMessage.swift in Sources */,
+				007A57751C85CF39003A2030 /* TMKGraphContentView.swift in Sources */,
+				007A57761C85CF39003A2030 /* TMKGraphView.swift in Sources */,
+				007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */,
+				007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */,
+				007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */,
+				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,
+				007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */,
+				007A57851C85CF39003A2030 /* DocController.swift in Sources */,
+				007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */,
+				007A57821C85CF39003A2030 /* BLEMim.swift in Sources */,
 				007A571A1C85CE49003A2030 /* ViewController.swift in Sources */,
+				007A57771C85CF39003A2030 /* GraphViewController.swift in Sources */,
+				007A57791C85CF39003A2030 /* BLENinebot.swift in Sources */,
+				007A57741C85CF39003A2030 /* TMKGraphViewDataSource.swift in Sources */,
+				007A577D1C85CF39003A2030 /* BLEConnection.swift in Sources */,
+				007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
+				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
+				007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,33 +432,6 @@
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		007A571B1C85CE49003A2030 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				007A571C1C85CE49003A2030 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		007A57201C85CE49003A2030 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				007A57211C85CE49003A2030 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		007A572B1C85CE49003A2030 /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				007A572C1C85CE49003A2030 /* Base */,
-			);
-			name = Interface.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
 		007A57411C85CE49003A2030 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -360,6 +450,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -383,6 +474,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -405,7 +497,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -420,7 +513,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -429,10 +524,12 @@
 		007A57441C85CE49003A2030 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "9BMetrics WatchKit Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics.watchkitapp.watchkitextension";
 				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -443,10 +540,13 @@
 		007A57451C85CE49003A2030 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
 				INFOPLIST_FILE = "9BMetrics WatchKit Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics.watchkitapp.watchkitextension";
 				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE = "81f1dac8-c7d9-4437-b062-cba0d796fee3";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -457,12 +557,14 @@
 		007A57481C85CE49003A2030 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconW;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				IBSC_MODULE = _BMetrics_WatchKit_Extension;
 				INFOPLIST_FILE = "9BMetrics WatchKit App/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -473,12 +575,15 @@
 		007A57491C85CE49003A2030 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconW;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				IBSC_MODULE = _BMetrics_WatchKit_Extension;
 				INFOPLIST_FILE = "9BMetrics WatchKit App/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "81f1dac8-c7d9-4437-b062-cba0d796fee3";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -490,10 +595,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = 9BMetrics/9BMetrics.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = 9BMetrics/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -501,10 +611,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = 9BMetrics/9BMetrics.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
 				INFOPLIST_FILE = 9BMetrics/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "a358aa2d-ea89-454f-9f89-f480db6e2458";
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};
@@ -527,6 +642,7 @@
 				007A57451C85CE49003A2030 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		007A57471C85CE49003A2030 /* Build configuration list for PBXNativeTarget "9BMetrics WatchKit App" */ = {
 			isa = XCConfigurationList;
@@ -535,6 +651,7 @@
 				007A57491C85CE49003A2030 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		007A574B1C85CE49003A2030 /* Build configuration list for PBXNativeTarget "9BMetrics" */ = {
 			isa = XCConfigurationList;
@@ -543,6 +660,7 @@
 				007A574D1C85CE49003A2030 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
