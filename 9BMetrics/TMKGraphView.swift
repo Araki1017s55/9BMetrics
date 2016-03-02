@@ -899,8 +899,8 @@ class TMKGraphView: UIView {
             else if step <= 10.0{
                 step = 10.0
             }
-            else if step <= 50.0{
-                step = 50.0
+            else if step <= 60.0{
+                step = 60.0
             }
             else{
                 step = 50.0
@@ -956,11 +956,23 @@ class TMKGraphView: UIView {
             else if step <= 10.0{
                 step = 10.0
             }
-            else if step <= 50.0{
-                step = 50.0
+            else if step <= 30.0{
+                step = 30.0
             }
-            else{
-                step = 50.0
+            else if step <= 60.0{
+                step = 60.0
+            }
+            else if step <= 90.0{
+                step = 90.0
+            }
+            else if step <= 120.0{
+                step = 120.0
+            }
+            else if step <= 300.0{
+                step = 300.0
+            }
+           else{
+                step = 600.0
             }
             
             for var x  = CGFloat(minuts); x < self.xmax; x = x + step {
