@@ -128,7 +128,13 @@ class BLESimulatedClient: NSObject {
         
         // First we disconnect the device
         
+        NSLog("Simulated Client Stop")        
         self.connection.stopConnection()
+        
+        if let altm = self.altimeter{
+            altm.stopRelativeAltitudeUpdates()
+            self.altimeter = nil
+        }
         
         // Now we save the file
         
@@ -166,7 +172,7 @@ class BLESimulatedClient: NSObject {
                     withHandler: { (alts : CMAltitudeData?, error : NSError?) -> Void in
                         
                         if let alt = alts, nb = self.datos {
-                            nb.addValue(0, value: Int(floor(alt.relativeAltitude.doubleValue * 10.0)))
+                            nb.addValue(0, value: Int(round(alt.relativeAltitude.doubleValue * 100.0)))
                         }
                 })
             }
@@ -385,9 +391,7 @@ class BLESimulatedClient: NSObject {
                         BLESimulatedClient.sendNotification(BLESimulatedClient.kNinebotDataUpdatedNotification, data: nil)
                         
                         //let state = self.getAppState()
-                        
-                        
-                        
+                         
                     }
                 }
             }
@@ -436,6 +440,8 @@ extension BLESimulatedClient : BLENinebotConnectionDelegate{
             altm.stopRelativeAltitudeUpdates()
             self.altimeter = nil
         }
+        
+
     }
     
     func charUpdated(char : CBCharacteristic, data: NSData){
