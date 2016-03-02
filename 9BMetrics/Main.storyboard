@@ -133,18 +133,12 @@
                             <outlet property="delegate" destination="D7j-2Q-CfH" id="dvl-O3-AV9"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Waiting for Connection" id="qlD-tt-3Xv">
-                        <barButtonItem key="rightBarButtonItem" title="Stop Rec" id="8dT-Os-O2G">
-                            <connections>
-                                <action selector="stop:" destination="D7j-2Q-CfH" id="ydg-Z8-c4O"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Waiting for Connection" id="qlD-tt-3Xv"/>
                     <connections>
                         <outlet property="titleField" destination="qlD-tt-3Xv" id="dF8-4w-5QP"/>
                         <segue destination="DuF-6H-UYu" kind="show" identifier="turnSegueIdentifier" id="1AL-ba-LUv"/>
                         <segue destination="UfK-jf-3En" kind="show" identifier="ninebotSettingsSegue" id="hEo-Vt-osT"/>
-                        <segue destination="w4n-7a-0ja" kind="popoverPresentation" identifier="deviceSelectorSegue" popoverAnchorBarButtonItem="8dT-Os-O2G" id="MoW-XC-4xL">
+                        <segue destination="w4n-7a-0ja" kind="popoverPresentation" identifier="deviceSelectorSegue" popoverAnchorView="1E6-M6-FoV" id="MoW-XC-4xL">
                             <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                         </segue>
                     </connections>
