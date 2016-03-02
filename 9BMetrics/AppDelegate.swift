@@ -23,6 +23,7 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    static var debugging = false
     
     static let applicationShortcutUserInfoIconKey = "applicationShortcutUserInfoIconKey"
     
@@ -112,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func handleShortCutItem(shortcut : UIApplicationShortcutItem) -> Bool{
 
-        NSLog("Handle Sort Cut Item")
+        AppDelegate.debugLog("Handle Sort Cut Item")
         launchedShortcutItem = nil // Clear it
      
         if shortcut.type == "es.gorina.9BMetrics.Record"{
@@ -135,6 +136,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         return true
+    }
+    
+    // Missatges de Debug
+    
+    static func debugLog(format: String, _ args: CVarArgType...) {
+        
+        if AppDelegate.debugging {
+            withVaList(args){
+                NSLogv(format, $0)
+            }
+        }
+        
     }
     
     //MARK : Directory Management
