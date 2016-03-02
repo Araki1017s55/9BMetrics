@@ -41,15 +41,15 @@ class BLENinebotDashboard: UITableViewController {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         self.initNotifications()
-
-    
+        
+        
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.initNotifications()    
+        self.initNotifications()
     }
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,11 +76,11 @@ class BLENinebotDashboard: UITableViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTitle:", name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "update:", name: BLESimulatedClient.kNinebotDataUpdatedNotification, object: nil)
-
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "listDevices:", name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
-
+        
     }
-
+    
     func update(not : NSNotification?){
         self.tableView.reloadData()
     }
@@ -88,22 +88,49 @@ class BLENinebotDashboard: UITableViewController {
     
     func updateTitle(not : NSNotification?){
         
-        if let nb = ninebot {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
-            if nb.data[16].value != -1 {
             
-                let sn = nb.serialNo()
-                let v1 = nb.version()
-            
-                let title = String(format:"%@ (%d.%d.%d)", sn, v1.0, v1.1, v1.2)
-            
-                self.titleField.title = title
-            } else {
-                self.titleField.title = "Connecting"
+            if let nb = self.ninebot {
+                
+                if nb.data[16].value != -1 {
+                    
+                    let sn = nb.serialNo()
+                    let v1 = nb.version()
+                    
+                    let title = String(format:"%@ (%d.%d.%d)", sn, v1.0, v1.1, v1.2)
+                    
+                    self.titleField.title = title
+                    
+                    let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+                    if let dele = appDelegate {
+                        dele.setShortcutItems(true)
+                    }
+                    
+                    self.addStopButton()
+                    
+                    
+                    //TODO: Build stop button
+                    
+                } else {
+                    self.titleField.title = "Connecting"
+                }
             }
-        }
+        })
     }
-
+    
+    
+    func addStopButton(){
+        
+        let stopButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: "stop:")
+        self.navigationItem.rightBarButtonItem = stopButton
+        
+    }
+    
+    func removeStopButton(){
+        self.navigationItem.rightBarButtonItem = nil
+    }
+    
     // MARK: Device Selection
     
     
@@ -114,9 +141,9 @@ class BLENinebotDashboard: UITableViewController {
         // if searching is false we must create a selector
         
         if let devs = devices {
-        
+            
             if !self.searching{
- 
+                
                 self.devList.removeAll()    // Remove old ones
                 self.devList.appendContentsOf(devs)
                 
@@ -145,10 +172,21 @@ class BLENinebotDashboard: UITableViewController {
     
     @IBAction func stop(src: AnyObject){
         
+        NSLog("Dashboard Stop");
+        
         if let cli = self.client{
             cli.stop()
         }
         self.client = nil // Release all data
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        if let dele = appDelegate {
+            dele.setShortcutItems(false)
+        }
+        
+        self.removeStopButton()
+        
+        //TODO: Clear stop button
     }
     
     func connectToPeripheral(peripheral : CBPeripheral){
@@ -162,18 +200,18 @@ class BLENinebotDashboard: UITableViewController {
             self.devSelector = nil
             self.devList.removeAll()
         }
-            
+        
     }
     
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-       
+        
         return 2
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       
+        
         
         switch(section){
             
@@ -276,7 +314,7 @@ class BLENinebotDashboard: UITableViewController {
                     let (h, m, s) = nb.totalRuntimeHMS()
                     cell.textLabel!.text = "Total Time Running"
                     cell.detailTextLabel!.text = String(format:"%02d:%02d:%02d", h, m, s)
-                  
+                    
                     
                 case 4:
                     cell.textLabel!.text = "Remaining Distance"
@@ -290,7 +328,7 @@ class BLENinebotDashboard: UITableViewController {
                 case 6:
                     cell.textLabel!.text = "Temperature"
                     cell.detailTextLabel!.text = String(format:"%4.1f ºC", nb.temperature())
-                  
+                    
                 default:
                     
                     cell.textLabel!.text = "Unknown"
@@ -351,7 +389,7 @@ class BLENinebotDashboard: UITableViewController {
                 vc.ninebot = self.ninebot
                 vc.delegate = self
             }
-    
+            
         }
         else if segue.identifier == "deviceSelectorSegue" {
             
@@ -362,14 +400,14 @@ class BLENinebotDashboard: UITableViewController {
                 vc.delegate = self
                 self.devList.removeAll()
                 self.searching = true
-
+                
             }
         }
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
-        
+            
             self.performSegueWithIdentifier("turnSegueIdentifier", sender: self)
         }
     }
