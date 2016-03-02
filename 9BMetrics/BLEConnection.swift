@@ -66,13 +66,17 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     override init()
     {
+        NSLog("Init")
+
         super.init()
         self.centralManager = CBCentralManager(delegate: self, queue: nil) // Startup Central Manager
-        
+
+
     }
     
     
     internal func connectToDeviceWithUUID(device : String){
+        NSLog("Connect to device")
         
         if let central = self.centralManager{
             
@@ -95,10 +99,16 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     internal func stopConnection()
     {
+        NSLog("Stop Connection")
+        
+ 
         self.scanning = false
         if let cm = self.centralManager {
-            cm.stopScan()
+            if cm.state == CBCentralManagerState.PoweredOn{
+                cm.stopScan()
+            }
         }
+        
         self.cleanup()
         self.centralManager = nil
         
@@ -108,7 +118,8 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     internal func cleanup() {
         
         // See if we are subscribed to a characteristic on the peripheral
-        
+        NSLog("Cleanup")
+       
         if let thePeripheral = self.discoveredPeripheral  {
             if let theServices = thePeripheral.services {
                 
@@ -144,13 +155,9 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     internal func centralManagerDidUpdateState(central : CBCentralManager)
     {
+        NSLog("Update state")
         
         self.scanning = false;
-        
-        
-        if central.state != CBCentralManagerState.PoweredOn {
-            return;
-        }
         
         if central.state == CBCentralManagerState.PoweredOn {
             
@@ -170,6 +177,8 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     // MARK: Scanning for Bluetooth Devices
     
     func startScanning(){
+        NSLog("Strt Scanning")
+
         
         let services = [CBUUID(string:self.serviceId)]
         let moreDevs : [CBPeripheral] = self.centralManager!.retrieveConnectedPeripheralsWithServices(services)
@@ -187,6 +196,8 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     func doRealScan()
     {
+        NSLog("Real Scann")
+
         self.scanning = true
         
         
@@ -210,6 +221,8 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     func connectPeripheral(peripheral : CBPeripheral)
     {
+        NSLog("Connect to peripheral")
+
         if let central = self.centralManager{
             NSLog("Connecting to HR peripheral %@", peripheral);
         
@@ -261,6 +274,8 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         error: NSError?)
         
     {
+        NSLog("DidDisconnectPeripheral")
+
         self.connected = false
         self.subscribed = false
         
@@ -281,7 +296,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
                     if devs.count > 0
                     {
                         let peri : CBPeripheral = devs[0]
-                        
+                        //TODO: Probablement modificar per establir la connexio directament
                         self.centralManager(central,  didDiscoverPeripheral:peri,  advertisementData:["Hello" : "Hello"],  RSSI:NSNumber())
                         return;
                     }
