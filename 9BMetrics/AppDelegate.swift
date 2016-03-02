@@ -22,7 +22,13 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+
     
+    static let applicationShortcutUserInfoIconKey = "applicationShortcutUserInfoIconKey"
+    
+    /// Saved shortcut item used as a result of an app launch, used later when app is activated.
+    var launchedShortcutItem: UIApplicationShortcutItem?
+
     var window: UIWindow?
     
     var ubiquityUrl : NSURL?
@@ -30,7 +36,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        return true
+        var shouldPerformAdditionalDelegateHandling = true
+      
+        
+        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
+            
+            launchedShortcutItem = shortcutItem
+            
+            // This will block "performActionForShortcutItem:completionHandler" from being called.
+            shouldPerformAdditionalDelegateHandling = false
+        }
+        
+        self.setShortcutItems(false)
+        
+        return shouldPerformAdditionalDelegateHandling
+    }
+    
+    
+    func setShortcutItems(recording : Bool){
+        
+        var item : UIMutableApplicationShortcutItem?
+        
+        if recording {
+            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Stop", localizedTitle: "Stop", localizedSubtitle: "Stop recording data", icon: UIApplicationShortcutIcon(type: .Pause), userInfo: [
+                AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.Pause.rawValue
+                ]
+            )
+        }
+        else{
+            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Record", localizedTitle: "Record", localizedSubtitle: "Start recording data", icon: UIApplicationShortcutIcon(type: .Play), userInfo: [
+                AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.Play.rawValue
+            ]
+            )
+        }
+        
+        
+        if let it = item {
+            UIApplication.sharedApplication().shortcutItems = [it]
+        }
+        
+        
     }
     
     func applicationWillResignActive(application: UIApplication) {
@@ -49,10 +94,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        
     }
     
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    //MARK : Shortcuts
+    
+    func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+        let handledShortCutItem = handleShortCutItem(shortcutItem)
+        
+        completionHandler(handledShortCutItem)
+    }
+    
+    func handleShortCutItem(shortcut : UIApplicationShortcutItem) -> Bool{
+
+        NSLog("Handle Sort Cut Item")
+        launchedShortcutItem = nil // Clear it
+     
+        if shortcut.type == "es.gorina.9BMetrics.Record"{
+            
+            guard  let nav : UINavigationController = window?.rootViewController  as? UINavigationController else {return false}
+            
+            guard let wc = nav.topViewController as? ViewController   else {return false}
+            
+            wc.performSegueWithIdentifier("dashboardSegue", sender: wc)
+            
+        }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
+            guard  let nav : UINavigationController = window?.rootViewController  as? UINavigationController else {return false}
+            
+            guard let ds = nav.topViewController as? BLENinebotDashboard   else {return false}
+            //guard let ds = wc.dashboard else {return false}
+            
+            ds.stop(self)
+            
+        }
+        
+        
+        return true
     }
     
     //MARK : Directory Management
