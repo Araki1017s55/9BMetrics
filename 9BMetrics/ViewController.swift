@@ -23,15 +23,11 @@ import UIKit
 
 class ViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
     
-    
-    
-    
     enum stateValues {
         case Waiting
         case MiM
         case Client
         case Server
-        
     }
     
     struct fileSection {
@@ -51,8 +47,6 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     var firstField = 185      // Primer camp a llegir
     var nFields = 10         // Numero de camps a llegir
     var timerStep = 0.01   // Segons per repetir el enviar
-    
-    
     
     var dashboard : BLENinebotDashboard?
     
@@ -79,6 +73,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             
             loadLocalDirectoryData(docs)
         }
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -586,7 +581,11 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     
     //MARK: View management
     
+    
+    
     override func viewWillAppear(animated: Bool) {
+        
+        NSLog("View Controller will appear")
         
         if let dash = self.dashboard{
             if dash.client != nil{
@@ -594,6 +593,8 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             }
             self.dashboard = nil // Released dashboard
         }
+        
+        
         // Now reload all data foir
         let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
         
@@ -604,6 +605,32 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             loadLocalDirectoryData(docs)
             self.tableView.reloadData()
         }
+        
+        
+        
+        guard let dele = UIApplication.sharedApplication().delegate as? AppDelegate else {return}
+        guard let shortcut = dele.launchedShortcutItem else { return }
+        
+        
+        
+        if shortcut.type == "es.gorina.9BMetrics.Record"{
+            
+            dele.launchedShortcutItem  = nil
+            NSLog("Following dashboardSegue")
+            
+            self.performSegueWithIdentifier("dashboardSegue", sender: self)
+            
+        }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
+            dele.launchedShortcutItem  = nil
+            
+            NSLog("Stopping xxx")
+            
+            if let ds = self.dashboard{
+                ds.stop(self)
+            }
+            
+        }
+
     }
     
 }
