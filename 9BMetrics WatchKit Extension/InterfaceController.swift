@@ -169,7 +169,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     func sessionWatchStateDidChange(session: WCSession) {
         
-        NSLog("WCSessionState changed. Reachable %@", session.reachable)
+       // NSLog("WCSessionState changed. Reachable %@", session.reachable)
     }
     
     func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]){

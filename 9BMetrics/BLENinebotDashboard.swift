@@ -172,7 +172,7 @@ class BLENinebotDashboard: UITableViewController {
     
     @IBAction func stop(src: AnyObject){
         
-        NSLog("Dashboard Stop");
+        AppDelegate.debugLog("Dashboard Stop");
         
         if let cli = self.client{
             cli.stop()

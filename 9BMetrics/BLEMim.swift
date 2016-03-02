@@ -205,7 +205,7 @@ class BLEMim: UIViewController {
             
         }
         catch{
-            NSLog("Error al obtenir File Handle")
+            AppDelegate.debugLog("Error al obtenir File Handle")
         }
         
         return nil
@@ -235,14 +235,14 @@ extension BLEMim : BLENinebotConnectionDelegate{
 
     func deviceConnected(peripheral : CBPeripheral ){
         if let s = peripheral.name{
-            NSLog("Device %@ connected", s)
+            AppDelegate.debugLog("Device %@ connected", s)
             self.ninebotButton.enabled = true
             self.startDate = NSDate()
         }
     }
     func deviceDisconnectedConnected(peripheral : CBPeripheral ){
         if let s = peripheral.name{
-            NSLog("Device %@ disconnected", s)
+            AppDelegate.debugLog("Device %@ disconnected", s)
             self.ninebotButton.enabled = false
             
         }
@@ -272,11 +272,11 @@ extension BLEMim : BLENinebotServerDelegate {
         
     }
     func remoteDeviceSubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
-        NSLog("Device subscribed %@", central)
+        AppDelegate.debugLog("Device subscribed %@", central)
         self.iPhoneButton.enabled = true
     }
     func remoteDeviceUnsubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
-        NSLog("Device unsubscribed %@", central)
+        AppDelegate.debugLog("Device unsubscribed %@", central)
         self.iPhoneButton.enabled = false
     }
 

@@ -90,12 +90,12 @@ class BLESimulatedClient: NSObject {
             let installed = session.watchAppInstalled
             
             if paired {
-                NSLog("Session Paired")
+                AppDelegate.debugLog("Session Paired")
                 
             }
             
             if installed {
-                NSLog("Session Installed" )
+                AppDelegate.debugLog("Session Installed" )
             }
             
             if session.paired && session.watchAppInstalled{
@@ -128,7 +128,7 @@ class BLESimulatedClient: NSObject {
         
         // First we disconnect the device
         
-        NSLog("Simulated Client Stop")        
+        AppDelegate.debugLog("Simulated Client Stop")        
         self.connection.stopConnection()
         
         if let altm = self.altimeter{
@@ -256,7 +256,7 @@ class BLESimulatedClient: NSObject {
                         self.oldState = info
                     }
                     catch _{
-                        NSLog("Error sending data to watch")
+                        AppDelegate.debugLog("Error sending data to watch")
                     }
                 }
                 

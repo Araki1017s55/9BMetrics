@@ -342,7 +342,7 @@ class  BLENinebot : NSObject{
                     
                     let varName = String(format: "%d\t%@\n",v.codi, BLENinebot.labels[v.codi])
                     
-                    NSLog("Gravant log per %@", varName)
+                    AppDelegate.debugLog("Gravant log per %@", varName)
                     
                     if let vn = varName.dataUsingEncoding(NSUTF8StringEncoding){
                         hdl.writeData(vn)
@@ -366,7 +366,7 @@ class  BLENinebot : NSObject{
             
         }
         catch{
-            NSLog("Error al obtenir File Handle")
+            AppDelegate.debugLog("Error al obtenir File Handle")
         }
         
         return nil

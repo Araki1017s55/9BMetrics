@@ -66,7 +66,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     override init()
     {
-        NSLog("Init")
+        AppDelegate.debugLog("Init")
 
         super.init()
         self.centralManager = CBCentralManager(delegate: self, queue: nil) // Startup Central Manager
@@ -76,7 +76,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     
     internal func connectToDeviceWithUUID(device : String){
-        NSLog("Connect to device")
+        AppDelegate.debugLog("Connect to device")
         
         if let central = self.centralManager{
             
@@ -99,7 +99,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     internal func stopConnection()
     {
-        NSLog("Stop Connection")
+        AppDelegate.debugLog("Stop Connection")
         
  
         self.scanning = false
@@ -118,7 +118,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     internal func cleanup() {
         
         // See if we are subscribed to a characteristic on the peripheral
-        NSLog("Cleanup")
+        AppDelegate.debugLog("Cleanup")
        
         if let thePeripheral = self.discoveredPeripheral  {
             if let theServices = thePeripheral.services {
@@ -155,7 +155,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     internal func centralManagerDidUpdateState(central : CBCentralManager)
     {
-        NSLog("Update state")
+        AppDelegate.debugLog("Update state")
         
         self.scanning = false;
         
@@ -177,7 +177,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     // MARK: Scanning for Bluetooth Devices
     
     func startScanning(){
-        NSLog("Strt Scanning")
+        AppDelegate.debugLog("Strt Scanning")
 
         
         let services = [CBUUID(string:self.serviceId)]
@@ -196,7 +196,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     func doRealScan()
     {
-        NSLog("Real Scann")
+        AppDelegate.debugLog("Real Scann")
 
         self.scanning = true
         
@@ -204,7 +204,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         // Scan for devices    @[[CBUUID UUIDWithString:@"1819"]]
         self.centralManager!.scanForPeripheralsWithServices([CBUUID(string:self.serviceId)], options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
         
-        NSLog("Scanning started")
+        AppDelegate.debugLog("Scanning started")
     }
     
     
@@ -215,16 +215,16 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
             
             BLESimulatedClient.sendNotification(BLESimulatedClient.kdevicesDiscoveredNotification, data: ["peripherals" : [peripheral]])
 
-            NSLog("Discovered %@ - %@ (%@)", peripheral.name!, peripheral.identifier, BLESimulatedClient.kdevicesDiscoveredNotification );
+            AppDelegate.debugLog("Discovered %@ - %@ (%@)", peripheral.name!, peripheral.identifier, BLESimulatedClient.kdevicesDiscoveredNotification );
             return
     }
     
     func connectPeripheral(peripheral : CBPeripheral)
     {
-        NSLog("Connect to peripheral")
+        AppDelegate.debugLog("Connect to peripheral")
 
         if let central = self.centralManager{
-            NSLog("Connecting to HR peripheral %@", peripheral);
+            AppDelegate.debugLog("Connecting to HR peripheral %@", peripheral);
         
             central.stopScan()     // Just in the case, stop scan when finished to looking for more devices
         
@@ -232,7 +232,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
             central.connectPeripheral(peripheral, options:nil)
         }
         else{
-            NSLog("No Central Manager")
+            AppDelegate.debugLog("No Central Manager")
         }
     }
     
@@ -245,13 +245,13 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     }
     
     internal func centralManager(central : CBCentralManager, didConnectPeripheral peripheral :CBPeripheral){
-        NSLog("Connected");
+        AppDelegate.debugLog("Connected");
         
         if self.scanning    // Just in case!!!
         {
             self.centralManager!.stopScan()
             self.scanning = false
-            NSLog("Scanning stopped")
+            AppDelegate.debugLog("Scanning stopped")
         }
         
         peripheral.delegate = self;
@@ -274,7 +274,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         error: NSError?)
         
     {
-        NSLog("DidDisconnectPeripheral")
+        AppDelegate.debugLog("DidDisconnectPeripheral")
 
         self.connected = false
         self.subscribed = false
@@ -331,7 +331,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         if let serv = peripheral.services{
             for sr in serv
             {
-                NSLog("Service %@", sr.UUID.UUIDString)
+                AppDelegate.debugLog("Service %@", sr.UUID.UUIDString)
                 
                 if sr.UUID.UUIDString == self.serviceId
                 {
@@ -375,7 +375,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
                     BLESimulatedClient.sendNotification(BLESimulatedClient.kConnectionReadyNotification, data: ["peripheral" : peripheral])
                 }
                 else{
-                    NSLog("Caracteristica desconeguda")
+                    AppDelegate.debugLog("Caracteristica desconeguda")
                 }
                 
             }
@@ -401,42 +401,42 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
                 
                 if let data = characteristic.value {
                     self.manufacturer = String(data:data, encoding: NSUTF8StringEncoding)
-                    NSLog("Manufacturer : %@", self.manufacturer!)
+                    AppDelegate.debugLog("Manufacturer : %@", self.manufacturer!)
                 }
             }
             else if characteristic.UUID.UUIDString==self.kUUIDModelNameVariable  {
                 
                 if let data = characteristic.value {
                     self.model = String(data:data, encoding: NSUTF8StringEncoding)
-                    NSLog("Model : %@", self.model!)
+                    AppDelegate.debugLog("Model : %@", self.model!)
                 }
             }
             else if characteristic.UUID.UUIDString==self.kUUIDSerialNumberVariable  {
                 
                 if let data = characteristic.value {
                     self.serial = String(data:data, encoding: NSUTF8StringEncoding)
-                    NSLog("Serial : %@", self.serial!)
+                    AppDelegate.debugLog("Serial : %@", self.serial!)
                 }
             }
             else if characteristic.UUID.UUIDString==self.kUUIDHardwareVersion  {
                 
                 if let data = characteristic.value {
                     self.hardwareVer = String(data:data, encoding: NSUTF8StringEncoding)
-                    NSLog("Hardware Version : %@", self.hardwareVer!)
+                    AppDelegate.debugLog("Hardware Version : %@", self.hardwareVer!)
                 }
             }
             else if characteristic.UUID.UUIDString==self.kUUIDFirmwareVersion  {
                 
                 if let data = characteristic.value {
                     self.firmwareVer = String(data:data, encoding: NSUTF8StringEncoding)
-                    NSLog("Firmware Version : %@", self.firmwareVer!)
+                    AppDelegate.debugLog("Firmware Version : %@", self.firmwareVer!)
                 }
             }
             else if characteristic.UUID.UUIDString==self.kUUIDSoftwareVersion {
                 
                 if let data = characteristic.value {
                     self.softwareVer = String(data:data, encoding: NSUTF8StringEncoding)
-                    NSLog("Software Ver : %@", self.softwareVer!)
+                    AppDelegate.debugLog("Software Ver : %@", self.softwareVer!)
                 }
             }
             

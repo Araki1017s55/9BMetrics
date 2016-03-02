@@ -88,7 +88,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             try url.getResourceValue(&rsrc, forKey: NSURLCreationDateKey)
         }
         catch{
-            NSLog("Error reading creation date of file %", url)
+            AppDelegate.debugLog("Error reading creation date of file %", url)
         }
         
         let date = rsrc as? NSDate
@@ -220,7 +220,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         
         let enumerator = mgr.enumeratorAtURL(dir, includingPropertiesForKeys: nil, options: [NSDirectoryEnumerationOptions.SkipsHiddenFiles, NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants]) { (url:NSURL, err:NSError) -> Bool in
-            NSLog("Error enumerating files %@", err)
+            AppDelegate.debugLog("Error enumerating files %@", err)
             return true
         }
         
@@ -412,7 +412,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                     tableView.deleteSections(NSIndexSet(index: indexPath.section), withRowAnimation: UITableViewRowAnimation.Automatic)
                 }
             }catch{
-                NSLog("Error removing %@", url)
+                AppDelegate.debugLog("Error removing %@", url)
             }
             // Delete the row from the data source
             
@@ -585,7 +585,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     
     override func viewWillAppear(animated: Bool) {
         
-        NSLog("View Controller will appear")
+        AppDelegate.debugLog("View Controller will appear")
         
         if let dash = self.dashboard{
             if dash.client != nil{
@@ -616,14 +616,14 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         if shortcut.type == "es.gorina.9BMetrics.Record"{
             
             dele.launchedShortcutItem  = nil
-            NSLog("Following dashboardSegue")
+            AppDelegate.debugLog("Following dashboardSegue")
             
             self.performSegueWithIdentifier("dashboardSegue", sender: self)
             
         }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
             dele.launchedShortcutItem  = nil
             
-            NSLog("Stopping xxx")
+            AppDelegate.debugLog("Stopping xxx")
             
             if let ds = self.dashboard{
                 ds.stop(self)
