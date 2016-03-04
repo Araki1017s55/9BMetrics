@@ -464,28 +464,30 @@ class  BLENinebot : NSObject{
         return t
     }
     
+    static func HMSfromSeconds(secs : NSTimeInterval) -> (Int, Int, Int) {
+        
+        let hours =  floor(secs / 3600.0)
+        let minutes = floor((secs - (hours * 3600.0)) / 60.0)
+        let seconds = round(secs - (hours * 3600.0) - (minutes * 60.0))
+        
+        return (Int(hours), Int(minutes), Int(seconds))
+       
+    }
+    
     func singleRuntimeHMS() -> (Int, Int, Int) {
         
-        let total  = data[BLENinebot.kSingleRuntime].value
+        let total  = Double(data[BLENinebot.kSingleRuntime].value)
         
-        let hours =  total / 3600
-        let minutes = (total - (hours * 3600)) / 60
-        let seconds = total - (hours * 3600) - (minutes * 60)
-        
-        return (hours, minutes, seconds)
+        return BLENinebot.HMSfromSeconds(total)
         
     }
     
     
     func totalRuntimeHMS() -> (Int, Int, Int) {
         
-        let total = data[BLENinebot.kTotalRuntime1].value * 65536 + data[BLENinebot.kTotalRuntime0].value
-        
-        let hours = total / 3600
-        let minutes = (total - (hours * 3600)) / 60
-        let seconds = total - (hours * 3600) - (minutes * 60)
-        
-        return (hours, minutes, seconds)
+        let total = Double(data[BLENinebot.kTotalRuntime1].value * 65536 + data[BLENinebot.kTotalRuntime0].value)
+          
+        return BLENinebot.HMSfromSeconds(total)
         
     }
     
@@ -515,6 +517,13 @@ class  BLENinebot : NSObject{
         }
     }
     
+    func temperature(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
+    {
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kTemperature, from: t0, to: t1)
+        
+        return (max/10.0, min/10.0, avg/10.0, acum/10.0)
+    }
     
     
     
@@ -540,6 +549,14 @@ class  BLENinebot : NSObject{
         else{
             return 0.0
         }
+    }
+    
+    func voltage(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
+    {
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kVoltage, from: t0, to: t1)
+        
+        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
     }
     
     // Current
@@ -571,6 +588,13 @@ class  BLENinebot : NSObject{
     }
     
     
+    func current(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
+    {
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kCurrent, from: t0, to: t1)
+        
+        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+    }
     
     
     func power() -> Double{ // Units are Watts
@@ -628,7 +652,14 @@ class  BLENinebot : NSObject{
         }
     }
     
-    
+    func pitch(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
+    {
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kPitchAngle, from: t0, to: t1)
+        
+        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+    }
+   
     
     
     // roll Angle
@@ -658,6 +689,13 @@ class  BLENinebot : NSObject{
         }
     }
     
+    func roll(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
+    {
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kRollAngle, from: t0, to: t1)
+        
+        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+    }
     
     // pitch angle speed
     
@@ -708,6 +746,13 @@ class  BLENinebot : NSObject{
         }
     }
     
+    func batteryLevel(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double){
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kBattery, from: t0, to: t1)
+        
+        return (max, min, avg, acum)
+    }
+   
     // Speed
     
     func speed() -> Double {
@@ -743,7 +788,15 @@ class  BLENinebot : NSObject{
         }
     }
     
+    // This functions returns min/avg/max values of speed between the interval
     
+    func speed(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double){
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kCurrentSpeed, from: t0, to: t1)
+        
+        return (max/1000.0, min/1000.0, avg/1000.0, acum/1000.0)
+    }
+
     
     // Speed limit
     
@@ -811,8 +864,16 @@ class  BLENinebot : NSObject{
             return 0.0
         }
     }
+
     
-    // t is time from firstDate
+    func altitude(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
+    {
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kAltitude, from: t0, to: t1)
+        
+        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+    }
+// t is time from firstDate
     
     func value(variable : Int,  forTime t:NSTimeInterval) -> DoubleLogEntry?{
         
@@ -850,7 +911,7 @@ class  BLENinebot : NSObject{
         
         if p0 == p1 {
             let e = self.data[v].log[p0]
-            return DoubleLogEntry(time: e.time, variable: e.variable, value: Double(e.value))
+            return DoubleLogEntry(time: NSDate(timeInterval: x, sinceDate: self.firstDate!), variable: e.variable, value: Double(e.value))
             
         }
         else {      // Intentem interpolar
@@ -871,6 +932,259 @@ class  BLENinebot : NSObject{
             return DoubleLogEntry(time: NSDate(timeInterval: x, sinceDate: self.firstDate!), variable: variable, value: v)
         }
     }
+    
+    
+    // Returns min, max, avg and acum (integral trapezoidal)
+    
+    func stats(variable : Int,  from t:NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double){
+    
+        
+        let v = variable
+        let x = t
+        
+        
+        if self.data[v].log.count <= 0{       // No Data
+            return (0.0, 0.0, 0.0, 0.0)
+        }
+        
+        var p0 = 0
+        var p1 = self.data[v].log.count - 1
+        let xd = Double(x)
+        
+        var minv = 0.0
+        var maxv = 0.0
+        var integralv = 0.0
+        var tempsv = 0.0
+        
+        var oldx = 0.0
+        var oldy = 0.0
+        var x1 = 0.0
+        var y1 = 0.0
+        
+        var i = 0
+        
+        
+        while p1 - p0 > 1{
+            
+            let p = (p1 + p0 ) / 2
+            
+            let xValue = self.data[v].log[p].time.timeIntervalSinceDate(self.firstDate!)
+            
+            if xd < xValue {
+                p1 = p
+            }
+            else if xd > xValue {
+                p0 = p
+            }
+            else{
+                p0 = p
+                p1 = p
+            }
+        }
+        
+        
+        
+        
+        // If p0 == p1 easy
+        
+        if p0 == p1 {
+            
+            let e = self.data[v].log[p0]
+            oldx = x
+            oldy = Double(e.value)
+            i = p1
+        }
+        else {      // Intentem interpolar
+            
+            let v0 = self.data[v].log[p0]
+            let v1 = self.data[v].log[p1]
+            
+            if v0.time.compare( v1.time) == NSComparisonResult.OrderedSame{   // One more check not to have div/0
+                oldx = x
+                oldy = Double(v0.value)
+                i = p1
+            }
+            else{
+            
+                let deltax = v1.time.timeIntervalSinceDate(v0.time)
+                let deltay = Double(v1.value) - Double(v0.value)
+                let v = (x - v0.time.timeIntervalSinceDate(self.firstDate!)) / deltax * deltay + Double(v0.value)
+                
+                oldx = x
+                oldy = v
+                i = p1
+            }
+            
+         }
+        
+        minv = oldy
+        maxv = oldy
+        
+        // i sempre apunta al proper punt. Aleshores fem
+        
+        x1 = self.data[v].log[i].time.timeIntervalSinceDate(self.firstDate!)
+        y1 = Double(self.data[v].log[i].value)
+        
+        while x1 < t1{
+            
+            if y1 < minv {
+                minv = y1
+            }
+            
+            if y1 > maxv {
+                maxv = y1
+            }
+            
+            integralv += (y1 + oldy) / 2.0 * (x1 - oldx)
+            tempsv += x1 - oldx
+            
+            oldx = x1
+            oldy = y1
+            
+            i++
+            
+            if i >= self.data[v].log.count{
+                break
+            }
+            
+            x1 = self.data[v].log[i].time.timeIntervalSinceDate(self.firstDate!)
+            y1 = Double(self.data[v].log[i].value)
+            
+        }
+        
+        // OK ens queda un trocet des de oldx a x. A fer mes endavant
+        
+        return (minv, maxv, integralv/tempsv, integralv)
+        
+        
+        
+    }
+    
+    // Power Stats
+    
+    func powerStats(from t:NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double){
+        
+        
+        let v = BLENinebot.kCurrent
+        let x = t
+        
+        
+        if self.data[v].log.count <= 0{       // No Data
+            return (0.0, 0.0, 0.0, 0.0)
+        }
+        
+        var p0 = 0
+        var p1 = self.data[v].log.count - 1
+        let xd = Double(x)
+        
+        var minv = 0.0
+        var maxv = 0.0
+        var integralv = 0.0
+        var tempsv = 0.0
+        
+        var oldx = 0.0
+        var oldy = 0.0
+        var x1 = 0.0
+        var y1 = 0.0
+        
+        var i = 0
+        
+        
+        while p1 - p0 > 1{
+            
+            let p = (p1 + p0 ) / 2
+            
+            let xValue = self.data[v].log[p].time.timeIntervalSinceDate(self.firstDate!)
+            
+            if xd < xValue {
+                p1 = p
+            }
+            else if xd > xValue {
+                p0 = p
+            }
+            else{
+                p0 = p
+                p1 = p
+            }
+        }
+        
+        // If p0 == p1 easy
+        
+        if p0 == p1 {
+            
+
+            oldx = x
+            oldy = self.current(p0) * voltage(time : x)     // Wats
+            i = p1
+        }
+        else {      // Intentem interpolar
+            
+            let v0 = self.data[v].log[p0]
+            let v1 = self.data[v].log[p1]
+            
+            if v0.time.compare( v1.time) == NSComparisonResult.OrderedSame{   // One more check not to have div/0
+                oldx = x
+                oldy = Double(v0.value) / 100.0 * self.voltage(time: x)
+                i = p1
+            }
+            else{
+                
+                let deltax = v1.time.timeIntervalSinceDate(v0.time)
+                let deltay = (Double(v1.value) / 100.0  * self.voltage(time: v1.time.timeIntervalSinceDate(self.firstDate!))) - (Double(v0.value) / 100.0  * self.voltage(time: v0.time.timeIntervalSinceDate(self.firstDate!)))
+                let v = (x - v0.time.timeIntervalSinceDate(self.firstDate!)) / deltax * deltay + Double(v0.value)
+                
+                oldx = x
+                oldy = v
+                i = p1
+            }
+            
+        }
+        
+        minv = oldy
+        maxv = oldy
+        
+        // i sempre apunta al proper punt. Aleshores fem
+        
+        x1 = self.data[v].log[i].time.timeIntervalSinceDate(self.firstDate!)
+        y1 = Double(self.data[v].log[i].value) / 100.0 * self.voltage(time: x1)
+        
+        while x1 < t1{
+            
+            if y1 < minv {
+                minv = y1
+            }
+            
+            if y1 > maxv {
+                maxv = y1
+            }
+            
+            integralv += (y1 + oldy) / 2.0 * (x1 - oldx)
+            tempsv += x1 - oldx
+            oldx = x1
+            oldy = y1
+            
+           
+            i++
+            
+            if i >= self.data[v].log.count{
+                break
+            }
+
+            x1 = self.data[v].log[i].time.timeIntervalSinceDate(self.firstDate!)
+            y1 = Double(self.data[v].log[i].value)  / 100.0 * self.voltage(time: x1)
+            
+        }
+        
+        // OK ens queda un trocet des de oldx a x. A fer mes endavant
+        
+        return (minv, maxv, integralv/tempsv, integralv)
+        
+        
+        
+    }
+    
+   
+    
     
     func getLogValue(variable : Int, time : NSTimeInterval) -> Double{
         switch(variable){
@@ -910,6 +1224,49 @@ class  BLENinebot : NSObject{
             
         }
     }
+    
+    func getLogStats(variable : Int, from t0 : NSTimeInterval, to t1 : NSTimeInterval) -> (Double, Double, Double, Double){
+        switch(variable){
+            
+        case 0:
+            return self.speed(from: t0, to: t1)
+            
+        case 1:
+            return self.temperature(from: t0, to: t1)
+            
+        case 2:
+            return self.voltage(from: t0, to: t1)
+            
+        case 3:
+            return self.current(from: t0, to: t1)
+            
+        case 4:
+            return self.batteryLevel(from: t0, to: t1)
+            
+        case 5:
+            return self.pitch(from: t0, to: t1)
+            
+        case 6:
+            return self.roll(from: t0, to: t1)
+            
+        case 7:
+            let s0 = self.singleMileage(time: t0)
+            let s1 = self.singleMileage(time: t1)
+            let t = t1 - t0
+            return (s0, s1, ((s0 + s1) / 2.0) , ((s1 - s0) * t))
+            
+        case 8:
+            return self.altitude(from: t0, to: t1)
+            
+        case 9:
+            return self.powerStats(from: t0, to: t1)
+            
+        default:
+            return (0.0, 0.0, 0.0, 0.0)
+            
+        }
+    }
+  
     
     func getLogValue(variable : Int, index : Int) -> Double{
         

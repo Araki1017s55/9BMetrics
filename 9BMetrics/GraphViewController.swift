@@ -165,6 +165,62 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         return false
     }
     
+    func statsForSerie(value: Int, from t0: NSTimeInterval, to t1: NSTimeInterval) -> String{
+        
+        if let nb = self.ninebot{
+            
+            let (min, max, avg, acum) = nb.getLogStats(value, from: t0, to: t1)
+            let (h, m, s) = BLENinebot.HMSfromSeconds(t1 - t0)
+            
+            var answer = String(format: "%02d:%02d:%02d",  h, m, s)
+            
+            switch value {
+                
+            case 0: // Speed
+                
+                let dist = acum / 3600.0
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Dist: %4.2f Km", min, avg, max, dist))
+                
+            case 1: //T
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 2:                 // Voltage
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 3:                 // Current
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Q: %4.2fC", min, avg, max, acum))
+                
+            case 4:     //Battery
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 5:     // Pitch
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 6:     //Roll
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 7:     //Distance
+                answer.appendContentsOf(String(format:" Dist: %4.2f Km ", max - min))
+                
+            case 8:     //Altitude
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 9:     //Power
+                let wh = acum / 3600.0
+                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f W: %4.2f wh", min, avg, max, wh))
+               
+                
+            default:
+                answer.appendContentsOf(" ")
+                
+            }
+              return answer
+            
+        }else{
+            return ""
+        }
+    }
+    
     func minMaxForSerie(serie : Int, value: Int) -> (CGFloat, CGFloat){
         
         switch(value){
