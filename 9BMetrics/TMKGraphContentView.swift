@@ -109,10 +109,12 @@ class TMKGraphContentView: UIView {
                     // Implementació amb unitats naturals. Comentat versio anterior
                     
                     var x = v.xmin
-                    let d = (v.xmax - v.xmin) / self.bounds.width       // At most every pixel
+//                    let d = (v.xmax - v.xmin) / self.bounds.width       // At most every pixel
                     
+                    let dminus = (v.selectionLeftUnits - v.xmin)/(v.selectionLeft - v.leftMargin)
                     let d0 = (v.selectionRightUnits - v.selectionLeftUnits)/(v.selectionRight - v.selectionLeft)
-                    
+                    let dplus = (v.xmax - v.selectionRightUnits)/(v.bounds.size.width - v.rightMargin - v.selectionRight )
+                   
                     
                    // let n = ds.numberOfPointsForSerie(selSerie, value: v.yValue) // abans v.yValue
                     
@@ -133,11 +135,15 @@ class TMKGraphContentView: UIView {
                         pt = v.heightPointFromTrackPoint(pt)
                         bz.moveToPoint(pt)
                         
-                        if v.selectionLeftUnits < x && x < v.selectionRightUnits{
-                            x = x + d0
+                        
+                        if x < v.selectionLeftUnits{
+                            x = x + dminus
+                        }
+                        else if v.selectionLeftUnits <= x && x <= v.selectionRightUnits{
+                             x = x + d0
                         }
                         else{
-                             x = x + d
+                             x = x + dplus
                         }
                         
                         //for i in 0..<n{
@@ -149,11 +155,14 @@ class TMKGraphContentView: UIView {
                             pt = v.heightPointFromTrackPoint(pt)
                             bz.addLineToPoint(pt)
                             
-                            if v.selectionLeftUnits < x && x < v.selectionRightUnits{
+                            if x < v.selectionLeftUnits{
+                                x = x + dminus
+                            }
+                            else if v.selectionLeftUnits <= x && x <= v.selectionRightUnits{
                                 x = x + d0
                             }
                             else{
-                                x = x + d
+                                x = x + dplus
                             }
                         }
                         
@@ -324,8 +333,10 @@ class TMKGraphContentView: UIView {
                     // Implementació amb unitats naturals. Comentat versio anterior
                     
                     var x = v.xmin
-                    let d = (v.xmax - v.xmin) / self.bounds.width       // At most every pixel
+//                    let d = (v.xmax - v.xmin) / self.bounds.width       // At most every pixel
+                    let dminus = (v.selectionLeftUnits - v.xmin)/(v.selectionLeft - v.leftMargin)
                     let d0 = (v.selectionRightUnits - v.selectionLeftUnits)/(v.selectionRight - v.selectionLeft)
+                    let dplus = (v.xmax - v.selectionRightUnits)/(v.bounds.size.width - v.rightMargin - v.selectionRight )
                     
                    // if n > 0 {
                     if x < v.xmax{
@@ -343,11 +354,14 @@ class TMKGraphContentView: UIView {
                         pt = v.viewPointFromTrackPoint(pt)
                         bz.moveToPoint(pt)
                         
-                        if v.selectionLeftUnits < x && x < v.selectionRightUnits{
+                        if x < v.selectionLeftUnits{
+                            x = x + dminus
+                        }
+                        else if v.selectionLeftUnits <= x && x <= v.selectionRightUnits{
                             x = x + d0
                         }
                         else{
-                            x = x + d
+                            x = x + dplus
                         }
                         
                         //for i in 1..<n {
@@ -358,11 +372,14 @@ class TMKGraphContentView: UIView {
                             pt = v.viewPointFromTrackPoint(pt)
                             bz.addLineToPoint(pt)
                             
-                            if v.selectionLeftUnits < x && x < v.selectionRightUnits{
+                            if x < v.selectionLeftUnits{
+                                x = x + dminus
+                            }
+                            else if v.selectionLeftUnits <= x && x <= v.selectionRightUnits{
                                 x = x + d0
                             }
                             else{
-                                x = x + d
+                                x = x + dplus
                             }
                         }
                         

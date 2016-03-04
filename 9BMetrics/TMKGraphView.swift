@@ -65,7 +65,8 @@ class TMKGraphView: UIView {
     @IBOutlet  weak var  yValueButton : UIButton!
     @IBOutlet  weak var  infoField : UILabel!
     @IBOutlet  weak var  infoSelField : UILabel!
-    @IBOutlet  weak var  filterSlider : UISlider!
+    @IBOutlet  weak var  statsField : UILabel!
+   @IBOutlet  weak var  filterSlider : UISlider!
     @IBOutlet  weak var  graphContent : TMKGraphContentView!
     
     var yValue = 0 // 0->elev 1->bpm 2->ºC
@@ -136,7 +137,7 @@ class TMKGraphView: UIView {
         self.addGestureRecognizer(tapG)
     }
     
-    
+ 
     
     @IBAction func clamp(src: UITapGestureRecognizer)
     {
@@ -145,9 +146,27 @@ class TMKGraphView: UIView {
         
         if myPt.x > self.selectionLeft && myPt.x < self.selectionRight && myPt.y > ( self.topMargin) && myPt.y < (self.bounds.size.height - self.bottomMargin)
         {
+            var stats = ""
+            
+            if self.clampDown {
+                self.recomputeSelectionPosition()
+                self.statsField.text = stats
+                self.statsField.hidden = true
+                self.setNeedsDisplay()
+            } else {
+                self.recomputeSelectionUnits()
+                
+                if let ds = self.dataSource{
+                    stats = ds.statsForSerie(self.yValue, from :Double(self.selectionLeftUnits), to: Double(self.selectionRightUnits))
+
+                }
+                self.statsField.text = stats
+                self.statsField.hidden = false
+
+                self.setNeedsDisplay()
+            }
+            
             self.clampDown = !self.clampDown
-            self.recomputeSelectionUnits()
-            self.setNeedsDisplay()
             
         }
         
@@ -683,7 +702,7 @@ class TMKGraphView: UIView {
         self.addConstraint(sCons)
         
         
-        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Right, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.CenterX, multiplier:1.0, constant:-10.0)
+        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Right, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.CenterX, multiplier:1.0, constant:30.0)
         
         self.addConstraint(sCons)
         
@@ -716,7 +735,7 @@ class TMKGraphView: UIView {
         
         //   sCons = [NSLayoutConstraint constraintWithItem:tf attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:10.0];
         
-        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Left, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.Left, multiplier:1.0, constant:self.leftMargin + 50.0)
+        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Left, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.CenterX, multiplier:1.0, constant:30.0)
         
         
         self.addConstraint(sCons)
@@ -733,6 +752,51 @@ class TMKGraphView: UIView {
         
         self.infoSelField = tf
         
+        tf = UILabel()
+        
+        tf.textColor = UIColor.whiteColor()
+        
+        //tf.backgroundColor = UIColor.clearColor()
+        
+        tf.backgroundColor = UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 0.7)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        tf.font = UIFont.systemFontOfSize(12)
+        tf.textAlignment = NSTextAlignment.Center
+        tf.text = "X"
+        
+        //[tf setFont:[NSFont systemFontOfSize:10]];
+        
+        tf.adjustsFontSizeToFitWidth = true
+        
+        self.addSubview(tf)
+        
+        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Height, relatedBy:NSLayoutRelation.Equal, toItem:nil, attribute:NSLayoutAttribute.NotAnAttribute, multiplier:1.0, constant:17)
+        
+        tf.addConstraint(sCons)
+        
+        //sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.CenterX, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.CenterX, multiplier:1.0, constant:0.0)
+        
+        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Left, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.Left, multiplier:1.0, constant:self.leftMargin)
+        
+        
+        self.addConstraint(sCons)
+        
+        
+        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Right, relatedBy:NSLayoutRelation.Equal, toItem:self , attribute:NSLayoutAttribute.Right, multiplier:1.0, constant: -self.rightMargin)
+        
+ //       sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Width, relatedBy:NSLayoutRelation.Equal, toItem:nil, attribute:NSLayoutAttribute.NotAnAttribute, multiplier:1.0, constant:80.0)
+        
+        self.addConstraint(sCons)
+        
+        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.Top, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.Top, multiplier:1.0, constant:self.topMargin)
+        
+        self.addConstraint(sCons)
+        
+        tf.hidden = true
+        
+        self.statsField = tf
     }
     
     
@@ -1003,8 +1067,6 @@ class TMKGraphView: UIView {
                 }
             }
         }
-        
-        
         
         
         CGContextRestoreGState(aContext)
