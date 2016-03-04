@@ -66,19 +66,22 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         self.navigationItem.leftBarButtonItem = editButton;
         // Lookup files
         let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
-        
-        let docsUrl = appDelegate?.applicationDocumentsDirectory()
-        
-        if let docs = docsUrl{
-            
-            loadLocalDirectoryData(docs)
-        }
-        
+         appDelegate?.mainController = self
+         self.reloadFiles()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+ 
+    func reloadFiles(){
+        guard let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate else {return}
+        guard let docsUrl = appDelegate.applicationDocumentsDirectory() else {return}
+
+        loadLocalDirectoryData(docsUrl)
+ 
     }
     
     func creationDate(url : NSURL) -> NSDate?{
@@ -210,6 +213,17 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    func isDirectory(url : NSURL) -> Bool{
+        
+        var isDirectory: ObjCBool = ObjCBool(false)
+        guard let path = url.path else {return false}
+        
+        if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDirectory) {
+            return Bool(isDirectory)
+
+        }
+        return false
+    }
     func loadLocalDirectoryData(dir : NSURL){
         
         self.actualDir = dir
@@ -226,9 +240,11 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         if let arch = enumerator{
             
-            for url in arch {
+            for item in arch  {
                 
-                files.append(url as! NSURL)
+                if let url = item as? NSURL where !self.isDirectory(url){
+                    files.append(url)
+                }
                 
             }
         }
@@ -451,6 +467,15 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    func openUrl(url : NSURL){
+        self.currentFile = url
+        
+        if let file = self.currentFile{
+            self.ninebot.loadTextFile(file)
+        }
+        
+        self.performSegueWithIdentifier("openFileSegue", sender: self)
+    }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
@@ -459,17 +484,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         let urls = urlForIndexPath(indexPath)
         
         if let url = urls {
-            
-            self.currentFile = url
-            
-            if let file = self.currentFile{
-                self.ninebot.loadTextFile(file)
-            }
-            
-            
-            self.performSegueWithIdentifier("openFileSegue", sender: self)
+           self.openUrl(url)
         }
     }
+    
     
     
     // MARK : Navigatiom
