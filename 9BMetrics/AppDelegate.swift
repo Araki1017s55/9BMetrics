@@ -23,7 +23,7 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    static var debugging = false
+    static var debugging = true
     
     static let applicationShortcutUserInfoIconKey = "applicationShortcutUserInfoIconKey"
     
@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var ubiquityUrl : NSURL?
+    
+    weak var mainController : ViewController?
     
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -78,6 +80,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
     }
+    
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        if url.fileURL{
+            
+            
+            guard let name = url.lastPathComponent else {return false}
+            
+            guard var newUrl =  self.applicationDocumentsDirectory()?.URLByAppendingPathComponent(name) else {return false}
+            
+            let mgr = NSFileManager.defaultManager()
+            
+            // Check if file exists
+            
+            var ct = 1
+            guard var path = newUrl.path else {return false}
+            
+            while mgr.fileExistsAtPath(path){
+                
+                let newName = String(format: "%@(%d)", name, ct)
+                let aUrl = self.applicationDocumentsDirectory()?.URLByAppendingPathComponent(newName)
+                if let url = aUrl{
+                    path = url.path!
+                    newUrl = url
+                    ct++
+                }
+                else{
+                    return false
+                    
+                }
+            }
+            
+            do {
+                try mgr.moveItemAtURL(url, toURL: newUrl)
+                
+                if let wc = self.mainController{
+                    wc.reloadFiles()
+                    wc.openUrl(newUrl)
+                }
+                
+            }catch {
+                AppDelegate.debugLog("ERROR al copiar url %@ a %@", url, newUrl)
+                return false
+                
+            }
+            
+            return true
+            
+        }
+        return false
+    }
+    
+  
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
