@@ -111,6 +111,8 @@ class TMKGraphContentView: UIView {
                     var x = v.xmin
                     let d = (v.xmax - v.xmin) / self.bounds.width       // At most every pixel
                     
+                    let d0 = (v.selectionRightUnits - v.selectionLeftUnits)/(v.selectionRight - v.selectionLeft)
+                    
                     
                    // let n = ds.numberOfPointsForSerie(selSerie, value: v.yValue) // abans v.yValue
                     
@@ -131,7 +133,12 @@ class TMKGraphContentView: UIView {
                         pt = v.heightPointFromTrackPoint(pt)
                         bz.moveToPoint(pt)
                         
-                        x = x + d
+                        if v.selectionLeftUnits < x && x < v.selectionRightUnits{
+                            x = x + d0
+                        }
+                        else{
+                             x = x + d
+                        }
                         
                         //for i in 0..<n{
                             
@@ -141,7 +148,13 @@ class TMKGraphContentView: UIView {
                             pt = ds.value(v.yValue, axis: v.xAxis, forX: x, forSerie: selSerie)
                             pt = v.heightPointFromTrackPoint(pt)
                             bz.addLineToPoint(pt)
-                            x = x + d
+                            
+                            if v.selectionLeftUnits < x && x < v.selectionRightUnits{
+                                x = x + d0
+                            }
+                            else{
+                                x = x + d
+                            }
                         }
                         
                         pt = ds.value(v.yValue, axis: v.xAxis, forX: v.xmax, forSerie: selSerie)
@@ -312,7 +325,7 @@ class TMKGraphContentView: UIView {
                     
                     var x = v.xmin
                     let d = (v.xmax - v.xmin) / self.bounds.width       // At most every pixel
-                 
+                    let d0 = (v.selectionRightUnits - v.selectionLeftUnits)/(v.selectionRight - v.selectionLeft)
                     
                    // if n > 0 {
                     if x < v.xmax{
@@ -330,7 +343,12 @@ class TMKGraphContentView: UIView {
                         pt = v.viewPointFromTrackPoint(pt)
                         bz.moveToPoint(pt)
                         
-                        x = x + d
+                        if v.selectionLeftUnits < x && x < v.selectionRightUnits{
+                            x = x + d0
+                        }
+                        else{
+                            x = x + d
+                        }
                         
                         //for i in 1..<n {
                         while x <= v.xmax{
@@ -340,7 +358,12 @@ class TMKGraphContentView: UIView {
                             pt = v.viewPointFromTrackPoint(pt)
                             bz.addLineToPoint(pt)
                             
-                            x = x + d
+                            if v.selectionLeftUnits < x && x < v.selectionRightUnits{
+                                x = x + d0
+                            }
+                            else{
+                                x = x + d
+                            }
                         }
                         
                         bz.stroke()
