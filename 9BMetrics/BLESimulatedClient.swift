@@ -47,8 +47,8 @@ class BLESimulatedClient: NSObject {
     var timerStep = 0.01        // Get data every step
     var contadorOp = 0          // Normal data updated every second
     var contadorOpFast = 0      // Special data updated every 1/10th of second
-    var listaOp :[(UInt8, UInt8)] = [(34,4), (41, 2), (50,2), (58,5), (71,6), (182, 5)]
-    var listaOpFast :[(UInt8, UInt8)] = [(38,1), (80,1), (97,4)]
+    var listaOp :[(UInt8, UInt8)] = [(41, 2), (50,2), (58,5),  (182, 5)]
+    var listaOpFast :[(UInt8, UInt8)] = [(38,1), (80,1), (97,4), (34,4), (71,6)]
     
     
     var buffer = [UInt8]()
