@@ -490,7 +490,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     
     
     
-    // MARK : Navigatiom
+    // MARK : Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "dashboardSegue" {
@@ -498,6 +498,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 dash.delegate = self
                 self.ninebot.clearAll()
                 dash.ninebot = self.ninebot
+                dash.file = nil
                 self.dashboard = dash
                 dash.connect()
                 
@@ -507,6 +508,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 dash.delegate = self
                 dash.ninebot = self.ninebot
                 self.dashboard = dash
+                dash.file = self.currentFile    
                 
                 //self.startClient() // Tan sols en algun cas potser depenent del sender?
                 
