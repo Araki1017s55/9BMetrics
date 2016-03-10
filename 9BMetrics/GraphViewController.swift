@@ -208,7 +208,11 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
             case 9:     //Power
                 let wh = acum / 3600.0
                 answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f W: %4.2f wh", min, avg, max, wh))
-               
+                
+            case 10:     //Energy
+                answer.appendContentsOf(String(format:" Energy: %4.2f wh ", max - min))
+
+                
                 
             default:
                 answer.appendContentsOf(" ")
