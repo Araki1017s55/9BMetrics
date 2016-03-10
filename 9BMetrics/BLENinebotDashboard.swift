@@ -35,6 +35,8 @@ class BLENinebotDashboard: UITableViewController {
     
     var searching = false
     
+    var file : NSURL?
+    
     // Connected is not necessary because when disconnected client is nill
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -53,6 +55,13 @@ class BLENinebotDashboard: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let f = self.file {
+            
+            let name = f.lastPathComponent
+            self.titleField.title = name
+        
+        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -160,6 +169,8 @@ class BLENinebotDashboard: UITableViewController {
     
     func connect(){
         
+        self.titleField.title = "Connecting..."
+        
         self.client = BLESimulatedClient()
         
         if let cli = self.client{
@@ -207,7 +218,7 @@ class BLENinebotDashboard: UITableViewController {
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-        return 2
+        return 3
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -221,6 +232,9 @@ class BLENinebotDashboard: UITableViewController {
         case 1 :
             return 7
             
+        case 2 :
+            return 3
+            
         default:
             return 0
         }
@@ -233,6 +247,9 @@ class BLENinebotDashboard: UITableViewController {
             
         case 1:
             return "General Info"
+            
+        case 2:
+            return "Settings"
             
         default:
             return "--- ??? ---"
@@ -248,6 +265,9 @@ class BLENinebotDashboard: UITableViewController {
             let i = indexPath.row
             
             if  section == 0 {
+                
+                cell.detailTextLabel!.textColor = UIColor.lightGrayColor()
+                
                 switch(i) {
                     
                 case 0:
@@ -260,8 +280,6 @@ class BLENinebotDashboard: UITableViewController {
                         cell.detailTextLabel!.textColor = UIColor.orangeColor()
                     }else if v > 20.0 {
                         cell.detailTextLabel!.textColor = UIColor.redColor()
-                    }else{
-                        cell.detailTextLabel!.textColor = UIColor.blackColor()
                     }
                     
                     
@@ -337,9 +355,43 @@ class BLENinebotDashboard: UITableViewController {
                 }
                 
             }
+            else if section == 2{
+                switch(i) {
+                    
+                case 0:
+                    cell.textLabel!.text = "Riding Level"
+                    cell.detailTextLabel!.text = String(format:"%d", nb.ridingLevel())
+                    
+                case 1:
+                    cell.textLabel!.text = "Limit Speed"
+                    cell.detailTextLabel!.text = String(format:"%4.0f km/h", nb.limitSpeed())
+                    
+                case 2:
+                    cell.textLabel!.text = "Max Speed"
+                    cell.detailTextLabel!.text = String(format:"%4.0f km/h", nb.maxSpeed())
+                    
+                default:
+                    
+                    cell.textLabel!.text = "Unknown"
+                    cell.detailTextLabel!.text = ""
+                }
+                
+
+             }
+            
+            
         }
         
         return cell
+    }
+    
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if indexPath.section == 2{
+            self.performSegueWithIdentifier("ninebotSettingsSegue", sender: self)
+        }
     }
     
     
@@ -386,6 +438,10 @@ class BLENinebotDashboard: UITableViewController {
         
         if segue.identifier == "turnSegueIdentifier" {
             if let vc = segue.destinationViewController as? GraphViewController  {
+                
+                if let nb = self.ninebot{
+                    nb.buildEnergy()
+                }
                 vc.ninebot = self.ninebot
                 vc.delegate = self
             }
@@ -400,6 +456,13 @@ class BLENinebotDashboard: UITableViewController {
                 vc.delegate = self
                 self.devList.removeAll()
                 self.searching = true
+                
+            }
+        }
+        
+        else if segue.identifier == "ninebotSettingsSegue"{
+            if let vc = segue.destinationViewController as? BLENinebotSettingsViewController{
+                vc.ninebotClient = self.client
                 
             }
         }
