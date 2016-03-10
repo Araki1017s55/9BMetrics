@@ -19,17 +19,46 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+//TODO: We need to decide what to do when maxSpeed goes less than limitSpeed. Logically
+// we should reduce limitSpeed automatically. Will think about
+
 import UIKit
 
 class BLENinebotSettingsViewController: UIViewController {
 
-    @IBOutlet weak var speedLimitField: UITextField!
-    @IBOutlet weak var maxSpeedField: UITextField!
+    @IBOutlet weak var speedLimitSlider: UISlider!
+    @IBOutlet weak var maxSpeedSlider: UISlider!
     @IBOutlet weak var ridingSettingsSlider: UISlider!
+    
+    @IBOutlet weak var vSpeedLimitSetings: UILabel!
+    @IBOutlet weak var vMaxSpeedSettings: UILabel!
+    @IBOutlet weak var vRidingSettings: UILabel!
+    
+    var oldRidingLevel = 0
+    var oldSpeedLimit = 0.0
+    var oldMaxSpeed = 0.0
+   
+    weak var ninebotClient : BLESimulatedClient?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let nb = self.ninebotClient{
+            if let dat = nb.datos {
+                
+                speedLimitSlider.value = Float(dat.limitSpeed())
+                speedLimitSlider.maximumValue = Float(dat.maxSpeed())
+                vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.limitSpeed())
+                maxSpeedSlider.value = Float(dat.maxSpeed())
+                vMaxSpeedSettings.text = String(format: "%1.0f km/h", dat.maxSpeed())
+                
+                ridingSettingsSlider.value = Float(dat.ridingLevel())
+                vRidingSettings.text = String(format: "%d", dat.ridingLevel())
+                oldRidingLevel = dat.ridingLevel()
+                oldSpeedLimit = dat.limitSpeed()
+                oldMaxSpeed = dat.maxSpeed()
+            }
+        }
         // Do any additional setup after loading the view.
     }
 
@@ -38,12 +67,83 @@ class BLENinebotSettingsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    @IBAction func clearNinebotUUID(src : AnyObject){
+    
+    @IBAction func ridingSettingsSliderMoved(src : AnyObject){
         
+        let v = Int(round(ridingSettingsSlider.value))
         
+        if v != oldRidingLevel{
+            vRidingSettings.text = String(format: "%d", v)
+            oldRidingLevel = v
+        }
+    
         
+        if let nb = self.ninebotClient{
+            
+            
+            if let dat = nb.datos {
+                
+                let v0 = dat.data[BLENinebot.kvRideMode].value
+                
+                if v != v0 {
+                    nb.setRidingLevel(v)
+                }
+               
+            }
+        }
     }
+    
+    
+    @IBAction func speedLimitSliderMoved(src : AnyObject){
+        
+        let v = Double(round(speedLimitSlider.value))
+        
+        if v != oldSpeedLimit{
+            vSpeedLimitSetings.text = String(format: "%1.0f km/h", v)
+            oldSpeedLimit = v
+        }
+        
+        
+        if let nb = self.ninebotClient{
+             if let dat = nb.datos {
+                let v0 = dat.limitSpeed()
+                
+                if fabs(v - v0) >= 1.0 {
+                    nb.setLimitSpeed(v)
+                }
+                
+            }
+        }
+    }
+    
+    @IBAction func maxSpeedSliderMoved(src : AnyObject){
+        
+        let v = Double(round(maxSpeedSlider.value))
+        
+        if v != oldMaxSpeed{
+            vMaxSpeedSettings.text = String(format: "%1.0f km/h", v)
+            oldMaxSpeed = v
+            speedLimitSlider.maximumValue = round(maxSpeedSlider.value)
+        }
+        
+        
+        if let nb = self.ninebotClient{
+            if let dat = nb.datos {
+                let v0 = dat.maxSpeed()
+                
+                if fabs(v - v0) >= 1.0 {
+                    nb.setMaxSpeed(v)
+                }
+                
+            }
+        }
+    }
+ 
+    
+    
+     
+    // Necessitem
+    
     /*
     // MARK: - Navigation
 
