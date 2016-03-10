@@ -58,6 +58,7 @@ class  BLENinebot : NSObject{
     
     static let kAltitude = 0        // Obte les dades de CMAltimeterManager. 0 es l'inici i serveix per variacions unicament
     static let kPower = 1           // Calculada com V * I
+    static let kEnergy = 2          // Total Energy = Integral (Power, dt)
     static let kSerialNo = 16       // 16-22
     static let kPinCode = 23        // 23-25
     static let kVersion = 26
@@ -80,6 +81,8 @@ class  BLENinebot : NSObject{
     static let kRollAngle = 98
     static let kPitchAngleVelocity = 99
     static let kRollAngleVelocity = 100
+    static let kAbsoluteSpeedLimit = 115
+    static let kSpeedLimit = 116
     
     static let kvCodeError = 176
     static let kvCodeWarning = 177
@@ -102,7 +105,7 @@ class  BLENinebot : NSObject{
     
     static var displayableVariables : [Int] = [BLENinebot.kCurrentSpeed, BLENinebot.kTemperature,
         BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
-        BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower]
+        BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower, BLENinebot.kEnergy]
     
     var data = [NinebotVariable](count:256, repeatedValue:NinebotVariable())
     var signed = [Bool](count: 256, repeatedValue: false)
@@ -138,6 +141,7 @@ class  BLENinebot : NSObject{
     static func initNames(){
         BLENinebot.labels[0]  = "Alt Var(m)"
         BLENinebot.labels[1]  = "Power(W)"
+        BLENinebot.labels[2]  = "Energy(wh)"
         BLENinebot.labels[16]  = "SN0"
         BLENinebot.labels[17]  = "SN1"
         BLENinebot.labels[18]  = "SN2"
@@ -217,6 +221,18 @@ class  BLENinebot : NSObject{
             }
         }
         
+        if data[BLENinebot.kSpeedLimit].value == -1{
+            filled = false
+        }
+
+        if data[BLENinebot.kAbsoluteSpeedLimit].value == -1{
+            filled = false
+        }
+
+        if data[BLENinebot.kvRideMode].value == -1{
+            filled = false
+        }
+
         headersOk = filled
         
         return filled
@@ -596,6 +612,36 @@ class  BLENinebot : NSObject{
         return (max/100.0, min/100.0, avg/100.0, acum/100.0)
     }
     
+    func buildEnergy(){
+        
+        if self.data[BLENinebot.kCurrent].log.isEmpty{
+            return
+        }
+        
+        
+        var acum = 0.0
+        var t0 = self.data[BLENinebot.kCurrent].log[0].time
+        var v0 = self.power(0)
+        
+        self.data[BLENinebot.kEnergy].log.removeAll()
+        self.data[BLENinebot.kEnergy].log.append(LogEntry(time: t0, variable: BLENinebot.kEnergy, value: 0))
+        
+        
+        for i in 1..<self.data[BLENinebot.kCurrent].log.count{
+            
+            let t1 = self.data[BLENinebot.kCurrent].log[i].time
+            let v1 = self.power(i)
+            
+           
+            acum = acum + (v1 + v0) / 2.0 * t1.timeIntervalSinceDate(t0)
+            t0 = t1
+            v0 = v1
+            self.data[BLENinebot.kEnergy].log.append(LogEntry(time: t0, variable: BLENinebot.kEnergy, value: Int(round(acum / 36.0))))
+         }
+        
+        self.data[BLENinebot.kEnergy].timeStamp = t0
+        self.data[BLENinebot.kEnergy].value = Int(round(acum / 36.0))
+    }
     
     func power() -> Double{ // Units are Watts
         return voltage() * current()
@@ -697,6 +743,40 @@ class  BLENinebot : NSObject{
         return (max/100.0, min/100.0, avg/100.0, acum/100.0)
     }
     
+    func energy() -> Double {
+        let v = data[BLENinebot.kEnergy].value
+        let t = Double(v) / 100.0
+        return t
+    }
+    
+    func energy(i : Int) -> Double {
+        let v = data[BLENinebot.kEnergy].log[i].value
+        let t = Double(v) / 100.0
+        return t
+    }
+    
+    func energy(time t: NSTimeInterval) -> Double{
+        
+        let entry = self.value(BLENinebot.kEnergy, forTime: t)
+        
+        if let e = entry{
+            let v = e.value
+            return Double(v) / 100.0
+        }
+        else{
+            return 0.0
+        }
+    }
+    
+    func energy(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
+    {
+        
+        let (max, min, avg, acum) = self.stats(BLENinebot.kEnergy, from: t0, to: t1)
+        
+        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+    }
+
+    
     // pitch angle speed
     
     
@@ -753,6 +833,32 @@ class  BLENinebot : NSObject{
         return (max, min, avg, acum)
     }
    
+    
+    // Limit Speeed
+    
+    func limitSpeed() -> Double {
+        let s : Double = Double(data[BLENinebot.kSpeedLimit].value) / 1000.0
+        
+        return s
+    }
+
+    // Max Speed
+    
+    func maxSpeed() -> Double {
+        let s : Double = Double(data[BLENinebot.kAbsoluteSpeedLimit].value) / 1000.0
+        
+        return s
+    }
+    
+    // Riding Level
+    
+    func ridingLevel() -> Int {
+        let s = data[BLENinebot.kvRideMode].value
+        
+        return s
+    }
+
+
     // Speed
     
     func speed() -> Double {
@@ -1218,7 +1324,10 @@ class  BLENinebot : NSObject{
             
         case 9:
             return self.power(time: time)
-            
+
+        case 10:
+            return self.energy(time: time)
+
         default:
             return 0.0
             
@@ -1260,7 +1369,11 @@ class  BLENinebot : NSObject{
             
         case 9:
             return self.powerStats(from: t0, to: t1)
+
             
+        case 10:
+            return self.energy(from: t0, to: t1)
+
         default:
             return (0.0, 0.0, 0.0, 0.0)
             
@@ -1301,7 +1414,10 @@ class  BLENinebot : NSObject{
             
         case 9:
             return self.power(index)
-            
+
+        case 10:
+            return self.energy(index)
+
         default:
             return 0.0
             
