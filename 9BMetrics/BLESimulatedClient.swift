@@ -264,6 +264,108 @@ class BLESimulatedClient: NSObject {
         }
     }
     
+    // Sets limit speed in km/h
+    
+    func setLimitSpeed(speed : Double){
+        // Check that level is between 0..9
+        if speed < 0  {
+            return
+        }
+        
+        let speedm = Int(round(speed * 1000.0)) // speedm es la velocitat en m
+        
+        let b1 = UInt8(speedm / 256)
+        let b0 = UInt8(speedm % 256)
+        
+        
+        // That write riding level
+        
+        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kSpeedLimit), dat:[b0, b1] )
+        
+        if let st = message?.toString(){
+            NSLog("Command : %@", st)
+        }
+        
+        if let dat = message?.toNSData(){
+            
+            self.connection.writeValue(dat)
+        }
+        
+        // Get value to see if it is OK
+        
+        message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat:[UInt8(2)] )
+        
+        if let dat = message?.toNSData(){
+            self.connection.writeValue(dat)
+        }
+    }
+    func setMaxSpeed(speed : Double){
+        // Check that level is between 0..9
+        if speed < 0  {
+            return
+        }
+        
+        let speedm = Int(round(speed * 1000.0)) // speedm es la velocitat en m
+        
+        let b1 = UInt8(speedm / 256)
+        let b0 = UInt8(speedm % 256)
+        
+        
+        // That write riding level
+        
+        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[b0, b1] )
+        
+        if let st = message?.toString(){
+            NSLog("Command : %@", st)
+        }
+        
+        if let dat = message?.toNSData(){
+            
+            self.connection.writeValue(dat)
+        }
+        
+        // Get value to see if it is OK
+        
+        message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[UInt8(2)] )
+        
+        if let dat = message?.toNSData(){
+            self.connection.writeValue(dat)
+        }
+    }
+
+    
+    func setRidingLevel(level : Int){
+        
+        // Check that level is between 0..9
+        
+        if level < 0 || level > 9 {
+            return
+        }
+
+        
+        // That write riding level
+
+        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kvRideMode), dat:[UInt8(level), UInt8(0)] )
+        
+        if let st = message?.toString(){
+            NSLog("Command : %@", st)
+        }
+        
+        if let dat = message?.toNSData(){
+            
+            self.connection.writeValue(dat)
+        }
+        
+        // Get value to see if it is OK
+        
+        message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat:[UInt8(2)] )
+        
+        if let dat = message?.toNSData(){
+            self.connection.writeValue(dat)
+        }
+        
+    }
+    
     func sendData(timer:NSTimer){
         
         if let nb = self.datos {
@@ -303,10 +405,25 @@ class BLESimulatedClient: NSObject {
             } else {    // Get One time data (S/N, etc.)
                 
                 
-                let message = BLENinebotMessage(com: UInt8(16), dat: [UInt8(22)])
+                var message = BLENinebotMessage(com: UInt8(16), dat: [UInt8(22)])
                 if let dat = message?.toNSData(){
                     self.connection.writeValue(dat)
                 }
+                
+                // Get riding Level and max speeds
+                
+                message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat: [UInt8(4)])
+                
+                if let dat = message?.toNSData(){
+                    self.connection.writeValue(dat)
+                }
+ 
+                message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat: [UInt8(2)])
+                
+                if let dat = message?.toNSData(){
+                    self.connection.writeValue(dat)
+                }
+
             }
         }
     }
