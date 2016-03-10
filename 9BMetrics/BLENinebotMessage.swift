@@ -94,6 +94,40 @@ class BLENinebotMessage: NSObject {
         
     }
     
+    // Aquest cas es per enviar ua comanda de escriptura. buff[4] = 03
+    
+    init?(commandToWrite command : UInt8, dat : [UInt8]){
+        super.init()
+        
+        if dat.count > 253 {    // Max buffer size must be 253
+            return nil
+        }
+        
+        self.command = command
+        self.data = dat
+        self.len = UInt8(dat.count + 2)
+        self.fixed2 = 0x03  // Writing values
+        
+        // OK build a buffer, compute checks and store
+        
+        var buff = [UInt8](count: 6, repeatedValue: 0)
+        buff[0] = h0
+        buff[1] = h1
+        buff[2] = len
+        buff[3] = fixed1
+        buff[4] = fixed2
+        buff[5] = command
+        
+        buff.appendContentsOf(dat)
+        
+        let (check0, check1) = self.check(buff, len: buff.count-2)
+        
+        self.ck0 = check0
+        self.ck1 = check1
+        
+        
+    }
+    
     init?(buffer : [UInt8]){
         
         super.init()
