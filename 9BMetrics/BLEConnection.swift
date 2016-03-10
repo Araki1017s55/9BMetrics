@@ -50,7 +50,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     var subscribed = false
     
     var connectionRetries = 0
-    var maxConnectionRetries = 3
+    var maxConnectionRetries = 5
     
     // These characteristics are not used usually
     
@@ -275,38 +275,44 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         
     {
         AppDelegate.debugLog("DidDisconnectPeripheral")
+        
+        if self.connected && self.subscribed    {   // Try to reconnect
+            
+            self.connectionRetries = connectionRetries + 1
+            
+            if connectionRetries < maxConnectionRetries{
+                let store = NSUserDefaults.standardUserDefaults()
+                let device = store.stringForKey(BLESimulatedClient.kLast9BDeviceAccessedKey)
+                
+                if let dev = device  // Try to connect to last connected peripheral
+                {
+                    
+                    if let theId = NSUUID(UUIDString:dev){
+                        
+                        let ids  = [theId]
+                        let devs : [CBPeripheral] = self.centralManager!.retrievePeripheralsWithIdentifiers(ids)
+                        
+                        if devs.count > 0
+                        {
+                            let peri : CBPeripheral = devs[0]
+                            
+                            self.connectPeripheral(peri)
 
+                            //TODO: Probablement modificar per establir la connexio directament
+                            //self.centralManager(central,  didDiscoverPeripheral:peri,  advertisementData:["Hello" : "Hello"],  RSSI:NSNumber())
+                            return;
+                        }
+                    }
+                }
+                    
+                else {
+                    
+                }
+            }
+        }
         self.connected = false
         self.subscribed = false
         
-        self.connectionRetries = connectionRetries + 1
-        
-        if connectionRetries < maxConnectionRetries{
-            let store = NSUserDefaults.standardUserDefaults()
-            let device = store.stringForKey(BLESimulatedClient.kLast9BDeviceAccessedKey)
-            
-            if let dev = device  // Try to connect to last connected peripheral
-            {
-                
-                if let theId = NSUUID(UUIDString:dev){
-                    
-                    let ids  = [theId]
-                    let devs : [CBPeripheral] = self.centralManager!.retrievePeripheralsWithIdentifiers(ids)
-                    
-                    if devs.count > 0
-                    {
-                        let peri : CBPeripheral = devs[0]
-                        //TODO: Probablement modificar per establir la connexio directament
-                        self.centralManager(central,  didDiscoverPeripheral:peri,  advertisementData:["Hello" : "Hello"],  RSSI:NSNumber())
-                        return;
-                    }
-                }
-            }
-                
-            else {
-                
-            }
-        }
         BLESimulatedClient.sendNotification(BLESimulatedClient.kConnectionLostNotification, data: ["peripheral" : peripheral])
         if let dele = self.delegate{
             dele.deviceDisconnectedConnected(peripheral)
