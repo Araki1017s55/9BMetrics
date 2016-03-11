@@ -277,6 +277,7 @@ class  BLENinebot : NSObject{
             if data[variable].value != sv || data[variable].log.count == 1 {
 
                 data[variable].log.append(v)
+                self.postVariableChanged(v)
                 
             }else if data[variable].log.count >= 2{
                 
@@ -297,11 +298,32 @@ class  BLENinebot : NSObject{
             
             data[variable].value = sv
             data[variable].timeStamp = dat
+            
+            //Now post new entru
+            
+
         }
     }
     
     
     // MARK : Converting to and from files
+    
+    func postVariableChanged(entry : LogEntry){
+        
+        let name = BLENinebot.nameOfVariableChangedNotification(entry.variable)
+        
+        let userInfo = ["value" : entry.value, "variable" : entry.variable, "time" : entry.time]
+        
+        let not = NSNotification(name: name, object: self, userInfo: userInfo)
+        
+        NSNotificationCenter.defaultCenter().postNotification(not)
+        
+        
+    }
+    
+    static func nameOfVariableChangedNotification(variable : Int) -> String{
+        return String(format: "ninebotVariable%dChanged", variable)
+    }
     
     func createTextFile() -> NSURL?{
         
