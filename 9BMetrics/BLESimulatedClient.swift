@@ -283,7 +283,7 @@ class BLESimulatedClient: NSObject {
         var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kSpeedLimit), dat:[b0, b1] )
         
         if let st = message?.toString(){
-            NSLog("Command : %@", st)
+            AppDelegate.debugLog("Command : %@", st)
         }
         
         if let dat = message?.toNSData(){
@@ -316,7 +316,7 @@ class BLESimulatedClient: NSObject {
         var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[b0, b1] )
         
         if let st = message?.toString(){
-            NSLog("Command : %@", st)
+            AppDelegate.debugLog("Command : %@", st)
         }
         
         if let dat = message?.toNSData(){
@@ -348,7 +348,7 @@ class BLESimulatedClient: NSObject {
         var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kvRideMode), dat:[UInt8(level), UInt8(0)] )
         
         if let st = message?.toString(){
-            NSLog("Command : %@", st)
+            AppDelegate.debugLog("Command : %@", st)
         }
         
         if let dat = message?.toNSData(){
