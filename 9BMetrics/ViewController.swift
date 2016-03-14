@@ -314,7 +314,14 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         })
         
         alert.addAction(action)
+
+        action = UIAlertAction(title: "Ninebot Server", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
+            
+            self.performSegueWithIdentifier("simulatedNinebotSegue", sender: self)
+        })
         
+        alert.addAction(action)
+
         action = UIAlertAction(title: "About 9B Metrics", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
             self.performSegueWithIdentifier("docSegue", sender: self)
         })
