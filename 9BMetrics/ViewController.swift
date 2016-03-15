@@ -463,7 +463,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 }
             }
             
-            self.shareData(self.currentFile, src: srcView)
+            self.shareData(self.currentFile, src: srcView, delete: false)
         }
     }
     
@@ -541,7 +541,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     func clientStopped(){
         
         let aFile = self.ninebot.createTextFile()
-        self.shareData(aFile, src: self.tableView)
+        self.shareData(aFile, src: self.tableView, delete: false)
         
     }
     
@@ -561,7 +561,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     
     // Create a file with actual data and share it
     
-    func shareData(file: NSURL?, src:AnyObject){
+    func shareData(file: NSURL?, src:AnyObject, delete: Bool){
         
         
         if let aFile = file {
@@ -574,6 +574,13 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             
             activityViewController.completionWithItemsHandler = {(a : String?, completed:Bool, objects:[AnyObject]?, error:NSError?) in
                 
+                if delete {
+                    do{
+                    try NSFileManager.defaultManager().removeItemAtURL(aFile)
+                    }catch{
+                        AppDelegate.debugLog("Error al esborrar %@", aFile)
+                    }
+                }
             }
             
             activityViewController.popoverPresentationController?.sourceView = src as? UIView
