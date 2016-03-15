@@ -42,4 +42,5 @@ protocol TMKGraphViewDataSource {
     func isSelectedPin(pin: Int) -> Bool
     func minMaxForSerie(serie : Int, value: Int) -> (CGFloat, CGFloat)
     func statsForSerie(value: Int, from t0: NSTimeInterval, to t1: NSTimeInterval) -> String
+    func doGearActionFrom(from: Double, to: Double, src:AnyObject)
 }
