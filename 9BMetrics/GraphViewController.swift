@@ -23,7 +23,6 @@ import UIKit
 class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     @IBOutlet weak var graphView : TMKGraphView!
-    
     weak var delegate : BLENinebotDashboard?
     weak var ninebot : BLENinebot?
     var shownVariable = 0
@@ -269,6 +268,25 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         
         
         
+    }
+    
+    func doGearActionFrom(from: Double, to: Double, src: AnyObject){
+        var url : NSURL?
+        
+        if let nb = self.ninebot{
+            url = nb.createCSVFileFrom(from, to: to)
+        }
+        
+        if let db = self.delegate{
+            if let vc = db.delegate{
+                
+                if let u = url {
+                    vc.shareData(u, src: src, delete: true)
+                }
+            }
+        }
+        
+        // Export all selected data to a file
     }
 
 }
