@@ -96,7 +96,7 @@ class TMKGraphView: UIView {
         self.addyValueButton()
         self.addGearButton()
         self.addInfoField()
-        //self.addSlider()
+       // self.addSlider()
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: "swipeLeft:")
         swipeLeft.direction = .Left
@@ -570,7 +570,7 @@ class TMKGraphView: UIView {
         let but = UIButton(type: UIButtonType.Custom)
         but.translatesAutoresizingMaskIntoConstraints = false
         
-        let clearImage = UIImage(named:"nakedGear_32")
+        let clearImage = UIImage(named:"nakedGear")
         but.setImage(clearImage, forState:UIControlState.Normal)
         
         
@@ -587,7 +587,7 @@ class TMKGraphView: UIView {
         self.addConstraint(sCons)
         
         
-        sCons = NSLayoutConstraint(item:but, attribute:NSLayoutAttribute.Right, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.Right, multiplier:1.0, constant:0.0)
+        sCons = NSLayoutConstraint(item:but, attribute:NSLayoutAttribute.Right, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.Right, multiplier:1.0, constant:-5.0)
         
         self.addConstraint(sCons)
         
@@ -1413,15 +1413,14 @@ class TMKGraphView: UIView {
     
     
     
-    /* Std Filterig is not OK here.
-    
-    func openGear(src : AnyObject){
-    
-    let hud = self.getHudView]()
-    hud.openGear()
+     func openGear(src : AnyObject){
+        
+        if let ds = self.dataSource{
+            ds.doGearActionFrom(Double(self.selectionLeftUnits), to: Double(self.selectionRightUnits), src: src)
+        }
     
     }
-    
+/*
     func getHudView() ->TMKHudView? {
     
     var v : UIView? = self
