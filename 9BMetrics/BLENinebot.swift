@@ -325,6 +325,97 @@ class  BLENinebot : NSObject{
         return String(format: "ninebotVariable%dChanged", variable)
     }
     
+    func createCSVFileFrom(from : NSTimeInterval, to: NSTimeInterval) -> NSURL?{
+        // Format first date into a filepath
+        
+        let ldateFormatter = NSDateFormatter()
+        let enUSPOSIXLocale = NSLocale(localeIdentifier: "en_US_POSIX")
+        
+        ldateFormatter.locale = enUSPOSIXLocale
+        ldateFormatter.dateFormat = "'Sel_'yyyyMMdd'_'HHmmss'.csv'"
+        let newName = ldateFormatter.stringFromDate(NSDate())
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        
+        var path : String = ""
+        
+        if let dele = appDelegate {
+            let docs = dele.applicationDocumentsDirectory()
+            
+            if let d = docs {
+                path = d.path!
+            }
+        }
+        else
+        {
+            return nil
+        }
+        
+        let tempFile = (path + "/" ).stringByAppendingString(newName )
+        
+        
+        let mgr = NSFileManager.defaultManager()
+        
+        mgr.createFileAtPath(tempFile, contents: nil, attributes: nil)
+        let file = NSURL.fileURLWithPath(tempFile)
+        
+        
+        
+        do{
+            let hdl = try NSFileHandle(forWritingToURL: file)
+            // Get time of first item
+            
+            if firstDate == nil {
+                firstDate = NSDate()
+            }
+            
+            
+            let title = String(format: "Time\tCurrent\tVoltage\tPower\tEnergy\tSpeed\tAlt\tDist\tPitch\tRoll\tBatt\n")
+            hdl.writeData(title.dataUsingEncoding(NSUTF8StringEncoding)!)
+            
+            // Get first ip of current
+            
+            for var i = 0; i < self.data[BLENinebot.kCurrent].log.count; i++ {
+            
+                    let e = self.data[BLENinebot.kCurrent].log[i]
+                
+                    let t = e.time.timeIntervalSinceDate(self.firstDate!)
+                
+                if from <= t && t <= to {
+ 
+                    let vCurrent = self.current(i)
+                    let vVoltage = self.voltage(time: t)
+                    let vPower = self.power(time: t)
+                    let vEnergy = self.energy(time :t)
+                    let vSpeed = self.speed(time: t)
+                    let vAlt = self.altitude(time: t)
+                    let vDistance = self.singleMileage(time: t)
+                    let vPitch = self.pitch(time: t)
+                    let vRoll = self.roll(time: t)
+                    let vBattery = self.batteryLevel(time: t)
+                    
+                    
+                    let s = String(format: "%20.3f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\n", t, vCurrent, vVoltage, vPower, vEnergy, vSpeed, vAlt, vDistance, vPitch, vRoll, vBattery)
+                    if let vn = s.dataUsingEncoding(NSUTF8StringEncoding){
+                        hdl.writeData(vn)
+                    }
+                }
+            }
+            
+            
+            hdl.closeFile()
+            
+            return file
+            
+        }
+        catch{
+            AppDelegate.debugLog("Error al obtenir File Handle")
+        }
+        
+        return nil
+        
+    }
+    
     func createTextFile() -> NSURL?{
         
         // Format first date into a filepath
