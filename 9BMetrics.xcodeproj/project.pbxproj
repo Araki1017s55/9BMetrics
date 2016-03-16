@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0016670C1C9958B70048344F /* BLESimulatedNinebot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */; };
 		007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57171C85CE49003A2030 /* AppDelegate.swift */; };
 		007A571A1C85CE49003A2030 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57191C85CE49003A2030 /* ViewController.swift */; };
 		007A57271C85CE49003A2030 /* 9BMetrics WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 007A57261C85CE49003A2030 /* 9BMetrics WatchKit App.app */; };
@@ -88,6 +89,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESimulatedNinebot.swift; sourceTree = "<group>"; };
 		007A57141C85CE49003A2030 /* 9BMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9BMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A57171C85CE49003A2030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		007A57191C85CE49003A2030 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				007A57661C85CF39003A2030 /* PickerActivity.swift */,
 				007A57671C85CF39003A2030 /* BLENinebot.swift */,
 				007A57681C85CF39003A2030 /* BLENinebotMessage.swift */,
+				0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */,
 				007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */,
 				007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */,
 				007A576B1C85CF39003A2030 /* BLEConnection.swift */,
@@ -404,6 +407,7 @@
 				007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
+				0016670C1C9958B70048344F /* BLESimulatedNinebot.swift in Sources */,
 				007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
