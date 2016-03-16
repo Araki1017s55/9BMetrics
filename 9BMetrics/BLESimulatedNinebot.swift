@@ -14,6 +14,7 @@ class BLESimulatedNinebot: UIViewController {
     @IBOutlet weak var fNinebot: UIButton!
     @IBOutlet weak var fIphone: UIButton!
     @IBOutlet weak var fMessages: UITextView!
+    @IBOutlet weak var fSlider: UISlider!
     
     var url : NSURL?
     var ninebot : BLENinebot = BLENinebot()
@@ -32,12 +33,16 @@ class BLESimulatedNinebot: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let cursor = UIImage(named: "9bcursor")
+        self.fSlider.setThumbImage(cursor, forState: UIControlState.Normal)
         // Load data file
         
         let bundle = NSBundle.mainBundle()
         url = bundle.URLForResource("simulated_log", withExtension: "txt")
         if let u = url {
             self.loadURL(u)
+            
+            
         }
         
 
@@ -117,6 +122,9 @@ class BLESimulatedNinebot: UIViewController {
         
         self.firstDate = logData[0].time
         
+        self.fSlider.maximumValue = Float(logData.count)
+        
+        
         
         // Now all is OK; we may simulate everything
     }
@@ -141,6 +149,7 @@ class BLESimulatedNinebot: UIViewController {
     func startSimulate(){
         self.simulating = true
         self.ip = 0
+        self.fSlider.value = 0.0
         self.startDate = NSDate()
         
        // dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
@@ -151,6 +160,7 @@ class BLESimulatedNinebot: UIViewController {
     
     func stopSimulate(){
         self.simulating = false
+        self.fSlider.value = 0.0
     }
     
     func processData(){
@@ -173,6 +183,8 @@ class BLESimulatedNinebot: UIViewController {
                // self.startDate = now
                 ip = 0
             }
+            self.fSlider.value = Float(ip)
+
             w = self.logData[ip]
          }
         

@@ -293,7 +293,7 @@
                                 <state key="normal" image="9b"/>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="zzF-mR-wq8">
-                                <rect key="frame" x="20" y="231" width="560" height="349"/>
+                                <rect key="frame" x="20" y="308" width="560" height="272"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -302,15 +302,21 @@
                                 <rect key="frame" x="352" y="112" width="56" height="96"/>
                                 <state key="normal" image="iPhone"/>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1001" translatesAutoresizingMaskIntoConstraints="NO" id="IIt-Eq-sDr">
+                                <rect key="frame" x="18" y="244" width="564" height="31"/>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="zzF-mR-wq8" firstAttribute="top" secondItem="fPW-TE-kAb" secondAttribute="bottom" constant="23" id="64R-f1-1gB"/>
+                            <constraint firstItem="zzF-mR-wq8" firstAttribute="top" secondItem="fPW-TE-kAb" secondAttribute="bottom" constant="100" id="64R-f1-1gB"/>
                             <constraint firstItem="fPW-TE-kAb" firstAttribute="centerX" secondItem="BJu-L4-Wvi" secondAttribute="centerX" constant="-80" id="82I-VD-yb9"/>
+                            <constraint firstItem="IIt-Eq-sDr" firstAttribute="trailing" secondItem="BJu-L4-Wvi" secondAttribute="trailingMargin" id="8JE-yR-dwM"/>
                             <constraint firstItem="aZO-nS-XqQ" firstAttribute="top" secondItem="zzF-mR-wq8" secondAttribute="bottom" constant="20" id="Bgi-MR-VpJ"/>
+                            <constraint firstItem="IIt-Eq-sDr" firstAttribute="leading" secondItem="BJu-L4-Wvi" secondAttribute="leadingMargin" id="HCE-pj-AdM"/>
                             <constraint firstItem="zzF-mR-wq8" firstAttribute="leading" secondItem="BJu-L4-Wvi" secondAttribute="leadingMargin" id="I6q-ap-YCq"/>
                             <constraint firstItem="zzF-mR-wq8" firstAttribute="trailing" secondItem="BJu-L4-Wvi" secondAttribute="trailingMargin" id="JpB-Uz-FDT"/>
                             <constraint firstItem="q0b-u5-2Ik" firstAttribute="centerY" secondItem="fPW-TE-kAb" secondAttribute="centerY" id="mSy-sZ-LW5"/>
+                            <constraint firstItem="IIt-Eq-sDr" firstAttribute="top" secondItem="q0b-u5-2Ik" secondAttribute="bottom" constant="36" id="sCo-EX-Zik"/>
                             <constraint firstItem="fPW-TE-kAb" firstAttribute="top" secondItem="3s5-94-caG" secondAttribute="bottom" constant="48" id="yEk-1g-D3a"/>
                             <constraint firstItem="q0b-u5-2Ik" firstAttribute="centerX" secondItem="BJu-L4-Wvi" secondAttribute="centerX" constant="80" id="znL-Kj-mtz"/>
                         </constraints>
@@ -319,6 +325,7 @@
                         <outlet property="fIphone" destination="q0b-u5-2Ik" id="dHr-Oe-aIl"/>
                         <outlet property="fMessages" destination="zzF-mR-wq8" id="uVf-ga-Obw"/>
                         <outlet property="fNinebot" destination="fPW-TE-kAb" id="NoB-JG-1Ly"/>
+                        <outlet property="fSlider" destination="IIt-Eq-sDr" id="lMV-iq-p46"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dbK-kK-iXk" userLabel="First Responder" sceneMemberID="firstResponder"/>

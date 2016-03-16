@@ -37,6 +37,8 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         var files : [NSURL]
     }
     
+    let kTextMode = "enabled_test"
+    
     
     var ninebot : BLENinebot = BLENinebot()
     var server : BLESimulatedServer?
@@ -291,6 +293,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         let but = src as? UIButton
         
+        let store = NSUserDefaults.standardUserDefaults()
+        let testMode = store.boolForKey(kTextMode)
+
+        
         let alert = UIAlertController(title: "Options", message: "Select an option", preferredStyle: UIAlertControllerStyle.ActionSheet);
         
         alert.popoverPresentationController?.sourceView = but
@@ -307,27 +313,30 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         alert.addAction(action)
         
+        if testMode {
         
-        action = UIAlertAction(title: "Debug Server", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
+        
+            action = UIAlertAction(title: "Debug Server", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
+                
+                self.performSegueWithIdentifier("mimSegue", sender: self)
+            })
             
-            self.performSegueWithIdentifier("mimSegue", sender: self)
-        })
-        
-        alert.addAction(action)
+            alert.addAction(action)
 
-        action = UIAlertAction(title: "Ninebot Server", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
+            action = UIAlertAction(title: "Ninebot Server", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
+                
+                self.performSegueWithIdentifier("simulatedNinebotSegue", sender: self)
+            })
             
-            self.performSegueWithIdentifier("simulatedNinebotSegue", sender: self)
-        })
-        
-        alert.addAction(action)
+            alert.addAction(action)
+        }
 
         action = UIAlertAction(title: "About 9B Metrics", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
             self.performSegueWithIdentifier("docSegue", sender: self)
         })
         
         alert.addAction(action)
-        
+   
         
         
         self.presentViewController(alert, animated: true) { () -> Void in
