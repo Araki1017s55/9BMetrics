@@ -111,6 +111,8 @@ class TMKGraphView: UIView {
         
         self.setupGestureRecognizers()
         self.computeDataForSeries()
+        self.selectionLeft = self.leftMargin
+        self.selectionLeftUnits = xmin
         self.recomputeSelectionUnits()
         // self.setupNotifications()
         
@@ -570,9 +572,11 @@ class TMKGraphView: UIView {
         let but = UIButton(type: UIButtonType.Custom)
         but.translatesAutoresizingMaskIntoConstraints = false
         
-        let clearImage = UIImage(named:"nakedGear")
-        but.setImage(clearImage, forState:UIControlState.Normal)
+        let clearImage = UIImage(named:"share")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate) // era nakedGear
         
+        but.setImage(clearImage, forState:UIControlState.Normal)
+    
+        but.tintColor = UIColor(red: 0.11, green: 0.44, blue: 0.72, alpha: 1)
         
         //    [but addTarget:self action:@selector(switchyValue:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -582,7 +586,7 @@ class TMKGraphView: UIView {
         
         
         
-        var sCons = NSLayoutConstraint(item:but, attribute:NSLayoutAttribute.Top, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.Top, multiplier:1.0, constant:5)
+        var sCons = NSLayoutConstraint(item:but, attribute:NSLayoutAttribute.Top, relatedBy:NSLayoutRelation.Equal, toItem:self, attribute:NSLayoutAttribute.Top, multiplier:1.0, constant:7)
         
         self.addConstraint(sCons)
         
@@ -799,11 +803,48 @@ class TMKGraphView: UIView {
         self.statsField = tf
     }
     
+    func minuteStep(rawStep : CGFloat) -> CGFloat{
+        
+        var step = rawStep
+        
+        if rawStep <= 1.0 {
+            step = 1.0
+        }
+        else if rawStep <= 5.0{
+            step = 5.0
+        }
+        else if rawStep <= 10.0{
+            step = 10.0
+        }
+        else if rawStep <= 30.0{
+            step = 30.0
+        }
+        else if rawStep <= 60.0{
+            step = 60.0
+        }
+        else if rawStep <= 90.0{
+            step = 90.0
+        }
+        else if rawStep <= 120.0{
+            step = 120.0
+        }
+        else if rawStep <= 300.0{
+            step = 300.0
+        }
+        else{
+            step = 600.0
+        }
+        
+        return step
+    }
+    
     
     override func drawRect(dirtyRect : CGRect){
         // Get the Context
         
-        self.recomputeSelectionUnits()
+        if !clampDown {
+            self.recomputeSelectionUnits()
+        }
         self.graphContent.setNeedsDisplay()
         let aContext = UIGraphicsGetCurrentContext()
         
@@ -938,7 +979,7 @@ class TMKGraphView: UIView {
         
         // Ara hem de fer l'eix de les x. 2 Posibilitats
         
-        if self.xAxis == 0 { // Km
+        if self.xAxis == 0{ // Km
             
             //  CGFloat delta = self.xmax-self.xmin;
             
@@ -997,49 +1038,23 @@ class TMKGraphView: UIView {
             }
             
         }
-        else if self.xAxis == 1 {// Minuts de la sortida
+        else if self.xAxis == 1 {// Segons de la sortida
             
-            var minuts   = Int(floor(self.xmin))
+            var minuts   = Int(ceil(self.xmin / 60.0))
             
-            if(minuts < 0){
+            if minuts < 0 {
                 minuts = 0
             }
             
-            let delta : CGFloat = self.bounds.size.width / (self.xmax - self.xmin)
             
-            var step : CGFloat = 1.0
+            let dminus = minuteStep(30.0 * (self.selectionLeftUnits - self.xmin)/(self.selectionLeft - self.leftMargin))
             
-            step = 30.0 / delta
+            let d0 = minuteStep(30.0 * (self.selectionRightUnits - self.selectionLeftUnits)/(self.selectionRight - self.selectionLeft))
             
-            if step <= 1.0 {
-                step = 1.0
-            }
-            else if step <= 5.0{
-                step = 5.0
-            }
-            else if step <= 10.0{
-                step = 10.0
-            }
-            else if step <= 30.0{
-                step = 30.0
-            }
-            else if step <= 60.0{
-                step = 60.0
-            }
-            else if step <= 90.0{
-                step = 90.0
-            }
-            else if step <= 120.0{
-                step = 120.0
-            }
-            else if step <= 300.0{
-                step = 300.0
-            }
-           else{
-                step = 600.0
-            }
+            let dplus = minuteStep(30.0 * (self.xmax - self.selectionRightUnits)/(self.bounds.size.width - self.rightMargin - self.selectionRight ))
             
-            for var x  = CGFloat(minuts); x < self.xmax; x = x + step {
+            let x0 = floor(CGFloat(minuts * 60) / dminus ) * dminus
+            for var x  = x0; x < self.xmax; {
                 
                 if x >= self.xmin{
                     
@@ -1050,10 +1065,10 @@ class TMKGraphView: UIView {
                     
                     // Calculem el format hh:mm
                     
-                    let h = Int(floor(x/60.0))
-                    let m = Int(floor(x - (CGFloat(h) * 60.0)))
+                    let m = Int(floor(x/60.0))
+                    let s = Int(floor(x - (CGFloat(m) * 60.0)))
                     
-                    let lab = String(format:"%ld:%ld", h, m)
+                    let lab = String(format:"%ld:%ld", m, s)
                     
                     let attr : [String : AnyObject] = NSDictionary(objects: NSArray(objects:font!, UIColor.whiteColor()) as [AnyObject],
                         forKeys: NSArray(objects:NSFontAttributeName, NSForegroundColorAttributeName) as! [NSCopying]) as! [String : AnyObject]
@@ -1064,6 +1079,16 @@ class TMKGraphView: UIView {
                     
                     
                     lab.drawAtPoint(ptView, withAttributes:attr)
+                }
+                
+                if x < self.selectionLeftUnits{
+                    x = x + dminus
+                }
+                else if self.selectionLeftUnits <= x && x <= self.selectionRightUnits{
+                    x = x + d0
+                }
+                else{
+                    x = x + dplus
                 }
             }
         }
@@ -1084,11 +1109,12 @@ class TMKGraphView: UIView {
                 let un = ds.nameOfValue(self.yValue)
                 
                 var s0 = String(format: "%4.2f", p.x)
+                
                 if self.xAxis == 1{
                     
                     let h = Int(floor(p.x/3600.0)) // Hours
                     let m = Int(floor((p.x - CGFloat(h) * 3600.0) / 60.0))      // Minuts
-                    let s = Int(p.x -  CGFloat(h) * 3600.0 -  CGFloat(m) * 60.0) // Segons
+                    let s = Int(round(p.x -  CGFloat(h) * 3600.0 -  CGFloat(m) * 60.0)) // Segons
                      
                     s0 = String(format:"%ld:%ld:%ld", h, m, s)
                     
@@ -1263,6 +1289,7 @@ class TMKGraphView: UIView {
         movingLeftSelection = false
         self.updateSelection()
         self.graphContent.setNeedsDisplay()
+        self.setNeedsDisplay()
     }
     
     func updateSelection()

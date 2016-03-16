@@ -231,7 +231,7 @@ class TMKGraphContentView: UIView {
                 
                 // Ara hem de fer l'eix de les x. 2 Posibilitats
                 
-                if v.xAxis == 0 {// Km
+                if v.xAxis == 0 && false{// Km
                     
                     //  CGFloat delta = self.xmax-self.xmin;
                     
@@ -274,7 +274,7 @@ class TMKGraphContentView: UIView {
                     }
                     
                 }
-                else if (v.xAxis == 1){ // Minuts de la sortida
+                else if (v.xAxis == 1) && false{ // Minuts de la sortida
                     
                     var minuts = Int(floor(v.xmin))
                     
@@ -327,18 +327,14 @@ class TMKGraphContentView: UIView {
                     
                     ds.colorForSerie(serie).set()
                     
-                    //let n = ds.numberOfPointsForSerie(serie, value:v.yValue)
-                    
-                    
-                    // Implementació amb unitats naturals. Comentat versio anterior
+                     // Implementació amb unitats naturals. Comentat versio anterior
                     
                     var x = v.xmin
-//                    let d = (v.xmax - v.xmin) / self.bounds.width       // At most every pixel
+
                     let dminus = (v.selectionLeftUnits - v.xmin)/(v.selectionLeft - v.leftMargin)
                     let d0 = (v.selectionRightUnits - v.selectionLeftUnits)/(v.selectionRight - v.selectionLeft)
                     let dplus = (v.xmax - v.selectionRightUnits)/(v.bounds.size.width - v.rightMargin - v.selectionRight )
                     
-                   // if n > 0 {
                     if x < v.xmax{
                         
                         let bz = UIBezierPath()

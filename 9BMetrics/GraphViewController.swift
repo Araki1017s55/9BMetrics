@@ -57,11 +57,10 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     */
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+
         if size.width < size.height{
-            
             self.navigationController?.navigationBar.hidden = false
             self.navigationController?.popViewControllerAnimated(true)
-
         }
     }
     
@@ -277,16 +276,41 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
             url = nb.createCSVFileFrom(from, to: to)
         }
         
-        if let db = self.delegate{
-            if let vc = db.delegate{
-                
-                if let u = url {
-                    vc.shareData(u, src: src, delete: true)
-                }
-            }
-        }
         
+        if let u = url {
+            self.shareData(u, src: src, delete: true)
+        }
+          
         // Export all selected data to a file
     }
-
+    
+    // Create a file with actual data and share it
+    
+    func shareData(file: NSURL?, src:AnyObject, delete: Bool){
+        
+        if let aFile = file {
+            let activityViewController = UIActivityViewController(
+                activityItems: [aFile.lastPathComponent!,   aFile],
+                applicationActivities: [PickerActivity()])
+            
+            activityViewController.completionWithItemsHandler = {(a : String?, completed:Bool, objects:[AnyObject]?, error:NSError?) in
+                
+                if delete {
+                    do{
+                        try NSFileManager.defaultManager().removeItemAtURL(aFile)
+                    }catch{
+                        AppDelegate.debugLog("Error al esborrar %@", aFile)
+                    }
+                }
+            }
+            
+            activityViewController.popoverPresentationController?.sourceView = src as? UIView
+            
+            activityViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+            
+            self.presentViewController(activityViewController,
+                animated: true,
+                completion: nil)
+        }
+    }
 }

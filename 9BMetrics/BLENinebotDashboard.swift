@@ -470,7 +470,6 @@ class BLENinebotDashboard: UITableViewController {
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
-            
             self.performSegueWithIdentifier("turnSegueIdentifier", sender: self)
         }
     }
