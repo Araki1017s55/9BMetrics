@@ -88,6 +88,7 @@
                         <segue destination="Fgy-Tj-722" kind="show" identifier="mimSegue" id="m2S-aY-Omg"/>
                         <segue destination="Etv-RF-9vT" kind="show" identifier="settingsSegue" id="r1A-vs-6uH"/>
                         <segue destination="dQ6-9t-zsI" kind="show" identifier="docSegue" id="2Ma-l7-br9"/>
+                        <segue destination="8uK-VF-C0E" kind="show" identifier="simulatedNinebotSegue" id="Hvu-ta-rvi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -270,6 +271,66 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w63-z2-b43" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="765" y="806"/>
+        </scene>
+        <!--Simulated Ninebot-->
+        <scene sceneID="gxN-ug-9rc">
+            <objects>
+                <viewController id="8uK-VF-C0E" customClass="BLESimulatedNinebot" customModule="_BMetrics" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3s5-94-caG"/>
+                        <viewControllerLayoutGuide type="bottom" id="aZO-nS-XqQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="BJu-L4-Wvi">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fPW-TE-kAb">
+                                <rect key="frame" x="145" y="112" width="150" height="96"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="2ur-BU-kMI"/>
+                                    <constraint firstAttribute="height" constant="96" id="Zmv-Yu-YLR"/>
+                                </constraints>
+                                <state key="normal" image="9b"/>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="zzF-mR-wq8">
+                                <rect key="frame" x="20" y="308" width="560" height="272"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q0b-u5-2Ik">
+                                <rect key="frame" x="352" y="112" width="56" height="96"/>
+                                <state key="normal" image="iPhone"/>
+                            </button>
+                            <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1001" translatesAutoresizingMaskIntoConstraints="NO" id="IIt-Eq-sDr">
+                                <rect key="frame" x="18" y="244" width="564" height="31"/>
+                            </slider>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="zzF-mR-wq8" firstAttribute="top" secondItem="fPW-TE-kAb" secondAttribute="bottom" constant="100" id="64R-f1-1gB"/>
+                            <constraint firstItem="fPW-TE-kAb" firstAttribute="centerX" secondItem="BJu-L4-Wvi" secondAttribute="centerX" constant="-80" id="82I-VD-yb9"/>
+                            <constraint firstItem="IIt-Eq-sDr" firstAttribute="trailing" secondItem="BJu-L4-Wvi" secondAttribute="trailingMargin" id="8JE-yR-dwM"/>
+                            <constraint firstItem="aZO-nS-XqQ" firstAttribute="top" secondItem="zzF-mR-wq8" secondAttribute="bottom" constant="20" id="Bgi-MR-VpJ"/>
+                            <constraint firstItem="IIt-Eq-sDr" firstAttribute="leading" secondItem="BJu-L4-Wvi" secondAttribute="leadingMargin" id="HCE-pj-AdM"/>
+                            <constraint firstItem="zzF-mR-wq8" firstAttribute="leading" secondItem="BJu-L4-Wvi" secondAttribute="leadingMargin" id="I6q-ap-YCq"/>
+                            <constraint firstItem="zzF-mR-wq8" firstAttribute="trailing" secondItem="BJu-L4-Wvi" secondAttribute="trailingMargin" id="JpB-Uz-FDT"/>
+                            <constraint firstItem="q0b-u5-2Ik" firstAttribute="centerY" secondItem="fPW-TE-kAb" secondAttribute="centerY" id="mSy-sZ-LW5"/>
+                            <constraint firstItem="IIt-Eq-sDr" firstAttribute="top" secondItem="q0b-u5-2Ik" secondAttribute="bottom" constant="36" id="sCo-EX-Zik"/>
+                            <constraint firstItem="fPW-TE-kAb" firstAttribute="top" secondItem="3s5-94-caG" secondAttribute="bottom" constant="48" id="yEk-1g-D3a"/>
+                            <constraint firstItem="q0b-u5-2Ik" firstAttribute="centerX" secondItem="BJu-L4-Wvi" secondAttribute="centerX" constant="80" id="znL-Kj-mtz"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="fIphone" destination="q0b-u5-2Ik" id="dHr-Oe-aIl"/>
+                        <outlet property="fMessages" destination="zzF-mR-wq8" id="uVf-ga-Obw"/>
+                        <outlet property="fNinebot" destination="fPW-TE-kAb" id="NoB-JG-1Ly"/>
+                        <outlet property="fSlider" destination="IIt-Eq-sDr" id="lMV-iq-p46"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dbK-kK-iXk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="854" y="1697"/>
         </scene>
         <!--Debug connections-->
         <scene sceneID="UfD-ek-dV8">
@@ -482,7 +543,7 @@
                                     <constraint firstAttribute="width" constant="100" id="abQ-jC-r3Q"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bi5-TB-PjH">
@@ -492,7 +553,7 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="knj-KX-xln"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="10" minValue="0.0" maxValue="20" translatesAutoresizingMaskIntoConstraints="NO" id="qta-TY-xcm">
@@ -518,7 +579,7 @@
                                     <constraint firstAttribute="width" constant="100" id="DNr-k5-2L1"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="20" minValue="0.0" maxValue="30" translatesAutoresizingMaskIntoConstraints="NO" id="SEZ-QF-1JU">
@@ -640,10 +701,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="9b" width="128" height="128"/>
+        <image name="9b" width="96" height="96"/>
         <image name="9b2iPhone" width="100" height="50"/>
         <image name="Gear" width="32" height="32"/>
-        <image name="iPhone" width="74" height="128"/>
+        <image name="iPhone" width="56" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="yCW-cQ-mhb"/>

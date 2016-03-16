@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Gear_32.png",
+      "filename" : "cursor_0.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Gear_32@2x.png",
+      "filename" : "cursor.png",
       "scale" : "2x"
     },
     {

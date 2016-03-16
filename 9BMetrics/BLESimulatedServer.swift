@@ -158,7 +158,6 @@ class BLESimulatedServer: NSObject, CBPeripheralManagerDelegate {
         
         self.manager.startAdvertising(dict)
         self.transmiting = true
-
         
     }
     

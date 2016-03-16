@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0016670C1C9958B70048344F /* BLESimulatedNinebot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */; };
+		0016670E1C995A290048344F /* simulated_log.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0016670D1C995A290048344F /* simulated_log.txt */; };
+		001667101C9967290048344F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0016670F1C9967290048344F /* Settings.bundle */; };
+		00389AFF1C9986A4007BADDC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00389AFE1C9986A4007BADDC /* Default-568h@2x.png */; };
 		007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57171C85CE49003A2030 /* AppDelegate.swift */; };
 		007A571A1C85CE49003A2030 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57191C85CE49003A2030 /* ViewController.swift */; };
 		007A57271C85CE49003A2030 /* 9BMetrics WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 007A57261C85CE49003A2030 /* 9BMetrics WatchKit App.app */; };
@@ -88,6 +92,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESimulatedNinebot.swift; sourceTree = "<group>"; };
+		0016670D1C995A290048344F /* simulated_log.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = simulated_log.txt; sourceTree = "<group>"; };
+		0016670F1C9967290048344F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		00389AFE1C9986A4007BADDC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		007A57141C85CE49003A2030 /* 9BMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9BMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A57171C85CE49003A2030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		007A57191C85CE49003A2030 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -173,6 +181,7 @@
 		007A57161C85CE49003A2030 /* 9BMetrics */ = {
 			isa = PBXGroup;
 			children = (
+				0016670F1C9967290048344F /* Settings.bundle */,
 				007A575B1C85CE7B003A2030 /* 9BMetrics.entitlements */,
 				007A57621C85CF39003A2030 /* TMKGraphViewDataSource.swift */,
 				007A57631C85CF39003A2030 /* TMKGraphContentView.swift */,
@@ -186,6 +195,7 @@
 				007A576B1C85CF39003A2030 /* BLEConnection.swift */,
 				007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */,
 				007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */,
+				0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */,
 				007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */,
 				007A576F1C85CF39003A2030 /* BLEDeviceSelector.swift */,
 				007A57701C85CF39003A2030 /* BLEMim.swift */,
@@ -226,6 +236,8 @@
 		007A574E1C85CE5D003A2030 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00389AFE1C9986A4007BADDC /* Default-568h@2x.png */,
+				0016670D1C995A290048344F /* simulated_log.txt */,
 				007A574F1C85CE69003A2030 /* icon_ipad@2x.png */,
 				007A57501C85CE69003A2030 /* icon_ipad.png */,
 				007A57511C85CE69003A2030 /* Ninebot-One-4.jpg */,
@@ -354,9 +366,12 @@
 				007A57561C85CE69003A2030 /* icon_ipad.png in Resources */,
 				007A57591C85CE69003A2030 /* nb_512.png in Resources */,
 				007A57581C85CE69003A2030 /* about.html in Resources */,
+				00389AFF1C9986A4007BADDC /* Default-568h@2x.png in Resources */,
 				007A575D1C85CEF0003A2030 /* Main.storyboard in Resources */,
 				007A57551C85CE69003A2030 /* icon_ipad@2x.png in Resources */,
 				007A57611C85CF0A003A2030 /* Assets.xcassets in Resources */,
+				0016670E1C995A290048344F /* simulated_log.txt in Resources */,
+				001667101C9967290048344F /* Settings.bundle in Resources */,
 				007A57571C85CE69003A2030 /* Ninebot-One-4.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,6 +419,7 @@
 				007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
+				0016670C1C9958B70048344F /* BLESimulatedNinebot.swift in Sources */,
 				007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
