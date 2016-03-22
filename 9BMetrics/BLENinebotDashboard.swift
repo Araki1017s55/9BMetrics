@@ -82,11 +82,11 @@ class BLENinebotDashboard: UITableViewController {
     
     func initNotifications()
     {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTitle:", name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotDashboard.updateTitle(_:)), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "update:", name: BLESimulatedClient.kNinebotDataUpdatedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotDashboard.update(_:)), name: BLESimulatedClient.kNinebotDataUpdatedNotification, object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "listDevices:", name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotDashboard.listDevices(_:)), name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
         
     }
     
@@ -131,7 +131,7 @@ class BLENinebotDashboard: UITableViewController {
     
     func addStopButton(){
         
-        let stopButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: "stop:")
+        let stopButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: #selector(BLENinebotDashboard.stop(_:)))
         self.navigationItem.rightBarButtonItem = stopButton
         
     }
@@ -384,8 +384,7 @@ class BLENinebotDashboard: UITableViewController {
         
         return cell
     }
-    
-    
+        
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
