@@ -177,7 +177,7 @@ class BLESimulatedNinebot: UIViewController {
             
             self.ninebot.addValueWithDate(now, variable: w.variable, value: w.value)
             
-            self.ip++
+            self.ip += 1
             
             if ip == self.logData.count{
                // self.startDate = now
@@ -195,7 +195,7 @@ class BLESimulatedNinebot: UIViewController {
             ti = 0.01
         }
         
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(ti, target: self, selector: "processData", userInfo: nil, repeats: false)
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(ti, target: self, selector: #selector(BLESimulatedNinebot.processData), userInfo: nil, repeats: false)
     }
     
     
