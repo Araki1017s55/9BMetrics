@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="9532" systemVersion="15E49a" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="9532" systemVersion="14C109" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="9515"/>
@@ -87,7 +87,7 @@
                                         <fontDescription key="font" type="system" pointSize="19"/>
                                     </variation>
                                 </label>
-                                <label width="64.5" alignment="right" verticalAlignment="bottom" text="15,5 Km" textAlignment="right" minimumScaleFactor="0.90000000000000002" id="jQx-ap-kp3">
+                                <label width="64.5" alignment="right" verticalAlignment="bottom" text="20ºC" textAlignment="right" minimumScaleFactor="0.90000000000000002" id="jQx-ap-kp3">
                                     <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" type="system" pointSize="19"/>
                                     <variation key="device=watch38mm">
@@ -101,6 +101,7 @@
                             <edgeInsets key="margins" left="3" right="3" top="0.0" bottom="4"/>
                         </group>
                     </items>
+                    <menu key="menu" id="r5p-tK-SUL"/>
                     <variation key="device=watch42mm">
                         <mask key="items">
                             <include reference="ibe-0W-tFo"/>
