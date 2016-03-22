@@ -103,7 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if let url = aUrl{
                     path = url.path!
                     newUrl = url
-                    ct++
+                    ct += 1
                 }
                 else{
                     return false
