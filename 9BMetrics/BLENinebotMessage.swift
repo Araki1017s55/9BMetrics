@@ -166,7 +166,7 @@ class BLENinebotMessage: NSObject {
         var i2 = string.startIndex
         
         
-        for (var i = 0; i < ni; i++){
+        for  i in 0..<ni{
             index = i2
             i2 = index.advancedBy(2)
             
@@ -271,7 +271,7 @@ class BLENinebotMessage: NSObject {
     func check(bArr : [UInt8], len : Int) -> (UInt8, UInt8) {			//Comença a i2 = 2 per c bytes
         var i : UInt16 = 0;
         
-        for (var i2 = 2; i2 < len + 2; i2++) {
+        for i2 in 2 ..< len + 2 {
             i =  (i + UInt16(bArr[i2]))
         }
         let v : UInt16 =   (i ^ 0xFFFF) & self.CUSTOMER_ACTION_MASK
@@ -304,12 +304,15 @@ class BLENinebotMessage: NSObject {
             let l = Int(self.len-2)
             var k = Int(self.command)
             
-            for var i = 0; i < l; i=i+2{
+            var i = 0
+            
+            while  i < l{
                 
                 let value = Int(data[i+1]) * 256 + Int(data[i])
                 
                 dict[k] = value
-                k++
+                k += 1
+                i=i+2
                 
             }
         }
