@@ -199,7 +199,9 @@ class TMKGraphContentView: UIView {
                 
                 var firstLine = true
                 
-                for var  y = step0; y < ymax; y = y + step {
+                var y = step0
+                
+                while y < ymax {
                     
                     if y > v.ymin{
                         let bz = UIBezierPath()
@@ -226,7 +228,8 @@ class TMKGraphContentView: UIView {
                         
                     }
                     
-                    j++;
+                    j += 1;
+                    y = y + step
                 }
                 
                 // Ara hem de fer l'eix de les x. 2 Posibilitats
@@ -247,8 +250,9 @@ class TMKGraphContentView: UIView {
                     
                     step = stepStep(30.0 / delta)
                     
+                    var x : CGFloat = CGFloat(Double(km) * 1.0)
                     
-                    for var x : CGFloat = CGFloat(Double(km) * 1.0); x < v.xmax; x = x + step{
+                    while x < v.xmax{
                         if x >= v.xmin{
                             
                             let ptLoc = CGPointMake(x, 0.0)
@@ -271,6 +275,7 @@ class TMKGraphContentView: UIView {
                             }
                             
                         }
+                        x = x + step
                     }
                     
                 }
@@ -286,8 +291,9 @@ class TMKGraphContentView: UIView {
                     
                     let step = stepStep(30.0 / delta)
                     
+                    var x = CGFloat(CGFloat(minuts) * 1.0);
                     
-                    for var  x = CGFloat(CGFloat(minuts) * 1.0); x < v.xmax; x = x + step{
+                    while x < v.xmax{
                         if x >= v.xmin{
                             
                             let ptLoc = CGPointMake(x, 0.0)
@@ -312,6 +318,7 @@ class TMKGraphContentView: UIView {
                             
                             lab.drawAtPoint(ptView, withAttributes:attr)
                         }
+                        x = x + step
                     }
                 }
                 
@@ -320,7 +327,7 @@ class TMKGraphContentView: UIView {
                 
                 // Draw data points
                 
-                for var serie : Int = 0; serie < ds.numberOfSeries(); serie++ {
+                for serie : Int in 0 ..< ds.numberOfSeries() {
                     
                     
                     CGContextSaveGState(aContext)
