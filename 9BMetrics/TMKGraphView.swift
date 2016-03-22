@@ -98,11 +98,11 @@ class TMKGraphView: UIView {
         self.addInfoField()
        // self.addSlider()
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "swipeLeft:")
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(TMKGraphView.swipeLeft(_:)))
         swipeLeft.direction = .Left
         swipeLeft.numberOfTouchesRequired = 2
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: "swipeRight:")
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(TMKGraphView.swipeRight(_:)))
         swipeRight.direction = .Right
         swipeRight.numberOfTouchesRequired = 2
         
@@ -134,7 +134,7 @@ class TMKGraphView: UIView {
     //MARK: Recognizers
     
     func setupGestureRecognizers(){
-        let tapG = UITapGestureRecognizer(target: self, action: "clamp:")
+        let tapG = UITapGestureRecognizer(target: self, action: #selector(TMKGraphView.clamp(_:)))
         tapG.numberOfTapsRequired = 2
         self.addGestureRecognizer(tapG)
     }
@@ -542,7 +542,7 @@ class TMKGraphView: UIView {
         sl.maximumValueImage = rightImage
         
         sl.translatesAutoresizingMaskIntoConstraints = false
-        sl.addTarget(self, action:"sliderMoved:", forControlEvents:UIControlEvents.ValueChanged)
+        sl.addTarget(self, action:#selector(TMKGraphView.sliderMoved(_:)), forControlEvents:UIControlEvents.ValueChanged)
         
         self.addSubview(sl)
         
@@ -582,7 +582,7 @@ class TMKGraphView: UIView {
         
         self.addSubview(but)
         
-        but.addTarget(self, action:"openGear:", forControlEvents:UIControlEvents.TouchUpInside)
+        but.addTarget(self, action:#selector(TMKGraphView.openGear(_:)), forControlEvents:UIControlEvents.TouchUpInside)
         
         
         
@@ -614,7 +614,7 @@ class TMKGraphView: UIView {
             but.setTitleColor(self.activeColor, forState:UIControlState.Normal)
             but.setTitleColor(self.highlightColor, forState:UIControlState.Highlighted)
             
-            but.addTarget(self, action:"switchHorizontalAxe:", forControlEvents:UIControlEvents.TouchUpInside)
+            but.addTarget(self, action:#selector(TMKGraphView.switchHorizontalAxe(_:)), forControlEvents:UIControlEvents.TouchUpInside)
             
             self.addSubview(but)
             
@@ -657,7 +657,7 @@ class TMKGraphView: UIView {
             but.setTitleColor(self.highlightColor,  forState:UIControlState.Highlighted)
             //[but setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.5]];
             
-            but.addTarget(self, action:"switchyValue:", forControlEvents:UIControlEvents.TouchUpInside)
+            but.addTarget(self, action:#selector(TMKGraphView.switchyValue(_:)), forControlEvents:UIControlEvents.TouchUpInside)
             
             self.addSubview(but)
             
@@ -925,7 +925,9 @@ class TMKGraphView: UIView {
         
         var firstLine = true
         
-        for var y : CGFloat = step0; y < self.ymax; y = y + step {
+        var y : CGFloat = step0
+        
+        while y < self.ymax {
             
             if y > self.ymin{
                 let s1  = Int(y*10.0)
@@ -974,7 +976,8 @@ class TMKGraphView: UIView {
                 
             }
             
-            j++
+            j += 1
+            y = y + step
         }
         
         // Ara hem de fer l'eix de les x. 2 Posibilitats
@@ -1011,7 +1014,9 @@ class TMKGraphView: UIView {
                 step = 50.0
             }
             
-            for var x : CGFloat = CGFloat(km); x < self.xmax; x = x + step {
+            var x : CGFloat = CGFloat(km)
+            
+            while x < self.xmax {
                 if x >= self.xmin{
                     
                     let ptLoc = CGPointMake(x, 0.0)
@@ -1035,6 +1040,7 @@ class TMKGraphView: UIView {
                     lab!.drawAtPoint(ptView, withAttributes:attr)
                     
                 }
+                x = x + step
             }
             
         }
@@ -1054,7 +1060,9 @@ class TMKGraphView: UIView {
             let dplus = minuteStep(30.0 * (self.xmax - self.selectionRightUnits)/(self.bounds.size.width - self.rightMargin - self.selectionRight ))
             
             let x0 = floor(CGFloat(minuts * 60) / dminus ) * dminus
-            for var x  = x0; x < self.xmax; {
+            
+            var x = x0
+            while x < self.xmax {
                 
                 if x >= self.xmin{
                     
