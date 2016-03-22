@@ -64,7 +64,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         // Do any additional setup after loading the view, typically from a nib.
         let editButton = self.editButtonItem();
         editButton.target = self
-        editButton.action = "editFiles:"
+        editButton.action = #selector(ViewController.editFiles(_:))
         self.navigationItem.leftBarButtonItem = editButton;
         // Lookup files
         let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
@@ -210,7 +210,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             if self.sections[i].files.count == 0{
                 self.sections.removeAtIndex(i)
             }else{
-                i++
+                i += 1
             }
         }
     }
