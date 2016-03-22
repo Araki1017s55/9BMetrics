@@ -45,6 +45,7 @@ class BLESimulatedClient: NSObject {
     var headersOk = false
     var sendTimer : NSTimer?    // Timer per enviar les dades periodicament
     var timerStep = 0.01        // Get data every step
+    var watchTimerStep = 0.1        // Get data every step
     var contadorOp = 0          // Normal data updated every second
     var contadorOpFast = 0      // Special data updated every 1/10th of second
     var listaOp :[(UInt8, UInt8)] = [(41, 2), (50,2), (58,5),  (182, 5)]
@@ -57,6 +58,7 @@ class BLESimulatedClient: NSObject {
     
     var altimeter : CMAltimeter?
     var altQueue : NSOperationQueue?
+    var queryQueue : NSOperationQueue?
     
     // General State
     
@@ -101,12 +103,16 @@ class BLESimulatedClient: NSObject {
             if session.paired && session.watchAppInstalled{
                 self.sendToWatch = true
             }
+            
+            self.queryQueue = NSOperationQueue()
+            self.queryQueue!.maxConcurrentOperationCount = 1
+        
         }
     }
     
     func initNotifications()
     {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTitle:", name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
+ //       NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateTitle:"), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
     }
     
     // Connect is the start connection
@@ -128,7 +134,7 @@ class BLESimulatedClient: NSObject {
         
         // First we disconnect the device
         
-        AppDelegate.debugLog("Simulated Client Stop")        
+        AppDelegate.debugLog("Simulated Client Stop")
         self.connection.stopConnection()
         
         if let altm = self.altimeter{
@@ -178,7 +184,16 @@ class BLESimulatedClient: NSObject {
             }
         }
     }
+    // MARK: NSOperationSupport
     
+    func sendNewRequest(){
+        
+        let request = BLERequestOperation(cliente: self)
+        
+        if let q = self.queryQueue{
+            q.addOperation(request)
+        }
+    }
     
     
     //MARK: AppleWatch Support
@@ -194,6 +209,7 @@ class BLESimulatedClient: NSObject {
             dict["speed"]  =  nb.speed()
             dict["battery"]  =  nb.batteryLevel()
             dict["remaining"]  =  nb.remainingMileage()
+            dict["temperature"]  =  nb.temperature()
             
             let v = nb.speed()
             
@@ -332,7 +348,7 @@ class BLESimulatedClient: NSObject {
             self.connection.writeValue(dat)
         }
     }
-
+    
     
     func setRidingLevel(level : Int){
         
@@ -341,10 +357,10 @@ class BLESimulatedClient: NSObject {
         if level < 0 || level > 9 {
             return
         }
-
+        
         
         // That write riding level
-
+        
         var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kvRideMode), dat:[UInt8(level), UInt8(0)] )
         
         if let st = message?.toString(){
@@ -366,7 +382,7 @@ class BLESimulatedClient: NSObject {
         
     }
     
-    func sendData(timer:NSTimer){
+    func sendData(){
         
         if let nb = self.datos {
             
@@ -378,7 +394,8 @@ class BLESimulatedClient: NSObject {
                     
                 }
                 
-                let (op, l) = listaOpFast[contadorOpFast++]
+                let (op, l) = listaOpFast[contadorOpFast]
+                contadorOpFast += 1
                 let message = BLENinebotMessage(com: op, dat:[ l * 2] )
                 if let dat = message?.toNSData(){
                     self.connection.writeValue(dat)
@@ -387,7 +404,8 @@ class BLESimulatedClient: NSObject {
                 
                 if contadorOpFast >= listaOpFast.count{
                     contadorOpFast = 0
-                    let (op, l) = listaOp[contadorOp++]
+                    let (op, l) = listaOp[contadorOp]
+                    contadorOp += 1
                     
                     if contadorOp >= listaOp.count{
                         contadorOp = 0
@@ -417,13 +435,13 @@ class BLESimulatedClient: NSObject {
                 if let dat = message?.toNSData(){
                     self.connection.writeValue(dat)
                 }
- 
+                
                 message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat: [UInt8(2)])
                 
                 if let dat = message?.toNSData(){
                     self.connection.writeValue(dat)
                 }
-
+                
             }
         }
     }
@@ -482,7 +500,9 @@ class BLESimulatedClient: NSObject {
             
             let block = Array(buffer[0..<(l+6)])
             
-            
+            if let q = self.queryQueue where q.operationCount < 4{
+                self.sendNewRequest()
+            }
             let msg = BLENinebotMessage(buffer: block)
             
             if let m = msg {
@@ -508,7 +528,7 @@ class BLESimulatedClient: NSObject {
                         BLESimulatedClient.sendNotification(BLESimulatedClient.kNinebotDataUpdatedNotification, data: nil)
                         
                         //let state = self.getAppState()
-                         
+                        
                     }
                 }
             }
@@ -525,20 +545,18 @@ extension BLESimulatedClient : BLENinebotConnectionDelegate{
     
     func deviceConnected(peripheral : CBPeripheral ){
         
-
-            self.startAltimeter()
-            self.contadorOp = 0
-            self.headersOk = false
-            self.connected = true
-            
-            self.sendTimer = NSTimer.scheduledTimerWithTimeInterval(self.timerStep, target: self, selector: "sendData:", userInfo: nil, repeats: true)
-            
-            
-            // Start timer for sending info to watch
-            
-            if self.sendToWatch {
-                self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector:"sendStateToWatch:", userInfo: nil, repeats: true)
-            }
+        
+        self.startAltimeter()
+        self.contadorOp = 0
+        self.headersOk = false
+        self.connected = true
+        
+        self.sendNewRequest()
+        // Start timer for sending info to watch
+        
+        if self.sendToWatch {
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(watchTimerStep, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
+        }
     }
     
     func deviceDisconnectedConnected(peripheral : CBPeripheral ){
@@ -558,7 +576,7 @@ extension BLESimulatedClient : BLENinebotConnectionDelegate{
             self.altimeter = nil
         }
         
-
+        
     }
     
     func charUpdated(char : CBCharacteristic, data: NSData){
@@ -577,7 +595,7 @@ extension BLESimulatedClient :  WCSessionDelegate{
         
         if session.paired && session.watchAppInstalled{
             self.sendToWatch = true
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector:"sendStateToWatch:", userInfo: nil, repeats: true)
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
             
         }
         else{
@@ -595,10 +613,30 @@ extension BLESimulatedClient :  WCSessionDelegate{
         // For the moment the watch just listens
     }
     
+    //TODO: Move Watch Support to AppDelegate or ViewController.
+    
+    
     func session(session: WCSession, didReceiveMessage message: [String : AnyObject]) {
-        
-        // Fot the moment the watch just listens
-        
+        if let op = message["op"] as? String{
+            
+            switch op {
+                
+            case "start":
+                break
+                
+                
+            case "stop" :
+                break
+                
+                
+            case "waypoint" :
+                break
+                
+            default:
+                NSLog("Op de Watch desconeguda", op)
+            }
+            
+        }
     }
     
 }
