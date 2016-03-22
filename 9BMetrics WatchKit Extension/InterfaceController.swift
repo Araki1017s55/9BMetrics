@@ -32,6 +32,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     @IBOutlet weak  var batteryLabel : WKInterfaceLabel!
     @IBOutlet weak  var remainingLabel : WKInterfaceLabel!
     
+    
+    
     // State
     
     var skyColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
@@ -41,6 +43,9 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var speed : Double = 0.0
     var battery : Double = 0.0
     var remaining : Double = 0.0
+    var temperature : Double = 0.0
+    var recording : Bool = false
+    var oldRecording : Bool = false
     var color : UIColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     var oldColor : UIColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     var colorLevel : Int = 0
@@ -56,6 +61,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         if let session = wcsession{
             session.delegate = self
             session.activateSession()
+            addMenuItemWithItemIcon(WKMenuItemIcon.Play, title: "Start", action: #selector(InterfaceController.start))
             
         }
     }
@@ -71,16 +77,19 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         super.didDeactivate()
     }
     
-    func updateData(applicationContext: [String : Double]){
+    func updateData(applicationContext: [String : AnyObject]){
         
-        self.distancia = applicationContext["distancia"]!
-        self.temps = applicationContext["temps"]!
-        self.speed = applicationContext["speed"]!
-        self.battery = applicationContext["battery"]!
-        self.remaining = applicationContext["remaining"]!
+        self.recording = applicationContext["recording"] as! Bool
+        self.distancia = applicationContext["distancia"] as! Double
+        self.temps = applicationContext["temps"]  as! Double
+        self.speed = applicationContext["speed"]  as! Double
+        self.battery = applicationContext["battery"]  as! Double
+        self.remaining = applicationContext["remaining"]  as! Double
+        self.temperature = applicationContext["temperature"]  as! Double
         
         
-        let cx = applicationContext["color"]
+        
+        let cx = applicationContext["color"]  as? Double
         
         if let c = cx {
             let ci = Int(floor(c))
@@ -113,8 +122,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         
         // Check a change in color and generate haptic feedback
         
-        
-        
         self.stateChanged = true
     }
     
@@ -146,14 +153,14 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             
             self.speedLabel.setText(String(format: "%5.2f", self.speed))
             self.batteryLabel.setText(String(format: "%2d %%", Int(self.battery)))
+            
             self.remainingLabel.setText(String(format: "%5.2f %@", self.remaining, "Km"))
+            self.remainingLabel.setText(String(format: "%3.0f%@", self.temperature, "ºC"))
             
             if self.battery < 30.0{
                 self.batteryLabel.setTextColor(UIColor.redColor())
-                self.remainingLabel.setTextColor(UIColor.redColor())
             }else{
                 self.batteryLabel.setTextColor(UIColor.greenColor())
-                self.remainingLabel.setTextColor(UIColor.greenColor())
             }
             
             if self.oldColorLevel != self.colorLevel {
@@ -163,9 +170,47 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 
             }
             
+            if self.recording != self.oldRecording{
+                if self.recording {
+                    self.clearAllMenuItems()
+                    self.addMenuItemWithItemIcon(WKMenuItemIcon.Play, title: "Stop", action: #selector(InterfaceController.stop))
+                }
+                else {
+                    self.clearAllMenuItems()
+                    self.addMenuItemWithItemIcon(WKMenuItemIcon.Play, title: "Start", action: #selector(InterfaceController.start))
+                }
+            }
+            
             self.stateChanged = false
         })
     }
+    
+    func start(){
+        self.sendOp("start", value: nil)
+     }
+    
+    func stop(){
+        self.sendOp("stop", value: nil)
+    }
+    
+
+    func sendOp(op : String, value : AnyObject?){
+        if let session = self.wcsession{
+            
+            if session.reachable {
+                
+                var dict : [String : AnyObject] = ["op" : op]
+                if let v = value {
+                    dict["value"] = v
+                }
+                session.sendMessage(dict, replyHandler: nil, errorHandler: { (err : NSError) -> Void in
+                    
+                    NSLog("Error al enviar missatge %@", err)
+                })
+            }
+        }
+    }
+
     
     func sessionWatchStateDidChange(session: WCSession) {
         
