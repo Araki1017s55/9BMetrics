@@ -224,15 +224,15 @@ class  BLENinebot : NSObject{
         if data[BLENinebot.kSpeedLimit].value == -1{
             filled = false
         }
-
+        
         if data[BLENinebot.kAbsoluteSpeedLimit].value == -1{
             filled = false
         }
-
+        
         if data[BLENinebot.kvRideMode].value == -1{
             filled = false
         }
-
+        
         headersOk = filled
         
         return filled
@@ -271,11 +271,11 @@ class  BLENinebot : NSObject{
                     sv = value - 65536
                 }
             }
-
+            
             let v = LogEntry(time:dat, variable: variable, value: sv)
-
+            
             if data[variable].value != sv || data[variable].log.count == 1 {
-
+                
                 data[variable].log.append(v)
                 self.postVariableChanged(v)
                 
@@ -301,7 +301,7 @@ class  BLENinebot : NSObject{
             
             //Now post new entru
             
-
+            
         }
     }
     
@@ -375,14 +375,14 @@ class  BLENinebot : NSObject{
             
             // Get first ip of current
             
-            for var i = 0; i < self.data[BLENinebot.kCurrent].log.count; i++ {
-            
-                    let e = self.data[BLENinebot.kCurrent].log[i]
+            for i in 0 ..< self.data[BLENinebot.kCurrent].log.count {
                 
-                    let t = e.time.timeIntervalSinceDate(self.firstDate!)
+                let e = self.data[BLENinebot.kCurrent].log[i]
+                
+                let t = e.time.timeIntervalSinceDate(self.firstDate!)
                 
                 if from <= t && t <= to {
- 
+                    
                     let vCurrent = self.current(i)
                     let vVoltage = self.voltage(time: t)
                     let vPower = self.power(time: t)
@@ -395,7 +395,7 @@ class  BLENinebot : NSObject{
                     let vBattery = self.batteryLevel(time: t)
                     
                     
-                    let s = String(format: "%20.3f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f\n", t, vCurrent, vVoltage, vPower, vEnergy, vSpeed, vAlt, vDistance, vPitch, vRoll, vBattery)
+                    let s = String(format: "%0.3f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\n", t, vCurrent, vVoltage, vPower, vEnergy, vSpeed, vAlt, vDistance, vPitch, vRoll, vBattery)
                     if let vn = s.dataUsingEncoding(NSUTF8StringEncoding){
                         hdl.writeData(vn)
                     }
@@ -415,6 +415,13 @@ class  BLENinebot : NSObject{
         return nil
         
     }
+    
+    // Modified to reduce size :
+    //
+    //  1.- First line includes "Version" and FirstDate
+    //  2.- Each data sample includes time from firstDate and NOT white filles by left.
+    //  3.- Deleted variable number from every line
+    //
     
     func createTextFile() -> NSURL?{
         
@@ -461,15 +468,17 @@ class  BLENinebot : NSObject{
                 firstDate = NSDate()
             }
             
+            let version = String(format: "Version\t2\tStart\t%0.3f\n", firstDate!.timeIntervalSince1970)
+            hdl.writeData(version.dataUsingEncoding(NSUTF8StringEncoding)!)
             
-            let title = String(format: "Time\tVar\tValor\n")
+            let title = String(format: "Time\tValor\n")
             hdl.writeData(title.dataUsingEncoding(NSUTF8StringEncoding)!)
             
             for v in self.data {
                 
-                if v.value != -1 && v.log.count > 0{
+                if v.log.count > 0{
                     
-                    let varName = String(format: "%d\t%@\n",v.codi, BLENinebot.labels[v.codi])
+                    let varName = String(format: "V\t%d\t%@\n",v.codi, BLENinebot.labels[v.codi])
                     
                     AppDelegate.debugLog("Gravant log per %@", varName)
                     
@@ -479,9 +488,9 @@ class  BLENinebot : NSObject{
                     
                     for item in v.log {
                         
-                        let t = item.time.timeIntervalSince1970
+                        let t = item.time.timeIntervalSinceDate(self.firstDate!)
                         
-                        let s = String(format: "%20.3f\t%d\t%d\n", t, item.variable, item.value)
+                        let s = String(format: "%0.3f\t%d\n", t, item.value)
                         if let vn = s.dataUsingEncoding(NSUTF8StringEncoding){
                             hdl.writeData(vn)
                         }
@@ -510,10 +519,49 @@ class  BLENinebot : NSObject{
             let data = try String(contentsOfURL: url, encoding: NSUTF8StringEncoding)
             let lines = data.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
             
+            var lineNumber = 0
+            var version = 1
+            var date0 : NSDate?
+            var variable : Int = -1
+            
             for line in lines {
                 let fields = line.componentsSeparatedByString("\t")
                 
-                if fields.count == 3{   // Good Data
+                if lineNumber == 0 {
+                    
+                    if fields[0] == "Version"{
+                        if let v = Int(fields[1]){
+                            
+                            if v >= 1 && v <= 2{
+                                version = v
+                                
+                                // field 3 has first date
+                                
+                                guard let dt = Double(fields[3].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return}
+                                date0 = NSDate(timeIntervalSince1970: dt)
+                                
+                            } else {
+                                AppDelegate.debugLog("Error amb version %d", v)
+                                lineNumber += 1
+                                return
+                            }
+                        }
+                        
+                    } else if fields[0] == "Time"{
+                        version = 1
+                    } else {
+                        AppDelegate.debugLog("Incorrect Format")
+                        lineNumber += 1
+                        return
+                    }
+                    lineNumber += 1
+                    continue
+                } else if lineNumber == 1 && version == 2{
+                    lineNumber += 1
+                    continue    // Just jump line with titles
+                }
+                
+                if version == 1 && fields.count == 3{   // Old filea
                     
                     let time = Double(fields[0].stringByReplacingOccurrencesOfString(" ", withString: ""))
                     let variable = Int(fields[1])
@@ -522,8 +570,59 @@ class  BLENinebot : NSObject{
                     if let t = time, i = variable, v = value {
                         self.addValueWithTimeInterval(t, variable: i, value: v)
                     }
+                }else  if version == 2 && fields.count == 3 && fields[0] == "V"{
+                    
+                    let sv = fields[1]
+                    let iv = Int(sv)
+                    
+                    if let ix = iv {
+                        variable = ix  // Set variable
+                    }else{
+                        return  // Error en format
+                    }
+                    
+                }else if version == 2 && fields.count == 2 {
+                    
+                    guard let dt = Double(fields[0].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return}
+                    
+                    if let d = date0{
+                        let t = NSDate(timeInterval: dt, sinceDate: d)
+                        let value = Int(fields[1])
+                        
+                        if  let v = value {
+                            self.addValueWithDate(t, variable: variable, value: v)
+                        }
+                    }
                 }
                 
+                lineNumber += 1
+                
+            }
+            
+            // Hack to calculate current if we have energy and Current was not written
+            // due to a bug.
+            
+            if self.data[BLENinebot.kCurrent].log.count == 0 &&
+                self.data[BLENinebot.kEnergy].log.count > 0 {
+                    
+                    var oldEntry : LogEntry?
+                    
+                    for e in self.data[BLENinebot.kEnergy].log {
+                        
+                        if let oe = oldEntry  {
+                            
+                            let dt = e.time.timeIntervalSinceDate(oe.time)
+                            let de = e.value - oe.value
+                            
+                            let pw = Double(de) * 36.0 / dt
+                            
+                            let t = (e.time.timeIntervalSinceDate(self.firstDate!) + oe.time.timeIntervalSinceDate(self.firstDate!))/2.0
+                            let current = pw / self.voltage(time:t)
+                            self.data[BLENinebot.kCurrent].log.append(LogEntry(time: NSDate.init(timeInterval: dt/2.0, sinceDate: oe.time), variable: BLENinebot.kCurrent, value: Int(round(current * 100.0))))
+                        }
+                        
+                        oldEntry = e
+                    }
             }
             
         }catch {
@@ -538,7 +637,7 @@ class  BLENinebot : NSObject{
         
         var no = ""
         
-        for (var i = 16; i < 23; i++){
+        for i in 16 ..< 23{
             let v = self.data[i].value
             
             
@@ -600,7 +699,7 @@ class  BLENinebot : NSObject{
         let seconds = round(secs - (hours * 3600.0) - (minutes * 60.0))
         
         return (Int(hours), Int(minutes), Int(seconds))
-       
+        
     }
     
     func singleRuntimeHMS() -> (Int, Int, Int) {
@@ -615,7 +714,7 @@ class  BLENinebot : NSObject{
     func totalRuntimeHMS() -> (Int, Int, Int) {
         
         let total = Double(data[BLENinebot.kTotalRuntime1].value * 65536 + data[BLENinebot.kTotalRuntime0].value)
-          
+        
         return BLENinebot.HMSfromSeconds(total)
         
     }
@@ -745,12 +844,12 @@ class  BLENinebot : NSObject{
             let t1 = self.data[BLENinebot.kCurrent].log[i].time
             let v1 = self.power(i)
             
-           
+            
             acum = acum + (v1 + v0) / 2.0 * t1.timeIntervalSinceDate(t0)
             t0 = t1
             v0 = v1
             self.data[BLENinebot.kEnergy].log.append(LogEntry(time: t0, variable: BLENinebot.kEnergy, value: Int(round(acum / 36.0))))
-         }
+        }
         
         self.data[BLENinebot.kEnergy].timeStamp = t0
         self.data[BLENinebot.kEnergy].value = Int(round(acum / 36.0))
@@ -818,7 +917,7 @@ class  BLENinebot : NSObject{
         
         return (max/100.0, min/100.0, avg/100.0, acum/100.0)
     }
-   
+    
     
     
     // roll Angle
@@ -888,7 +987,7 @@ class  BLENinebot : NSObject{
         
         return (max/100.0, min/100.0, avg/100.0, acum/100.0)
     }
-
+    
     
     // pitch angle speed
     
@@ -945,7 +1044,7 @@ class  BLENinebot : NSObject{
         
         return (max, min, avg, acum)
     }
-   
+    
     
     // Limit Speeed
     
@@ -954,7 +1053,7 @@ class  BLENinebot : NSObject{
         
         return s
     }
-
+    
     // Max Speed
     
     func maxSpeed() -> Double {
@@ -970,8 +1069,8 @@ class  BLENinebot : NSObject{
         
         return s
     }
-
-
+    
+    
     // Speed
     
     func speed() -> Double {
@@ -1015,7 +1114,7 @@ class  BLENinebot : NSObject{
         
         return (max/1000.0, min/1000.0, avg/1000.0, acum/1000.0)
     }
-
+    
     
     // Speed limit
     
@@ -1083,7 +1182,7 @@ class  BLENinebot : NSObject{
             return 0.0
         }
     }
-
+    
     
     func altitude(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
     {
@@ -1092,7 +1191,7 @@ class  BLENinebot : NSObject{
         
         return (max/100.0, min/100.0, avg/100.0, acum/100.0)
     }
-// t is time from firstDate
+    // t is time from firstDate
     
     func value(variable : Int,  forTime t:NSTimeInterval) -> DoubleLogEntry?{
         
@@ -1156,7 +1255,7 @@ class  BLENinebot : NSObject{
     // Returns min, max, avg and acum (integral trapezoidal)
     
     func stats(variable : Int,  from t:NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double){
-    
+        
         
         let v = variable
         let x = t
@@ -1224,7 +1323,7 @@ class  BLENinebot : NSObject{
                 i = p1
             }
             else{
-            
+                
                 let deltax = v1.time.timeIntervalSinceDate(v0.time)
                 let deltay = Double(v1.value) - Double(v0.value)
                 let v = (x - v0.time.timeIntervalSinceDate(self.firstDate!)) / deltax * deltay + Double(v0.value)
@@ -1234,7 +1333,7 @@ class  BLENinebot : NSObject{
                 i = p1
             }
             
-         }
+        }
         
         minv = oldy
         maxv = oldy
@@ -1260,7 +1359,7 @@ class  BLENinebot : NSObject{
             oldx = x1
             oldy = y1
             
-            i++
+            i += 1
             
             if i >= self.data[v].log.count{
                 break
@@ -1331,7 +1430,7 @@ class  BLENinebot : NSObject{
         
         if p0 == p1 {
             
-
+            
             oldx = x
             oldy = self.current(p0) * voltage(time : x)     // Wats
             i = p1
@@ -1382,13 +1481,13 @@ class  BLENinebot : NSObject{
             oldx = x1
             oldy = y1
             
-           
-            i++
+            
+            i += 1
             
             if i >= self.data[v].log.count{
                 break
             }
-
+            
             x1 = self.data[v].log[i].time.timeIntervalSinceDate(self.firstDate!)
             y1 = Double(self.data[v].log[i].value)  / 100.0 * self.voltage(time: x1)
             
@@ -1401,8 +1500,6 @@ class  BLENinebot : NSObject{
         
         
     }
-    
-   
     
     
     func getLogValue(variable : Int, time : NSTimeInterval) -> Double{
@@ -1437,10 +1534,10 @@ class  BLENinebot : NSObject{
             
         case 9:
             return self.power(time: time)
-
+            
         case 10:
             return self.energy(time: time)
-
+            
         default:
             return 0.0
             
@@ -1482,17 +1579,17 @@ class  BLENinebot : NSObject{
             
         case 9:
             return self.powerStats(from: t0, to: t1)
-
+            
             
         case 10:
             return self.energy(from: t0, to: t1)
-
+            
         default:
             return (0.0, 0.0, 0.0, 0.0)
             
         }
     }
-  
+    
     
     func getLogValue(variable : Int, index : Int) -> Double{
         
@@ -1527,10 +1624,10 @@ class  BLENinebot : NSObject{
             
         case 9:
             return self.power(index)
-
+            
         case 10:
             return self.energy(index)
-
+            
         default:
             return 0.0
             
