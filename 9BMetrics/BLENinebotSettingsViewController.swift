@@ -183,9 +183,9 @@ class BLENinebotSettingsViewController: UIViewController {
         let notSpeedLimitName = BLENinebot.nameOfVariableChangedNotification(BLENinebot.kSpeedLimit)
         let maxSpeedName = BLENinebot.nameOfVariableChangedNotification(BLENinebot.kAbsoluteSpeedLimit)
       
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "rideModeChanged:", name: notRidingName, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "limitSpeedChanged:", name: notSpeedLimitName, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "maxSpeedChanged:", name: maxSpeedName, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotSettingsViewController.rideModeChanged(_:)), name: notRidingName, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotSettingsViewController.limitSpeedChanged(_:)), name: notSpeedLimitName, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotSettingsViewController.maxSpeedChanged(_:)), name: maxSpeedName, object: nil)
     }
     
     override func viewWillDisappear(animated: Bool) {
