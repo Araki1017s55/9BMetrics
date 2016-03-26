@@ -200,10 +200,11 @@ class BLESimulatedClient: NSObject {
     
     func getAppState() -> [String : Double]?{
         
-        var dict  = [String : Double]()
         
         if let nb = self.datos{
             
+            var dict  = [String : Double]()
+           
             dict["temps"] = nb.singleRuntime()
             dict["distancia"]  = nb.singleMileage()
             dict["speed"]  =  nb.speed()
@@ -221,13 +222,20 @@ class BLESimulatedClient: NSObject {
             else{
                 dict["color"] = 0.0
             }
+            return dict
         }
-        return dict
+        else {
+            return nil
+        }
+
     }
     
     func checkState(state_1 :[String : Double]?, state_2:[String : Double]?) -> Bool{
         
-        if state_1 == nil || state_2 == nil{
+        if state_1 == nil && state_2 == nil {
+            return true
+        }
+        else if state_1 == nil || state_2 == nil{
             return false
         }
         
@@ -275,7 +283,6 @@ class BLESimulatedClient: NSObject {
                         AppDelegate.debugLog("Error sending data to watch")
                     }
                 }
-                
             }
         }
     }
