@@ -79,13 +79,37 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     func updateData(applicationContext: [String : AnyObject]){
         
-        self.recording = applicationContext["recording"] as! Bool
-        self.distancia = applicationContext["distancia"] as! Double
-        self.temps = applicationContext["temps"]  as! Double
-        self.speed = applicationContext["speed"]  as! Double
-        self.battery = applicationContext["battery"]  as! Double
-        self.remaining = applicationContext["remaining"]  as! Double
-        self.temperature = applicationContext["temperature"]  as! Double
+        if applicationContext.count == 0 {
+            return
+        }
+        
+        if let r = applicationContext["recording"] as? Bool {
+            self.recording = r
+        }
+        
+        if let  dist = applicationContext["distancia"] as? Double{
+            self.distancia = dist
+        }
+        
+        if let t = applicationContext["temps"]  as? Double{
+            self.temps = t
+        }
+        
+        if let sp = applicationContext["speed"]  as? Double {
+            self.speed = sp
+        }
+
+        if let bat = applicationContext["battery"]  as? Double {
+            self.battery = bat
+        }
+        
+        if let rem = applicationContext["remaining"]  as? Double {
+            self.remaining = rem
+        }
+        
+        if let temp = applicationContext["temperature"]  as? Double {
+            self.temperature = temp
+        }
         
         
         
@@ -154,7 +178,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             self.speedLabel.setText(String(format: "%5.2f", self.speed))
             self.batteryLabel.setText(String(format: "%2d %%", Int(self.battery)))
             
-            self.remainingLabel.setText(String(format: "%5.2f %@", self.remaining, "Km"))
+            //self.remainingLabel.setText(String(format: "%5.2f %@", self.remaining, "Km"))
             self.remainingLabel.setText(String(format: "%3.0f%@", self.temperature, "ºC"))
             
             if self.battery < 30.0{
