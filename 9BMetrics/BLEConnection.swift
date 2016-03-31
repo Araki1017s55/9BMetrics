@@ -48,6 +48,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     var scanning = false
     var connected = false
     var subscribed = false
+    var connecting = false
     
     var connectionRetries = 0
     var maxConnectionRetries = 5
@@ -79,6 +80,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         AppDelegate.debugLog("Connect to device")
         
         if let central = self.centralManager{
+            self.connecting = true
             
             if central.state == CBCentralManagerState.PoweredOn{
                 
@@ -110,7 +112,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         }
         
         self.cleanup()
-        self.centralManager = nil
+//        self.centralManager = nil
         
     }
     
@@ -147,6 +149,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         
         self.connected = false
         self.subscribed = false
+        self.connecting = false
         self.discoveredPeripheral = nil;
     }
     
@@ -159,7 +162,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         
         self.scanning = false;
         
-        if central.state == CBCentralManagerState.PoweredOn {
+        if central.state == CBCentralManagerState.PoweredOn && connecting {
             
             let store = NSUserDefaults.standardUserDefaults()
             let device = store.stringForKey(BLESimulatedClient.kLast9BDeviceAccessedKey)
@@ -177,7 +180,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     // MARK: Scanning for Bluetooth Devices
     
     func startScanning(){
-        AppDelegate.debugLog("Strt Scanning")
+        AppDelegate.debugLog("Start Scanning")
 
         
         let services = [CBUUID(string:self.serviceId)]
@@ -222,8 +225,9 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     func connectPeripheral(peripheral : CBPeripheral)
     {
         AppDelegate.debugLog("Connect to peripheral")
-
+        
         if let central = self.centralManager{
+            self.connecting = true
             AppDelegate.debugLog("Connecting to HR peripheral %@", peripheral);
         
             central.stopScan()     // Just in the case, stop scan when finished to looking for more devices
@@ -278,6 +282,9 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         
         if self.connected && self.subscribed    {   // Try to reconnect
             
+            BLESimulatedClient.sendNotification(BLESimulatedClient.kStartConnection, data:["status":"Connecting"] )
+           
+            
             self.connectionRetries = connectionRetries + 1
             
             if connectionRetries < maxConnectionRetries{
@@ -314,6 +321,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         self.subscribed = false
         
         BLESimulatedClient.sendNotification(BLESimulatedClient.kConnectionLostNotification, data: ["peripheral" : peripheral])
+        
         if let dele = self.delegate{
             dele.deviceDisconnectedConnected(peripheral)
         }
@@ -330,7 +338,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     //MARK: CBPeripheralDelegate
     
-    internal func peripheral(peripheral: CBPeripheral,didDiscoverServices error: NSError?)
+    internal func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?)
     {
         
         
@@ -374,6 +382,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
                     self.connected = true
                     self.subscribed = true
                     self.connectionRetries = 0
+                    self.connecting = false
                     
                     if let dele = self.delegate{
                         dele.deviceConnected(peripheral)
