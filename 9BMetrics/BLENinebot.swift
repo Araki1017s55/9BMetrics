@@ -56,6 +56,10 @@ class  BLENinebot : NSObject{
         
     }
     
+    struct IndexEntry {
+        var subIndex : [IndexEntry] = [IndexEntry]()
+    }
+    
     static let kAltitude = 0        // Obte les dades de CMAltimeterManager. 0 es l'inici i serveix per variacions unicament
     static let kPower = 1           // Calculada com V * I
     static let kEnergy = 2          // Total Energy = Integral (Power, dt)
@@ -634,6 +638,10 @@ class  BLENinebot : NSObject{
     // MARK: Query Functions
     
     func serialNo() -> String{
+        
+        if !self.checkHeaders(){
+            return "Waiting"
+        }
         
         var no = ""
         
