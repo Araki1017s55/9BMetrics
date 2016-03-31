@@ -40,9 +40,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     let kTextMode = "enabled_test"
     
     
-    var ninebot : BLENinebot = BLENinebot()
+   // weak var ninebot : BLENinebot?
     var server : BLESimulatedServer?
-    var client : BLESimulatedClient?
+    //var client : BLESimulatedClient?
     
     var state : stateValues = .Waiting
     
@@ -487,7 +487,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         self.currentFile = url
         
         if let file = self.currentFile{
-            self.ninebot.loadTextFile(file)
+            
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                dele.datos.loadTextFile(file)
+            }
         }
         
         self.performSegueWithIdentifier("openFileSegue", sender: self)
@@ -509,22 +512,26 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     // MARK : Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "dashboardSegue" {
-            if let dash = segue.destinationViewController as? BLENinebotDashboard{
-                dash.delegate = self
-                self.ninebot.clearAll()
-                dash.ninebot = self.ninebot
-                dash.file = nil
-                self.dashboard = dash
-                dash.connect()
+        if segue.identifier == "runningDashboardSegue" {
+            if let dash = segue.destinationViewController as? BLERunningDashboard{
+                
+                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    dash.client = dele.client
+                    if let cli = dele.client{
+                        cli.connect()
+                    }
+                }
                 
             }
         }else if segue.identifier == "openFileSegue"{
             if let dash = segue.destinationViewController as? BLENinebotDashboard{
-                dash.delegate = self
-                dash.ninebot = self.ninebot
-                self.dashboard = dash
-                dash.file = self.currentFile    
+                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    
+                    dash.delegate = self
+                    dash.ninebot = dele.datos
+                    self.dashboard = dash
+                    dash.file = self.currentFile
+                }
                 
                 //self.startClient() // Tan sols en algun cas potser depenent del sender?
                 
@@ -535,8 +542,6 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 
                 settings.delegate = self
             }
-            
-            
         }
     }
     
@@ -556,7 +561,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     
     func clientStopped(){
         
-        let aFile = self.ninebot.createTextFile()
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        let aFile = delegate.datos.createTextFile()
         self.shareData(aFile, src: self.tableView, delete: false)
         
     }
@@ -629,53 +636,43 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     override func viewWillAppear(animated: Bool) {
         
         AppDelegate.debugLog("View Controller will appear")
+            self.navigationController?.navigationBar.hidden = false
+
         
-        if let dash = self.dashboard{
-            if dash.client != nil{
-                dash.stop(self)
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                //dele.stop(self)
+                
+                if let docs = dele.applicationDocumentsDirectory(){
+                    loadLocalDirectoryData(docs)
+                    self.tableView.reloadData()
+              }
+                
+                guard let shortcut = dele.launchedShortcutItem else { return }
+                
+                
+                
+                if shortcut.type == "es.gorina.9BMetrics.Record"{
+                    
+                    dele.launchedShortcutItem  = nil
+                    AppDelegate.debugLog("Following dashboardSegue")
+                    
+                    self.performSegueWithIdentifier("dashboardSegue", sender: self)
+                    
+                }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
+                    dele.launchedShortcutItem  = nil
+                    
+                    AppDelegate.debugLog("Stopping xxx")
+                    
+                    if let ds = self.dashboard{
+                        ds.stop(self)
+                    }
+                    
+                }
+
             }
             self.dashboard = nil // Released dashboard
-        }
-        
-        
-        // Now reload all data foir
-        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
-        
-        let docsUrl = appDelegate?.applicationDocumentsDirectory()
-        
-        if let docs = docsUrl{
-            
-            loadLocalDirectoryData(docs)
-            self.tableView.reloadData()
-        }
-        
-        
-        
-        guard let dele = UIApplication.sharedApplication().delegate as? AppDelegate else {return}
-        guard let shortcut = dele.launchedShortcutItem else { return }
-        
-        
-        
-        if shortcut.type == "es.gorina.9BMetrics.Record"{
-            
-            dele.launchedShortcutItem  = nil
-            AppDelegate.debugLog("Following dashboardSegue")
-            
-            self.performSegueWithIdentifier("dashboardSegue", sender: self)
-            
-        }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
-            dele.launchedShortcutItem  = nil
-            
-            AppDelegate.debugLog("Stopping xxx")
-            
-            if let ds = self.dashboard{
-                ds.stop(self)
-            }
-            
-        }
-
+            super.viewWillAppear(animated)
     }
-    
 }
 
 
