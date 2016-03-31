@@ -33,14 +33,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var ubiquityUrl : NSURL?
-    
+
+    var datos : BLENinebot = BLENinebot()
+    var client : BLESimulatedClient?
+
     weak var mainController : ViewController?
     
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
-      
+ 
+        if self.client == nil {
+            self.client = BLESimulatedClient()
+            if let cli = self.client {
+                cli.datos = self.datos
+            }
+        }
         
         if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
             
@@ -122,7 +131,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }catch {
                 AppDelegate.debugLog("ERROR al copiar url %@ a %@", url, newUrl)
                 return false
-                
             }
             
             return true
@@ -191,6 +199,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
+    
+    //MARK: Connect and disconnect from Watch and ninebot
+    
+    func connect(){
+        
+       // self.titleField.title = "Connecting..."
+        
+        //self.client = BLESimulatedClient()
+        
+        if let cli = self.client{
+            if let dele = mainController {
+                cli.timerStep = dele.timerStep
+            }
+            else{
+                cli.timerStep = 0.01
+            }
+            
+            cli.connect()
+        }
+    }
+    
+    @IBAction func stop(src: AnyObject){
+        
+        
+        if let cli = self.client{
+            cli.stop()
+        }
+         self.setShortcutItems(false)
+    }
+    
+        //TODO: Clear stop button
+
     
     // Missatges de Debug
     
