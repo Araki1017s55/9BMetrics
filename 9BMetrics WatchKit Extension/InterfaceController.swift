@@ -83,8 +83,13 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             return
         }
         
-        if let r = applicationContext["recording"] as? Bool {
-            self.recording = r
+        if let r = applicationContext["recording"] as? Double {
+            
+            if r == 1.0 {
+                self.recording = true
+            }else{
+                self.recording = false
+            }
         }
         
         if let  dist = applicationContext["distancia"] as? Double{
