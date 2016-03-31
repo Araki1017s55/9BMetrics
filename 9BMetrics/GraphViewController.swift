@@ -23,7 +23,7 @@ import UIKit
 class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     @IBOutlet weak var graphView : TMKGraphView!
-    weak var delegate : BLENinebotDashboard?
+   // weak var delegate : BLENinebotDashboard?
     weak var ninebot : BLENinebot?
     var shownVariable = 0
 
@@ -59,7 +59,6 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
 
         if size.width < size.height{
-            self.navigationController?.navigationBar.hidden = false
             self.navigationController?.popViewControllerAnimated(true)
         }
     }
