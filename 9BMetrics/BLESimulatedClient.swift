@@ -25,7 +25,8 @@ import CoreMotion
 import WatchConnectivity
 
 class BLESimulatedClient: NSObject {
-    
+ 
+    static internal let kStartConnection = "startConnectinonNotification"
     static internal let kHeaderDataReadyNotification = "headerDataReadyNotification"
     static internal let kNinebotDataUpdatedNotification = "ninebotDataUpdatedNotification"
     static internal let kConnectionReadyNotification = "connectionReadyNotification"
@@ -35,10 +36,7 @@ class BLESimulatedClient: NSObject {
     
     static internal let kLast9BDeviceAccessedKey = "9BDEVICE"
     
-    var serviceId = "FFE0"
-    var serviceName = "HMSoft"
-    var charId = "FFE1"
-    
+     
     // Ninebot control
     
     var datos : BLENinebot?
@@ -80,6 +78,8 @@ class BLESimulatedClient: NSObject {
         self.connection = BLEConnection()
         super.init()
         self.connection.delegate = self
+        self.queryQueue = NSOperationQueue()
+        self.queryQueue!.maxConcurrentOperationCount = 1
         
         if WCSession.isSupported(){
             
@@ -104,8 +104,6 @@ class BLESimulatedClient: NSObject {
                 self.sendToWatch = true
             }
             
-            self.queryQueue = NSOperationQueue()
-            self.queryQueue!.maxConcurrentOperationCount = 1
         
         }
     }
@@ -122,30 +120,42 @@ class BLESimulatedClient: NSObject {
         
         // First we recover the last device and try to connect directly
         
+        
+        
         let store = NSUserDefaults.standardUserDefaults()
         let device = store.stringForKey(BLESimulatedClient.kLast9BDeviceAccessedKey)
         
         if let dev = device {
             self.connection.connectToDeviceWithUUID(dev)
+            BLESimulatedClient.sendNotification(BLESimulatedClient.kStartConnection, data:["status":"Connecting"] )
+        }else{
+            self.connection.startScanning()
+            BLESimulatedClient.sendNotification(BLESimulatedClient.kStartConnection, data:["status":"Scanning"])
         }
+        
     }
     
     func stop(){
         
         // First we disconnect the device
         
-        AppDelegate.debugLog("Simulated Client Stop")
-        self.connection.stopConnection()
-        
-        if let altm = self.altimeter{
-            altm.stopRelativeAltitudeUpdates()
-            self.altimeter = nil
-        }
-        
-        // Now we save the file
-        
-        if let nb = self.datos{
-            nb.createTextFile()
+        if self.connection.connected{
+            
+            AppDelegate.debugLog("Stopping")
+            
+            
+            self.connection.stopConnection()
+            
+            if let altm = self.altimeter{
+                altm.stopRelativeAltitudeUpdates()
+                self.altimeter = nil
+            }
+            
+            // Now we save the file
+            
+            if let nb = self.datos where nb.data[BLENinebot.kCurrent].log.count > 0{
+                nb.createTextFile()
+            }
         }
     }
     
@@ -204,7 +214,13 @@ class BLESimulatedClient: NSObject {
         if let nb = self.datos{
             
             var dict  = [String : Double]()
-           
+            
+            if self.connection.connected && self.connection.subscribed {
+                dict["recording"] = 1.0
+            }else {
+                dict["recording"] = 0.0
+            }
+            
             dict["temps"] = nb.singleRuntime()
             dict["distancia"]  = nb.singleMileage()
             dict["speed"]  =  nb.speed()
@@ -629,12 +645,11 @@ extension BLESimulatedClient :  WCSessionDelegate{
             switch op {
                 
             case "start":
-                break
+                self.connect()
                 
                 
             case "stop" :
-                break
-                
+                self.stop()
                 
             case "waypoint" :
                 break
