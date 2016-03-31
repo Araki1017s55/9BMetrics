@@ -27,7 +27,7 @@ class BLEDeviceSelector: UIViewController {
     @IBOutlet weak var tableView : UITableView?
     
     var devices : [CBPeripheral] = [CBPeripheral] ()
-    weak var delegate : BLENinebotDashboard?
+    weak var delegate : BLERunningDashboard?
     
     
     func clearDevices(){
