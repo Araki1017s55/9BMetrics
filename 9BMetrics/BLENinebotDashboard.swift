@@ -28,7 +28,7 @@ class BLENinebotDashboard: UITableViewController {
     @IBOutlet weak var titleField   : UINavigationItem!
     weak var ninebot : BLENinebot?
     weak var delegate : ViewController?
-    var client : BLESimulatedClient?
+    //weak var client : BLESimulatedClient?
     
     var devSelector : BLEDeviceSelector?
     var devList = [CBPeripheral]()
@@ -171,28 +171,17 @@ class BLENinebotDashboard: UITableViewController {
         
         self.titleField.title = "Connecting..."
         
-        self.client = BLESimulatedClient()
-        
-        if let cli = self.client{
-            cli.datos = self.ninebot
-            if let dele = delegate {
-                cli.timerStep = dele.timerStep
-            }
+        if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+            dele.connect()
         }
-    }
+     }
     
     @IBAction func stop(src: AnyObject){
         
         AppDelegate.debugLog("Dashboard Stop");
         
-        if let cli = self.client{
-            cli.stop()
-        }
-        self.client = nil // Release all data
-        
-        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
-        if let dele = appDelegate {
-            dele.setShortcutItems(false)
+        if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+            dele.stop(src)
         }
         
         self.removeStopButton()
@@ -202,8 +191,11 @@ class BLENinebotDashboard: UITableViewController {
     
     func connectToPeripheral(peripheral : CBPeripheral){
         
-        if let cli = self.client{
-            cli.connection.connectPeripheral(peripheral)
+        
+        if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+            if let cli = dele.client {
+                cli.connection.connectPeripheral(peripheral)
+            }
         }
         self.dismissViewControllerAnimated(true) { () -> Void in
             
@@ -442,34 +434,22 @@ class BLENinebotDashboard: UITableViewController {
                     nb.buildEnergy()
                 }
                 vc.ninebot = self.ninebot
-                vc.delegate = self
+                //vc.delegate = self
             }
             
-        }
-        else if segue.identifier == "deviceSelectorSegue" {
-            
-            if let vc = segue.destinationViewController as? BLEDeviceSelector{
-                
-                self.devSelector = vc
-                vc.addDevices(self.devList)
-                vc.delegate = self
-                self.devList.removeAll()
-                self.searching = true
-                
-            }
         }
         
-        else if segue.identifier == "ninebotSettingsSegue"{
-            if let vc = segue.destinationViewController as? BLENinebotSettingsViewController{
-                vc.ninebotClient = self.client
-                
-            }
-        }
-    }
+     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
             self.performSegueWithIdentifier("turnSegueIdentifier", sender: self)
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.hidden = false
+
     }
 }
