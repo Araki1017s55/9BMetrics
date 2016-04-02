@@ -70,6 +70,10 @@ class BLERunningDashboard: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.connectionStarted(_:)), name: BLESimulatedClient.kStartConnection, object: nil)
 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.hasStopped(_:)), name: BLESimulatedClient.kStoppedRecording, object: nil)
+
+        
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: BLESimulatedClient.kNinebotDataUpdatedNotification, object: nil)
@@ -78,6 +82,9 @@ class BLERunningDashboard: UIViewController {
   
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kConnectionReadyNotification, object: nil)
+        
+        
+        
 
     }
     
@@ -93,11 +100,7 @@ class BLERunningDashboard: UIViewController {
             
             if cl.connection.subscribed || self.state == connectionState.connecting{
                 cl.stop()
-                let img = UIImage(named: "record")
-                self.fStartStopButton.setImage(img, forState: UIControlState.Normal)
-                self.state = connectionState.stopped
-                self.navigationController!.popViewControllerAnimated(true)
-            }
+             }
             else{
                 cl.connect()
             }
@@ -105,6 +108,12 @@ class BLERunningDashboard: UIViewController {
         
     }
     
+    func hasStopped(not : NSNotification){
+        let img = UIImage(named: "record")
+        self.fStartStopButton.setImage(img, forState: UIControlState.Normal)
+        self.state = connectionState.stopped
+        self.navigationController!.popViewControllerAnimated(true)
+    }
 
     
     func dataUpdated(not : NSNotification){
