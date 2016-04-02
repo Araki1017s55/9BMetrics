@@ -40,7 +40,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     let kTextMode = "enabled_test"
     
     
-   // weak var ninebot : BLENinebot?
+    // weak var ninebot : BLENinebot?
     var server : BLESimulatedServer?
     //var client : BLESimulatedClient?
     
@@ -68,8 +68,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         self.navigationItem.leftBarButtonItem = editButton;
         // Lookup files
         let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
-         appDelegate?.mainController = self
-         self.reloadFiles()
+        appDelegate?.mainController = self
+        self.reloadFiles()
+        
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -77,13 +79,28 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         // Dispose of any resources that can be recreated.
     }
     
- 
+    
+    func hasStopped(not : NSNotification){
+        self.reloadFiles()
+    }
+    
+    func connectionStarted(not : NSNotification){
+        
+        if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+            
+            if  dele.client != nil{
+                
+                //self.performSegueWithIdentifier("runningDashboardSegue", sender: self)
+            }
+        }
+    }
+    
     func reloadFiles(){
         guard let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate else {return}
         guard let docsUrl = appDelegate.applicationDocumentsDirectory() else {return}
-
+        
         loadLocalDirectoryData(docsUrl)
- 
+        
     }
     
     func creationDate(url : NSURL) -> NSDate?{
@@ -222,7 +239,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         if NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDirectory) {
             return Bool(isDirectory)
-
+            
         }
         return false
     }
@@ -245,7 +262,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             for item in arch  {
                 
                 if let url = item as? NSURL where !self.isDirectory(url){
-                    files.append(url)
+                    if let ext = url.pathExtension where ext != "gpx"{
+                        files.append(url)
+                    }
                 }
                 
             }
@@ -311,7 +330,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         let store = NSUserDefaults.standardUserDefaults()
         let testMode = store.boolForKey(kTextMode)
-
+        
         
         let alert = UIAlertController(title: "Options", message: "Select an option", preferredStyle: UIAlertControllerStyle.ActionSheet);
         
@@ -330,15 +349,15 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         alert.addAction(action)
         
         if testMode {
-        
-        
+            
+            
             action = UIAlertAction(title: "Debug Server", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
                 
                 self.performSegueWithIdentifier("mimSegue", sender: self)
             })
             
             alert.addAction(action)
-
+            
             action = UIAlertAction(title: "Ninebot Server", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
                 
                 self.performSegueWithIdentifier("simulatedNinebotSegue", sender: self)
@@ -346,13 +365,13 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             
             alert.addAction(action)
         }
-
+        
         action = UIAlertAction(title: "About 9B Metrics", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
             self.performSegueWithIdentifier("docSegue", sender: self)
         })
         
         alert.addAction(action)
-   
+        
         
         
         self.presentViewController(alert, animated: true) { () -> Void in
@@ -503,7 +522,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         let urls = urlForIndexPath(indexPath)
         
         if let url = urls {
-           self.openUrl(url)
+            self.openUrl(url)
         }
     }
     
@@ -518,7 +537,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
                     dash.client = dele.client
                     if let cli = dele.client{
-                        cli.connect()
+                        
+                        if !cli.connection.subscribed && !cli.connection.connecting {
+                            cli.connect()
+                        }
                     }
                 }
                 
@@ -589,21 +611,38 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         if let aFile = file {
             
+            let name = aFile.URLByDeletingPathExtension!.lastPathComponent!
+            var activityItems = [aFile]
+            
+            
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate {
+                dele.datos.loadTextFile(aFile)
+                let url = dele.datos.createZipFile(name)
+                
+                if let u = url {
+                    activityItems = [u]
+                }
+              }
             
             let activityViewController = UIActivityViewController(
-                activityItems: [aFile.lastPathComponent!,   aFile],
+                activityItems: activityItems,
                 applicationActivities: [PickerActivity()])
             
             
             activityViewController.completionWithItemsHandler = {(a : String?, completed:Bool, objects:[AnyObject]?, error:NSError?) in
                 
-                if delete {
-                    do{
-                    try NSFileManager.defaultManager().removeItemAtURL(aFile)
-                    }catch{
-                        AppDelegate.debugLog("Error al esborrar %@", aFile)
+                
+                do{
+                    if activityItems.count >= 0{
+                        for item in activityItems {
+                            try NSFileManager.defaultManager().removeItemAtURL(item)
+                        }
+ 
                     }
+                }catch{
+                    AppDelegate.debugLog("Error al esborrar %@", aFile)
                 }
+                
             }
             
             activityViewController.popoverPresentationController?.sourceView = src as? UIView
@@ -611,13 +650,75 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             activityViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
             
             self.presentViewController(activityViewController,
-                animated: true,
-                completion: nil)
+                                       animated: true,
+                                       completion: nil)
             
         }
         
     }
     
+    func shareDatax(file: NSURL?, src:AnyObject, delete: Bool){
+        
+        
+        if let aFile = file {
+            
+            
+            var activityItems = [aFile]
+            
+            
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate {
+                dele.datos.loadTextFile(aFile)
+                
+                if dele.datos.hasGPSData(){
+                    
+                    let gpxUrl = aFile.URLByDeletingPathExtension!.URLByAppendingPathExtension("gpx")
+                    if dele.datos.createGPXFile(gpxUrl){
+                        activityItems.append(gpxUrl)
+                    }
+                }
+            }
+            
+            let activityViewController = UIActivityViewController(
+                activityItems: activityItems,
+                applicationActivities: [PickerActivity()])
+            
+            
+            activityViewController.completionWithItemsHandler = {(a : String?, completed:Bool, objects:[AnyObject]?, error:NSError?) in
+                
+                
+                do{
+                    if delete {
+                        try NSFileManager.defaultManager().removeItemAtURL(aFile)
+                    }
+                    if activityItems.count > 1{
+                        try NSFileManager.defaultManager().removeItemAtURL(activityItems[1])
+                        self.reloadFiles()
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.tableView.reloadData()
+                        })
+                        
+                    }
+                    
+                    
+                    
+                }catch{
+                    AppDelegate.debugLog("Error al esborrar %@", aFile)
+                }
+                
+            }
+            
+            activityViewController.popoverPresentationController?.sourceView = src as? UIView
+            
+            activityViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+            
+            self.presentViewController(activityViewController,
+                                       animated: true,
+                                       completion: nil)
+            
+        }
+        
+    }
+
     
     // MARK: Other functions
     
@@ -636,42 +737,64 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     override func viewWillAppear(animated: Bool) {
         
         AppDelegate.debugLog("View Controller will appear")
-            self.navigationController?.navigationBar.hidden = false
-
         
-            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
-                //dele.stop(self)
-                
-                if let docs = dele.applicationDocumentsDirectory(){
-                    loadLocalDirectoryData(docs)
-                    self.tableView.reloadData()
-              }
-                
-                guard let shortcut = dele.launchedShortcutItem else { return }
-                
-                
+        // Listen to stop notification. Must reload files
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.hasStopped(_:)), name: BLESimulatedClient.kStoppedRecording, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.connectionStarted(_:)), name: BLESimulatedClient.kStartConnection, object: nil)
+        
+        self.navigationController?.navigationBar.hidden = false
+        
+        
+        if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+            
+            if let docs = dele.applicationDocumentsDirectory(){
+                loadLocalDirectoryData(docs)
+                self.tableView.reloadData()
+            }
+            
+            if  let shortcut = dele.launchedShortcutItem {
                 
                 if shortcut.type == "es.gorina.9BMetrics.Record"{
                     
                     dele.launchedShortcutItem  = nil
                     AppDelegate.debugLog("Following dashboardSegue")
                     
-                    self.performSegueWithIdentifier("dashboardSegue", sender: self)
+                    self.performSegueWithIdentifier("runningDashboardSegue", sender: self)
                     
                 }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
                     dele.launchedShortcutItem  = nil
                     
                     AppDelegate.debugLog("Stopping xxx")
                     
-                    if let ds = self.dashboard{
-                        ds.stop(self)
+                    if let cli = dele.client{
+                        cli.stop()
                     }
                     
                 }
-
+            } else {
+                
+                // check if we are connected
+                
+                if let cli = dele.client {
+                    
+                    if cli.connection.subscribed {  // We are connected!! Load running
+                        
+                        //self.performSegueWithIdentifier("runningDashboardSegue", sender: self)
+                    }
+                }
+                
             }
-            self.dashboard = nil // Released dashboard
-            super.viewWillAppear(animated)
+            
+        }
+        self.dashboard = nil // Released dashboard
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        super.viewWillDisappear(true)
     }
 }
 
