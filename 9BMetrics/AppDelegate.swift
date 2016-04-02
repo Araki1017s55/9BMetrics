@@ -153,10 +153,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        
+        NSLog("Foreground")
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        NSLog("Activating")
         
         
     }
@@ -184,15 +188,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             guard let wc = nav.topViewController as? ViewController   else {return false}
             
-            wc.performSegueWithIdentifier("dashboardSegue", sender: wc)
+            wc.performSegueWithIdentifier("runningDashboardSegue", sender: wc)
+            self.setShortcutItems(true)
+
             
         }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
-            guard  let nav : UINavigationController = window?.rootViewController  as? UINavigationController else {return false}
+             
+            guard let cli = self.client   else {return false}
             
-            guard let ds = nav.topViewController as? BLENinebotDashboard   else {return false}
+            cli.stop()
+            self.setShortcutItems(false)
+
             //guard let ds = wc.dashboard else {return false}
             
-            ds.stop(self)
+        
             
         }
         
