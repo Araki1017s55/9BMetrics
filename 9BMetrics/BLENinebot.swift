@@ -63,6 +63,10 @@ class  BLENinebot : NSObject{
     static let kAltitude = 0        // Obte les dades de CMAltimeterManager. 0 es l'inici i serveix per variacions unicament
     static let kPower = 1           // Calculada com V * I
     static let kEnergy = 2          // Total Energy = Integral (Power, dt)
+    static let kLatitude = 3          // Latitut del GPS * 100000
+    static let kLongitude = 4          // Longitut dek GPS * 100000
+    static let kAltitudeGPS = 5          // Altitut GPS en m
+    static let kSpeedGPS = 6          // Velocitat del GPS * 1000 (m/s * 1000)
     static let kSerialNo = 16       // 16-22
     static let kPinCode = 23        // 23-25
     static let kVersion = 26
@@ -117,7 +121,7 @@ class  BLENinebot : NSObject{
     var headersOk = false
     var firstDate : NSDate?
     
-    
+    var otherFormatter : NSDateFormatter = NSDateFormatter()
     
     
     override init(){
@@ -139,6 +143,12 @@ class  BLENinebot : NSObject{
         signed[BLENinebot.kvRollAngle] = true
         signed[BLENinebot.kvPitchAngle] = true
         
+        self.otherFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        
+        self.otherFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
+        self.otherFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'.000Z'"
+
+        
         
     }
     
@@ -146,6 +156,10 @@ class  BLENinebot : NSObject{
         BLENinebot.labels[0]  = "Alt Var(m)"
         BLENinebot.labels[1]  = "Power(W)"
         BLENinebot.labels[2]  = "Energy(wh)"
+        BLENinebot.labels[3]  = "Latitude"
+        BLENinebot.labels[4]  = "Longitude"
+        BLENinebot.labels[5]  = "Altitude GPS"
+        BLENinebot.labels[6]  = "Speed GPS"
         BLENinebot.labels[16]  = "SN0"
         BLENinebot.labels[17]  = "SN1"
         BLENinebot.labels[18]  = "SN2"
@@ -195,6 +209,16 @@ class  BLENinebot : NSObject{
         BLENinebot.labels[211] = "One Fun Bool"
         
     }
+    
+    let xmlHeader : String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<gpx xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.cluetrust.com/XML/GPXDATA/1/0 http://www.cluetrust.com/Schemas/gpxdata10.xsd http://www.gorina.es/XML/TRACESDATA/1/0/tracesdata.xsd\" xmlns:gpxdata=\"http://www.cluetrust.com/XML/GPXDATA/1/0\" xmlns:tracesdata=\"http://www.gorina.es/XML/TRACESDATA/1/0\" version=\"1.1\" creator=\"9BMetrics - http://www.gorina.es/9BMetrics\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n"
+    
+    let xmlFooter = "</trkseg>\n</trk>\n</gpx>\n"
+    
+    
+    var trackHeader : String {
+        return "<trk>\n<name>Ninebot One</name>\n\n<trkseg>\n"
+    }
+
     
     func clearAll(){
         
@@ -258,6 +282,11 @@ class  BLENinebot : NSObject{
     }
     
     func addValueWithDate(dat: NSDate, variable : Int, value : Int){
+
+        self.addValueWithDate(dat, variable : variable, value : value, forced : false)
+    }
+    
+    func addValueWithDate(dat: NSDate, variable : Int, value : Int, forced : Bool){
         
         if variable >= 0 && variable < 256 {
             
@@ -288,7 +317,7 @@ class  BLENinebot : NSObject{
                 let c = data[variable].log.count
                 let e = data[variable].log[c-2]
                 
-                if e.value != sv{   // Append new point
+                if e.value != sv || forced{   // Append new point
                     data[variable].log.append(v)
                 }
                 else {  // Update time of new point
@@ -514,6 +543,183 @@ class  BLENinebot : NSObject{
         return nil
     }
     
+    func createZipFile(name : String) -> NSURL?{
+        
+        let tmpDirURL = NSURL.fileURLWithPath(NSTemporaryDirectory(),isDirectory: true)
+        let fmgr = NSFileManager()
+        let pkgUrl = tmpDirURL.URLByAppendingPathComponent(name)
+        
+        var files : [NSURL] = [NSURL]()
+        
+        if firstDate == nil {
+            firstDate = NSDate()
+        }
+        
+        do{
+            try fmgr.createDirectoryAtURL(pkgUrl, withIntermediateDirectories: false, attributes: nil)
+            
+            // Add file with gpx extension
+            
+            for v in self.data {
+                 if v.log.count > 0{
+                    
+                    let vn = v.codi
+                    let fileName = String(format: "%03d", vn)
+                    let fileUrl = pkgUrl.URLByAppendingPathComponent(fileName).URLByAppendingPathExtension("txt")
+                    if let path = fileUrl.path {
+                    
+                        fmgr.createFileAtPath(path, contents: nil, attributes: nil)
+                        let hdl = try NSFileHandle(forWritingToURL: fileUrl)
+                        
+                        let version = String(format: "Version\t2\tStart\t%0.3f\n", firstDate!.timeIntervalSince1970)
+                        hdl.writeData(version.dataUsingEncoding(NSUTF8StringEncoding)!)
+                        
+                        let title = String(format: "Time\tValor\n")
+                        hdl.writeData(title.dataUsingEncoding(NSUTF8StringEncoding)!)
+                        
+                        let varName = String(format: "V\t%d\t%@\n",v.codi, BLENinebot.labels[v.codi])
+                        
+                        AppDelegate.debugLog("Gravant file log per %@", varName)
+                        
+                        if let vn = varName.dataUsingEncoding(NSUTF8StringEncoding){
+                            hdl.writeData(vn)
+                        }
+                        for item in v.log {
+                            
+                            let t = item.time.timeIntervalSinceDate(self.firstDate!)
+                            
+                            let s = String(format: "%0.3f\t%d\n", t, item.value)
+                            if let vn = s.dataUsingEncoding(NSUTF8StringEncoding){
+                                hdl.writeData(vn)
+                            }
+                        }
+                        
+                        hdl.closeFile()
+                        
+                        files.append(fileUrl)
+                    }
+                    
+                    
+                }
+             }
+            
+            // Create a gpx file  in the same directory
+            
+            if self.hasGPSData(){
+                let gpxURL = pkgUrl.URLByAppendingPathComponent(name).URLByAppendingPathExtension("gpx")
+            
+                if self.createGPXFile(gpxURL)
+                {
+                    files.append(gpxURL)
+                }
+            }
+            let zipURL = pkgUrl.URLByAppendingPathExtension("zip")
+            
+                do {
+                    
+                
+            
+                try Zip.zipFiles(files, zipFilePath: zipURL, password: nil, progress: { (progress) -> () in
+                    NSLog("Zip %f", progress)
+                })
+                    
+                // OK finished so remove directory
+                    
+                try fmgr.removeItemAtURL(pkgUrl)
+                }catch{
+                    AppDelegate.debugLog("Error al crear zip file")
+                }
+            
+            return zipURL
+            
+        }catch {
+            AppDelegate.debugLog("Error al crear zip file")
+           
+            return nil
+        }
+        
+    }
+    
+    
+    
+    internal func createGPXFile(url : NSURL) -> (Bool)
+    {
+        //let cord : NSFileCoordinator = NSFileCoordinator(filePresenter: self.doc)
+        //var error : NSError?
+        
+        //        cord.coordinateWritingItemAtURL(url,
+        //           options: NSFileCoordinatorWritingOptions.ForReplacing,
+        //          error: &error)
+        //          { ( newURL :NSURL!) -> Void in
+        
+        // Check if it exits
+        
+        let mgr =  NSFileManager()
+        
+        
+        
+        let exists = mgr.fileExistsAtPath(url.path!)
+        
+        if !exists{
+            mgr.createFileAtPath(url.path!, contents: "Hello".dataUsingEncoding(NSUTF8StringEncoding), attributes:nil)
+        }
+        
+        
+        
+        if let hdl = NSFileHandle(forWritingAtPath: url.path!){
+            hdl.truncateFileAtOffset(0)
+            hdl.writeData(self.xmlHeader.dataUsingEncoding(NSUTF8StringEncoding)!)
+            
+            
+            hdl.writeData(self.trackHeader.dataUsingEncoding(NSUTF8StringEncoding)!)
+            
+            for i in 0..<(data[BLENinebot.kLatitude].log.count) {
+                
+                let time = data[BLENinebot.kLatitude].log[i].time
+                let lat = Double(data[BLENinebot.kLatitude].log[i].value) / 100000.0
+                let lon = Double(data[BLENinebot.kLongitude].log[i].value) / 100000.0
+                
+                var ele : Double = 0.0
+                if data[BLENinebot.kAltitudeGPS].log.count > i {
+                    ele = Double(data[BLENinebot.kAltitudeGPS].log[i].value)
+                }// Altitude in m
+                
+                var speed = 0.0
+                
+                if data[BLENinebot.kSpeedGPS].log.count > i {
+                    speed = Double(data[BLENinebot.kSpeedGPS].log[i].value) / 1000.0    // Speed in m/s
+
+                }// Altitude in m
+                
+                let timestr =  self.otherFormatter.stringFromDate(time)
+
+                
+                
+                  let timeString : String = timestr.stringByReplacingOccurrencesOfString(" ",  withString: "").stringByReplacingOccurrencesOfString("\n",withString: "").stringByReplacingOccurrencesOfString("\r",withString: "")
+                
+                
+                let s = String(format:"<trkpt lat=\"%7.5f\" lon=\"%7.5f\">\n<ele>%3.0f</ele>\n<speed>%0.2f</speed>\n<time>\(timeString)</time>\n</trkpt>\n", lat, lon, ele, speed)
+
+                hdl.writeData(s.dataUsingEncoding(NSUTF8StringEncoding)!)
+               
+            }
+            
+            hdl.writeData(self.xmlFooter.dataUsingEncoding(NSUTF8StringEncoding)!)
+            hdl.closeFile()
+            return true
+        }
+        else
+        {
+            return false
+            //error = err
+        }
+        
+        //   } Fora manager
+        
+    }
+
+    
+    
     func loadTextFile(url:NSURL){
         
         self.clearAll()
@@ -636,6 +842,20 @@ class  BLENinebot : NSObject{
     }
     
     // MARK: Query Functions
+    
+    func hasGPSData() -> Bool{
+        return data[BLENinebot.kLatitude].log.count > 0
+    }
+    
+    func altitudeGPS(time: NSTimeInterval) -> Double{
+        
+        if let v = value(BLENinebot.kAltitudeGPS , forTime: time){
+            return v.value 
+        }
+        else{
+            return 0.0
+        }
+    }
     
     func serialNo() -> String{
         
@@ -1642,6 +1862,14 @@ class  BLENinebot : NSObject{
         }
     }
     
+    //TODO: Create .zip file
+    //
+    // Create a directory and fill it with :
+    //
+    //  One file for variable
+    //  One gpx file if needed
+    //  Zip all files -> name.zip
+    //  Delete directory
     
     // Ride mode
     
