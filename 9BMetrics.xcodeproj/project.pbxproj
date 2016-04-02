@@ -13,6 +13,7 @@
 		001667101C9967290048344F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0016670F1C9967290048344F /* Settings.bundle */; };
 		0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */; };
 		00389AFF1C9986A4007BADDC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00389AFE1C9986A4007BADDC /* Default-568h@2x.png */; };
+		004F45CB1CAD9DE10071B7C4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004F45CA1CAD9DE10071B7C4 /* MapKit.framework */; };
 		007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57171C85CE49003A2030 /* AppDelegate.swift */; };
 		007A571A1C85CE49003A2030 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57191C85CE49003A2030 /* ViewController.swift */; };
 		007A57271C85CE49003A2030 /* 9BMetrics WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 007A57261C85CE49003A2030 /* 9BMetrics WatchKit App.app */; };
@@ -49,6 +50,22 @@
 		007A57851C85CF39003A2030 /* DocController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57731C85CF39003A2030 /* DocController.swift */; };
 		007A57871C85CF80003A2030 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A57861C85CF80003A2030 /* Interface.storyboard */; };
 		007A57891C85CF8D003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A57881C85CF8D003A2030 /* Assets.xcassets */; };
+		00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
+		00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
+		00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
+		00AB593B1CAEE61700277859 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59341CAEE61700277859 /* unzip.c */; };
+		00AB593C1CAEE61700277859 /* minizip.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59361CAEE61700277859 /* minizip.c */; };
+		00AB593D1CAEE61700277859 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59391CAEE61700277859 /* ioapi.c */; };
+		00AB59541CAEE64000277859 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59411CAEE64000277859 /* aescrypt.c */; };
+		00AB59551CAEE64000277859 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59421CAEE64000277859 /* aeskey.c */; };
+		00AB59561CAEE64000277859 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59441CAEE64000277859 /* aestab.c */; };
+		00AB59571CAEE64000277859 /* entropy.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59481CAEE64000277859 /* entropy.c */; };
+		00AB59581CAEE64000277859 /* fileenc.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594A1CAEE64000277859 /* fileenc.c */; };
+		00AB59591CAEE64000277859 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594C1CAEE64000277859 /* hmac.c */; };
+		00AB595A1CAEE64000277859 /* prng.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594E1CAEE64000277859 /* prng.c */; };
+		00AB595B1CAEE64000277859 /* pwd2key.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59501CAEE64000277859 /* pwd2key.c */; };
+		00AB595C1CAEE64000277859 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59521CAEE64000277859 /* sha1.c */; };
+		00AB595E1CAEE65E00277859 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB595D1CAEE65E00277859 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +117,7 @@
 		0016670F1C9967290048344F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLERequestOperation.swift; sourceTree = "<group>"; };
 		00389AFE1C9986A4007BADDC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		004F45CA1CAD9DE10071B7C4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		007A57141C85CE49003A2030 /* 9BMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9BMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007A57171C85CE49003A2030 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		007A57191C85CE49003A2030 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +159,40 @@
 		007A57731C85CF39003A2030 /* DocController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocController.swift; sourceTree = "<group>"; };
 		007A57861C85CF80003A2030 /* Interface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Interface.storyboard; sourceTree = "<group>"; };
 		007A57881C85CF8D003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zip.h; sourceTree = "<group>"; };
+		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
+		00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipUtilities.swift; sourceTree = "<group>"; };
+		00AB592E1CAEE5EC00277859 /* QuickZip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickZip.swift; sourceTree = "<group>"; };
+		00AB59331CAEE61600277859 /* 9BMetrics-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "9BMetrics-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		00AB59341CAEE61700277859 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		00AB59351CAEE61700277859 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		00AB59361CAEE61700277859 /* minizip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minizip.c; sourceTree = "<group>"; };
+		00AB59371CAEE61700277859 /* minizip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minizip.h; sourceTree = "<group>"; };
+		00AB59381CAEE61700277859 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		00AB59391CAEE61700277859 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		00AB593A1CAEE61700277859 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		00AB593F1CAEE64000277859 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		00AB59401CAEE64000277859 /* aes_via_ace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes_via_ace.h; sourceTree = "<group>"; };
+		00AB59411CAEE64000277859 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
+		00AB59421CAEE64000277859 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
+		00AB59431CAEE64000277859 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
+		00AB59441CAEE64000277859 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
+		00AB59451CAEE64000277859 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
+		00AB59461CAEE64000277859 /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_endian.h; sourceTree = "<group>"; };
+		00AB59471CAEE64000277859 /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_types.h; sourceTree = "<group>"; };
+		00AB59481CAEE64000277859 /* entropy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = entropy.c; sourceTree = "<group>"; };
+		00AB59491CAEE64000277859 /* entropy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entropy.h; sourceTree = "<group>"; };
+		00AB594A1CAEE64000277859 /* fileenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fileenc.c; sourceTree = "<group>"; };
+		00AB594B1CAEE64000277859 /* fileenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileenc.h; sourceTree = "<group>"; };
+		00AB594C1CAEE64000277859 /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac.c; sourceTree = "<group>"; };
+		00AB594D1CAEE64000277859 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
+		00AB594E1CAEE64000277859 /* prng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prng.c; sourceTree = "<group>"; };
+		00AB594F1CAEE64000277859 /* prng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prng.h; sourceTree = "<group>"; };
+		00AB59501CAEE64000277859 /* pwd2key.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pwd2key.c; sourceTree = "<group>"; };
+		00AB59511CAEE64000277859 /* pwd2key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pwd2key.h; sourceTree = "<group>"; };
+		00AB59521CAEE64000277859 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
+		00AB59531CAEE64000277859 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
+		00AB595D1CAEE65E00277859 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +200,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00AB595E1CAEE65E00277859 /* libz.tbd in Frameworks */,
+				004F45CB1CAD9DE10071B7C4 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +218,7 @@
 		007A570B1C85CE49003A2030 = {
 			isa = PBXGroup;
 			children = (
+				00AB592A1CAEE5CA00277859 /* Zip */,
 				007A574E1C85CE5D003A2030 /* Resources */,
 				007A57161C85CE49003A2030 /* 9BMetrics */,
 				007A572A1C85CE49003A2030 /* 9BMetrics WatchKit App */,
@@ -187,6 +242,7 @@
 			children = (
 				0016670F1C9967290048344F /* Settings.bundle */,
 				007A575B1C85CE7B003A2030 /* 9BMetrics.entitlements */,
+				00AB59331CAEE61600277859 /* 9BMetrics-Bridging-Header.h */,
 				007A57621C85CF39003A2030 /* TMKGraphViewDataSource.swift */,
 				007A57631C85CF39003A2030 /* TMKGraphContentView.swift */,
 				007A57641C85CF39003A2030 /* TMKGraphView.swift */,
@@ -242,8 +298,9 @@
 		007A574E1C85CE5D003A2030 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				00389AFE1C9986A4007BADDC /* Default-568h@2x.png */,
+				004F45CA1CAD9DE10071B7C4 /* MapKit.framework */,
 				0016670D1C995A290048344F /* simulated_log.txt */,
+				00389AFE1C9986A4007BADDC /* Default-568h@2x.png */,
 				007A574F1C85CE69003A2030 /* icon_ipad@2x.png */,
 				007A57501C85CE69003A2030 /* icon_ipad.png */,
 				007A57511C85CE69003A2030 /* Ninebot-One-4.jpg */,
@@ -252,6 +309,62 @@
 				007A57541C85CE69003A2030 /* License_GPL30.html */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		00AB592A1CAEE5CA00277859 /* Zip */ = {
+			isa = PBXGroup;
+			children = (
+				00AB59321CAEE60100277859 /* minizip */,
+				00AB592B1CAEE5EC00277859 /* Zip.h */,
+				00AB592C1CAEE5EC00277859 /* Zip.swift */,
+				00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */,
+				00AB592E1CAEE5EC00277859 /* QuickZip.swift */,
+				00AB595D1CAEE65E00277859 /* libz.tbd */,
+			);
+			name = Zip;
+			sourceTree = "<group>";
+		};
+		00AB59321CAEE60100277859 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				00AB593E1CAEE62800277859 /* aes */,
+				00AB59341CAEE61700277859 /* unzip.c */,
+				00AB59351CAEE61700277859 /* unzip.h */,
+				00AB59361CAEE61700277859 /* minizip.c */,
+				00AB59371CAEE61700277859 /* minizip.h */,
+				00AB59381CAEE61700277859 /* crypt.h */,
+				00AB59391CAEE61700277859 /* ioapi.c */,
+				00AB593A1CAEE61700277859 /* ioapi.h */,
+			);
+			name = minizip;
+			sourceTree = "<group>";
+		};
+		00AB593E1CAEE62800277859 /* aes */ = {
+			isa = PBXGroup;
+			children = (
+				00AB593F1CAEE64000277859 /* aes.h */,
+				00AB59401CAEE64000277859 /* aes_via_ace.h */,
+				00AB59411CAEE64000277859 /* aescrypt.c */,
+				00AB59421CAEE64000277859 /* aeskey.c */,
+				00AB59431CAEE64000277859 /* aesopt.h */,
+				00AB59441CAEE64000277859 /* aestab.c */,
+				00AB59451CAEE64000277859 /* aestab.h */,
+				00AB59461CAEE64000277859 /* brg_endian.h */,
+				00AB59471CAEE64000277859 /* brg_types.h */,
+				00AB59481CAEE64000277859 /* entropy.c */,
+				00AB59491CAEE64000277859 /* entropy.h */,
+				00AB594A1CAEE64000277859 /* fileenc.c */,
+				00AB594B1CAEE64000277859 /* fileenc.h */,
+				00AB594C1CAEE64000277859 /* hmac.c */,
+				00AB594D1CAEE64000277859 /* hmac.h */,
+				00AB594E1CAEE64000277859 /* prng.c */,
+				00AB594F1CAEE64000277859 /* prng.h */,
+				00AB59501CAEE64000277859 /* pwd2key.c */,
+				00AB59511CAEE64000277859 /* pwd2key.h */,
+				00AB59521CAEE64000277859 /* sha1.c */,
+				00AB59531CAEE64000277859 /* sha1.h */,
+			);
+			name = aes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,7 +429,7 @@
 		007A570C1C85CE49003A2030 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Paco Gorina";
 				TargetAttributes = {
@@ -325,6 +438,9 @@
 						DevelopmentTeam = N72U6DTDRE;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
 								enabled = 1;
 							};
 							com.apple.iCloud = {
@@ -406,29 +522,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00AB59581CAEE64000277859 /* fileenc.c in Sources */,
 				007A577A1C85CF39003A2030 /* BLENinebotMessage.swift in Sources */,
 				007A57751C85CF39003A2030 /* TMKGraphContentView.swift in Sources */,
 				007A57761C85CF39003A2030 /* TMKGraphView.swift in Sources */,
 				007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */,
 				007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */,
+				00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */,
 				007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */,
+				00AB59551CAEE64000277859 /* aeskey.c in Sources */,
 				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,
+				00AB59561CAEE64000277859 /* aestab.c in Sources */,
+				00AB595B1CAEE64000277859 /* pwd2key.c in Sources */,
+				00AB595C1CAEE64000277859 /* sha1.c in Sources */,
 				007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */,
 				007A57851C85CF39003A2030 /* DocController.swift in Sources */,
+				00AB593C1CAEE61700277859 /* minizip.c in Sources */,
+				00AB593D1CAEE61700277859 /* ioapi.c in Sources */,
+				00AB59591CAEE64000277859 /* hmac.c in Sources */,
 				0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */,
 				007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */,
+				00AB595A1CAEE64000277859 /* prng.c in Sources */,
 				007A57821C85CF39003A2030 /* BLEMim.swift in Sources */,
 				007A571A1C85CE49003A2030 /* ViewController.swift in Sources */,
 				0002C47E1CAABF0E0060CFA5 /* BLERunningDashboard.swift in Sources */,
 				007A57771C85CF39003A2030 /* GraphViewController.swift in Sources */,
+				00AB59571CAEE64000277859 /* entropy.c in Sources */,
 				007A57791C85CF39003A2030 /* BLENinebot.swift in Sources */,
 				007A57741C85CF39003A2030 /* TMKGraphViewDataSource.swift in Sources */,
+				00AB593B1CAEE61700277859 /* unzip.c in Sources */,
+				00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */,
 				007A577D1C85CF39003A2030 /* BLEConnection.swift in Sources */,
 				007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
 				0016670C1C9958B70048344F /* BLESimulatedNinebot.swift in Sources */,
 				007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */,
+				00AB59541CAEE64000277859 /* aescrypt.c in Sources */,
+				00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,15 +750,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = 9BMetrics/9BMetrics.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = 9BMetrics/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "9BMetrics-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -635,15 +774,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = 9BMetrics/9BMetrics.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = 9BMetrics/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a358aa2d-ea89-454f-9f89-f480db6e2458";
 				SKIP_INSTALL = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "9BMetrics-Bridging-Header.h";
 			};
 			name = Release;
 		};
