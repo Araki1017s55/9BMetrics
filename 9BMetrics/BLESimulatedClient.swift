@@ -22,11 +22,13 @@
 import UIKit
 import CoreBluetooth
 import CoreMotion
+import MapKit
 import WatchConnectivity
 
 class BLESimulatedClient: NSObject {
- 
+    
     static internal let kStartConnection = "startConnectinonNotification"
+    static internal let kStoppedRecording = "stoppedRecordingNotification"
     static internal let kHeaderDataReadyNotification = "headerDataReadyNotification"
     static internal let kNinebotDataUpdatedNotification = "ninebotDataUpdatedNotification"
     static internal let kConnectionReadyNotification = "connectionReadyNotification"
@@ -36,7 +38,7 @@ class BLESimulatedClient: NSObject {
     
     static internal let kLast9BDeviceAccessedKey = "9BDEVICE"
     
-     
+    
     // Ninebot control
     
     var datos : BLENinebot?
@@ -71,7 +73,15 @@ class BLESimulatedClient: NSObject {
     var sendToWatch = false
     var oldState : Dictionary<String, Double>?
     
+    // Ninebot Connection
+    
     var connection : BLEConnection
+    
+    // Location Manager
+    
+    var locm = CLLocationManager()
+    var deferringUpdates = false
+    var lastLoc : CLLocation?
     
     override init() {
         
@@ -80,6 +90,21 @@ class BLESimulatedClient: NSObject {
         self.connection.delegate = self
         self.queryQueue = NSOperationQueue()
         self.queryQueue!.maxConcurrentOperationCount = 1
+        
+        locm.delegate = self
+        locm.activityType = CLActivityType.Fitness
+        locm.desiredAccuracy = kCLLocationAccuracyBest
+        locm.distanceFilter = kCLDistanceFilterNone
+        
+        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.NotDetermined
+            || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Denied {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.locm.requestAlwaysAuthorization()
+            })
+            
+        }
+        
         
         if WCSession.isSupported(){
             
@@ -104,13 +129,13 @@ class BLESimulatedClient: NSObject {
                 self.sendToWatch = true
             }
             
-        
+            
         }
     }
     
     func initNotifications()
     {
- //       NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateTitle:"), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
+        //       NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateTitle:"), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
     }
     
     // Connect is the start connection
@@ -119,7 +144,9 @@ class BLESimulatedClient: NSObject {
     func connect(){
         
         // First we recover the last device and try to connect directly
-        
+        if self.connection.connecting || self.connection.subscribed{
+            return
+        }
         
         
         let store = NSUserDefaults.standardUserDefaults()
@@ -131,6 +158,15 @@ class BLESimulatedClient: NSObject {
         }else{
             self.connection.startScanning()
             BLESimulatedClient.sendNotification(BLESimulatedClient.kStartConnection, data:["status":"Scanning"])
+        }
+        
+        // Start looking for GPS Data
+        
+        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways{
+        
+            locm.allowsBackgroundLocationUpdates = true
+            lastLoc = nil
+            locm.startUpdatingLocation()
         }
         
     }
@@ -151,12 +187,21 @@ class BLESimulatedClient: NSObject {
                 self.altimeter = nil
             }
             
+            locm.stopUpdatingLocation() // Haurem de modificar posteriorment
+            locm.allowsBackgroundLocationUpdates = false
+                
+            
             // Now we save the file
             
             if let nb = self.datos where nb.data[BLENinebot.kCurrent].log.count > 0{
                 nb.createTextFile()
             }
+            
+            BLESimulatedClient.sendNotification(BLESimulatedClient.kStoppedRecording, data: [:])
+            
         }
+        
+        self.sendDataToWatch()
     }
     
     //MARK: Auxiliary functions
@@ -185,11 +230,11 @@ class BLESimulatedClient: NSObject {
             if let altm = self.altimeter, queue = self.altQueue{
                 
                 altm.startRelativeAltitudeUpdatesToQueue(queue,
-                    withHandler: { (alts : CMAltitudeData?, error : NSError?) -> Void in
-                        
-                        if let alt = alts, nb = self.datos {
-                            nb.addValue(0, value: Int(round(alt.relativeAltitude.doubleValue * 100.0)))
-                        }
+                                                         withHandler: { (alts : CMAltitudeData?, error : NSError?) -> Void in
+                                                            
+                                                            if let alt = alts, nb = self.datos {
+                                                                nb.addValue(0, value: Int(round(alt.relativeAltitude.doubleValue * 100.0)))
+                                                            }
                 })
             }
         }
@@ -243,7 +288,7 @@ class BLESimulatedClient: NSObject {
         else {
             return nil
         }
-
+        
     }
     
     func checkState(state_1 :[String : Double]?, state_2:[String : Double]?) -> Bool{
@@ -286,18 +331,22 @@ class BLESimulatedClient: NSObject {
     func sendStateToWatch(timer: NSTimer){
         
         if self.sendToWatch{
+            sendDataToWatch()
             
-            let info = self.getAppState()
-            
-            if !self.checkState(info, state_2: self.oldState){
-                if let session = wcsession, inf = info {
-                    do {
-                        try session.updateApplicationContext(inf)
-                        self.oldState = info
-                    }
-                    catch _{
-                        AppDelegate.debugLog("Error sending data to watch")
-                    }
+        }
+    }
+    
+    func sendDataToWatch(){
+        let info = self.getAppState()
+        
+        if !self.checkState(info, state_2: self.oldState){
+            if let session = wcsession, inf = info {
+                do {
+                    try session.updateApplicationContext(inf)
+                    self.oldState = info
+                }
+                catch _{
+                    AppDelegate.debugLog("Error sending data to watch")
                 }
             }
         }
@@ -377,7 +426,7 @@ class BLESimulatedClient: NSObject {
         
         // Check that level is between 0..9
         
-        if level < 0 || level > 9 {
+        if level < 1 || level > 9 {
             return
         }
         
@@ -660,6 +709,95 @@ extension BLESimulatedClient :  WCSessionDelegate{
             
         }
     }
+    
+}
+
+// CLLocationManagerDelegate
+
+extension BLESimulatedClient : CLLocationManagerDelegate{
+    
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus){
+        
+        AppDelegate.debugLog("Location Manager Authorization Status Changed")
+        
+        
+    }
+    
+    func locationManager(manager: CLLocationManager,
+                         didUpdateLocations locations: [CLLocation])
+    {
+        AppDelegate.debugLog("LocationManager received locations")
+        
+        if let nb = self.datos {
+            
+            for loc : CLLocation in locations {
+                
+                
+                if loc.horizontalAccuracy <= 20.0{  // Other data is really bad bad bad. probably GPS not fixes
+                    
+                    if let llc = self.lastLoc{
+                        if llc.distanceFromLocation(loc) >= 5.0{       // one point every 10 meters. Not less
+                            
+                            let lat : Int = Int(floor(loc.coordinate.latitude * 100000))
+                            let lon : Int = Int(floor(loc.coordinate.longitude * 100000))
+                            let alt : Int = Int(round(loc.altitude))
+                            let speed : Int = Int(round(loc.speed) * 1000)
+                            
+                            nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kLatitude, value: lat, forced: true)
+                            nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kLongitude, value: lon, forced: true)
+                            nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kAltitudeGPS, value: alt, forced: true)
+                            nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kSpeedGPS, value: speed, forced: true)
+                           
+                            self.lastLoc = loc
+                        }
+                    }
+                    else
+                    {
+                        let lat : Int = Int(floor(loc.coordinate.latitude * 100000))
+                        let lon : Int = Int(floor(loc.coordinate.longitude * 100000))
+                        let alt : Int = Int(round(loc.altitude))
+                        let speed : Int = Int(round(loc.speed) * 1000)
+                        
+                        nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kLatitude, value: lat, forced: true)
+                        nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kLongitude, value: lon, forced: true)
+                        nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kAltitudeGPS, value: alt, forced: true)
+                        nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kSpeedGPS, value: speed, forced: true)
+                       self.lastLoc = loc
+                    }
+                }
+            }
+        }
+        
+        if !self.deferringUpdates  {
+            let distance : CLLocationDistance =  1000.0 // Update every km
+            let time : NSTimeInterval = 60.0 // Or every 1'
+            
+            manager.allowDeferredLocationUpdatesUntilTraveled(distance,  timeout:time)
+            self.deferringUpdates = true
+            
+        }
+    }
+    
+    
+    func locationManager(manager: CLLocationManager, didFinishDeferredUpdatesWithError error: NSError?) {
+        
+        self.deferringUpdates = false
+    }
+    
+    
+    func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
+    }
+    
+    
+    func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
+    }
+    
+    func locationManager(manager: CLLocationManager, monitoringDidFailForRegion region: CLRegion?, withError error: NSError) {
+    }
+    
+    
+    
     
 }
 
