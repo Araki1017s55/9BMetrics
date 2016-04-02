@@ -208,6 +208,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                     self.clearAllMenuItems()
                     self.addMenuItemWithItemIcon(WKMenuItemIcon.Play, title: "Start", action: #selector(InterfaceController.start))
                 }
+                self.oldRecording = self.recording
             }
             
             self.stateChanged = false
