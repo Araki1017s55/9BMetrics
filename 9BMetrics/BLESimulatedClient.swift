@@ -44,13 +44,15 @@ class BLESimulatedClient: NSObject {
     var datos : BLENinebot?
     var headersOk = false
     var sendTimer : NSTimer?    // Timer per enviar les dades periodicament
-    var timerStep = 0.01        // Get data every step
+    var timerStep = 0.1        // Get data every step
     var watchTimerStep = 0.1        // Get data every step
     var contadorOp = 0          // Normal data updated every second
     var contadorOpFast = 0      // Special data updated every 1/10th of second
     var listaOp :[(UInt8, UInt8)] = [(41, 2), (50,2), (58,5),  (182, 5)]
-    var listaOpFast :[(UInt8, UInt8)] = [(38,1), (80,1), (97,4), (34,4), (71,6)]
-    
+   // var listaOpFast :[(UInt8, UInt8)] = [(38,1), (80,1), (97,4), (34,4), (71,6)]
+   
+    var listaOpFast :[(UInt8, UInt8)] = [ (80,1), (187,4), (180,2)]
+
     
     var buffer = [UInt8]()
     
@@ -470,33 +472,27 @@ class BLESimulatedClient: NSObject {
                     
                 }
                 
-                let (op, l) = listaOpFast[contadorOpFast]
-                contadorOpFast += 1
-                let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-                if let dat = message?.toNSData(){
-                    self.connection.writeValue(dat)
-                }
-                
-                
-                if contadorOpFast >= listaOpFast.count{
-                    contadorOpFast = 0
-                    let (op, l) = listaOp[contadorOp]
-                    contadorOp += 1
-                    
-                    if contadorOp >= listaOp.count{
-                        contadorOp = 0
-                    }
-                    
+                for (op, l) in listaOpFast{
                     let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-                    
-                    
                     if let dat = message?.toNSData(){
                         self.connection.writeValue(dat)
                     }
                 }
                 
+                let (op, l) = listaOp[contadorOp]
+                contadorOp += 1
                 
-            } else {    // Get One time data (S/N, etc.)
+                if contadorOp >= listaOp.count{
+                    contadorOp = 0
+                }
+                
+                let message = BLENinebotMessage(com: op, dat:[ l * 2] )
+                
+                
+                if let dat = message?.toNSData(){
+                    self.connection.writeValue(dat)
+                }
+            }else {    // Get One time data (S/N, etc.)
                 
                 
                 var message = BLENinebotMessage(com: UInt8(16), dat: [UInt8(22)])
