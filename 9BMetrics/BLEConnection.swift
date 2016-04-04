@@ -39,6 +39,10 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     var serviceName = "HMSoft"
     var charId = "FFE1"
     
+    var nordicServiceId = "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+    var nordicServiceCharId = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+    var nordicServiceCharId1 = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
+    
     
     var centralManager : CBCentralManager?
     var discoveredPeripheral : CBPeripheral?
