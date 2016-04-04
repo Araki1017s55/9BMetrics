@@ -241,6 +241,10 @@ class BLESimulatedClient: NSObject {
     }
     // MARK: NSOperationSupport
     
+    func injectRequest(tim : NSTimer){
+        self.sendNewRequest()
+    }
+    
     func sendNewRequest(){
         
         let request = BLERequestOperation(cliente: self)
@@ -629,6 +633,11 @@ extension BLESimulatedClient : BLENinebotConnectionDelegate{
         if self.sendToWatch {
             self.timer = NSTimer.scheduledTimerWithTimeInterval(watchTimerStep, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
         }
+        
+        // Just to be sure we start another timer to correct cases where we loose all requests
+        // Will inject one request every timerStep
+        
+        self.sendTimer = NSTimer.scheduledTimerWithTimeInterval(timerStep, target: self, selector:#selector(BLESimulatedClient.injectRequest(_:)), userInfo: nil, repeats: true)
     }
     
     func deviceDisconnectedConnected(peripheral : CBPeripheral ){
