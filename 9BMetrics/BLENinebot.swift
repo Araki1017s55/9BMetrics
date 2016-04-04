@@ -565,25 +565,22 @@ class  BLENinebot : NSObject{
                     
                     let vn = v.codi
                     let fileName = String(format: "%03d", vn)
-                    let fileUrl = pkgUrl.URLByAppendingPathComponent(fileName).URLByAppendingPathExtension("txt")
+                    let fileUrl = pkgUrl.URLByAppendingPathComponent(fileName).URLByAppendingPathExtension("csv")
                     if let path = fileUrl.path {
                     
                         fmgr.createFileAtPath(path, contents: nil, attributes: nil)
                         let hdl = try NSFileHandle(forWritingToURL: fileUrl)
-                        
-                        let version = String(format: "Version\t2\tStart\t%0.3f\n", firstDate!.timeIntervalSince1970)
-                        hdl.writeData(version.dataUsingEncoding(NSUTF8StringEncoding)!)
-                        
-                        let title = String(format: "Time\tValor\n")
-                        hdl.writeData(title.dataUsingEncoding(NSUTF8StringEncoding)!)
+ 
                         
                         let varName = String(format: "V\t%d\t%@\n",v.codi, BLENinebot.labels[v.codi])
+
+                        let version = String(format: "Version\t3\tStart\t%0.3f\tVariable\t%@\n", firstDate!.timeIntervalSince1970, varName)
+                        
+                        hdl.writeData(version.dataUsingEncoding(NSUTF8StringEncoding)!)
+                        
                         
                         AppDelegate.debugLog("Gravant file log per %@", varName)
                         
-                        if let vn = varName.dataUsingEncoding(NSUTF8StringEncoding){
-                            hdl.writeData(vn)
-                        }
                         for item in v.log {
                             
                             let t = item.time.timeIntervalSinceDate(self.firstDate!)
