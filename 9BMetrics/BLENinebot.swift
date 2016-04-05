@@ -84,9 +84,9 @@ class  BLENinebot : NSObject{
     static let kTemperature = 62
     static let kvDriveVoltage = 71
     static let kElectricVoltage12v = 74
-    static let kCurrent = 80
-    static let kvPitchAngle = 97
-    static let kvRollAngle = 98
+    static let kvCurrent = 80
+    static let kPitchAngle = 97
+    static let kRollAngle = 98
     static let kPitchAngleVelocity = 99
     static let kRollAngleVelocity = 100
     static let kAbsoluteSpeedLimit = 115
@@ -104,8 +104,8 @@ class  BLENinebot : NSObject{
     static let kvSingleMileage = 185
     static let kvTemperature = 187
     static let kVoltage = 188
-    static let kRollAngle = 189
-    static let kPitchAngle = 190
+    static let kCurrent = 189
+    static let kvPitchAngle = 190
     static let kvMaxSpeed = 191
     static let kvRideMode = 210
     
@@ -140,7 +140,6 @@ class  BLENinebot : NSObject{
         signed[BLENinebot.kPitchAngleVelocity] = true
         signed[BLENinebot.kRollAngleVelocity] = true
         signed[BLENinebot.kCurrent] = true
-        signed[BLENinebot.kvRollAngle] = true
         signed[BLENinebot.kvPitchAngle] = true
         
         self.otherFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
@@ -203,7 +202,7 @@ class  BLENinebot : NSObject{
         BLENinebot.labels[186] = "Single Mileage?"
         BLENinebot.labels[187] = "T ºC"
         BLENinebot.labels[188] = "Voltage (V)"
-        BLENinebot.labels[189] = "Roll(º)"
+        BLENinebot.labels[189] = "Current (A)"
         BLENinebot.labels[190] = "Pitch(º)"
         BLENinebot.labels[191] = "Max Speed"
         BLENinebot.labels[210] = "Ride Mode"
@@ -747,6 +746,7 @@ class  BLENinebot : NSObject{
                                 
                                 guard let dt = Double(fields[3].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return}
                                 date0 = NSDate(timeIntervalSince1970: dt)
+                                self.firstDate = date0
                                 
                             } else {
                                 AppDelegate.debugLog("Error amb version %d", v)
