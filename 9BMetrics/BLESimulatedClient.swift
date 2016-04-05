@@ -51,7 +51,7 @@ class BLESimulatedClient: NSObject {
     var listaOp :[(UInt8, UInt8)] = [(41, 2), (50,2), (58,5),  (182, 5)]
    // var listaOpFast :[(UInt8, UInt8)] = [(38,1), (80,1), (97,4), (34,4), (71,6)]
    
-    var listaOpFast :[(UInt8, UInt8)] = [ (80,1), (187,4), (180,2)]
+    var listaOpFast :[(UInt8, UInt8)] = [ (97,2), (188,2), (180,2)]
 
     
     var buffer = [UInt8]()
@@ -623,6 +623,13 @@ extension BLESimulatedClient : BLENinebotConnectionDelegate{
         self.headersOk = false
         self.connected = true
         
+        if let nb = self.datos{
+            nb.clearAll()
+            nb.firstDate = NSDate()
+        }
+        
+        
+        
         self.sendNewRequest()
         // Start timer for sending info to watch
         
@@ -634,6 +641,8 @@ extension BLESimulatedClient : BLENinebotConnectionDelegate{
         // Will inject one request every timerStep
         
         self.sendTimer = NSTimer.scheduledTimerWithTimeInterval(timerStep, target: self, selector:#selector(BLESimulatedClient.injectRequest(_:)), userInfo: nil, repeats: true)
+        
+        
     }
     
     func deviceDisconnectedConnected(peripheral : CBPeripheral ){
