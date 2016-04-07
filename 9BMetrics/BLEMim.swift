@@ -205,6 +205,10 @@ class BLEMim: UIViewController {
             
         }
         catch{
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                dele.displayMessageWithTitle("Error",format:"Error when creating file handle for %@", file)
+            }
+
             AppDelegate.debugLog("Error al obtenir File Handle")
         }
         
