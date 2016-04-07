@@ -240,6 +240,11 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
             central.connectPeripheral(peripheral, options:nil)
         }
         else{
+            
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                dele.displayMessageWithTitle("Error",format:"There is no Central Manager!!!")
+            }
+
             AppDelegate.debugLog("No Central Manager")
         }
     }
