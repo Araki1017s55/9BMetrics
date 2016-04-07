@@ -31,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var launchedShortcutItem: UIApplicationShortcutItem?
 
     var window: UIWindow?
+    var genericAlert : UIAlertView?
     
     var ubiquityUrl : NSURL?
 
@@ -129,6 +130,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 
             }catch {
+                
+                self.displayMessageWithTitle("Error",format:"ERROR al copiar url %@ a %@", url, newUrl)
                 AppDelegate.debugLog("ERROR al copiar url %@ a %@", url, newUrl)
                 return false
             }
@@ -273,6 +276,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return self.localApplicationDocumentsDirectory()
         }
     }
+    
+    //MARK: Message
+    //MARK: - Utilities
+    
+    
+    func displayMessageWithTitle(title: String, format: String, _ args: CVarArgType...)
+    {
+        var  msg  = ""
+            
+        withVaList(args){
+            msg = String(format, $0)
+        }
+        
+        self.genericAlert =  UIAlertView(title: title, message: msg, delegate: self, cancelButtonTitle: "OK")
+        
+        if let alert = self.genericAlert{
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                alert.show()
+            })
+        }
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if alertView == self.genericAlert
+        {
+            alertView.dismissWithClickedButtonIndex(buttonIndex, animated: true)
+        }
+    }
+
     
 }
 
