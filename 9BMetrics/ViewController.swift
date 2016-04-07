@@ -612,7 +612,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         if let aFile = file {
             
             let name = aFile.URLByDeletingPathExtension!.lastPathComponent!
-            var activityItems = [aFile]
+            var activityItems : [NSURL] = []
             
             
             if let dele = UIApplication.sharedApplication().delegate as? AppDelegate {
@@ -621,8 +621,12 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 
                 if let u = url {
                     activityItems = [u]
+                } else {
+                    AppDelegate.debugLog("Error creating Zip file")
                 }
-              }
+            } else {
+                AppDelegate.debugLog("Error acessing to delegate")
+            }
             
             let activityViewController = UIActivityViewController(
                 activityItems: activityItems,
@@ -657,68 +661,6 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
     }
     
-    func shareDatax(file: NSURL?, src:AnyObject, delete: Bool){
-        
-        
-        if let aFile = file {
-            
-            
-            var activityItems = [aFile]
-            
-            
-            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate {
-                dele.datos.loadTextFile(aFile)
-                
-                if dele.datos.hasGPSData(){
-                    
-                    let gpxUrl = aFile.URLByDeletingPathExtension!.URLByAppendingPathExtension("gpx")
-                    if dele.datos.createGPXFile(gpxUrl){
-                        activityItems.append(gpxUrl)
-                    }
-                }
-            }
-            
-            let activityViewController = UIActivityViewController(
-                activityItems: activityItems,
-                applicationActivities: [PickerActivity()])
-            
-            
-            activityViewController.completionWithItemsHandler = {(a : String?, completed:Bool, objects:[AnyObject]?, error:NSError?) in
-                
-                
-                do{
-                    if delete {
-                        try NSFileManager.defaultManager().removeItemAtURL(aFile)
-                    }
-                    if activityItems.count > 1{
-                        try NSFileManager.defaultManager().removeItemAtURL(activityItems[1])
-                        self.reloadFiles()
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.tableView.reloadData()
-                        })
-                        
-                    }
-                    
-                    
-                    
-                }catch{
-                    AppDelegate.debugLog("Error al esborrar %@", aFile)
-                }
-                
-            }
-            
-            activityViewController.popoverPresentationController?.sourceView = src as? UIView
-            
-            activityViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
-            
-            self.presentViewController(activityViewController,
-                                       animated: true,
-                                       completion: nil)
-            
-        }
-        
-    }
-
     
     // MARK: Other functions
     
