@@ -442,6 +442,10 @@ class  BLENinebot : NSObject{
             
         }
         catch{
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file)
+            }
+
             AppDelegate.debugLog("Error al obtenir File Handle")
         }
         
@@ -537,6 +541,10 @@ class  BLENinebot : NSObject{
             
         }
         catch{
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file)
+            }
+
             AppDelegate.debugLog("Error al obtenir File Handle")
         }
         
@@ -572,9 +580,9 @@ class  BLENinebot : NSObject{
                         let hdl = try NSFileHandle(forWritingToURL: fileUrl)
  
                         
-                        let varName = String(format: "V\t%d\t%@\n",v.codi, BLENinebot.labels[v.codi])
+                        let varName = String(format: "\"%d\",\"%@\"\n",v.codi, BLENinebot.labels[v.codi])
 
-                        let version = String(format: "Version\t3\tStart\t%0.3f\tVariable\t%@\n", firstDate!.timeIntervalSince1970, varName)
+                        let version = String(format: "\"Version\",\"3\",\"Start\",\"%0.3f\",\"Variable\",%@\n", firstDate!.timeIntervalSince1970, varName)
                         
                         hdl.writeData(version.dataUsingEncoding(NSUTF8StringEncoding)!)
                         
@@ -585,7 +593,7 @@ class  BLENinebot : NSObject{
                             
                             let t = item.time.timeIntervalSinceDate(self.firstDate!)
                             
-                            let s = String(format: "%0.3f\t%d\n", t, item.value)
+                            let s = String(format: "\"%0.3f\",\"%d\"\n", t, item.value)
                             if let vn = s.dataUsingEncoding(NSUTF8StringEncoding){
                                 hdl.writeData(vn)
                             }
@@ -624,12 +632,19 @@ class  BLENinebot : NSObject{
                     
                 try fmgr.removeItemAtURL(pkgUrl)
                 }catch{
+                    if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                        dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL)
+                    }
                     AppDelegate.debugLog("Error al crear zip file")
                 }
             
             return zipURL
             
         }catch {
+            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                dele.displayMessageWithTitle("Error",format:"Error when tprocessing files")
+            }
+
             AppDelegate.debugLog("Error al crear zip file")
            
             return nil
