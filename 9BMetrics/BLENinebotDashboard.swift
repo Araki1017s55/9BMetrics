@@ -437,9 +437,22 @@ class BLENinebotDashboard: UITableViewController {
                 //vc.delegate = self
             }
             
+        } else if segue.identifier == "mapViewSegue" {
+            
+            if let vc = segue.destinationViewController as? BLEMapViewController  {
+                vc.dades = self.ninebot
+            }
         }
         
      }
+    
+    @IBAction func prepareForUnwind(segue: UIStoryboardSegue){
+        
+        self.dismissViewControllerAnimated(true) {
+            
+        }
+        
+    }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
