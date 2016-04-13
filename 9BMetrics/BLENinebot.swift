@@ -33,6 +33,8 @@
 //
 
 import UIKit
+import MapKit
+
 
 class  BLENinebot : NSObject{
     
@@ -76,8 +78,8 @@ class  BLENinebot : NSObject{
     static let kvPowerRemaining = 34
     static let kRemainingDistance = 37
     static let kvSpeed = 38
-    static let kTotalMileage0 = 41
-    static let kTotalMileage1 = 42
+    static let kvTotalMileage0 = 41
+    static let kvTotalMileage1 = 42
     static let kTotalRuntime0 = 50
     static let kTotalRuntime1 = 51
     static let kSingleRuntime = 58
@@ -99,8 +101,8 @@ class  BLENinebot : NSObject{
     static let kBattery = 180
     static let kCurrentSpeed = 181
     static let kvAverageSpeed = 182
-    static let kvTotalDistance0 = 183
-    static let kvTotalDistance1 = 184
+    static let kTotalMileage0 = 183
+    static let kTotalMileage1 = 184
     static let kvSingleMileage = 185
     static let kvTemperature = 187
     static let kVoltage = 188
@@ -307,17 +309,17 @@ class  BLENinebot : NSObject{
             
             let v = LogEntry(time:dat, variable: variable, value: sv)
             
-            if data[variable].value != sv || data[variable].log.count == 1 {
+            if data[variable].value != sv || data[variable].log.count <= 1 || forced{
                 
                 data[variable].log.append(v)
                 self.postVariableChanged(v)
                 
-            }else if data[variable].log.count >= 2{
+            }else if data[variable].log.count > 2{
                 
                 let c = data[variable].log.count
                 let e = data[variable].log[c-2]
                 
-                if e.value != sv || forced{   // Append new point
+                if e.value != sv {   // Append new point
                     data[variable].log.append(v)
                 }
                 else {  // Update time of new point
@@ -462,6 +464,10 @@ class  BLENinebot : NSObject{
     
     func createTextFile() -> NSURL?{
         
+        
+        if self.data[BLENinebot.kEnergy].log.count == 0{
+            self.buildEnergy()
+        }
         // Format first date into a filepath
         
         let ldateFormatter = NSDateFormatter()
@@ -564,6 +570,9 @@ class  BLENinebot : NSObject{
         }
         
         do{
+            if fmgr.fileExistsAtPath(pkgUrl.path!) {
+                try fmgr.removeItemAtURL(pkgUrl)
+            }
             try fmgr.createDirectoryAtURL(pkgUrl, withIntermediateDirectories: false, attributes: nil)
             
             // Add file with gpx extension
@@ -641,8 +650,9 @@ class  BLENinebot : NSObject{
             return zipURL
             
         }catch {
+            
             if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when tprocessing files")
+                dele.displayMessageWithTitle("Error",format:"Error when processing files")
             }
 
             AppDelegate.debugLog("Error al crear zip file")
@@ -685,7 +695,8 @@ class  BLENinebot : NSObject{
             
             hdl.writeData(self.trackHeader.dataUsingEncoding(NSUTF8StringEncoding)!)
             
-            for i in 0..<(data[BLENinebot.kLatitude].log.count) {
+            let n = min(data[BLENinebot.kLatitude].log.count, data[BLENinebot.kLongitude].log.count)
+            for i in 0..<n {
                 
                 let time = data[BLENinebot.kLatitude].log[i].time
                 let lat = Double(data[BLENinebot.kLatitude].log[i].value) / 100000.0
@@ -728,6 +739,29 @@ class  BLENinebot : NSObject{
         
         //   } Fora manager
         
+    }
+    
+    func locationArray() -> [CLLocationCoordinate2D] {
+        
+        var locs = [CLLocationCoordinate2D]()
+        
+        if !self.hasGPSData(){      // Nothing to return :(
+            return locs
+        }
+        
+        // Loop over 3 and 4
+        
+        let latArray = self.data[BLENinebot.kLatitude].log
+        let lonArray = self.data[BLENinebot.kLongitude].log
+        
+        let n = min(latArray.count, lonArray.count)
+        
+        for i in 0..<n{
+            let lcd = CLLocationCoordinate2DMake(Double(latArray[i].value)/100000.0, Double(lonArray[i].value)/100000.0)
+            locs.append(lcd)
+        }
+        
+        return locs
     }
 
     
@@ -813,7 +847,7 @@ class  BLENinebot : NSObject{
                         let value = Int(fields[1])
                         
                         if  let v = value {
-                            self.addValueWithDate(t, variable: variable, value: v)
+                            self.addValueWithDate(t, variable: variable, value: v, forced: true)
                         }
                     }
                 }
@@ -837,7 +871,11 @@ class  BLENinebot : NSObject{
                             let dt = e.time.timeIntervalSinceDate(oe.time)
                             let de = e.value - oe.value
                             
-                            let pw = Double(de) * 36.0 / dt
+                            var pw = 0.0
+                            
+                            if dt != 0 {
+                                 pw = Double(de) * 36.0 / dt
+                            }
                             
                             let t = (e.time.timeIntervalSinceDate(self.firstDate!) + oe.time.timeIntervalSinceDate(self.firstDate!))/2.0
                             let current = pw / self.voltage(time:t)
