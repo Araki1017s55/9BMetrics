@@ -98,9 +98,13 @@ class BLERunningDashboard: UIViewController {
         
         if let cl = self.client {
             
-            if cl.connection.subscribed || self.state == connectionState.connecting{
+            if cl.connection.subscribed{
                 cl.stop()
              }
+            else if cl.connection.connecting {
+                cl.stop()
+                self.hasStopped(NSNotification(name: BLESimulatedClient.kStoppedRecording, object: nil))
+            }
             else{
                 cl.connect()
             }
