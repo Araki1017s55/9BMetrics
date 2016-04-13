@@ -51,7 +51,7 @@ class PickerActivity: UIActivity, UIDocumentPickerDelegate {
     override func canPerformWithActivityItems(activityItems: [AnyObject]) -> Bool {
         
         if activityItems.count != 2{
-            return false
+            //return false
         }
         for obj in activityItems{
             if obj.isKindOfClass(NSURL){
@@ -65,6 +65,10 @@ class PickerActivity: UIActivity, UIDocumentPickerDelegate {
         for obj in activityItems{
             if obj.isKindOfClass(NSURL){
                 self.originalURL = obj as? NSURL
+                if let url = self.originalURL {
+                    self.name = url.lastPathComponent
+                }
+                
             }else if obj.isKindOfClass(NSString){
                 self.name = obj as? String
             }
