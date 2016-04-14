@@ -141,6 +141,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="fMapButton" destination="eNw-AL-hNW" id="Hdn-Eg-Zir"/>
                         <outlet property="titleField" destination="qlD-tt-3Xv" id="dF8-4w-5QP"/>
                         <segue destination="DuF-6H-UYu" kind="show" identifier="turnSegueIdentifier" id="1AL-ba-LUv"/>
                     </connections>
