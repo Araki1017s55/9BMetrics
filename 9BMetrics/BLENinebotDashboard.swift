@@ -30,6 +30,7 @@ class BLENinebotDashboard: UITableViewController {
     weak var delegate : ViewController?
     //weak var client : BLESimulatedClient?
     
+    @IBOutlet weak var fMapButton: UIBarButtonItem!
     var devSelector : BLEDeviceSelector?
     var devList = [CBPeripheral]()
     
@@ -62,7 +63,12 @@ class BLENinebotDashboard: UITableViewController {
             self.titleField.title = name
         
         }
-        
+        if let nb = self.ninebot{
+           self.fMapButton.enabled = nb.hasGPSData()
+        }
+        else{
+            self.fMapButton.enabled = false
+        }
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
