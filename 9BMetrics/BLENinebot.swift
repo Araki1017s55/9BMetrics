@@ -405,7 +405,7 @@ class  BLENinebot : NSObject{
             }
             
             
-            let title = String(format: "Time\tCurrent\tVoltage\tPower\tEnergy\tSpeed\tAlt\tDist\tPitch\tRoll\tBatt\n")
+            let title = String(format: "Time\tCurrent\tVoltage\tPower\tEnergy\tSpeed\tAlt\tDist\tPitch\tRoll\tBatt\tTºC\n")
             hdl.writeData(title.dataUsingEncoding(NSUTF8StringEncoding)!)
             
             // Get first ip of current
@@ -428,9 +428,10 @@ class  BLENinebot : NSObject{
                     let vPitch = self.pitch(time: t)
                     let vRoll = self.roll(time: t)
                     let vBattery = self.batteryLevel(time: t)
+                    let vTemp = self.temperature(time: t)
                     
                     
-                    let s = String(format: "%0.3f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\n", t, vCurrent, vVoltage, vPower, vEnergy, vSpeed, vAlt, vDistance, vPitch, vRoll, vBattery)
+                    let s = String(format: "%0.3f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\n", t, vCurrent, vVoltage, vPower, vEnergy, vSpeed, vAlt, vDistance, vPitch, vRoll, vBattery, vTemp)
                     if let vn = s.dataUsingEncoding(NSUTF8StringEncoding){
                         hdl.writeData(vn)
                     }
