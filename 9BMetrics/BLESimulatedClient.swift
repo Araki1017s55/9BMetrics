@@ -145,6 +145,13 @@ class BLESimulatedClient: NSObject {
     //  First it recovers if it exists a device and calls
     func connect(){
         
+        
+        if let nb = self.datos{
+            nb.clearAll()
+            nb.firstDate = NSDate()
+        }
+
+        
         // First we recover the last device and try to connect directly
         if self.connection.connecting || self.connection.subscribed{
             return
@@ -622,12 +629,6 @@ extension BLESimulatedClient : BLENinebotConnectionDelegate{
         self.contadorOp = 0
         self.headersOk = false
         self.connected = true
-        
-        if let nb = self.datos{
-            nb.clearAll()
-            nb.firstDate = NSDate()
-        }
-        
         
         
         self.sendNewRequest()
