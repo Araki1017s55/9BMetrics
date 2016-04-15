@@ -1158,7 +1158,6 @@ class  BLENinebot : NSObject{
     
     func power(time  t : NSTimeInterval) -> Double{
         
-        
         return self.current(time: t) * self.voltage(time: t)
         
     }
@@ -1197,8 +1196,6 @@ class  BLENinebot : NSObject{
         
         return (max/100.0, min/100.0, avg/100.0, acum/100.0)
     }
-    
-    
     
     // roll Angle
     
