@@ -14,6 +14,8 @@
 		0029253F1CBA3B3400AEA843 /* Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0029253E1CBA3B3400AEA843 /* Notes.rtf */; };
 		0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */; };
 		00389AFF1C9986A4007BADDC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00389AFE1C9986A4007BADDC /* Default-568h@2x.png */; };
+		004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */; };
+		004A297E1CCA36F300D6A9A1 /* TMKLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */; };
 		004F45CB1CAD9DE10071B7C4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004F45CA1CAD9DE10071B7C4 /* MapKit.framework */; };
 		007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */; };
 		007A31FF1CB820DA00BB928D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A31FE1CB820DA00BB928D /* Main.storyboard */; };
@@ -68,6 +70,9 @@
 		00AB595B1CAEE64000277859 /* pwd2key.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59501CAEE64000277859 /* pwd2key.c */; };
 		00AB595C1CAEE64000277859 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59521CAEE64000277859 /* sha1.c */; };
 		00AB595E1CAEE65E00277859 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB595D1CAEE65E00277859 /* libz.tbd */; };
+		00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */; };
+		00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */; };
+		00F1A9601CC9164F00D8EB27 /* TMKTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95F1CC9164F00D8EB27 /* TMKTestController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +125,8 @@
 		0029253E1CBA3B3400AEA843 /* Notes.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Notes.rtf; sourceTree = "<group>"; };
 		0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLERequestOperation.swift; sourceTree = "<group>"; };
 		00389AFE1C9986A4007BADDC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKVerticalView.swift; sourceTree = "<group>"; };
+		004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKLevelView.swift; sourceTree = "<group>"; };
 		004F45CA1CAD9DE10071B7C4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMapViewController.swift; sourceTree = "<group>"; };
 		007A31FE1CB820DA00BB928D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -197,6 +204,9 @@
 		00AB59521CAEE64000277859 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
 		00AB59531CAEE64000277859 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
 		00AB595D1CAEE65E00277859 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKImage.swift; sourceTree = "<group>"; };
+		00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKClockView.swift; sourceTree = "<group>"; };
+		00F1A95F1CC9164F00D8EB27 /* TMKTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKTestController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +260,11 @@
 				007A57621C85CF39003A2030 /* TMKGraphViewDataSource.swift */,
 				007A57631C85CF39003A2030 /* TMKGraphContentView.swift */,
 				007A57641C85CF39003A2030 /* TMKGraphView.swift */,
+				00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */,
+				00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */,
+				004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */,
+				004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */,
+				00F1A95F1CC9164F00D8EB27 /* TMKTestController.swift */,
 				007A57651C85CF39003A2030 /* GraphViewController.swift */,
 				007A57661C85CF39003A2030 /* PickerActivity.swift */,
 				007A57671C85CF39003A2030 /* BLENinebot.swift */,
@@ -532,10 +547,13 @@
 				00AB59581CAEE64000277859 /* fileenc.c in Sources */,
 				007A577A1C85CF39003A2030 /* BLENinebotMessage.swift in Sources */,
 				007A57751C85CF39003A2030 /* TMKGraphContentView.swift in Sources */,
+				00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */,
+				004A297E1CCA36F300D6A9A1 /* TMKLevelView.swift in Sources */,
 				007A57761C85CF39003A2030 /* TMKGraphView.swift in Sources */,
 				007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */,
 				007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */,
 				00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */,
+				00F1A9601CC9164F00D8EB27 /* TMKTestController.swift in Sources */,
 				007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */,
 				00AB59551CAEE64000277859 /* aeskey.c in Sources */,
 				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,
@@ -560,7 +578,9 @@
 				00AB593B1CAEE61700277859 /* unzip.c in Sources */,
 				00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */,
 				007A577D1C85CF39003A2030 /* BLEConnection.swift in Sources */,
+				004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */,
 				007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */,
+				00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */,
 				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
