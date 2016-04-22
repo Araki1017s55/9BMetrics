@@ -114,14 +114,16 @@ class  BLENinebot : NSObject{
     static var  labels = Array<String>(count:256, repeatedValue:"?")
     
     static var displayableVariables : [Int] = [BLENinebot.kCurrentSpeed, BLENinebot.kTemperature,
-        BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
-        BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower, BLENinebot.kEnergy]
+                                               BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
+                                               BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower, BLENinebot.kEnergy]
     
     var data = [NinebotVariable](count:256, repeatedValue:NinebotVariable())
     var signed = [Bool](count: 256, repeatedValue: false)
     
     var headersOk = false
     var firstDate : NSDate?
+    
+    var distOffset = 0  // Just to support stop start without affecting total distance. We supose we start at same place we stopped
     
     var otherFormatter : NSDateFormatter = NSDateFormatter()
     
@@ -148,7 +150,7 @@ class  BLENinebot : NSObject{
         
         self.otherFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
         self.otherFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'.000Z'"
-
+        
         
         
     }
@@ -220,7 +222,7 @@ class  BLENinebot : NSObject{
     var trackHeader : String {
         return "<trk>\n<name>Ninebot One</name>\n\n<trkseg>\n"
     }
-
+    
     
     func clearAll(){
         
@@ -233,8 +235,8 @@ class  BLENinebot : NSObject{
         }
         
         headersOk = false
-        
         firstDate = nil
+        distOffset = 0
     }
     
     func checkHeaders() -> Bool{
@@ -278,13 +280,19 @@ class  BLENinebot : NSObject{
     
     func addValueWithTimeInterval(time: NSTimeInterval, variable : Int, value : Int){
         
-        let t = NSDate(timeIntervalSince1970: time)
-        
-        self.addValueWithDate(t, variable: variable, value: value)
+        self.addValueWithTimeInterval(time, variable: variable, value: value, forced: false)
     }
     
+    func addValueWithTimeInterval(time: NSTimeInterval, variable : Int, value : Int, forced : Bool){
+        
+        let t = NSDate(timeIntervalSince1970: time)
+        
+        self.addValueWithDate(t, variable: variable, value: value, forced: forced)
+    }
+    
+    
     func addValueWithDate(dat: NSDate, variable : Int, value : Int){
-
+        
         self.addValueWithDate(dat, variable : variable, value : value, forced : false)
     }
     
@@ -307,6 +315,18 @@ class  BLENinebot : NSObject{
                 }
             }
             
+            
+            if variable == BLENinebot.kvSingleMileage{
+                let delta = sv + self.distOffset - self.data[BLENinebot.kvSingleMileage].value
+                
+                if delta < 0 {
+                    self.distOffset = self.data[BLENinebot.kvSingleMileage].value - sv
+                    sv = self.data[BLENinebot.kvSingleMileage].value
+                } else {
+                    sv = sv + self.distOffset
+                }
+                
+            }
             let v = LogEntry(time:dat, variable: variable, value: sv)
             
             if data[variable].value != sv || data[variable].log.count <= 1 || forced{
@@ -448,7 +468,7 @@ class  BLENinebot : NSObject{
             if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
                 dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file)
             }
-
+            
             AppDelegate.debugLog("Error al obtenir File Handle")
         }
         
@@ -543,7 +563,7 @@ class  BLENinebot : NSObject{
             }
             
             hdl.closeFile()
-            
+            checkImage(file)
             return file
             
         }
@@ -551,9 +571,10 @@ class  BLENinebot : NSObject{
             if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
                 dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file)
             }
-
+            
             AppDelegate.debugLog("Error al obtenir File Handle")
         }
+        
         
         return nil
     }
@@ -579,19 +600,19 @@ class  BLENinebot : NSObject{
             // Add file with gpx extension
             
             for v in self.data {
-                 if v.log.count > 0{
+                if v.log.count > 0{
                     
                     let vn = v.codi
                     let fileName = String(format: "%03d", vn)
                     let fileUrl = pkgUrl.URLByAppendingPathComponent(fileName).URLByAppendingPathExtension("csv")
                     if let path = fileUrl.path {
-                    
+                        
                         fmgr.createFileAtPath(path, contents: nil, attributes: nil)
                         let hdl = try NSFileHandle(forWritingToURL: fileUrl)
- 
+                        
                         
                         let varName = String(format: "\"%d\",\"%@\"\n",v.codi, BLENinebot.labels[v.codi])
-
+                        
                         let version = String(format: "\"Version\",\"3\",\"Start\",\"%0.3f\",\"Variable\",%@\n", firstDate!.timeIntervalSince1970, varName)
                         
                         hdl.writeData(version.dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -616,13 +637,13 @@ class  BLENinebot : NSObject{
                     
                     
                 }
-             }
+            }
             
             // Create a gpx file  in the same directory
             
             if self.hasGPSData(){
                 let gpxURL = pkgUrl.URLByAppendingPathComponent(name).URLByAppendingPathExtension("gpx")
-            
+                
                 if self.createGPXFile(gpxURL)
                 {
                     files.append(gpxURL)
@@ -630,23 +651,23 @@ class  BLENinebot : NSObject{
             }
             let zipURL = pkgUrl.URLByAppendingPathExtension("zip")
             
-                do {
-                    
+            do {
                 
-            
+                
+                
                 try Zip.zipFiles(files, zipFilePath: zipURL, password: nil, progress: { (progress) -> () in
                     NSLog("Zip %f", progress)
                 })
-                    
+                
                 // OK finished so remove directory
-                    
+                
                 try fmgr.removeItemAtURL(pkgUrl)
-                }catch{
-                    if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
-                        dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL)
-                    }
-                    AppDelegate.debugLog("Error al crear zip file")
+            }catch{
+                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL)
                 }
+                AppDelegate.debugLog("Error al crear zip file")
+            }
             
             return zipURL
             
@@ -655,9 +676,9 @@ class  BLENinebot : NSObject{
             if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
                 dele.displayMessageWithTitle("Error",format:"Error when processing files")
             }
-
+            
             AppDelegate.debugLog("Error al crear zip file")
-           
+            
             return nil
         }
         
@@ -712,20 +733,20 @@ class  BLENinebot : NSObject{
                 
                 if data[BLENinebot.kSpeedGPS].log.count > i {
                     speed = Double(data[BLENinebot.kSpeedGPS].log[i].value) / 1000.0    // Speed in m/s
-
+                    
                 }// Altitude in m
                 
                 let timestr =  self.otherFormatter.stringFromDate(time)
-
                 
                 
-                  let timeString : String = timestr.stringByReplacingOccurrencesOfString(" ",  withString: "").stringByReplacingOccurrencesOfString("\n",withString: "").stringByReplacingOccurrencesOfString("\r",withString: "")
+                
+                let timeString : String = timestr.stringByReplacingOccurrencesOfString(" ",  withString: "").stringByReplacingOccurrencesOfString("\n",withString: "").stringByReplacingOccurrencesOfString("\r",withString: "")
                 
                 
                 let s = String(format:"<trkpt lat=\"%7.5f\" lon=\"%7.5f\">\n<ele>%3.0f</ele>\n<speed>%0.2f</speed>\n<time>\(timeString)</time>\n</trkpt>\n", lat, lon, ele, speed)
-
+                
                 hdl.writeData(s.dataUsingEncoding(NSUTF8StringEncoding)!)
-               
+                
             }
             
             hdl.writeData(self.xmlFooter.dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -764,7 +785,7 @@ class  BLENinebot : NSObject{
         
         return locs
     }
-
+    
     
     
     func loadTextFile(url:NSURL){
@@ -826,7 +847,7 @@ class  BLENinebot : NSObject{
                     let value = Int(fields[2])
                     
                     if let t = time, i = variable, v = value {
-                        self.addValueWithTimeInterval(t, variable: i, value: v)
+                        self.addValueWithTimeInterval(t, variable: i, value: v, forced: true)
                     }
                 }else  if version == 2 && fields.count == 3 && fields[0] == "V"{
                     
@@ -857,41 +878,288 @@ class  BLENinebot : NSObject{
                 
             }
             
+            self.buildEnergy()
+            
             // Hack to calculate current if we have energy and Current was not written
             // due to a bug.
             
-            if self.data[BLENinebot.kCurrent].log.count == 0 &&
-                self.data[BLENinebot.kEnergy].log.count > 0 {
-                    
-                    var oldEntry : LogEntry?
-                    
-                    for e in self.data[BLENinebot.kEnergy].log {
-                        
-                        if let oe = oldEntry  {
-                            
-                            let dt = e.time.timeIntervalSinceDate(oe.time)
-                            let de = e.value - oe.value
-                            
-                            var pw = 0.0
-                            
-                            if dt != 0 {
-                                 pw = Double(de) * 36.0 / dt
-                            }
-                            
-                            let t = (e.time.timeIntervalSinceDate(self.firstDate!) + oe.time.timeIntervalSinceDate(self.firstDate!))/2.0
-                            let current = pw / self.voltage(time:t)
-                            self.data[BLENinebot.kCurrent].log.append(LogEntry(time: NSDate.init(timeInterval: dt/2.0, sinceDate: oe.time), variable: BLENinebot.kCurrent, value: Int(round(current * 100.0))))
-                        }
-                        
-                        oldEntry = e
-                    }
-            }
+//            if self.data[BLENinebot.kCurrent].log.count == 0 &&
+//                self.data[BLENinebot.kEnergy].log.count > 0 {
+//                
+//                var oldEntry : LogEntry?
+//                
+//                for e in self.data[BLENinebot.kEnergy].log {
+//                    
+//                    if let oe = oldEntry  {
+//                        
+//                        let dt = e.time.timeIntervalSinceDate(oe.time)
+//                        let de = e.value - oe.value
+//                        
+//                        var pw = 0.0
+//                        
+//                        if dt != 0 {
+//                            pw = Double(de) * 36.0 / dt
+//                        }
+//                        
+//                        let t = (e.time.timeIntervalSinceDate(self.firstDate!) + oe.time.timeIntervalSinceDate(self.firstDate!))/2.0
+//                        let current = pw / self.voltage(time:t)
+//                        self.data[BLENinebot.kCurrent].log.append(LogEntry(time: NSDate.init(timeInterval: dt/2.0, sinceDate: oe.time), variable: BLENinebot.kCurrent, value: Int(round(current * 100.0))))
+//                    }
+//                    
+//                    oldEntry = e
+//                }
+//            }
+            
+            checkImage(url)
             
         }catch {
             
         }
         
     }
+    func computeTrackSize() -> (l0 : CLLocation?, l1 : CLLocation? ){
+        
+        if self.data[BLENinebot.kLatitude].log.count <= 0{
+            return (nil, nil)
+        }
+        
+        var latmin = self.data[BLENinebot.kLatitude].log[0].value
+        var latmax = self.data[BLENinebot.kLatitude].log[0].value
+        var lonmin = self.data[BLENinebot.kLongitude].log[0].value
+        var lonmax = self.data[BLENinebot.kLongitude].log[0].value
+        
+        for i in 1..<self.data[BLENinebot.kLatitude].log.count{
+            
+            let lat = self.data[BLENinebot.kLatitude].log[i].value
+            let lon = self.data[BLENinebot.kLongitude].log[i].value
+            
+            if lat < latmin {
+                latmin = lat
+            }
+            if lat > latmax {
+                latmax = lat
+            }
+            if lon < lonmin {
+                lonmin = lon
+            }
+            if lon > lonmax {
+                lonmax = lon
+            }
+        }
+        
+        return (CLLocation(latitude: Double(latmin)/100000.0, longitude: Double(lonmin)/100000.0), CLLocation(latitude: Double(latmax)/100000.0, longitude: Double(lonmax)/100000.0))
+        
+    }
+    
+    func checkImage(url : NSURL){
+        
+        var obj : AnyObject?
+        var icon : UIImage?
+        
+        do{
+            try url.getPromisedItemResourceValue(&obj, forKey: NSURLThumbnailDictionaryKey)
+            
+            if let dict = obj as? [NSString : UIImage] {
+                icon = dict[NSThumbnail1024x1024SizeKey]
+            }
+        }
+        catch {
+            
+        }
+        
+        
+        var thumb : UIImage?
+        
+        if self.hasGPSData(){
+            thumb = self.imageWithWidth(256, height: 256)
+        } else {
+            thumb = UIImage(named: "9b")
+        }
+        
+        
+        let dict = [NSThumbnail1024x1024SizeKey: thumb!] as NSDictionary
+        
+        do {
+            try url.setResourceValue( dict,
+                                      forKey:NSURLThumbnailDictionaryKey)
+        }
+        catch _{
+            NSLog("No puc gravar la imatge :)")
+        }
+        
+        
+        
+    }
+    
+    internal func imageWithWidth(wid:Double,  height:Double) -> UIImage? {
+        
+        TMKImage.beginImageContextWithSize(CGSizeMake(CGFloat(wid) , CGFloat(height)))
+        
+        var rect = CGRectMake(0, 0, CGFloat(wid), CGFloat(height))   // Total rectangle
+        
+        var bz = UIBezierPath(rect: rect)
+        
+        UIColor.whiteColor().set()
+        bz.fill()
+        bz.stroke()
+        
+        rect = CGRectInset(rect, 3.0, 3.0);
+        
+        bz = UIBezierPath(rect:rect)
+        bz.lineWidth = 2.0
+        bz.stroke()
+        
+        let (loc0, loc1) = self.computeTrackSize()
+        
+        if let locmin = loc0, locmax = loc1 {
+            
+            let p0 = MKMapPointForCoordinate(locmin.coordinate)
+            
+            let p1 = MKMapPointForCoordinate(locmax.coordinate)
+            
+            // Get Midpoint
+            
+            
+            let scalex : Double = fabs(wid * 0.9 / (p1.x - p0.x))  // 90 % de l'area
+            let scaley : Double = fabs(height * 0.9 / (p1.y - p0.y))  // 90 % de l'area
+            
+            let scale : Double = scalex < scaley ? scalex : scaley
+            
+            let minx = p0.x < p1.x ? p0.x : p1.x
+            let miny = p0.y < p1.y ? p0.y : p1.y
+            
+            // Compute midpoint
+            
+            let pm = MKMapPointMake((p0.x+p1.x)/2.0, (p0.y+p1.y)/2.0)
+            let pmc = MKMapPointMake((pm.x-minx)*scale, (pm.y-miny)*scale)
+            let offset = MKMapPointMake((wid/2.0)-pmc.x, (height/2.0)-pmc.y)
+            
+            bz  = UIBezierPath()
+            
+            var primer = true
+            
+            let n = self.data[BLENinebot.kLatitude].log.count
+            
+            
+            for i in 0..<n {
+                
+                
+                
+                let lat = Double(self.data[BLENinebot.kLatitude].log[i].value) / 100000.0
+                let lon = Double(self.data[BLENinebot.kLongitude].log[i].value) / 100000.0
+                
+                let p = MKMapPointForCoordinate(CLLocationCoordinate2D(latitude:lat, longitude: lon ))
+                
+                let x : CGFloat = CGFloat((p.x-minx) * scale + offset.x)
+                let y : CGFloat = CGFloat((p.y-miny) * scale + offset.y)
+                if primer
+                {
+                    bz.moveToPoint(CGPointMake(x,y))
+                    primer = false
+                }
+                else{
+                    bz.addLineToPoint(CGPointMake(x,y))
+                }
+                
+            }
+            
+            bz.lineWidth = 5.0
+            bz.lineJoinStyle = CGLineJoin.Round
+            UIColor.redColor().setStroke()
+            bz.stroke()
+            let img = UIGraphicsGetImageFromCurrentImageContext()
+            TMKImage.endImageContext()
+            
+            
+            return img
+        }
+        else{
+            return nil
+        }
+        
+    }
+    
+    //MARK: Analysis
+    
+    
+    func computeAscentDescent() -> (ascent : Double, descent : Double){
+        
+        let datos = self.data[BLENinebot.kAltitude];
+        
+        if datos.log.count <= 1{
+            return (0.0, 0.0)
+        }
+        
+        var ascent = 0.0
+        var descent = 0.0
+        
+        var oldEntry = datos.log[0]
+        
+        for i in 1..<datos.log.count {
+            
+            let e = datos.log[i]
+            
+            if e.value > oldEntry.value {
+                ascent = ascent + Double(e.value - oldEntry.value) / 100.0
+            }
+            else{
+                descent = descent - Double(e.value - oldEntry.value) / 100.0
+            }
+            
+            oldEntry = e
+            
+        }
+        
+        return (ascent, descent)
+    }
+    
+    func analCinematics() -> (Double, Double, Double, Double, Double, Double){
+        
+        if self.data[BLENinebot.kvSingleMileage].log.count <= 1{
+            return (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        }
+        
+        // Distancia
+        
+        let dist = self.singleMileage();    // Distància en Km
+        let (ascent, descent) = computeAscentDescent()      // Ascent, Descent
+        let distance = self.data[BLENinebot.kvSingleMileage]
+        let time = distance.log.last!.time.timeIntervalSinceDate(distance.log.first!.time)
+        let (_, maxSpeed, avgSpeed, _) = speed(from: 0.0, to: time)
+        
+        return (dist, ascent, descent, time, avgSpeed, maxSpeed)
+     }
+    
+    func analEnergy() -> (Double, Double, Double, Double, Double, Double, Double, Double, Double, Double){
+        
+        if self.data[BLENinebot.kBattery].log.count == 0{
+            return (0.0, 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, 0.0)
+        }
+        // Battery : First - Last - Min
+        
+        let bat0 = Double(self.data[BLENinebot.kBattery].log[0].value)
+        let bat1 = Double(self.data[BLENinebot.kBattery].log.last!.value)
+        let batt = self.data[BLENinebot.kBattery]
+        let time = batt.log.last!.time.timeIntervalSinceDate(batt.log.first!.time)
+        let (batMin, batMax, _, _) = self.batteryLevel(from: 0.0, to: time)
+        
+        // Energy  : Total
+        
+        let energy = self.energy()
+        let batEnergy = (bat1 - bat0) * 340.0  / 100.0 // Calculo
+        
+        // Current : Avg, max
+        
+        let (_, currMax, currAvg, _) = self.current(from: 0.0, to: time)
+        // Power   : Avg, max
+        
+        let (_, pwMax, pwAvg, _) = self.powerStats(from: 0.0, to: time)
+        
+        
+        return (bat0, bat1, batMin, batMax, energy, batEnergy, currMax, currAvg, pwMax, pwAvg)
+        
+    }
+    
     
     // MARK: Query Functions
     
@@ -902,7 +1170,7 @@ class  BLENinebot : NSObject{
     func altitudeGPS(time: NSTimeInterval) -> Double{
         
         if let v = value(BLENinebot.kAltitudeGPS , forTime: time){
-            return v.value 
+            return v.value
         }
         else{
             return 0.0
@@ -1028,9 +1296,9 @@ class  BLENinebot : NSObject{
     func temperature(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
     {
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kTemperature, from: t0, to: t1)
+        let (min, max, avg, acum) = self.stats(BLENinebot.kTemperature, from: t0, to: t1)
         
-        return (max/10.0, min/10.0, avg/10.0, acum/10.0)
+        return (min/10.0, max/10.0, avg/10.0, acum/10.0)
     }
     
     
@@ -1062,9 +1330,9 @@ class  BLENinebot : NSObject{
     func voltage(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
     {
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kVoltage, from: t0, to: t1)
+        let (min, max, avg, acum) = self.stats(BLENinebot.kVoltage, from: t0, to: t1)
         
-        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+        return (min/100.0, max/100.0, avg/100.0, acum/100.0)
     }
     
     // Current
@@ -1099,9 +1367,9 @@ class  BLENinebot : NSObject{
     func current(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
     {
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kCurrent, from: t0, to: t1)
+        let (min, max, avg, acum) = self.stats(BLENinebot.kCurrent, from: t0, to: t1)
         
-        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+        return (min/100.0, max/100.0, avg/100.0, acum/100.0)
     }
     
     func buildEnergy(){
@@ -1191,11 +1459,12 @@ class  BLENinebot : NSObject{
     
     func pitch(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
     {
+        let (min, max, avg, acum) = self.stats(BLENinebot.kPitchAngle, from: t0, to: t1)
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kPitchAngle, from: t0, to: t1)
-        
-        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+        return (min/100.0, max/100.0, avg/100.0, acum/100.0)
     }
+    
+
     
     // roll Angle
     
@@ -1227,15 +1496,21 @@ class  BLENinebot : NSObject{
     func roll(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
     {
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kRollAngle, from: t0, to: t1)
+        let (min, max, avg, acum) = self.stats(BLENinebot.kRollAngle, from: t0, to: t1)
         
-        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+        return (min/100.0, max/100.0, avg/100.0, acum/100.0)
     }
     
     func energy() -> Double {
         let v = data[BLENinebot.kEnergy].value
-        let t = Double(v) / 100.0
-        return t
+        
+        let e = data[BLENinebot.kEnergy]
+        if e.log.count > 0{
+            let t = Double(e.log.last!.value) / 100.0
+            return t
+        }else {
+            return 0.0
+        }
     }
     
     func energy(i : Int) -> Double {
@@ -1260,9 +1535,9 @@ class  BLENinebot : NSObject{
     func energy(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
     {
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kEnergy, from: t0, to: t1)
+        let (min, max, avg, acum) = self.stats(BLENinebot.kEnergy, from: t0, to: t1)
         
-        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+        return (min/100.0, max/100.0, avg/100.0, acum/100.0)
     }
     
     
@@ -1315,11 +1590,13 @@ class  BLENinebot : NSObject{
         }
     }
     
+
+    
     func batteryLevel(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double){
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kBattery, from: t0, to: t1)
+        let (min, max, avg, acum) = self.stats(BLENinebot.kBattery, from: t0, to: t1)
         
-        return (max, min, avg, acum)
+        return (min, max, avg, acum)
     }
     
     
@@ -1387,9 +1664,9 @@ class  BLENinebot : NSObject{
     
     func speed(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double){
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kCurrentSpeed, from: t0, to: t1)
+        let (min, max, avg, acum) = self.stats(BLENinebot.kCurrentSpeed, from: t0, to: t1)
         
-        return (max/1000.0, min/1000.0, avg/1000.0, acum/1000.0)
+        return (min/1000.0, max/1000.0, avg/1000.0, acum/1000.0)
     }
     
     
@@ -1464,9 +1741,9 @@ class  BLENinebot : NSObject{
     func altitude(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double)
     {
         
-        let (max, min, avg, acum) = self.stats(BLENinebot.kAltitude, from: t0, to: t1)
+        let (min, max, avg, acum) = self.stats(BLENinebot.kAltitude, from: t0, to: t1)
         
-        return (max/100.0, min/100.0, avg/100.0, acum/100.0)
+        return (min/100.0, max/100.0, avg/100.0, acum/100.0)
     }
     // t is time from firstDate
     
