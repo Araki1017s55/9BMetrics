@@ -364,6 +364,13 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             })
             
             alert.addAction(action)
+            
+            action = UIAlertAction(title: "Test Widgets", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
+                self.performSegueWithIdentifier("testSegue", sender: self)
+            })
+            
+            alert.addAction(action)
+
         }
         
         action = UIAlertAction(title: "About 9B Metrics", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
@@ -429,7 +436,31 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 
                 cell.detailTextLabel!.text = s
             }
-        }
+            
+            
+            var obj : AnyObject?
+            var icon : UIImage?
+            
+            do{
+                try url.getPromisedItemResourceValue(&obj, forKey: NSURLThumbnailDictionaryKey)
+                
+                if let dict = obj as? NSDictionary {
+                
+                    icon = dict[NSThumbnail1024x1024SizeKey] as? UIImage
+                }
+                else {
+                    icon = UIImage(named:"9b")
+                }
+            }
+            catch {
+                
+            }
+            if let img = icon {
+                if let imv = cell.imageView {
+                    imv.image = img
+                }
+            }
+         }
         
         return cell
     }
@@ -564,7 +595,17 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 
                 settings.delegate = self
             }
+        }else if segue.identifier == "testSegue"{
+            
+            if let settings = segue.destinationViewController as? TMKTestController{
+                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+              
+                    settings.ninebot = dele.datos
+                    
+                }
+            }
         }
+        
     }
     
     // MARK: Feedback
