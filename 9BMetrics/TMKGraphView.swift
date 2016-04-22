@@ -50,6 +50,8 @@ class TMKGraphView: UIView {
     var xmax : CGFloat = 0.0
     var ymin : CGFloat = 0.0
     var ymax : CGFloat = 0.0
+    var yminr : [CGFloat] = [0.0, 0.0]
+    var ymaxr : [CGFloat] = [0.0, 0.0]
     var sx : CGFloat = 0.0
     var sy : CGFloat = 0.0
     
@@ -66,7 +68,7 @@ class TMKGraphView: UIView {
     @IBOutlet  weak var  infoField : UILabel!
     @IBOutlet  weak var  infoSelField : UILabel!
     @IBOutlet  weak var  statsField : UILabel!
-   @IBOutlet  weak var  filterSlider : UISlider!
+    @IBOutlet  weak var  filterSlider : UISlider!
     @IBOutlet  weak var  graphContent : TMKGraphContentView!
     
     var yValue = 0 // 0->elev 1->bpm 2->ºC
@@ -182,6 +184,8 @@ class TMKGraphView: UIView {
         var xmax : CGFloat = 100.0
         var ymin : CGFloat = 0.0
         var ymax : CGFloat = 100.0
+        var yminr : [CGFloat] = [0.0, 0.0]
+        var ymaxr : [CGFloat] = [100.0, 100.0]
         var yminH : CGFloat = 0.0
         var ymaxH : CGFloat = 100.0
         
@@ -189,12 +193,17 @@ class TMKGraphView: UIView {
         self.xmax = 100.0
         self.ymin = 0.0
         self.ymax = 100.0
+        self.yminr = yminr
+        self.ymaxr = ymaxr
         self.yminH  = 0.0
         self.ymaxH = 100.0
         
         if let ds = self.dataSource {
             
             let nseries = ds.numberOfSeries()
+            
+            yminr = [CGFloat](count : nseries-1 , repeatedValue : 0.0)
+            ymaxr = [CGFloat](count : nseries-1 , repeatedValue : 100.0)
             
             if nseries == 0{
                 return
@@ -211,6 +220,10 @@ class TMKGraphView: UIView {
             
             (ymin, ymax) = ds.minMaxForSerie(0, value: self.yValue)
             
+            for i in 1..<nseries {
+                (yminr[i-1], ymaxr[i-1]) = ds.minMaxForSerie(i, value: self.yValue)
+            }
+            
            // pt = ds.value(self.yValue, axis:self.xAxis,  forPoint:0, forSerie:0) // Height
             
             yminH = ymin
@@ -223,16 +236,21 @@ class TMKGraphView: UIView {
                 
                 for i in 0..<n {
                     pt = ds.value(self.yValue, axis:self.xAxis, forPoint:i, forSerie:serie)
-                    
+
                     xmin = min(xmin, pt.x)
                     xmax = max(xmax, pt.x)
-                    ymin = min(ymin, pt.y)
-                    ymax = max(ymax, pt.y)
                     
-                    pt = ds.value(self.yValue ,axis:self.xAxis, forPoint:i, forSerie:serie) //Height
-                    
-                    yminH = min(yminH, pt.y)
-                    ymaxH = max(ymaxH, pt.y)
+                    if serie > 0 {
+                        yminr[serie-1] = min(yminr[serie-1], pt.y)
+                        ymaxr[serie-1] = max(ymaxr[serie-1], pt.y)
+                    } else {
+                        ymin = min(ymin, pt.y)
+                        ymax = max(ymax, pt.y)
+                        pt = ds.value(self.yValue ,axis:self.xAxis, forPoint:i, forSerie:serie) //Height
+
+                        yminH = min(yminH, pt.y)
+                        ymaxH = max(ymaxH, pt.y)
+                    }
                     
                 }
                 
@@ -242,6 +260,8 @@ class TMKGraphView: UIView {
             self.xmax = xmax
             self.ymin = ymin
             self.ymax = ymax
+            self.yminr = yminr
+            self.ymaxr = ymaxr
             self.yminH = yminH
             self.ymaxH = ymaxH
             
@@ -251,6 +271,12 @@ class TMKGraphView: UIView {
             
             if self.ymax == self.ymin{
                 self.ymax = self.ymin + 100.0
+            }
+            
+            for i in 0..<nseries-1{
+                if self.ymaxr[i] == self.yminr[i]{
+                    self.ymaxr[i] = self.yminr[i] + 100.0
+                }
             }
             
             if self.selectionLeftUnits < self.xmin{
@@ -447,8 +473,16 @@ class TMKGraphView: UIView {
         return myPt
     }
     
+
+    func rightViewPointFromTrackPoint(pt:CGPoint, serie : Int) -> CGPoint {
+        return viewPointFromTrackPoint(pt, serie: serie)
+    }
     
-    func viewPointFromTrackPoint(pt:CGPoint) -> CGPoint
+    func viewPointFromTrackPoint(pt:CGPoint) -> CGPoint {
+        return viewPointFromTrackPoint(pt, serie : 0)
+    }
+   
+    func viewPointFromTrackPoint(pt:CGPoint, serie : Int) -> CGPoint
     {
         var  myPt = CGPoint(x:0, y:0)
         let height = self.bounds.size.height
@@ -458,7 +492,17 @@ class TMKGraphView: UIView {
         let deltax : CGFloat = self.bounds.size.width - self.leftMargin - self.rightMargin
         let deltay : CGFloat = self.bounds.size.height - self.topMargin - self.bottomMargin
         self.sx = deltax / (self.xmax-self.xmin)
-        self.sy = deltay / (self.ymax-self.ymin)
+        
+        var ybot : CGFloat = 0.0
+        
+        if serie > 0 {
+            self.sy = deltay / (self.ymaxr[serie-1]-self.yminr[serie-1])
+            ybot = self.yminr[serie-1]
+        }
+        else {
+            self.sy = deltay / (self.ymax-self.ymin)
+            ybot = self.ymin
+        }
         
         
         // 3 posibilitats :
@@ -467,19 +511,19 @@ class TMKGraphView: UIView {
             let scx : CGFloat = (self.selectionLeft - self.leftMargin) / (self.selectionLeftUnits - self.xmin)
             
             myPt = CGPoint(x: (x: pt.x - self.xmin ) * scx + self.leftMargin,
-                y: height - ((pt.y - self.ymin ) * self.sy) - self.bottomMargin)
+                y: height - ((pt.y - ybot ) * self.sy) - self.bottomMargin)
         }
         else if pt.x >= self.selectionLeftUnits && pt.x <= self.selectionRightUnits{
             let scx : CGFloat = (self.selectionRight - self.selectionLeft) / (self.selectionRightUnits - self.selectionLeftUnits)
             
             myPt = CGPoint(x: (pt.x - self.selectionLeftUnits ) * scx + self.selectionLeft,
-                y: height - ((pt.y - self.ymin ) * self.sy) - self.bottomMargin)
+                y: height - ((pt.y - ybot ) * self.sy) - self.bottomMargin)
         }
         else if pt.x > self.selectionRightUnits{
             let scx : CGFloat = (self.leftMargin + deltax - self.selectionRight)/(self.xmax - self.selectionRightUnits)
             
             myPt = CGPoint(x: (pt.x - self.selectionRightUnits ) * scx + self.selectionRight,
-                y: height - ((pt.y - self.ymin ) * self.sy) - self.bottomMargin);
+                y: height - ((pt.y - ybot ) * self.sy) - self.bottomMargin);
         }
         
         if(isnan(myPt.x)){
