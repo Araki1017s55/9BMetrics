@@ -372,7 +372,13 @@ class TMKGraphContentView: UIView {
                             //pt = ds.value(v.yValue, axis:v.xAxis, forPoint:i, forSerie:serie)
                             pt = ds.value(v.yValue, axis: v.xAxis, forX: x, forSerie: serie)
                             
-                            pt = v.viewPointFromTrackPoint(pt)
+                            if serie == 0{
+                                pt = v.viewPointFromTrackPoint(pt)
+                            }
+                            else{
+                                pt = v.rightViewPointFromTrackPoint(pt, serie:serie)
+                            }
+                            
                             bz.addLineToPoint(pt)
                             
                             if x < v.selectionLeftUnits{
