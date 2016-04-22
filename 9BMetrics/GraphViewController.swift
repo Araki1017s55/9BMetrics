@@ -66,11 +66,25 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     // MARK: TMKGraphViewDataSource
     
+    func valueForSerie(serie : Int, value : Int) -> Int{
+        
+        switch serie {
+        case 1:
+            return 3
+        case 2:
+            return 5
+        default:
+            return value
+        }
+     }
+    
     func numberOfSeries() -> Int{
-        return 1
+        return 3
     }
     func numberOfPointsForSerie(serie : Int, value: Int) -> Int{
-        let v = BLENinebot.displayableVariables[value]
+        
+        let val = valueForSerie(serie, value: value)
+        let v = BLENinebot.displayableVariables[val]
         
         
         if let nb = self.ninebot{
@@ -88,7 +102,16 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         return 0
     }
     func colorForSerie(serie : Int) -> UIColor{
-        return UIColor.redColor()
+        
+        switch  serie {
+        case 1:
+            return UIColor.greenColor()
+        case 2:
+            return UIColor.cyanColor()
+        default:
+            return UIColor.redColor()
+        }
+        
     }
     func offsetForSerie(serie : Int) -> CGPoint{
         return CGPoint(x: 0, y: 0)
@@ -96,15 +119,18 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     func value(value : Int, axis: Int,  forPoint point: Int,  forSerie serie:Int) -> CGPoint{
         
-        var xv = value
+        let val = valueForSerie(serie, value: value)
         
-        if value == 9 {
+        var xv = val
+        
+        if xv == 9 {
             xv = 3
         }
         
         if let nb = self.ninebot{
             
-            let v = nb.getLogValue(value, index: point)
+            
+            let v = nb.getLogValue(val, index: point)
             
             let t = nb.data[BLENinebot.displayableVariables[xv]].log[point].time
             return CGPoint(x: CGFloat(t.timeIntervalSinceDate(nb.firstDate!)), y:CGFloat(v) )
@@ -117,9 +143,10 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     func value(value : Int, axis: Int,  forX x:CGFloat,  forSerie serie:Int) -> CGPoint{
  
+        let val = valueForSerie(serie, value: value)
         if let nb = self.ninebot{
             
-            let v = nb.getLogValue(value, time: NSTimeInterval(x))
+            let v = nb.getLogValue(val, time: NSTimeInterval(x))
             return CGPoint(x: x, y:CGFloat(v))
             
         }else{
@@ -138,8 +165,8 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         return false
     }
     func isSelectedSerie(serie: Int) -> Bool{
-        return true
-    }
+        return serie == 0
+     }
     func numberOfXAxis() -> Int {
         return 1
     }
@@ -224,7 +251,9 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     func minMaxForSerie(serie : Int, value: Int) -> (CGFloat, CGFloat){
         
-        switch(value){
+        let val = valueForSerie(serie, value: value)
+        
+        switch(val){
             
         case 0:
             return (0.0, 1.0)   // Speed
