@@ -749,10 +749,10 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
             for loc : CLLocation in locations {
                 
                 
-                if loc.horizontalAccuracy <= 20.0{  // Other data is really bad bad bad. probably GPS not fixes
+                if loc.horizontalAccuracy <= 20.0{  // Other data is really bad bad bad. probably GPS not fixed
                     
                     if let llc = self.lastLoc{
-                        if llc.distanceFromLocation(loc) >= 5.0{       // one point every 10 meters. Not less
+                        if llc.distanceFromLocation(loc) >= 2.0{       // one point every 5 meters. Not less
                             
                             let lat : Int = Int(floor(loc.coordinate.latitude * 100000))
                             let lon : Int = Int(floor(loc.coordinate.longitude * 100000))
