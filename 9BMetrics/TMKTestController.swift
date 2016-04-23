@@ -16,8 +16,12 @@ class TMKTestController: UIViewController {
     @IBOutlet weak var fTemp: TMKClockView!
     @IBOutlet weak var fRoll: TMKVerticalView!
     @IBOutlet weak var fPitch: TMKLevelView!
-   
+    @IBOutlet weak var fEnergy: TMKClockView!
+    @IBOutlet weak var fTitle : UILabel!
+
     weak var ninebot : BLENinebot?
+    
+    var titulo = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,11 +31,19 @@ class TMKTestController: UIViewController {
         
         if let nb = self.ninebot {
             
+            self.fTitle.text = titulo
+            
+            let font = self.fTitle.font
+            let name = font.fontName
+            NSLog(name)
+            
             let (dist, ascent, descent, time, avgSpeed, maxSpeed) = nb.analCinematics()
             let(bat0, bat1, batMin, batMax, energy, batEnergy, currMax, currAvg, pwMax, pwAvg) = nb.analEnergy()
             let (tmin, tmax, tavg, _) = nb.temperature(from: 0.0, to: 86400.0)
             let (pmin, pmax, pavg, _) = nb.pitch(from: 0.0, to: 86400.0)
             let (rmin, rmax, ravg, _) = nb.roll(from: 0.0, to: 86400.0)
+            
+            let (eplus, erec) = nb.energyDetails(from: 0.0, to: 86400.0)
            
             // Compute speed data
             
@@ -99,7 +111,7 @@ class TMKTestController: UIViewController {
                                                   TMKClockView.arc(start: pwMax / pwRange, end: 0.9, color: UIColor.redColor())]
             
             
-            fPower.updateData(String(format:"%0.0f", ceil(energy)) , units: "wh", radis: pwLevels, arcs: pwAreas, minValue: 0.0, maxValue: pwRange / 100.0)
+            fPower.updateData(String(format:"%0.0f", pwMax) , units: "w", radis: pwLevels, arcs: pwAreas, minValue: 0.0, maxValue: pwRange / 100.0)
             
             // Temperature
             //
@@ -133,6 +145,23 @@ class TMKTestController: UIViewController {
             
             fRoll.updateData(ravg, minValue: rmin, maxValue: rmax, scale: 1.0)
             fPitch.updateData(pavg, minValue: pmin, maxValue: pmax, scale: 1.0)
+            
+            // Energy  eplus / erec
+            
+            
+            var eAreas : [TMKClockView.arc] = []
+            
+            let emax = eplus
+            
+            eAreas.append(TMKClockView.arc(start: 0.0, end: (eplus-erec) / emax, color: UIColor.greenColor()))
+            
+            eAreas.append(TMKClockView.arc(start: (eplus-erec) / emax, end: eplus/emax, color: UIColor.redColor()))
+            
+            let eLevels =  [TMKClockView.arc(start: (eplus-erec) / emax, end: 0.5, color: UIColor.greenColor()),
+                            TMKClockView.arc(start: eplus/emax, end: 0.9, color: UIColor.redColor())]
+
+            fEnergy.updateData(String(format:"%0.0f", eplus-erec) , units: "wh", radis: eLevels, arcs: eAreas, minValue: 0.0, maxValue: emax)
+           
             
         }
 
