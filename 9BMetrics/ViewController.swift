@@ -371,7 +371,15 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             
             alert.addAction(action)
 
+            action = UIAlertAction(title: "Test Collection", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
+                self.performSegueWithIdentifier("testBLESegue", sender: self)
+            })
+            
+            alert.addAction(action)
+
         }
+        
+        
         
         action = UIAlertAction(title: "About 9B Metrics", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
             self.performSegueWithIdentifier("docSegue", sender: self)
@@ -597,10 +605,32 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             }
         }else if segue.identifier == "testSegue"{
             
-            if let settings = segue.destinationViewController as? TMKTestController{
+            if let testC = segue.destinationViewController as? TMKTestController{
                 if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
-              
-                    settings.ninebot = dele.datos
+                    
+                    testC.ninebot = dele.datos
+                    
+                    if let url = self.currentFile{
+                        if let name = url.lastPathComponent{
+                            testC.titulo = name
+                        }
+                        
+                    }
+                    
+                }
+            }
+        }else if segue.identifier == "testBLESegue"{
+            if let testC = segue.destinationViewController as? BLEHistoDashboard{
+                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    
+                    testC.ninebot = dele.datos
+                    
+                    if let url = self.currentFile{
+                        if let name = url.lastPathComponent{
+                            testC.titulo = name
+                        }
+                        
+                    }
                     
                 }
             }
