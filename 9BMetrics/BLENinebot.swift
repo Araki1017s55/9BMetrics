@@ -1540,6 +1540,33 @@ class  BLENinebot : NSObject{
         return (min/100.0, max/100.0, avg/100.0, acum/100.0)
     }
     
+    func energyDetails(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double){
+        
+        if self.data[BLENinebot.kEnergy].log.count < 2{
+            return ( 0.0, 0.0)
+        }
+        
+        var positive = 0.0
+        var negative = 0.0
+        
+        var first = true
+        
+        var oldEntry = self.data[BLENinebot.kEnergy].log[0]
+        for lv in self.data[BLENinebot.kEnergy].log{
+            if !first {
+                if oldEntry.value < lv.value{
+                    positive += Double(lv.value - oldEntry.value) / 100.0
+                } else {
+                    negative += Double(oldEntry.value - lv.value) / 100.0
+                }
+            }
+            oldEntry = lv
+            first = false
+
+        }
+        
+        return (positive, negative)
+    }
     
     // pitch angle speed
     
