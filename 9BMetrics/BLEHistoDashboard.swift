@@ -130,9 +130,9 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
             
         case 0:
             
-            var cell = collectionView.dequeueReusableCellWithReuseIdentifier("clockCellIdentifier", forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("clockCellIdentifier", forIndexPath: indexPath)
             
-            var speedView = TMKClockView(frame: CGRect(x:0.0, y:0.0, width: 155.0, height: 155.0))
+            let speedView = TMKClockView(frame: CGRect(x:0.0, y:0.0, width: 155.0, height: 155.0))
             cell.contentView.addSubview(speedView)
             
             var limits = [TMKClockView.arc(start: 0.0, end: 23.0/30.0, color: UIColor.greenColor())]
