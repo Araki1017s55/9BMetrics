@@ -58,7 +58,10 @@ class TMKClockView: UIView {
 
         label.text = String(format: "%0.2f", value)
         label.textAlignment = .Center
-        label.font = UIFont.systemFontOfSize(r / 4.0)
+        //label.font = UIFont.systemFontOfSize(r / 4.0)
+        
+        label.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
+        
         label.textColor = UIColor.whiteColor()
         label.backgroundColor = UIColor.clearColor()
         //label!.bounds = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 20.0)
@@ -76,7 +79,8 @@ class TMKClockView: UIView {
   
         unitsLabel.text = String(format: "%@", units)
         unitsLabel.textAlignment = .Center
-        unitsLabel.font = UIFont.systemFontOfSize(r / 6.0)
+        //unitsLabel.font = UIFont.systemFontOfSize(r / 6.0)
+        unitsLabel.font = UIFont(name: ".SFUIText-Light", size: r / 6.0)
         unitsLabel.textColor = UIColor.whiteColor()
         unitsLabel.backgroundColor = UIColor.clearColor()
         //label!.bounds = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 20.0)
@@ -186,14 +190,17 @@ class TMKClockView: UIView {
         
         var ptl = CGPoint(x: center.x + (r + l) * CGFloat(cos(start)), y: center.y + (r + l) * CGFloat(sin(start)))
         
-        var paraStyle = NSMutableParagraphStyle()
+        let paraStyle = NSMutableParagraphStyle()
         paraStyle.alignment = .Center
         
-        var attributes = [
+        let xfont = UIFont(name: ".SFUIText-Light", size: r / 6.0)
+        
+        let attributes = [
+            NSFontAttributeName: xfont!,
             NSForegroundColorAttributeName: UIColor.whiteColor(),
-            NSParagraphStyleAttributeName: paraStyle,
-            NSFontAttributeName: UIFont.systemFontOfSize(r / 6.0)
+            NSParagraphStyleAttributeName: paraStyle
         ]
+        // NSFontAttributeName: UIFont.systemFontOfSize(r / 6.0)
         
         let minS = NSString(format:"%0.0f", minValue)
         let minSiz = minS.sizeWithAttributes(attributes)
