@@ -14,6 +14,7 @@
 		0029253F1CBA3B3400AEA843 /* Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 0029253E1CBA3B3400AEA843 /* Notes.rtf */; };
 		0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */; };
 		00389AFF1C9986A4007BADDC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00389AFE1C9986A4007BADDC /* Default-568h@2x.png */; };
+		003CC9161CCA79C50020F83B /* BLEHistoDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */; };
 		004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */; };
 		004A297E1CCA36F300D6A9A1 /* TMKLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */; };
 		004F45CB1CAD9DE10071B7C4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004F45CA1CAD9DE10071B7C4 /* MapKit.framework */; };
@@ -125,6 +126,7 @@
 		0029253E1CBA3B3400AEA843 /* Notes.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Notes.rtf; sourceTree = "<group>"; };
 		0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLERequestOperation.swift; sourceTree = "<group>"; };
 		00389AFE1C9986A4007BADDC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEHistoDashboard.swift; sourceTree = "<group>"; };
 		004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKVerticalView.swift; sourceTree = "<group>"; };
 		004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKLevelView.swift; sourceTree = "<group>"; };
 		004F45CA1CAD9DE10071B7C4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -265,6 +267,7 @@
 				004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */,
 				004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */,
 				00F1A95F1CC9164F00D8EB27 /* TMKTestController.swift */,
+				003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */,
 				007A57651C85CF39003A2030 /* GraphViewController.swift */,
 				007A57661C85CF39003A2030 /* PickerActivity.swift */,
 				007A57671C85CF39003A2030 /* BLENinebot.swift */,
@@ -577,6 +580,7 @@
 				007A57741C85CF39003A2030 /* TMKGraphViewDataSource.swift in Sources */,
 				00AB593B1CAEE61700277859 /* unzip.c in Sources */,
 				00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */,
+				003CC9161CCA79C50020F83B /* BLEHistoDashboard.swift in Sources */,
 				007A577D1C85CF39003A2030 /* BLEConnection.swift in Sources */,
 				004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */,
 				007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */,
