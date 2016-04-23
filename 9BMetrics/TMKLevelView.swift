@@ -46,7 +46,7 @@ class TMKLevelView: UIView {
         
         valueLabel.text = String(format: "%0.1f", value)
         valueLabel.textAlignment = .Center
-        valueLabel.font = UIFont.systemFontOfSize(r / 4.0)
+        valueLabel.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
         valueLabel.textColor = UIColor.whiteColor()
         valueLabel.backgroundColor = UIColor.clearColor()
         valueLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -63,7 +63,7 @@ class TMKLevelView: UIView {
         
         minLabel.text = String(format: "%0.1f", minValue)
         minLabel.textAlignment = .Center
-        minLabel.font = UIFont.systemFontOfSize(r / 4.0)
+        minLabel.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
         minLabel.textColor = UIColor.whiteColor()
         minLabel.backgroundColor = UIColor.clearColor()
         minLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +82,7 @@ class TMKLevelView: UIView {
         
         maxLabel.text = String(format: "%0.1f", maxValue)
         maxLabel.textAlignment = .Center
-        maxLabel.font = UIFont.systemFontOfSize(r / 4.0)
+        maxLabel.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
         maxLabel.textColor = UIColor.whiteColor()
         maxLabel.backgroundColor = UIColor.clearColor()
         maxLabel.translatesAutoresizingMaskIntoConstraints = false
