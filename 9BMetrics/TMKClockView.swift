@@ -165,7 +165,7 @@ class TMKClockView: UIView {
         // Draw sphere
         
         sphereColor.setStroke()
-        var bz = UIBezierPath()
+        let bz = UIBezierPath()
         bz.lineWidth = sphereWidth
         
         if l > 0.0 {
