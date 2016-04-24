@@ -32,6 +32,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         
         self.navigationController?.navigationBar.hidden = true
         self.graphView.setup()
+        self.graphView.setanYValue(shownVariable)
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.graphView.setNeedsDisplay()
         })
@@ -79,7 +80,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
      }
     
     func numberOfSeries() -> Int{
-        return 3
+        return 1 //  Put 3 but for the moment too slow
     }
     func numberOfPointsForSerie(serie : Int, value: Int) -> Int{
         
