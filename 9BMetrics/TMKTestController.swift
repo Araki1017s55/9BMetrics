@@ -47,7 +47,7 @@ class TMKTestController: UIViewController {
            
             // Compute speed data
             
-            let topSpeed = 30.0
+            let topSpeed = 40.0
             var limits = [TMKClockView.arc(start: 0.0, end: 23.0/30.0, color: UIColor.greenColor())]
                           
             if maxSpeed > 23.0{
