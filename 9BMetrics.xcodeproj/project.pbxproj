@@ -55,6 +55,7 @@
 		007A57851C85CF39003A2030 /* DocController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57731C85CF39003A2030 /* DocController.swift */; };
 		007A57871C85CF80003A2030 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A57861C85CF80003A2030 /* Interface.storyboard */; };
 		007A57891C85CF8D003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A57881C85CF8D003A2030 /* Assets.xcassets */; };
+		007CE2F81CCBD5260005828F /* KTCenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */; };
 		00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
 		00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
 		00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
@@ -172,6 +173,7 @@
 		007A57731C85CF39003A2030 /* DocController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocController.swift; sourceTree = "<group>"; };
 		007A57861C85CF80003A2030 /* Interface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Interface.storyboard; sourceTree = "<group>"; };
 		007A57881C85CF8D003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KTCenterFlowLayout.swift; sourceTree = "<group>"; };
 		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zip.h; sourceTree = "<group>"; };
 		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
 		00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipUtilities.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */,
 				004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */,
 				00F1A95F1CC9164F00D8EB27 /* TMKTestController.swift */,
+				007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */,
 				003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */,
 				007A57651C85CF39003A2030 /* GraphViewController.swift */,
 				007A57661C85CF39003A2030 /* PickerActivity.swift */,
@@ -576,6 +579,7 @@
 				0002C47E1CAABF0E0060CFA5 /* BLERunningDashboard.swift in Sources */,
 				007A57771C85CF39003A2030 /* GraphViewController.swift in Sources */,
 				00AB59571CAEE64000277859 /* entropy.c in Sources */,
+				007CE2F81CCBD5260005828F /* KTCenterFlowLayout.swift in Sources */,
 				007A57791C85CF39003A2030 /* BLENinebot.swift in Sources */,
 				007A57741C85CF39003A2030 /* TMKGraphViewDataSource.swift in Sources */,
 				00AB593B1CAEE61700277859 /* unzip.c in Sources */,
