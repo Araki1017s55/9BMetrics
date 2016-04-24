@@ -34,7 +34,7 @@ class TMKImage: UIImage {
     
     class func  beginImageContextWithSize(size:CGSize)
     {
-        if UIScreen.mainScreen().respondsToSelector("scale") {
+        if UIScreen.mainScreen().respondsToSelector(#selector(NSDecimalNumberBehaviors.scale)) {
             if UIScreen.mainScreen().scale == 2.0 {
                 UIGraphicsBeginImageContextWithOptions(size, true, 2.0)
             } else {
