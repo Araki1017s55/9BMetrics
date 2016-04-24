@@ -991,7 +991,12 @@ class  BLENinebot : NSObject{
         
     }
     
+
     internal func imageWithWidth(wid:Double,  height:Double) -> UIImage? {
+        return imageWithWidth(wid,  height:height, color:UIColor.redColor(), backColor:UIColor.whiteColor(), lineWidth: 5.0)
+    }
+    
+    internal func imageWithWidth(wid:Double,  height:Double, color:UIColor, backColor:UIColor, lineWidth: Double) -> UIImage? {
         
         TMKImage.beginImageContextWithSize(CGSizeMake(CGFloat(wid) , CGFloat(height)))
         
@@ -999,7 +1004,7 @@ class  BLENinebot : NSObject{
         
         var bz = UIBezierPath(rect: rect)
         
-        UIColor.whiteColor().set()
+        backColor.set()
         bz.fill()
         bz.stroke()
         
@@ -1063,9 +1068,9 @@ class  BLENinebot : NSObject{
                 
             }
             
-            bz.lineWidth = 5.0
+            bz.lineWidth = CGFloat(lineWidth)
             bz.lineJoinStyle = CGLineJoin.Round
-            UIColor.redColor().setStroke()
+            color.setStroke()
             bz.stroke()
             let img = UIGraphicsGetImageFromCurrentImageContext()
             TMKImage.endImageContext()
@@ -1080,6 +1085,12 @@ class  BLENinebot : NSObject{
     }
     
     //MARK: Analysis
+    
+    // Computes summary. It is saved in the summary.cvs file in the package
+    
+    func computeSummary(){
+        
+    }
     
     
     func computeAscentDescent() -> (ascent : Double, descent : Double){
@@ -1862,7 +1873,6 @@ class  BLENinebot : NSObject{
         
         var i = 0
         
-        
         while p1 - p0 > 1{
             
             let p = (p1 + p0 ) / 2
@@ -1879,6 +1889,10 @@ class  BLENinebot : NSObject{
                 p0 = p
                 p1 = p
             }
+        }
+        
+        if self.data[v].log[p0].time.timeIntervalSinceDate(self.firstDate!) > x{
+            p1 = p0
         }
         
         
@@ -1923,6 +1937,8 @@ class  BLENinebot : NSObject{
         
         x1 = self.data[v].log[i].time.timeIntervalSinceDate(self.firstDate!)
         y1 = Double(self.data[v].log[i].value)
+        
+        
         
         while x1 < t1{
             
