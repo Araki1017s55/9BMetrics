@@ -40,6 +40,7 @@ class BLEHistoDashboard: UIViewController {
     var ravg = 0.0
     var eplus = 0.0
     var erec = 0.0
+    var trackImg : UIImage?
     
     let defaultTopSpeed = 30.0
     let secureSpeed = 23.0
@@ -48,6 +49,15 @@ class BLEHistoDashboard: UIViewController {
     @IBOutlet weak var fTitle : UILabel!
     
     private let sectionInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+
+    static var displayableVariables : [Int] = [BLENinebot.kCurrentSpeed, BLENinebot.kTemperature,
+                                               BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
+                                               BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower, BLENinebot.kEnergy]
+    
+    
+    private let graphValue = [0, 4, 9, 10, 1, 6, 5]
+    
+    var graphToShow : Int = 0
     
 
     override func viewDidLoad() {
@@ -65,6 +75,7 @@ class BLEHistoDashboard: UIViewController {
              (rmin, rmax, ravg, _) = nb.roll(from: 0.0, to: 86400.0)
             
              (eplus, erec) = nb.energyDetails(from: 0.0, to: 86400.0)
+            trackImg = nb.imageWithWidth(350.0,  height:350.0, color:UIColor.yellowColor(), backColor:UIColor.clearColor(), lineWidth: 2.0)
             
         }
     }
@@ -86,7 +97,43 @@ class BLEHistoDashboard: UIViewController {
         self.navigationController?.popViewControllerAnimated(true)
     }
 
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        switch segue.identifier! {
+            
+            case "otherMapSegue":
+                  if let vc = segue.destinationViewController as? BLEMapViewController  {
+                    vc.dades = self.ninebot
+            }
+            
+        case "graphicSegue":
 
+            if let vc = segue.destinationViewController as? GraphViewController  {
+                
+                if let nb = self.ninebot{
+                    nb.buildEnergy()
+                }
+                vc.ninebot = self.ninebot
+                vc.shownVariable = self.graphToShow
+            }
+            
+        default:
+            break
+        }
+    }
+    
+    @IBAction func prepareForUnwind(segue: UIStoryboardSegue){
+        
+        self.dismissViewControllerAnimated(true) {
+            
+        }
+        
+    }
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        if size.width > size.height{
+            graphToShow = graphValue[0]
+            self.performSegueWithIdentifier("graphicSegue", sender: self)
+        }
+    }
 }
 
 extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
@@ -150,6 +197,24 @@ extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
 }
 extension BLEHistoDashboard : UICollectionViewDelegate {
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let row = indexPath.row
+        
+        switch row {
+            
+        case 0: // Speed/map , open Map
+            performSegueWithIdentifier("otherMapSegue", sender: self)
+            
+            
+        default:
+            graphToShow = self.graphValue[row]
+            
+            performSegueWithIdentifier("graphicSegue", sender: self)
+            
+            
+        }
+    }
+    
     
 }
 
@@ -188,6 +253,7 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 tit.text = "Speed"
             }
             
+            
             var topSpeed = defaultTopSpeed
             if maxSpeed > defaultTopSpeed {
                 topSpeed = ceil(maxSpeed / 10.0) * 10.0
@@ -203,6 +269,9 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 
                 
                 let speeds : [TMKClockView.arc] = [TMKClockView.arc(start: avgSpeed / topSpeed, end: 0.5, color: UIColor.greenColor()), TMKClockView.arc(start: maxSpeed / topSpeed, end: 0.9, color: UIColor.redColor())]
+                
+                sv.backImage = self.trackImg
+                
                 
                 sv.updateData(String(format:"%0.2f", dist) , units: "Km", radis: speeds, arcs: limits, minValue: 0.0, maxValue: topSpeed)
             }
@@ -243,6 +312,7 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 let batLevels : [TMKClockView.arc] = [TMKClockView.arc(start: bat0 / 100.0, end: 0.5, color: UIColor.greenColor()),
                                                       TMKClockView.arc(start: bat1 / 100.0, end: 0.9, color: UIColor.redColor())]
                 
+                bv.backImage = nil
                 
                 bv.updateData(String(format:"%0.0f", (bat0 - bat1)) , units: "%", radis: batLevels, arcs: batAreas, minValue: 0.0, maxValue: 100.0)
             }
@@ -289,7 +359,8 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 let pwLevels : [TMKClockView.arc] = [TMKClockView.arc(start: pwAvg / pwRange, end: 0.5, color: UIColor.greenColor()),
                                                      TMKClockView.arc(start: pwMax / pwRange, end: 0.9, color: UIColor.redColor())]
                 
-                
+                pw.backImage = nil
+               
                 pw.updateData(String(format:"%0.0f", pwMax) , units: "w", radis: pwLevels, arcs: pwAreas, minValue: 0.0, maxValue: pwRange / 100.0)
             }
             
@@ -329,6 +400,8 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 let eLevels =  [TMKClockView.arc(start: (eplus-erec) / emax, end: 0.5, color: UIColor.greenColor()),
                                 TMKClockView.arc(start: eplus/emax, end: 0.9, color: UIColor.redColor())]
                 
+                ew.backImage = nil
+
                 ew.updateData(String(format:"%0.0f", eplus-erec) , units: "wh", radis: eLevels, arcs: eAreas, minValue: 0.0, maxValue: emax)
             }
             
@@ -379,6 +452,7 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                                                        TMKClockView.arc(start: tmax / tempRange, end: 0.9, color: UIColor.redColor())]
                 
                 
+                tw.backImage = nil
                 
                 tw.updateData(String(format:"%0.0f", tmax) , units: "ºC", radis: tempLevels, arcs: tempAreas, minValue: 0.0, maxValue: tempRange)
             }
