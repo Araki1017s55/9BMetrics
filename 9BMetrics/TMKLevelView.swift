@@ -28,6 +28,9 @@ class TMKLevelView: UIView {
     var minLabel : UILabel = UILabel()  // Minimum value left
     var maxLabel : UILabel = UILabel()  // Maximum value right
     
+    var cValue :NSLayoutConstraint?
+    var cMin :NSLayoutConstraint?
+    var cMax :NSLayoutConstraint?
     
     
     override init(frame: CGRect) {
@@ -53,13 +56,13 @@ class TMKLevelView: UIView {
         
         self.addSubview(valueLabel)
         
-        var c1 = NSLayoutConstraint(item: valueLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: -(r/2.0))
+        cValue = NSLayoutConstraint(item: valueLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: -(r/2.0))
         
-        var c2 = NSLayoutConstraint(item: valueLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: 0.0 )
+        var c1 = NSLayoutConstraint(item: valueLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: 0.0 )
         
         
         self.addConstraint(c1)
-        self.addConstraint(c2)
+        self.addConstraint(cValue!)
         
         minLabel.text = String(format: "%0.1f", minValue)
         minLabel.textAlignment = .Center
@@ -72,11 +75,11 @@ class TMKLevelView: UIView {
         
         c1 = NSLayoutConstraint(item: minLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
         
-        c2 = NSLayoutConstraint(item: minLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: +( r / 2.0) )
+        cMin = NSLayoutConstraint(item: minLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: +( r / 2.0) )
         
         
         self.addConstraint(c1)
-        self.addConstraint(c2)
+        self.addConstraint(cMin!)
         
         // max values
         
@@ -91,11 +94,11 @@ class TMKLevelView: UIView {
         
         c1 = NSLayoutConstraint(item: maxLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
         
-        c2 = NSLayoutConstraint(item: maxLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: -( r / 2.0) )
+        cMax = NSLayoutConstraint(item: maxLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: -( r / 2.0) )
         
         
         self.addConstraint(c1)
-        self.addConstraint(c2)
+        self.addConstraint(cMax!)
         
     }
     
@@ -150,6 +153,23 @@ class TMKLevelView: UIView {
         let r : CGFloat = (min(self.bounds.width, self.bounds.height) / 2.0)-1.0
         let l  : CGFloat = r * startEndLength
         
+        // Update size labels and position
+        
+        valueLabel.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
+        minLabel.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
+        maxLabel.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
+        
+        if let c = cValue {
+            c.constant = -(r / 2.0)
+        }
+        
+        if let c = cMin {
+            c.constant = (r / 2.0)
+        }
+        
+        if let c = cMax {
+            c.constant = -(r / 2.0)
+        }
         
         let center = CGPoint(x: self.bounds.width/2.0, y:self.bounds.height/2.0)
         
