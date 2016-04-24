@@ -30,6 +30,8 @@ class TMKClockView: UIView {
     
     var label : UILabel = UILabel()
     var unitsLabel : UILabel = UILabel()
+    
+    var backImage : UIImage?
 
     
     var radis : [arc] = []
@@ -111,21 +113,27 @@ class TMKClockView: UIView {
     }
     
     func drawCursor(value : Double, len : CGFloat, width : CGFloat, color : UIColor, center : CGPoint ){
-    
+
+        let semiBlackColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
+
         // OK now draw cursor
+        
         let bz = UIBezierPath()
-        
-        color.setStroke()
-        bz.lineWidth = width
-        
+        bz.lineCapStyle = .Round
         let ang = valueToAngle(value)
-        
         let pt = CGPoint(x: center.x + len * CGFloat(cos(ang)), y: center.y + len * CGFloat(sin(ang)))
-        
         bz.moveToPoint(center)
         bz.addLineToPoint(pt)
         
+        bz.lineWidth = width + 2.0
+        semiBlackColor.setStroke()
+
         bz.stroke()
+        
+        color.setStroke()
+        bz.lineWidth = width
+        bz.stroke()
+
     }
 
     func drawArc(start : Double, end : Double, r : CGFloat, width : CGFloat, color : UIColor, center : CGPoint){
@@ -156,11 +164,20 @@ class TMKClockView: UIView {
         
         let r : CGFloat = (min(self.bounds.width, self.bounds.height) / 2.0)-1.0
         let l  : CGFloat = r * startEndLength
-        
         let start = d2R(-270+openAngle)
         let end = d2R(90.0-openAngle)
         
         let center = CGPoint(x: self.bounds.width/2.0, y:self.bounds.height/2.0)
+        
+        if let img = backImage{
+            
+            let side = sqrt((r * r) / 2.0) * 2.0
+            
+            let rect = CGRect(x: center.x - side/2.0, y: center.y - side/2.0, width: side, height: side)
+            
+            img.drawInRect(rect)
+        }
+        
         
         // Draw sphere
         
@@ -223,6 +240,7 @@ class TMKClockView: UIView {
         }
         
         for a in radis {
+            
             drawCursor(a.start, len: r * cursorSize, width: cursorWidth, color: a.color, center: center)
         }
         
