@@ -280,7 +280,7 @@
                         <segue destination="8uK-VF-C0E" kind="show" identifier="simulatedNinebotSegue" id="Hvu-ta-rvi"/>
                         <segue destination="Ufs-me-LDL" kind="show" identifier="histoInfoSegue" id="m7N-60-78l"/>
                         <segue destination="DNq-7m-t37" kind="show" identifier="testSegue" id="M4u-UW-d4k"/>
-                        <segue destination="YP3-cK-QJF" kind="show" identifier="testBLESegue" id="uKD-Ce-nOC"/>
+                        <segue destination="YP3-cK-QJF" kind="show" identifier="openDataSegue" id="uKD-Ce-nOC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -792,6 +792,8 @@
                     <connections>
                         <outlet property="collectionView" destination="r2B-l9-UD5" id="KUE-F0-fMs"/>
                         <outlet property="fTitle" destination="DTn-nW-YMG" id="CV3-xB-3Ux"/>
+                        <segue destination="qqE-ny-9Bb" kind="presentation" identifier="otherMapSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="SRt-gK-Tyg"/>
+                        <segue destination="DuF-6H-UYu" kind="show" identifier="graphicSegue" id="n4b-GW-Qsa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ATo-22-5gD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -891,11 +893,11 @@
                         <viewControllerLayoutGuide type="bottom" id="2Pm-8H-Ieu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gjI-Ou-J7X">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iO1-UH-wOy" customClass="TMKGraphView" customModule="_BMetrics" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iO1-UH-wOy" customClass="TMKGraphView" customModule="_BMetrics" customModuleProvider="target">
+                                <rect key="frame" x="-4" y="64" width="383" height="536"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="DuF-6H-UYu" id="VbS-8E-bl5"/>
@@ -1422,6 +1424,7 @@
         <image name="reload" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="1AL-ba-LUv"/>
+        <segue reference="SRt-gK-Tyg"/>
+        <segue reference="n4b-GW-Qsa"/>
     </inferredMetricsTieBreakers>
 </document>
