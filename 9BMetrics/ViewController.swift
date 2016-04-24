@@ -372,7 +372,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             alert.addAction(action)
 
             action = UIAlertAction(title: "Test Collection", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
-                self.performSegueWithIdentifier("testBLESegue", sender: self)
+                self.performSegueWithIdentifier("openDataSegue", sender: self)
             })
             
             alert.addAction(action)
@@ -550,8 +550,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 dele.datos.loadTextFile(file)
             }
         }
-        
-        self.performSegueWithIdentifier("openFileSegue", sender: self)
+        //self.performSegueWithIdentifier("openFileSegue", sender: self)
+       
+        self.performSegueWithIdentifier("openDataSegue", sender: self)
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -597,7 +598,20 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 //self.startClient() // Tan sols en algun cas potser depenent del sender?
                 
             }
-        }else if segue.identifier == "settingsSegue"{
+        }else if segue.identifier == "openDataSegue"{
+            if let dash = segue.destinationViewController as? BLEHistoDashboard{
+                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    dash.ninebot = dele.datos
+                }
+                
+                //self.startClient() // Tan sols en algun cas potser depenent del sender?
+                
+            }
+        }
+        
+        
+        
+        else if segue.identifier == "settingsSegue"{
             
             if let settings = segue.destinationViewController as? SettingsViewController{
                 
