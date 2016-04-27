@@ -117,7 +117,7 @@ class  BLENinebot : NSObject{
                                                BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
                                                BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower, BLENinebot.kEnergy]
     
-    var data = [NinebotVariable](count:256, repeatedValue:NinebotVariable())
+    private var data = [NinebotVariable](count:256, repeatedValue:NinebotVariable())
     var signed = [Bool](count: 256, repeatedValue: false)
     
     var headersOk = false
@@ -238,7 +238,10 @@ class  BLENinebot : NSObject{
         firstDate = nil
         distOffset = 0
     }
-    
+    func hasData()->Bool{
+        
+        return data[BLENinebot.kCurrent].log.count > 0
+    }
     func checkHeaders() -> Bool{
         
         if headersOk {
@@ -579,6 +582,186 @@ class  BLENinebot : NSObject{
         return nil
     }
     
+    func variableLogtoString(v : NinebotVariable) -> String?{
+        
+        if v.log.count == 0{    // Just nothing to store
+            return nil
+        }
+        
+        
+        let varName = String(format: "%d,%@\n",v.codi, BLENinebot.labels[v.codi])
+        
+        let version = String(format: "Version,3,Start,%0.3f,Variable,%@\n", firstDate!.timeIntervalSince1970, varName)
+  
+        var buff = version
+    
+        
+        AppDelegate.debugLog("Gravant file log per %@", varName)
+        
+        for item in v.log {
+            let t = item.time.timeIntervalSinceDate(self.firstDate!)
+            buff += String(format: "%0.3f,%d\n", t, item.value)
+        }
+       return buff
+        
+    }
+    
+    func stringToVariableLog(s : String) -> NinebotVariable{
+        
+        var nv = NinebotVariable()
+        
+        let lines = s.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        
+        var lineNumber = 0
+        var version = 1
+        var date0 : NSDate?
+        let variable : Int = -1
+        
+        for line in lines {
+            let fields = line.componentsSeparatedByString(",")
+            
+            if lineNumber == 0 {
+                
+                if fields[0] == "Version"{
+                    if let v = Int(fields[1]){
+                        
+                        if v == 3{
+                            version = v
+                            
+                            // field 3 has first date
+                            
+                            guard let dt = Double(fields[3].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return nv}
+                            date0 = NSDate(timeIntervalSince1970: dt)
+                            guard let variable = Int(fields[5].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return nv}
+                            nv.codi = variable
+                            self.firstDate = date0
+                            
+                        } else {
+                            AppDelegate.debugLog("Error amb version %d", v)
+                            lineNumber += 1
+                            return nv
+                        }
+                    }
+                    
+                } else {
+                    AppDelegate.debugLog("Incorrect Format")
+                    lineNumber += 1
+                    return nv
+                }
+                lineNumber += 1
+                continue
+            }
+            if version == 3 && fields.count == 2 {
+                
+                guard let dt = Double(fields[0].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return nv}
+                
+                if let d = date0{
+                    let t = NSDate(timeInterval: dt, sinceDate: d)
+                    let value = Int(fields[1])
+                    
+                    if  let vl = value {
+                        
+                        let le = LogEntry(time: t, variable: variable, value: vl)
+                        nv.log.append(le)
+                        nv.timeStamp = t
+                        nv.value = vl
+                        
+                     }
+                }
+            }
+            
+            lineNumber += 1
+            
+        }
+        return nv
+    }
+    
+    
+    func createPackage(name : String) -> NSURL?{
+        
+        guard let docDir = (UIApplication.sharedApplication().delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+        
+        let pkgURL = docDir.URLByAppendingPathComponent(name).URLByAppendingPathExtension("9bm")
+
+        // Try to use file wrappers (ufff)
+        
+        let contents = NSFileWrapper(directoryWithFileWrappers: [:])
+        for v in self.data {
+            if v.log.count > 0{
+                
+                let vn = v.codi
+                let fileName = String(format: "%03d.csv", vn)
+                
+                if let s = variableLogtoString(v){
+                    if let dat = s.dataUsingEncoding(NSUTF8StringEncoding){
+                        let fWrapper = NSFileWrapper(regularFileWithContents: dat)
+                        fWrapper.preferredFilename = fileName
+                        contents.addFileWrapper(fWrapper)
+                    }
+                }
+            }
+        }
+        do{
+            try contents.writeToURL(pkgURL, options: .WithNameUpdating, originalContentsURL: pkgURL)
+        }catch let err as NSError{
+            
+            
+            AppDelegate.debugLog("Error al gravar arxius %@", err.description)
+            return nil
+        }
+        
+        return pkgURL
+    }
+    
+    func loadVariableFromPackage(packageName : String, variableName: String) -> NinebotVariable?{
+        guard let docDir = (UIApplication.sharedApplication().delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+        
+        let pkgURL = docDir.URLByAppendingPathComponent(packageName).URLByAppendingPathExtension("9bm")
+        
+        let fileURL = pkgURL.URLByAppendingPathComponent(variableName)
+        
+        do {
+             let str = try String(contentsOfURL: fileURL, encoding: NSUTF8StringEncoding)
+            return stringToVariableLog(str)
+            
+        }catch{
+            
+        }
+        return nil
+    }
+    
+    func loadPackage(url : NSURL) {
+        
+    
+        
+        do{
+            let pack = try NSFileWrapper(URL: url, options: [])
+        
+            if pack.directory{
+                
+                for (name, fw) in pack.fileWrappers!{
+                    if fw.regularFile && name == "summary.csv"{
+                        
+                                // Load summary
+                        
+                    } else if fw.regularFile && name == "map.gpx"{
+                        
+                        
+                        
+                    }else if fw.regularFile {
+                        
+                        if let str = String(data: fw.regularFileContents!, encoding: NSUTF8StringEncoding){
+                            let nv = stringToVariableLog(str)
+                            data[nv.codi] = nv
+                         }
+                    }
+                }
+            }
+        }catch{
+            
+        }
+    }
+    
     func createZipFile(name : String) -> NSURL?{
         
         let tmpDirURL = NSURL.fileURLWithPath(NSTemporaryDirectory(),isDirectory: true)
@@ -611,9 +794,9 @@ class  BLENinebot : NSObject{
                         let hdl = try NSFileHandle(forWritingToURL: fileUrl)
                         
                         
-                        let varName = String(format: "\"%d\",\"%@\"\n",v.codi, BLENinebot.labels[v.codi])
+                        let varName = String(format: "%d,%@\n",v.codi, BLENinebot.labels[v.codi])
                         
-                        let version = String(format: "\"Version\",\"3\",\"Start\",\"%0.3f\",\"Variable\",%@\n", firstDate!.timeIntervalSince1970, varName)
+                        let version = String(format: "Version,3,Start,%0.3f,Variable,%@\n", firstDate!.timeIntervalSince1970, varName)
                         
                         hdl.writeData(version.dataUsingEncoding(NSUTF8StringEncoding)!)
                         
@@ -624,7 +807,7 @@ class  BLENinebot : NSObject{
                             
                             let t = item.time.timeIntervalSinceDate(self.firstDate!)
                             
-                            let s = String(format: "\"%0.3f\",\"%d\"\n", t, item.value)
+                            let s = String(format: "%0.3f,%d\n", t, item.value)
                             if let vn = s.dataUsingEncoding(NSUTF8StringEncoding){
                                 hdl.writeData(vn)
                             }
@@ -914,6 +1097,17 @@ class  BLENinebot : NSObject{
             
         }catch {
             
+        }
+        
+        // OK now build package.
+        
+        if let name = url.URLByDeletingPathExtension?.lastPathComponent {
+            let newName = name.stringByReplacingOccurrencesOfString("9B_", withString: "")
+            if let url = createPackage(newName){
+                AppDelegate.debugLog("Package %@ created", url)
+            }else{
+                AppDelegate.debugLog("Error al crear Package")
+            }
         }
         
     }
