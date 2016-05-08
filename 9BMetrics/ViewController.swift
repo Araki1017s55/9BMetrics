@@ -261,7 +261,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             
             for item in arch  {
                 
-                if let url = item as? NSURL where !self.isDirectory(url){
+                if let url = item as? NSURL where !self.isDirectory(url)  || url.pathExtension == "9bm"{
                     if let ext = url.pathExtension where ext != "gpx"{
                         files.append(url)
                     }
@@ -547,7 +547,13 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         if let file = self.currentFile{
             
             if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
-                dele.datos.loadTextFile(file)
+                
+                if url.pathExtension! == "9bm"{
+                    dele.datos.loadPackage(file)
+                }
+                else{
+                    dele.datos.loadTextFile(file)
+                }
             }
         }
         //self.performSegueWithIdentifier("openFileSegue", sender: self)
@@ -608,30 +614,11 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 
             }
         }
-        
-        
-        
-        else if segue.identifier == "settingsSegue"{
+         else if segue.identifier == "settingsSegue"{
             
             if let settings = segue.destinationViewController as? SettingsViewController{
                 
                 settings.delegate = self
-            }
-        }else if segue.identifier == "testSegue"{
-            
-            if let testC = segue.destinationViewController as? TMKTestController{
-                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
-                    
-                    testC.ninebot = dele.datos
-                    
-                    if let url = self.currentFile{
-                        if let name = url.lastPathComponent{
-                            testC.titulo = name
-                        }
-                        
-                    }
-                    
-                }
             }
         }else if segue.identifier == "testBLESegue"{
             if let testC = segue.destinationViewController as? BLEHistoDashboard{
@@ -643,13 +630,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                         if let name = url.lastPathComponent{
                             testC.titulo = name
                         }
-                        
                     }
-                    
                 }
             }
         }
-        
     }
     
     // MARK: Feedback
@@ -668,10 +652,6 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     
     func clientStopped(){
         
-        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        
-        let aFile = delegate.datos.createTextFile()
-        self.shareData(aFile, src: self.tableView, delete: false)
         
     }
     
@@ -696,21 +676,15 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         if let aFile = file {
             
-            let name = aFile.URLByDeletingPathExtension!.lastPathComponent!
             var activityItems : [NSURL] = []
             
             
-            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate {
-                dele.datos.loadTextFile(aFile)
-                let url = dele.datos.createZipFile(name)
-                
-                if let u = url {
-                    activityItems = [u]
-                } else {
-                    AppDelegate.debugLog("Error creating Zip file")
-                }
+            let url = WheelTrack.createZipFile(aFile)
+            
+            if let u = url {
+                activityItems = [u]
             } else {
-                AppDelegate.debugLog("Error acessing to delegate")
+                AppDelegate.debugLog("Error creating Zip file")
             }
             
             let activityViewController = UIActivityViewController(
