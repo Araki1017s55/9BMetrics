@@ -63,7 +63,7 @@ public class Zip {
         guard let path = zipFilePath.path where destination.path != nil else {
             throw ZipError.FileNotFound
         }
-        if fileManager.fileExistsAtPath(path) == false || zipFilePath.pathExtension != "zip" {
+        if fileManager.fileExistsAtPath(path) == false || (zipFilePath.pathExtension != "zip" && zipFilePath.pathExtension != "9bz") {
             throw ZipError.FileNotFound
         }
         
