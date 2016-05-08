@@ -41,7 +41,7 @@ class BLESimulatedClient: NSObject {
     
     // Ninebot control
     
-    var datos : BLENinebot?
+    var datos : WheelTrack?
     var headersOk = false
     var sendTimer : NSTimer?    // Timer per enviar les dades periodicament
     var timerStep = 0.1        // Get data every step
@@ -85,6 +85,8 @@ class BLESimulatedClient: NSObject {
     var deferringUpdates = false
     var lastLoc : CLLocation?
     
+    var adapter : BLEWheelAdapterProtocol?
+    
     override init() {
         
         self.connection = BLEConnection()
@@ -92,6 +94,7 @@ class BLESimulatedClient: NSObject {
         self.connection.delegate = self
         self.queryQueue = NSOperationQueue()
         self.queryQueue!.maxConcurrentOperationCount = 1
+        self.initNotifications()
         
         locm.delegate = self
         locm.activityType = CLActivityType.Fitness
@@ -137,7 +140,7 @@ class BLESimulatedClient: NSObject {
     
     func initNotifications()
     {
-        //       NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateTitle:"), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLESimulatedClient.updateTitle(_:)), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
     }
     
     // Connect is the start connection
@@ -145,10 +148,10 @@ class BLESimulatedClient: NSObject {
     //  First it recovers if it exists a device and calls
     func connect(){
         
-        
+        self.adapter = nil
+
         if let nb = self.datos{
             nb.clearAll()
-            nb.firstDate = NSDate()
         }
 
         
@@ -191,6 +194,10 @@ class BLESimulatedClient: NSObject {
             
             self.connection.stopConnection()
             
+            if let adp = self.adapter {
+                adp.stopRecording()
+            }
+            
             if let altm = self.altimeter{
                 altm.stopRelativeAltitudeUpdates()
                 self.altimeter = nil
@@ -198,18 +205,33 @@ class BLESimulatedClient: NSObject {
             
             locm.stopUpdatingLocation() // Haurem de modificar posteriorment
             locm.allowsBackgroundLocationUpdates = false
-                
             
             // Now we save the file
             
-            if let nb = self.datos where nb.data[BLENinebot.kCurrent].log.count > 0{
-                nb.createTextFile()
+            if let nb = self.datos where nb.hasData(){
+                
+                let ldateFormatter = NSDateFormatter()
+                let enUSPOSIXLocale = NSLocale(localeIdentifier: "en_US_POSIX")
+                
+                ldateFormatter.locale = enUSPOSIXLocale
+                let name : String
+                
+                ldateFormatter.dateFormat = "yyyyMMdd'_'HHmmss"
+                if let date = nb.firstDate{
+                    name = ldateFormatter.stringFromDate(date)
+                }else{
+                    name = ldateFormatter.stringFromDate(NSDate())
+                }
+
+                
+                nb.createPackage(name)
             }
             
             BLESimulatedClient.sendNotification(BLESimulatedClient.kStoppedRecording, data: [:])
             
         }
-        
+        self.adapter = nil
+      
         self.sendDataToWatch()
     }
     
@@ -222,6 +244,15 @@ class BLESimulatedClient: NSObject {
         NSNotificationCenter.defaultCenter().postNotification(notification)
         
     }
+    
+    func updateTitle(not: NSNotification){
+        
+        if let wheel = datos, adp = adapter {
+            wheel.setName(adp.getName())
+            wheel.setSerialNo(adp.getSN())
+            wheel.setVersion(adp.getVersion())
+        }
+     }
     
     
     func startAltimeter(){
@@ -242,24 +273,10 @@ class BLESimulatedClient: NSObject {
                                                          withHandler: { (alts : CMAltitudeData?, error : NSError?) -> Void in
                                                             
                                                             if let alt = alts, nb = self.datos {
-                                                                nb.addValue(0, value: Int(round(alt.relativeAltitude.doubleValue * 100.0)))
+                                                                nb.addValue(.Altitude, value: alt.relativeAltitude.doubleValue)
                                                             }
                 })
             }
-        }
-    }
-    // MARK: NSOperationSupport
-    
-    func injectRequest(tim : NSTimer){
-        self.sendNewRequest()
-    }
-    
-    func sendNewRequest(){
-        
-        let request = BLERequestOperation(cliente: self)
-        
-        if let q = self.queryQueue{
-            q.addOperation(request)
         }
     }
     
@@ -279,14 +296,14 @@ class BLESimulatedClient: NSObject {
                 dict["recording"] = 0.0
             }
             
-            dict["temps"] = nb.singleRuntime()
-            dict["distancia"]  = nb.singleMileage()
-            dict["speed"]  =  nb.speed()
-            dict["battery"]  =  nb.batteryLevel()
-            dict["remaining"]  =  nb.remainingMileage()
-            dict["temperature"]  =  nb.temperature()
+            dict["temps"] = nb.currentValueForVariable(.Duration)
+            dict["distancia"]  = nb.currentValueForVariable(.Distance)
+            dict["speed"]  = nb.currentValueForVariable(.Speed)! * 3.6
+            dict["battery"]  =  nb.currentValueForVariable(.Battery)
+            //dict["remaining"]  =  nb.remainingMileage()
+            dict["temperature"]  =  nb.currentValueForVariable(.Temperature)
             
-            let v = nb.speed()
+            let v =  nb.currentValueForVariable(.Speed)! * 3.6
             
             if v >= 18.0 && v < 20.0{
                 dict["color"] = 1.0
@@ -467,187 +484,43 @@ class BLESimulatedClient: NSObject {
         
     }
     
-    func sendData(){
-        
-        if let nb = self.datos {
-            
-            if nb.checkHeaders() {  // Get normal data
-                
-                if !self.headersOk {
-                    self.headersOk = true
-                    BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
-                    
-                }
-                
-                for (op, l) in listaOpFast{
-                    let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-                    if let dat = message?.toNSData(){
-                        self.connection.writeValue(dat)
-                    }
-                }
-                
-                let (op, l) = listaOp[contadorOp]
-                contadorOp += 1
-                
-                if contadorOp >= listaOp.count{
-                    contadorOp = 0
-                }
-                
-                let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-                
-                
-                if let dat = message?.toNSData(){
-                    self.connection.writeValue(dat)
-                }
-            }else {    // Get One time data (S/N, etc.)
-                
-                
-                var message = BLENinebotMessage(com: UInt8(16), dat: [UInt8(22)])
-                if let dat = message?.toNSData(){
-                    self.connection.writeValue(dat)
-                }
-                
-                // Get riding Level and max speeds
-                
-                message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat: [UInt8(4)])
-                
-                if let dat = message?.toNSData(){
-                    self.connection.writeValue(dat)
-                }
-                
-                message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat: [UInt8(2)])
-                
-                if let dat = message?.toNSData(){
-                    self.connection.writeValue(dat)
-                }
-                
-            }
-        }
-    }
-    
-    //MARK: Receiving Data
-    
-    func appendToBuffer(data : NSData){
-        
-        let count = data.length
-        var buf = [UInt8](count: count, repeatedValue: 0)
-        data.getBytes(&buf, length:count * sizeof(UInt8))
-        
-        buffer.appendContentsOf(buf)
-    }
-    
-    func procesaBuffer()
-    {
-        // Wait till header
-        
-        repeat {
-            
-            while buffer.count > 0 && buffer[0] != 0x55 {
-                buffer.removeFirst()
-            }
-            
-            // OK, ara hem de veure si el caracter següent es un aa
-            
-            if buffer.count < 2{    // Wait for more data
-                return
-            }
-            
-            if buffer[1] != 0xaa {  // Fals header. continue cleaning
-                buffer.removeFirst()
-                procesaBuffer()
-                return
-            }
-            
-            if buffer.count < 8 {   // Too small. Wait
-                return
-            }
-            
-            // Extract len and check size
-            
-            let l = Int(buffer[2])
-            
-            if l + 4 > 250 {
-                buffer.removeFirst(3)
-                return
-            }
-            
-            if buffer.count < (6 + l){
-                return
-            }
-            
-            // OK ara ja podem extreure el block. Te len + 6 bytes
-            
-            let block = Array(buffer[0..<(l+6)])
-            
-            if let q = self.queryQueue where q.operationCount < 4{
-                self.sendNewRequest()
-            }
-            let msg = BLENinebotMessage(buffer: block)
-            
-            if let m = msg {
-                
-                let d = m.interpret()
-                
-                var updated = false
-                
-                if let nb = self.datos{
-                    
-                    for (k, v) in d {
-                        if k != 0{
-                            let w = nb.data[k].value
-                            if w != v{
-                                updated = true
-                            }
-                            
-                            nb.addValue(k, value: v)
-                        }
-                    }
-                    
-                    if updated{
-                        BLESimulatedClient.sendNotification(BLESimulatedClient.kNinebotDataUpdatedNotification, data: nil)
-                        
-                        //let state = self.getAppState()
-                        
-                    }
-                }
-            }
-            
-            buffer.removeFirst(l+6)
-            
-        } while buffer.count > 6
-    }
-}
 
+    
+}
 //MARK: BLENinebotConnectionDelegate
 
 extension BLESimulatedClient : BLENinebotConnectionDelegate{
     
-    func deviceConnected(peripheral : CBPeripheral ){
+    func deviceConnected(peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol ){
+        
+        if let adp = self.adapter {
+            adp.deviceConnected(self.connection, peripheral: peripheral)
+        
+        } else {
+            
+            self.adapter = adapter
+            if let adp = self.adapter {
+                adp.startRecording()
+                adp.deviceConnected(self.connection, peripheral: peripheral)
+            }
+        }
         
         
         self.startAltimeter()
-        self.contadorOp = 0
-        self.headersOk = false
         self.connected = true
-        
-        
-        self.sendNewRequest()
-        // Start timer for sending info to watch
-        
+         
         if self.sendToWatch {
             self.timer = NSTimer.scheduledTimerWithTimeInterval(watchTimerStep, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
         }
-        
-        // Just to be sure we start another timer to correct cases where we loose all requests
-        // Will inject one request every timerStep
-        
-        self.sendTimer = NSTimer.scheduledTimerWithTimeInterval(timerStep, target: self, selector:#selector(BLESimulatedClient.injectRequest(_:)), userInfo: nil, repeats: true)
-        
-        
     }
     
-    func deviceDisconnectedConnected(peripheral : CBPeripheral ){
+    func deviceDisconnected(peripheral : CBPeripheral ){
+
+        if let adp = self.adapter {
+            adp.deviceDisconnected(self.connection, peripheral: peripheral)
+        }
         self.connected = false
+        
         if let tim = self.sendTimer {
             tim.invalidate()
             self.sendTimer = nil
@@ -664,14 +537,46 @@ extension BLESimulatedClient : BLENinebotConnectionDelegate{
         }
         
         
+
+        
+        
     }
     
     func charUpdated(char : CBCharacteristic, data: NSData){
-        
-        self.appendToBuffer(data)
-        self.procesaBuffer()
+        if let adp = self.adapter {
+            if let newData = adp.charUpdated(self.connection, char: char, data: data), wheel = self.datos{
+                
+                var addPower = false
+                var curDate = NSDate()
+                
+                for (variable, date, value) in newData {
+                    wheel.addValueWithDate(date, variable: variable, value: value)
+                    if variable == .Current {
+                        addPower = true
+                        curDate = date
+                    }
+                }
+                
+                // Now there is the posibility that we must compute new values for Power and Energy
+                
+                if addPower{
+                    let power = wheel.getCurrentValueForVariable(.Current) * wheel.getCurrentValueForVariable(.Voltage)
+                    
+                    // OK now energy = power * dt
+                    
+                    let dt = wheel.getTimeIntervalForVariable(.Energy, toDate : curDate)
+                    let dE = dt * power     // Energy
+                    let E = wheel.getCurrentValueForVariable(.Energy) + dE
+                    
+                    wheel.addValueWithDate(curDate, variable: .Power, value: power)
+                    wheel.addValueWithDate(curDate, variable: .Energy, value: E)
+                    
+                
+                
+                }
+            }
+        }
     }
-    
 }
 
 //MARK: WCSessionDelegate
@@ -754,30 +659,19 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
                     if let llc = self.lastLoc{
                         if llc.distanceFromLocation(loc) >= 2.0{       // one point every 5 meters. Not less
                             
-                            let lat : Int = Int(floor(loc.coordinate.latitude * 100000))
-                            let lon : Int = Int(floor(loc.coordinate.longitude * 100000))
-                            let alt : Int = Int(round(loc.altitude))
-                            let speed : Int = Int(round(loc.speed) * 1000)
+                            nb.addValueWithDate(loc.timestamp, variable: .Latitude, value: loc.coordinate.latitude, forced: true, silent: false)
+                            nb.addValueWithDate(loc.timestamp, variable: .Longitude, value: loc.coordinate.longitude, forced: true, silent: false)
+                            nb.addValueWithDate(loc.timestamp, variable: .AltitudeGPS, value: loc.altitude, forced: true, silent: false)
                             
-                            nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kLatitude, value: lat, forced: true)
-                            nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kLongitude, value: lon, forced: true)
-                            nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kAltitudeGPS, value: alt, forced: true)
-                            nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kSpeedGPS, value: speed, forced: true)
-                           
                             self.lastLoc = loc
                         }
                     }
                     else
                     {
-                        let lat : Int = Int(floor(loc.coordinate.latitude * 100000))
-                        let lon : Int = Int(floor(loc.coordinate.longitude * 100000))
-                        let alt : Int = Int(round(loc.altitude))
-                        let speed : Int = Int(round(loc.speed) * 1000)
                         
-                        nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kLatitude, value: lat, forced: true)
-                        nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kLongitude, value: lon, forced: true)
-                        nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kAltitudeGPS, value: alt, forced: true)
-                        nb.addValueWithDate(loc.timestamp, variable: BLENinebot.kSpeedGPS, value: speed, forced: true)
+                        nb.addValueWithDate(loc.timestamp, variable: .Latitude, value: loc.coordinate.latitude, forced: true, silent: false)
+                        nb.addValueWithDate(loc.timestamp, variable: .Longitude, value: loc.coordinate.longitude, forced: true, silent: false)
+                        nb.addValueWithDate(loc.timestamp, variable: .AltitudeGPS, value: loc.altitude, forced: true, silent: false)
                        self.lastLoc = loc
                     }
                 }
@@ -810,9 +704,6 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
     
     func locationManager(manager: CLLocationManager, monitoringDidFailForRegion region: CLRegion?, withError error: NSError) {
     }
-    
-    
-    
     
 }
 
