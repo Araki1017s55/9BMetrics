@@ -34,6 +34,8 @@ class BLERunningDashboard: UIViewController {
     
     var searching = false
     
+    var headersReceived = false
+    
     enum connectionState {
         case stopped
         case connecting
@@ -83,7 +85,8 @@ class BLERunningDashboard: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kConnectionReadyNotification, object: nil)
         
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: kWheelVariableChangedNotification, object: nil)
+       
         
 
     }
@@ -117,28 +120,40 @@ class BLERunningDashboard: UIViewController {
         self.fStartStopButton.setImage(img, forState: UIControlState.Normal)
         self.state = connectionState.stopped
         self.navigationController!.popViewControllerAnimated(true)
+        self.headersReceived = false
     }
 
     
     func dataUpdated(not : NSNotification){
+        
+        if !(UIApplication.sharedApplication().applicationState == UIApplicationState.Active) {
+            return
+        }
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
             if let cli = self.client{
                 if let nb = cli.datos{
                     
+                    if let name = nb.getName() where !name.isEmpty && !self.headersReceived{
+                        self.headersReceived = true
+                        self.fSeriaNumber.text = nb.getName()
+                    }
+                    
                     //cell.detailTextLabel!.text = 
-                    self.fVoltage.text = String(format:"%0.2fV", nb.voltage())
+                    self.fVoltage.text = String(format:"%0.2fV", nb.getCurrentValueForVariable(.Voltage))
                     
-                    self.fCurrent.text = String(format:"%0.2fA", nb.current())
-                    self.fPower.text = String(format:"%0.0fW", nb.power())
-                    self.fDistance.text = String(format:"%6.2fkm", nb.singleMileage())
-                    let (h, m, s) = nb.singleRuntimeHMS()
+                    self.fCurrent.text = String(format:"%0.2fA", nb.getCurrentValueForVariable(.Current))
+                    self.fPower.text = String(format:"%0.0fW", nb.getCurrentValueForVariable(.Power))
+                    self.fDistance.text = String(format:"%6.2fkm", nb.getCurrentValueForVariable(.Distance) / 1000.0) // In Km
+                    let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.Duration))
                     self.fTime.text = String(format:"%02d:%02d:%02d", h, m, s)
-                    self.fBattery.text = String(format:"%4.0f%%", nb.batteryLevel())
-                    self.fTemperature.text = String(format:"%0.1fºC", nb.temperature())
+                    self.fBattery.text = String(format:"%4.0f%%", nb.getCurrentValueForVariable(.Battery))
+                    self.fTemperature.text = String(format:"%0.1fºC", nb.getCurrentValueForVariable(.Temperature))
                     
-                    let v = nb.speed()
+                    
+                    
+                    let v = nb.currentValueForVariable(.Speed)! * 3.6 // In Km/h
                     
                     self.fSpeed.text = String(format:"%0.2f", v)
                     
@@ -202,7 +217,7 @@ class BLERunningDashboard: UIViewController {
             self.fStartStopButton.setImage(img, forState: UIControlState.Normal)
             if let cli = self.client{
                 if let nb = cli.datos{
-                    self.fSeriaNumber.text = nb.serialNo()
+                    self.fSeriaNumber.text = nb.getSerialNo()
                 }
             }
         })
@@ -331,7 +346,7 @@ class BLERunningDashboard: UIViewController {
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
-            self.performSegueWithIdentifier("graphSegueIdentifier", sender: self)
+           // self.performSegueWithIdentifier("graphSegueIdentifier", sender: self)
         }
     }
 
