@@ -10,7 +10,7 @@ import UIKit
 
 class BLEHistoDashboard: UIViewController {
 
-    weak var ninebot : BLENinebot?
+    weak var ninebot : WheelTrack?
     
     var titulo = ""
     var dist = 0.0
@@ -47,6 +47,7 @@ class BLEHistoDashboard: UIViewController {
     
     @IBOutlet  weak var collectionView : UICollectionView!
     @IBOutlet weak var fTitle : UILabel!
+    @IBOutlet weak var fVersion : UILabel!
     
     private let sectionInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
 
@@ -68,14 +69,39 @@ class BLEHistoDashboard: UIViewController {
         fTitle.text = titulo
         
         if let nb = self.ninebot {
-             (dist, ascent, descent, time, avgSpeed, maxSpeed) = nb.analCinematics()
-             (bat0, bat1, batMin, batMax, energy, batEnergy, currMax, currAvg, pwMax, pwAvg) = nb.analEnergy()
-             (tmin, tmax, tavg, _) = nb.temperature(from: 0.0, to: 86400.0)
-             (pmin, pmax, pavg, _) = nb.pitch(from: 0.0, to: 86400.0)
-             (rmin, rmax, ravg, _) = nb.roll(from: 0.0, to: 86400.0)
             
-             (eplus, erec) = nb.energyDetails(from: 0.0, to: 86400.0)
-            trackImg = nb.imageWithWidth(350.0,  height:350.0, color:UIColor.yellowColor(), backColor:UIColor.clearColor(), lineWidth: 2.0)
+            if let myUrl = nb.url{
+                if let str = myUrl.URLByDeletingPathExtension?.lastPathComponent{
+                    fTitle.text = str
+                }
+            }else{
+                fTitle.text = "Unknown"
+            }
+            
+            fVersion.text = nb.getSerialNo() + "(" + nb.getVersion() + ")"
+            ascent = nb.getAscent()
+            descent = nb.getDescent()
+            dist = nb.getCurrentValueForVariable(.Distance) / 1000.0    // Convert to KM
+            time = nb.getCurrentValueForVariable(.Duration)
+            (_, maxSpeed, avgSpeed, _) = nb.getCurrentStats(.Speed)
+            
+            maxSpeed = maxSpeed * 3.6 // Convert to km/h
+            avgSpeed = avgSpeed * 3.6 // Convert to km/h
+            
+            (bat0, bat1) = nb.getFirstLast(.Battery)
+            (batMin, batMax, _, _) = nb.getCurrentStats(.Battery)
+            (_, currMax, currAvg, _) = nb.getCurrentStats(.Current)
+            (_, pwMax, pwAvg, _) = nb.getCurrentStats(.Power)
+            batEnergy = nb.getBatteryEnergy()
+            
+            (tmin, tmax, tavg, _) = nb.getCurrentStats(.Temperature)
+            (pmin, pmax, pavg, _) = nb.getCurrentStats(.Pitch)
+            (rmin, rmax, ravg, _) = nb.getCurrentStats(.Roll)
+                        
+            eplus = nb.getEnergyUsed() / 3600.0
+            erec = nb.getEnergyRecovered() / 3600.0
+            
+            trackImg = nb.getImage()
             
         }
     }
