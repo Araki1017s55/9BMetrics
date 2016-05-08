@@ -200,7 +200,7 @@ class BLESimulatedNinebot: UIViewController {
     
     
     func getVariable(variable : Int) -> Int{
-        return self.ninebot.data[variable].value
+        return self.ninebot.currentValueForVariable(variable)
     }
     
     
@@ -279,8 +279,8 @@ extension BLESimulatedNinebot : BLENinebotServerDelegate{
                     j = i+v
                 }
                 
-                var value = self.ninebot.data[Int(j)].value
-//                let vx = value
+                var value = self.ninebot.currentValueForVariable(Int(j))
+                //                let vx = value
                 
             
 
