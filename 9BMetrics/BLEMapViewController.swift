@@ -12,7 +12,7 @@ import MapKit
 class BLEMapViewController: UIViewController, MKMapViewDelegate{
     
     @IBOutlet weak var mapView: MKMapView!
-    weak var dades : BLENinebot?
+    weak var dades : WheelTrack?
     var fullRect = MKMapRect(origin: MKMapPoint(x:0.0, y:0.0), size: MKMapSize(width: 100.0, height: 100.0))
     
 
@@ -36,6 +36,7 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
         if let nb = self.dades {
             var locs = nb.locationArray()
             
+             
             let pt0 = MKMapPointForCoordinate(locs[0])
             
             var xmin = pt0.x
@@ -61,7 +62,7 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
             ymax = ymax + deltay * 0.10
             
             let orig = MKMapPoint(x: xmin, y: ymin)
-            let size = MKMapSize(width: xmax-xmin, height: ymax-ymin)
+            let size = MKMapSize(width: (xmax-xmin), height: (ymax-ymin))
             
             fullRect = MKMapRect(origin: orig, size: size)
             
@@ -69,7 +70,7 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
             let polyline = MKPolyline(coordinates: &locs, count: locs.count)
             mapView.addOverlay(polyline)
             
-            mapView.setVisibleMapRect(fullRect, animated: false)
+            mapView.setVisibleMapRect(fullRect, animated: false )
         }
     }
     
