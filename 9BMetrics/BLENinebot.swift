@@ -38,6 +38,8 @@ import MapKit
 
 class  BLENinebot : NSObject{
     
+    
+    
     struct LogEntry {
         var time : NSDate
         var variable : Int
@@ -48,6 +50,7 @@ class  BLENinebot : NSObject{
         var time : NSDate
         var variable : Int
         var value : Double
+
     }
     
     struct NinebotVariable {
@@ -112,6 +115,18 @@ class  BLENinebot : NSObject{
     static let kvRideMode = 210
     
     static var  labels = Array<String>(count:256, repeatedValue:"?")
+    static var conversion = Array<WheelTrack.WheelValue?>(count : 256, repeatedValue: nil)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     static var displayableVariables : [Int] = [BLENinebot.kCurrentSpeed, BLENinebot.kTemperature,
                                                BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
@@ -153,6 +168,35 @@ class  BLENinebot : NSObject{
         
         
         
+    }
+    
+    static func initConversion(){
+        conversion[BLENinebot.kAltitude] = WheelTrack.WheelValue.Altitude
+        conversion[BLENinebot.kPower] = WheelTrack.WheelValue.Power
+        conversion[BLENinebot.kEnergy] = WheelTrack.WheelValue.Energy
+        conversion[BLENinebot.kLatitude] = WheelTrack.WheelValue.Latitude
+        conversion[BLENinebot.kLongitude] = WheelTrack.WheelValue.Longitude
+        conversion[BLENinebot.kAltitudeGPS] = WheelTrack.WheelValue.AltitudeGPS
+        conversion[BLENinebot.kvPowerRemaining] = WheelTrack.WheelValue.Battery
+        conversion[BLENinebot.kvSpeed] = WheelTrack.WheelValue.Speed
+        conversion[BLENinebot.kSingleRuntime] = WheelTrack.WheelValue.Duration
+        conversion[BLENinebot.kTemperature] = WheelTrack.WheelValue.Temperature
+        conversion[BLENinebot.kvDriveVoltage] = WheelTrack.WheelValue.Voltage
+        conversion[BLENinebot.kvCurrent] = WheelTrack.WheelValue.Current
+        conversion[BLENinebot.kPitchAngle] = WheelTrack.WheelValue.Pitch
+        conversion[BLENinebot.kRollAngle] = WheelTrack.WheelValue.Roll
+        conversion[BLENinebot.kAbsoluteSpeedLimit] = WheelTrack.WheelValue.MaxSpeed
+        conversion[BLENinebot.kSpeedLimit] = WheelTrack.WheelValue.LimitSpeed
+        conversion[BLENinebot.kBattery] = WheelTrack.WheelValue.Battery
+        conversion[BLENinebot.kCurrentSpeed] = WheelTrack.WheelValue.Speed
+        conversion[BLENinebot.kvSingleMileage] = WheelTrack.WheelValue.Distance
+        conversion[BLENinebot.kvTemperature] = WheelTrack.WheelValue.Temperature
+        conversion[BLENinebot.kVoltage] = WheelTrack.WheelValue.Voltage
+        conversion[BLENinebot.kCurrent] = WheelTrack.WheelValue.Current
+        conversion[BLENinebot.kvPitchAngle] = WheelTrack.WheelValue.Pitch
+        conversion[BLENinebot.kvMaxSpeed] = WheelTrack.WheelValue.MaxSpeed
+        conversion[BLENinebot.kvRideMode] = WheelTrack.WheelValue.RidingLevel
+
     }
     
     static func initNames(){
@@ -1147,20 +1191,6 @@ class  BLENinebot : NSObject{
     
     func checkImage(url : NSURL){
         
-        var obj : AnyObject?
-        var icon : UIImage?
-        
-        do{
-            try url.getPromisedItemResourceValue(&obj, forKey: NSURLThumbnailDictionaryKey)
-            
-            if let dict = obj as? [NSString : UIImage] {
-                icon = dict[NSThumbnail1024x1024SizeKey]
-            }
-        }
-        catch {
-            
-        }
-        
         
         var thumb : UIImage?
         
@@ -1367,6 +1397,54 @@ class  BLENinebot : NSObject{
     
     
     // MARK: Query Functions
+    
+    func countLogForVariable(v : Int) -> Int{
+        
+        if v < 0 || v >= 256{
+            return -1
+        }
+        
+        return data[v].log.count
+
+    }
+    
+    func currentValueForVariable(v : Int) -> Int{
+        
+        if v < 0 || v >= 256{
+            return -1
+        }
+        
+        return data[v].value
+    }
+    
+    func valueForVariable(v : Int, atPoint point : Int) -> Int{
+        
+        if v < 0 || v >= 256{
+            return -1
+        }
+        
+        if point >= data[v].log.count{
+            return -1
+        }
+       
+        return data[v].log[point].value
+    }
+
+    func timeForVariable(v : Int, atPoint point : Int) -> NSDate?{
+        
+        if v < 0 || v >= 256{
+            return nil
+        }
+        
+        if point >= data[v].log.count{
+            return nil
+        }
+        
+        let t = data[v].log[point].time
+       
+        return t
+    }
+
     
     func hasGPSData() -> Bool{
         return data[BLENinebot.kLatitude].log.count > 0
@@ -1707,7 +1785,6 @@ class  BLENinebot : NSObject{
     }
     
     func energy() -> Double {
-        let v = data[BLENinebot.kEnergy].value
         
         let e = data[BLENinebot.kEnergy]
         if e.log.count > 0{
