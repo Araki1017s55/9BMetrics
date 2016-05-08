@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var ubiquityUrl : NSURL?
 
-    var datos : BLENinebot = BLENinebot()
+    var datos : WheelTrack = WheelTrack()
     var client : BLESimulatedClient?
 
     weak var mainController : ViewController?
@@ -95,9 +95,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if url.fileURL{
             
             
-            guard let name = url.lastPathComponent else {return false}
+            guard let name = url.URLByDeletingPathExtension?.lastPathComponent else {return false}
+            guard let ext = url.pathExtension else {return false}
             
-            guard var newUrl =  self.applicationDocumentsDirectory()?.URLByAppendingPathComponent(name) else {return false}
+            var newExt = ext
+            if ext == "9bz" {   // Will unpack
+                newExt = "9bm"
+            }
+            
+            
+            guard var newUrl =  self.applicationDocumentsDirectory()?.URLByAppendingPathComponent(name).URLByAppendingPathExtension(newExt) else {return false}
             
             let mgr = NSFileManager.defaultManager()
             
@@ -109,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             while mgr.fileExistsAtPath(path){
                 
                 let newName = String(format: "%@(%d)", name, ct)
-                let aUrl = self.applicationDocumentsDirectory()?.URLByAppendingPathComponent(newName)
+                let aUrl = self.applicationDocumentsDirectory()?.URLByAppendingPathComponent(newName).URLByAppendingPathExtension(newExt)
                 if let url = aUrl{
                     path = url.path!
                     newUrl = url
@@ -122,7 +129,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             do {
-                try mgr.moveItemAtURL(url, toURL: newUrl)
+                if ext == "9bz" {
+                    
+                    try Zip.unzipFile(url, destination: newUrl, overwrite: false, password: nil, progress: { (progress) in
+                        NSLog("Unzipping %f", progress)
+                    })
+                }else {
+                    
+                    try mgr.moveItemAtURL(url, toURL: newUrl)
+                }
                 
                 if let wc = self.mainController{
                     wc.reloadFiles()
@@ -170,6 +185,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        if let cli = self.client {
+            cli.stop()
+        }
+        
+        if self.datos.hasData() && self.datos.url == nil {
+            let ldateFormatter = NSDateFormatter()
+            let enUSPOSIXLocale = NSLocale(localeIdentifier: "en_US_POSIX")
+            
+            ldateFormatter.locale = enUSPOSIXLocale
+            let name : String
+            
+            ldateFormatter.dateFormat = "yyyyMMdd'_'HHmmss"
+            if let date = self.datos.firstDate{
+                name = ldateFormatter.stringFromDate(date)
+            }else{
+                name = ldateFormatter.stringFromDate(NSDate())
+            }
+            
+            
+            self.datos.createPackage(name)
+        }
+
+        
     }
     
     //MARK : Shortcuts
@@ -203,9 +242,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.setShortcutItems(false)
 
             //guard let ds = wc.dashboard else {return false}
-            
-        
-            
         }
         
         
