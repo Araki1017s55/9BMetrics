@@ -22,10 +22,12 @@ import UIKit
 
 class BLERequestOperation: NSOperation {
     
-    let client : BLESimulatedClient
+    let adapter : BLENinebotOneAdapter
+    let connection : BLEConnection
     
-    init(cliente : BLESimulatedClient) {
-        self.client = cliente
+    init(adapter : BLENinebotOneAdapter, connection : BLEConnection) {
+        self.adapter = adapter
+        self.connection = connection
     }
     
     override func main() {
@@ -33,9 +35,7 @@ class BLERequestOperation: NSOperation {
         if self.cancelled {
             return
         }
-      
-        if client.connected  {
-            client.sendData()
-        }
+        adapter.sendData(connection)
+
      }
 }
