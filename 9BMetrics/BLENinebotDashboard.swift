@@ -26,7 +26,7 @@ import CoreBluetooth
 class BLENinebotDashboard: UITableViewController {
     
     @IBOutlet weak var titleField   : UINavigationItem!
-    weak var ninebot : BLENinebot?
+    weak var ninebot : WheelTrack?
     weak var delegate : ViewController?
     //weak var client : BLESimulatedClient?
     
@@ -108,12 +108,10 @@ class BLENinebotDashboard: UITableViewController {
             
             if let nb = self.ninebot {
                 
-                if nb.data[16].value != -1 {
+                    let sn = nb.getSerialNo()
+                    let v1 = nb.getVersion()
                     
-                    let sn = nb.serialNo()
-                    let v1 = nb.version()
-                    
-                    let title = String(format:"%@ (%d.%d.%d)", sn, v1.0, v1.1, v1.2)
+                    let title = String(format:"%@ (%@)", sn, v1)
                     
                     self.titleField.title = title
                     
@@ -127,9 +125,6 @@ class BLENinebotDashboard: UITableViewController {
                     
                     //TODO: Build stop button
                     
-                } else {
-                    self.titleField.title = "Connecting"
-                }
             }
         })
     }
@@ -270,7 +265,7 @@ class BLENinebotDashboard: UITableViewController {
                     
                 case 0:
                     
-                    let v = nb.speed()
+                    let v = nb.getCurrentValueForVariable(.Speed) /  3.6 // Convert m/s to km/h
                     cell.textLabel!.text = "Speed"
                     cell.detailTextLabel!.text = String(format:"%5.2f Km/h", v)
                     
@@ -283,20 +278,20 @@ class BLENinebotDashboard: UITableViewController {
                     
                 case 1:
                     cell.textLabel!.text = "Voltage"
-                    cell.detailTextLabel!.text = String(format:"%5.2f V", nb.voltage())
+                    cell.detailTextLabel!.text = String(format:"%5.2f V", nb.getCurrentValueForVariable(.Voltage))
                     
                     
                 case 2:
                     cell.textLabel!.text = "Current"
-                    cell.detailTextLabel!.text = String(format:"%5.2f A", nb.current())
+                    cell.detailTextLabel!.text = String(format:"%5.2f A", nb.getCurrentValueForVariable(.Current))
                     
                 case 3:
                     cell.textLabel!.text = "Pitch"
-                    cell.detailTextLabel!.text = String(format:"%5.2f º", nb.pitch())
+                    cell.detailTextLabel!.text = String(format:"%5.2f º", nb.getCurrentValueForVariable(.Pitch))
                     
                 case 4:
                     cell.textLabel!.text = "Roll"
-                    cell.detailTextLabel!.text = String(format:"%5.2f º", nb.roll())
+                    cell.detailTextLabel!.text = String(format:"%5.2f º", nb.getCurrentValueForVariable(.Roll))
                     
                 default:
                     
@@ -311,39 +306,39 @@ class BLENinebotDashboard: UITableViewController {
                     
                 case 0:
                     cell.textLabel!.text = "Distance"
-                    cell.detailTextLabel!.text = String(format:"%6.2f Km", nb.singleMileage())
+                    cell.detailTextLabel!.text = String(format:"%6.2f Km", nb.getCurrentValueForVariable(.Distance) / 1000.0) // Comvert m to km
                     
                     
                 case 1:
                     
-                    let (h, m, s) = nb.singleRuntimeHMS()
+                    let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.Duration))
                     cell.textLabel!.text = "Time"
                     cell.detailTextLabel!.text = String(format:"%02d:%02d:%02d", h, m, s)
                     
                     
                 case 2:
                     cell.textLabel!.text = "Total Distance"
-                    cell.detailTextLabel!.text = String(format:"%6.2f Km", nb.totalMileage())
+                    cell.detailTextLabel!.text = String(format:"%6.2f Km", nb.getCurrentValueForVariable(.AcumDistance))
                     
                 case 3:
                     
-                    let (h, m, s) = nb.totalRuntimeHMS()
+                    let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.AcumRuntime))
                     cell.textLabel!.text = "Total Time Running"
                     cell.detailTextLabel!.text = String(format:"%02d:%02d:%02d", h, m, s)
                     
                     
                 case 4:
                     cell.textLabel!.text = "Remaining Distance"
-                    cell.detailTextLabel!.text = String(format:"%6.2f Km", nb.remainingMileage())
+                    cell.detailTextLabel!.text = String(format:"%6.2f Km", 0.0)
                     
                 case 5:
                     cell.textLabel!.text = "Battery level"
-                    cell.detailTextLabel!.text = String(format:"%4.0f %%", nb.batteryLevel())
+                    cell.detailTextLabel!.text = String(format:"%4.0f %%", nb.getCurrentValueForVariable(.Battery))
                     
                     
                 case 6:
                     cell.textLabel!.text = "Temperature"
-                    cell.detailTextLabel!.text = String(format:"%4.1f ºC", nb.temperature())
+                    cell.detailTextLabel!.text = String(format:"%4.1f ºC", nb.getCurrentValueForVariable(.Temperature))
                     
                 default:
                     
@@ -358,15 +353,15 @@ class BLENinebotDashboard: UITableViewController {
                     
                 case 0:
                     cell.textLabel!.text = "Riding Level"
-                    cell.detailTextLabel!.text = String(format:"%d", nb.ridingLevel())
+                    cell.detailTextLabel!.text = String(format:"%d", Int(nb.getCurrentValueForVariable(.RidingLevel)))
                     
                 case 1:
                     cell.textLabel!.text = "Limit Speed"
-                    cell.detailTextLabel!.text = String(format:"%4.0f km/h", nb.limitSpeed())
+                    cell.detailTextLabel!.text = String(format:"%4.0f km/h", nb.getCurrentValueForVariable(.LimitSpeed))
                     
                 case 2:
                     cell.textLabel!.text = "Max Speed"
-                    cell.detailTextLabel!.text = String(format:"%4.0f km/h", nb.maxSpeed())
+                    cell.detailTextLabel!.text = String(format:"%4.0f km/h", nb.getCurrentValueForVariable(.MaxSpeed))
                     
                 default:
                     
