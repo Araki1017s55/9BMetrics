@@ -56,6 +56,8 @@
 		007A57871C85CF80003A2030 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A57861C85CF80003A2030 /* Interface.storyboard */; };
 		007A57891C85CF8D003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A57881C85CF8D003A2030 /* Assets.xcassets */; };
 		007CE2F81CCBD5260005828F /* KTCenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */; };
+		008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */; };
+		008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */; };
 		00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
 		00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
 		00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
@@ -73,8 +75,9 @@
 		00AB595C1CAEE64000277859 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59521CAEE64000277859 /* sha1.c */; };
 		00AB595E1CAEE65E00277859 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB595D1CAEE65E00277859 /* libz.tbd */; };
 		00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */; };
+		00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */; };
+		00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB821CD1E5F200EB66FB /* Notifications.swift */; };
 		00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */; };
-		00F1A9601CC9164F00D8EB27 /* TMKTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95F1CC9164F00D8EB27 /* TMKTestController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -174,6 +177,8 @@
 		007A57861C85CF80003A2030 /* Interface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Interface.storyboard; sourceTree = "<group>"; };
 		007A57881C85CF8D003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KTCenterFlowLayout.swift; sourceTree = "<group>"; };
+		008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEWheelAdapterProtocol.swift; sourceTree = "<group>"; };
+		008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLENinebotOneAdapter.swift; sourceTree = "<group>"; };
 		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zip.h; sourceTree = "<group>"; };
 		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
 		00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipUtilities.swift; sourceTree = "<group>"; };
@@ -209,8 +214,9 @@
 		00AB59531CAEE64000277859 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
 		00AB595D1CAEE65E00277859 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKImage.swift; sourceTree = "<group>"; };
+		00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelTrack.swift; sourceTree = "<group>"; };
+		00DCEB821CD1E5F200EB66FB /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKClockView.swift; sourceTree = "<group>"; };
-		00F1A95F1CC9164F00D8EB27 /* TMKTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMKTestController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,19 +273,22 @@
 				007A57651C85CF39003A2030 /* GraphViewController.swift */,
 				00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */,
 				00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */,
-				004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */,
 				004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */,
-				00F1A95F1CC9164F00D8EB27 /* TMKTestController.swift */,
+				004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */,
 				007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */,
 				003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */,
 				007A57661C85CF39003A2030 /* PickerActivity.swift */,
 				007A57671C85CF39003A2030 /* BLENinebot.swift */,
+				00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */,
+				00DCEB821CD1E5F200EB66FB /* Notifications.swift */,
 				007A57681C85CF39003A2030 /* BLENinebotMessage.swift */,
 				007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */,
 				007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */,
 				007A576B1C85CF39003A2030 /* BLEConnection.swift */,
 				0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */,
+				008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */,
 				007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */,
+				008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */,
 				007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */,
 				0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */,
 				007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */,
@@ -550,6 +559,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */,
 				00AB59581CAEE64000277859 /* fileenc.c in Sources */,
 				007A577A1C85CF39003A2030 /* BLENinebotMessage.swift in Sources */,
 				007A57751C85CF39003A2030 /* TMKGraphContentView.swift in Sources */,
@@ -559,7 +569,6 @@
 				007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */,
 				007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */,
 				00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */,
-				00F1A9601CC9164F00D8EB27 /* TMKTestController.swift in Sources */,
 				007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */,
 				00AB59551CAEE64000277859 /* aeskey.c in Sources */,
 				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,
@@ -569,10 +578,12 @@
 				007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */,
 				007A57851C85CF39003A2030 /* DocController.swift in Sources */,
 				00AB593C1CAEE61700277859 /* minizip.c in Sources */,
+				008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */,
 				00AB593D1CAEE61700277859 /* ioapi.c in Sources */,
 				00AB59591CAEE64000277859 /* hmac.c in Sources */,
 				0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */,
 				007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */,
+				00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */,
 				00AB595A1CAEE64000277859 /* prng.c in Sources */,
 				007A57821C85CF39003A2030 /* BLEMim.swift in Sources */,
 				007A571A1C85CE49003A2030 /* ViewController.swift in Sources */,
@@ -589,6 +600,7 @@
 				004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */,
 				007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */,
 				00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */,
+				008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */,
 				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
