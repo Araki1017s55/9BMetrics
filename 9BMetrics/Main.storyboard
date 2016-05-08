@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="p3k-PT-xWD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="p3k-PT-xWD">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -768,23 +768,34 @@
                                     <action selector="goBack:" destination="YP3-cK-QJF" eventType="primaryActionTriggered" id="CRU-88-LZR"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Titulo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DTn-nW-YMG">
-                                <rect key="frame" x="168" y="23.5" width="38" height="18"/>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="scA-Zj-1PR">
+                                <rect key="frame" x="168" y="16" width="38" height="34"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Titulo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DTn-nW-YMG">
+                                        <rect key="frame" x="0.0" y="0.0" width="38" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WuF-NE-I5Q">
+                                        <rect key="frame" x="0.0" y="18" width="38" height="16"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="JLK-uL-OQO" firstAttribute="top" secondItem="r2B-l9-UD5" secondAttribute="bottom" constant="20" id="1my-8q-df9"/>
                             <constraint firstAttribute="trailingMargin" secondItem="r2B-l9-UD5" secondAttribute="trailing" id="B8D-Tu-WVg"/>
+                            <constraint firstItem="scA-Zj-1PR" firstAttribute="centerX" secondItem="xgM-bY-HEe" secondAttribute="centerX" id="FPb-nx-QW9"/>
                             <constraint firstItem="aNm-jx-2aw" firstAttribute="leading" secondItem="xgM-bY-HEe" secondAttribute="leadingMargin" id="GXb-R2-WbL"/>
-                            <constraint firstItem="DTn-nW-YMG" firstAttribute="centerX" secondItem="xgM-bY-HEe" secondAttribute="centerX" id="Mb5-bQ-YoV"/>
                             <constraint firstItem="r2B-l9-UD5" firstAttribute="top" secondItem="757-2H-Lmp" secondAttribute="bottom" constant="47" id="Z32-2h-K5x"/>
                             <constraint firstItem="aNm-jx-2aw" firstAttribute="top" secondItem="757-2H-Lmp" secondAttribute="bottom" id="h7o-kI-giO"/>
-                            <constraint firstItem="DTn-nW-YMG" firstAttribute="centerY" secondItem="aNm-jx-2aw" secondAttribute="centerY" id="jC0-lm-S0O"/>
                             <constraint firstItem="r2B-l9-UD5" firstAttribute="leading" secondItem="xgM-bY-HEe" secondAttribute="leadingMargin" id="wlU-wz-z90"/>
+                            <constraint firstItem="scA-Zj-1PR" firstAttribute="centerY" secondItem="aNm-jx-2aw" secondAttribute="centerY" id="yo7-of-jZV"/>
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
@@ -792,6 +803,7 @@
                     <connections>
                         <outlet property="collectionView" destination="r2B-l9-UD5" id="KUE-F0-fMs"/>
                         <outlet property="fTitle" destination="DTn-nW-YMG" id="CV3-xB-3Ux"/>
+                        <outlet property="fVersion" destination="WuF-NE-I5Q" id="7Sm-hy-syP"/>
                         <segue destination="qqE-ny-9Bb" kind="presentation" identifier="otherMapSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="SRt-gK-Tyg"/>
                         <segue destination="DuF-6H-UYu" kind="show" identifier="graphicSegue" id="n4b-GW-Qsa"/>
                     </connections>
