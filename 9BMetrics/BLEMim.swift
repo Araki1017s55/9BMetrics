@@ -237,14 +237,14 @@ class BLEMim: UIViewController {
 
 extension BLEMim : BLENinebotConnectionDelegate{
 
-    func deviceConnected(peripheral : CBPeripheral ){
+    func deviceConnected(peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol ){
         if let s = peripheral.name{
             AppDelegate.debugLog("Device %@ connected", s)
             self.ninebotButton.enabled = true
             self.startDate = NSDate()
         }
     }
-    func deviceDisconnectedConnected(peripheral : CBPeripheral ){
+    func deviceDisconnected(peripheral : CBPeripheral ){
         if let s = peripheral.name{
             AppDelegate.debugLog("Device %@ disconnected", s)
             self.ninebotButton.enabled = false
