@@ -24,15 +24,15 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     @IBOutlet weak var graphView : TMKGraphView!
    // weak var delegate : BLENinebotDashboard?
-    weak var ninebot : BLENinebot?
+    weak var ninebot : WheelTrack?
     var shownVariable = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.hidden = true
+        self.graphView.yValue = shownVariable
         self.graphView.setup()
-        self.graphView.setanYValue(shownVariable)
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.graphView.setNeedsDisplay()
         })
@@ -85,15 +85,11 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     func numberOfPointsForSerie(serie : Int, value: Int) -> Int{
         
         let val = valueForSerie(serie, value: value)
-        let v = BLENinebot.displayableVariables[val]
+        let v = WheelTrack.displayableVariables[val]
         
         
         if let nb = self.ninebot{
-            if v == BLENinebot.kPower {
-                return nb.data[BLENinebot.kCurrent].log.count
-            }else {
-                return nb.data[v].log.count
-            }
+            return nb.countLogForVariable(v)
         }
         else{
             return 0
@@ -121,20 +117,12 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     func value(value : Int, axis: Int,  forPoint point: Int,  forSerie serie:Int) -> CGPoint{
         
         let val = valueForSerie(serie, value: value)
-        
-        var xv = val
-        
-        if xv == 9 {
-            xv = 3
-        }
-        
         if let nb = self.ninebot{
-            
-            
+
             let v = nb.getLogValue(val, index: point)
             
-            let t = nb.data[BLENinebot.displayableVariables[xv]].log[point].time
-            return CGPoint(x: CGFloat(t.timeIntervalSinceDate(nb.firstDate!)), y:CGFloat(v) )
+            guard let t = nb.timeAtPointForVariable(WheelTrack.displayableVariables[val], atPoint: point) else  { return CGPoint(x:0.0, y:0.0)}
+            return CGPoint(x: CGFloat(t), y:CGFloat(v) )
         }
         else{
             return CGPoint(x: 0, y: 0)
@@ -178,7 +166,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         return BLENinebot.displayableVariables.count
     }
     func nameOfValue(value: Int) -> String{
-        return BLENinebot.labels[BLENinebot.displayableVariables[value]]
+        return WheelTrack.displayableVariables[value].rawValue
     }
     func numberOfPins() -> Int{
         return 0
