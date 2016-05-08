@@ -24,7 +24,6 @@ import CoreBluetooth
 
 class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
-    
     internal let kUUIDDeviceInfoService = "180A"
     internal let kUUIDManufacturerNameVariable = "2A29"
     internal let kUUIDModelNameVariable = "2A24"
@@ -67,7 +66,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     var softwareVer : String?
     
     
-    weak var delegate : BLENinebotConnectionDelegate?
+    var delegate : BLENinebotConnectionDelegate?
     
     override init()
     {
@@ -332,7 +331,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         BLESimulatedClient.sendNotification(BLESimulatedClient.kConnectionLostNotification, data: ["peripheral" : peripheral])
         
         if let dele = self.delegate{
-            dele.deviceDisconnectedConnected(peripheral)
+            dele.deviceDisconnected(peripheral)
         }
         self.discoveredPeripheral = nil;
     }
@@ -394,7 +393,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
                     self.connecting = false
                     
                     if let dele = self.delegate{
-                        dele.deviceConnected(peripheral)
+                        dele.deviceConnected(peripheral, adapter: BLENinebotOneAdapter())
                     }
                     BLESimulatedClient.sendNotification(BLESimulatedClient.kConnectionReadyNotification, data: ["peripheral" : peripheral])
                 }
