@@ -34,7 +34,7 @@ class BLENinebotSettingsViewController: UIViewController {
     @IBOutlet weak var vMaxSpeedSettings: UILabel!
     @IBOutlet weak var vRidingSettings: UILabel!
     
-    var oldRidingLevel = 0
+    var oldRidingLevel = 0.0
     var oldSpeedLimit = 0.0
     var oldMaxSpeed = 0.0
    
@@ -46,17 +46,17 @@ class BLENinebotSettingsViewController: UIViewController {
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
                 
-                speedLimitSlider.value = Float(dat.limitSpeed())
-                speedLimitSlider.maximumValue = Float(dat.maxSpeed())
-                vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.limitSpeed())
-                maxSpeedSlider.value = Float(dat.maxSpeed())
-                vMaxSpeedSettings.text = String(format: "%1.0f km/h", dat.maxSpeed())
+                speedLimitSlider.value = Float(dat.getCurrentValueForVariable(.LimitSpeed))
+                speedLimitSlider.maximumValue = Float(dat.getCurrentValueForVariable(.MaxSpeed))
+                vSpeedLimitSetings.text = String(format: "%1.0f km/h", Float(dat.getCurrentValueForVariable(.LimitSpeed)))
+                maxSpeedSlider.value = Float(Float(dat.getCurrentValueForVariable(.MaxSpeed)))
+                vMaxSpeedSettings.text = String(format: "%1.0f km/h", Float(dat.getCurrentValueForVariable(.MaxSpeed)))
                 
-                ridingSettingsSlider.value = Float(dat.ridingLevel())
-                vRidingSettings.text = String(format: "%d", dat.ridingLevel())
-                oldRidingLevel = dat.ridingLevel()
-                oldSpeedLimit = dat.limitSpeed()
-                oldMaxSpeed = dat.maxSpeed()
+                ridingSettingsSlider.value = Float(dat.getCurrentValueForVariable(.RidingLevel))
+                vRidingSettings.text = String(format: "%d", dat.getCurrentValueForVariable(.RidingLevel))
+                oldRidingLevel = dat.getCurrentValueForVariable(.RidingLevel)
+                oldSpeedLimit = dat.getCurrentValueForVariable(.LimitSpeed)
+                oldMaxSpeed = dat.getCurrentValueForVariable(.MaxSpeed)
             }
         }
         // Do any additional setup after loading the view.
@@ -70,7 +70,7 @@ class BLENinebotSettingsViewController: UIViewController {
     
     @IBAction func ridingSettingsSliderMoved(src : AnyObject){
         
-        let v = Int(round(ridingSettingsSlider.value))
+        let v = Double(round(ridingSettingsSlider.value))
         
         if v != oldRidingLevel{
             vRidingSettings.text = String(format: "%d", v)
@@ -83,10 +83,10 @@ class BLENinebotSettingsViewController: UIViewController {
             
             if let dat = nb.datos {
                 
-                let v0 = dat.data[BLENinebot.kvRideMode].value
+                let v0 =  dat.getCurrentValueForVariable(.RidingLevel)
                 
                 if v != v0 {
-                    nb.setRidingLevel(v)
+                    //TODO: Set an interface for different charateristics nb.setRidingLevel(v)
                     vRidingSettings.textColor = UIColor.redColor()
                 }
                
@@ -107,10 +107,10 @@ class BLENinebotSettingsViewController: UIViewController {
         
         if let nb = self.ninebotClient{
              if let dat = nb.datos {
-                let v0 = dat.limitSpeed()
+                let v0 = dat.getCurrentValueForVariable(.LimitSpeed)
                 
                 if fabs(v - v0) >= 1.0 {
-                    nb.setLimitSpeed(v)
+                    //nb.setLimitSpeed(v)
                     vSpeedLimitSetings.textColor = UIColor.redColor()
                 }
                 
@@ -131,10 +131,10 @@ class BLENinebotSettingsViewController: UIViewController {
         
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
-                let v0 = dat.maxSpeed()
+                let v0 = dat.getCurrentValueForVariable(.MaxSpeed)
                 
                 if fabs(v - v0) >= 1.0 {
-                     nb.setMaxSpeed(v)
+                     //nb.setMaxSpeed(v)
                     vMaxSpeedSettings.textColor = UIColor.redColor()
                 }
                 
@@ -147,7 +147,7 @@ class BLENinebotSettingsViewController: UIViewController {
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
                    // ridingSettingsSlider.value = Float(dat.ridingLevel())
-                    vRidingSettings.text = String(format: "%d", dat.ridingLevel())
+                    vRidingSettings.text = String(format: "%d", Int(dat.getCurrentValueForVariable(.RidingLevel)))
                     vRidingSettings.textColor = UIColor.blackColor()
             }
         }
@@ -159,7 +159,7 @@ class BLENinebotSettingsViewController: UIViewController {
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
                // speedLimitSlider.value = Float(dat.limitSpeed())
-                vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.limitSpeed())
+                vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.LimitSpeed))
                 vSpeedLimitSetings.textColor = UIColor.blackColor()
             }
         }
@@ -169,8 +169,8 @@ class BLENinebotSettingsViewController: UIViewController {
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
                // maxSpeedSlider.value = Float(dat.maxSpeed())
-                vMaxSpeedSettings.text = String(format: "%1.0f km/h", dat.maxSpeed())
-                speedLimitSlider.maximumValue = Float(dat.maxSpeed())
+                vMaxSpeedSettings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.MaxSpeed))
+                speedLimitSlider.maximumValue = Float(dat.getCurrentValueForVariable(.MaxSpeed))
                 vMaxSpeedSettings.textColor = UIColor.blackColor()
                 
             }
