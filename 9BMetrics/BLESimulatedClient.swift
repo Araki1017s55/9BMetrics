@@ -296,14 +296,14 @@ class BLESimulatedClient: NSObject {
                 dict["recording"] = 0.0
             }
             
-            dict["temps"] = nb.currentValueForVariable(.Duration)
-            dict["distancia"]  = nb.currentValueForVariable(.Distance)
-            dict["speed"]  = nb.currentValueForVariable(.Speed)! * 3.6
-            dict["battery"]  =  nb.currentValueForVariable(.Battery)
-            //dict["remaining"]  =  nb.remainingMileage()
-            dict["temperature"]  =  nb.currentValueForVariable(.Temperature)
+            dict["temps"] = nb.getCurrentValueForVariable(.Duration)
+            dict["distancia"]  = nb.getCurrentValueForVariable(.Distance)
+            dict["speed"]  = nb.getCurrentValueForVariable(.Speed) * 3.6
+            dict["battery"]  =  nb.getCurrentValueForVariable(.Battery)
+            dict["remaining"]  =  0.0
+            dict["temperature"]  =  nb.getCurrentValueForVariable(.Temperature)
             
-            let v =  nb.currentValueForVariable(.Speed)! * 3.6
+            let v =  nb.getCurrentValueForVariable(.Speed) * 3.6
             
             if v >= 18.0 && v < 20.0{
                 dict["color"] = 1.0
