@@ -48,9 +48,9 @@ class BLENinebotSettingsViewController: UIViewController {
                 
                 speedLimitSlider.value = Float(dat.getCurrentValueForVariable(.LimitSpeed))
                 speedLimitSlider.maximumValue = Float(dat.getCurrentValueForVariable(.MaxSpeed))
-                vSpeedLimitSetings.text = String(format: "%1.0f km/h", Float(dat.getCurrentValueForVariable(.LimitSpeed)))
+                vSpeedLimitSetings.text = String(format: "%1.0f km/h", Float(dat.getCurrentValueForVariable(.LimitSpeed)*3.6))
                 maxSpeedSlider.value = Float(Float(dat.getCurrentValueForVariable(.MaxSpeed)))
-                vMaxSpeedSettings.text = String(format: "%1.0f km/h", Float(dat.getCurrentValueForVariable(.MaxSpeed)))
+                vMaxSpeedSettings.text = String(format: "%1.0f km/h", Float(dat.getCurrentValueForVariable(.MaxSpeed)*3.6))
                 
                 ridingSettingsSlider.value = Float(dat.getCurrentValueForVariable(.RidingLevel))
                 vRidingSettings.text = String(format: "%d", dat.getCurrentValueForVariable(.RidingLevel))
@@ -110,7 +110,9 @@ class BLENinebotSettingsViewController: UIViewController {
                 let v0 = dat.getCurrentValueForVariable(.LimitSpeed)
                 
                 if fabs(v - v0) >= 1.0 {
-                    //nb.setLimitSpeed(v)
+                    
+                   // nb.setSerialNumber()
+                    nb.setLimitSpeed(v)
                     vSpeedLimitSetings.textColor = UIColor.redColor()
                 }
                 
@@ -159,7 +161,7 @@ class BLENinebotSettingsViewController: UIViewController {
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
                // speedLimitSlider.value = Float(dat.limitSpeed())
-                vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.LimitSpeed))
+                vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.LimitSpeed)*3.6)
                 vSpeedLimitSetings.textColor = UIColor.blackColor()
             }
         }
@@ -169,8 +171,8 @@ class BLENinebotSettingsViewController: UIViewController {
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
                // maxSpeedSlider.value = Float(dat.maxSpeed())
-                vMaxSpeedSettings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.MaxSpeed))
-                speedLimitSlider.maximumValue = Float(dat.getCurrentValueForVariable(.MaxSpeed))
+                vMaxSpeedSettings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.MaxSpeed)*3.6)
+                speedLimitSlider.maximumValue = Float(dat.getCurrentValueForVariable(.MaxSpeed)*3.6)
                 vMaxSpeedSettings.textColor = UIColor.blackColor()
                 
             }
