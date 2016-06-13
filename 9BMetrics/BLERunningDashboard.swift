@@ -153,7 +153,7 @@ class BLERunningDashboard: UIViewController {
                     
                     
                     
-                    let v = nb.currentValueForVariable(.Speed)! * 3.6 // In Km/h
+                    let v = nb.getCurrentValueForVariable(.Speed) * 3.6 // In Km/h
                     
                     self.fSpeed.text = String(format:"%0.2f", v)
                     
