@@ -382,6 +382,28 @@ class BLESimulatedClient: NSObject {
         }
     }
     
+    
+    func setSerialNumber(){
+        var message = BLENinebotMessage(commandToWrite: UInt8(17), dat:[79] )
+ 
+        
+        if let st = message?.toString(){
+            AppDelegate.debugLog("Command : %@", st)
+        }
+        
+        if let dat = message?.toNSData(){
+            
+            self.connection.writeValue(dat)
+        }
+      
+        message = BLENinebotMessage(com: UInt8(17), dat:[UInt8(2)] )
+        
+        if let dat = message?.toNSData(){
+            self.connection.writeValue(dat)
+        }
+        
+        
+    }
     // Sets limit speed in km/h
     
     func setLimitSpeed(speed : Double){
