@@ -48,7 +48,7 @@ class BLEHistoDashboard: UIViewController {
     @IBOutlet  weak var collectionView : UICollectionView!
     @IBOutlet weak var fTitle : UILabel!
     @IBOutlet weak var fVersion : UILabel!
-    
+
     private let sectionInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
 
     static var displayableVariables : [Int] = [BLENinebot.kCurrentSpeed, BLENinebot.kTemperature,
@@ -65,6 +65,10 @@ class BLEHistoDashboard: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        // Register for peek
+        
+        registerForPreviewingWithDelegate(self, sourceView: collectionView)
        
         fTitle.text = titulo
         
@@ -135,9 +139,6 @@ class BLEHistoDashboard: UIViewController {
 
             if let vc = segue.destinationViewController as? GraphViewController  {
                 
-                if let nb = self.ninebot{
-                    nb.buildEnergy()
-                }
                 vc.ninebot = self.ninebot
                 vc.shownVariable = self.graphToShow
             }
@@ -156,10 +157,56 @@ class BLEHistoDashboard: UIViewController {
     }
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
-            graphToShow = graphValue[0]
-            self.performSegueWithIdentifier("graphicSegue", sender: self)
+           // graphToShow = graphValue[0]
+           // self.performSegueWithIdentifier("graphicSegue", sender: self)
+            
+            
         }
     }
+    
+    //MARK: Preview Action Items
+    
+    override func previewActionItems() -> [UIPreviewActionItem] {
+        let shareTrack = UIPreviewAction(title: "Share Track", style: .Default)
+        {(action, viewController) in
+            
+            if let wheel = self.ninebot {
+                if let trackUrl : NSURL = wheel.url{
+                    
+                    // get ViewController
+                    
+                    if let theDelegate = UIApplication.sharedApplication().delegate as? AppDelegate{
+                        if let vc = theDelegate.mainController{
+                            vc.shareData(trackUrl, src: vc.view, delete: false)
+                        }
+                        
+                    }
+                }
+            }
+        }
+        
+        let openTrackIn = UIPreviewAction(title: "Open GPX In", style: .Default)
+        {(action, viewController) in
+            if let wheel = self.ninebot {
+                if let trackUrl : NSURL = wheel.url{
+                    
+                    // get ViewController
+                    
+                    if let theDelegate = UIApplication.sharedApplication().delegate as? AppDelegate{
+                        if let vc = theDelegate.mainController{
+                            
+                            vc.openFileIn(trackUrl, src: vc, delete: false)
+                        }
+                        
+                    }
+                }
+            }
+            
+        }
+        return [shareTrack, openTrackIn]
+    }
+
+
 }
 
 extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
@@ -541,6 +588,54 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
             
             
             
+        }
+        
+    }
+    
+}
+
+extension BLEHistoDashboard : UIViewControllerPreviewingDelegate{
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if let indexPath = collectionView.indexPathForItemAtPoint(location), cellAttributes = collectionView.layoutAttributesForItemAtIndexPath(indexPath) {
+            //This will show the cell clearly and blur the rest of the screen for our peek.
+            previewingContext.sourceRect = cellAttributes.frame
+            
+            switch indexPath.row {
+                
+            case 0:
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let  mpc = storyboard.instantiateViewControllerWithIdentifier("mapViewControllerIdentifier") as? BLEMapViewController{
+                    
+                    mpc.dades = self.ninebot
+                    return mpc
+                }
+                
+            default:
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let  gc = storyboard.instantiateViewControllerWithIdentifier("graphViewControllerIdentifier") as? GraphViewController{
+                    
+                    gc.ninebot = self.ninebot
+                    graphToShow = self.graphValue[indexPath.row]
+                    gc.shownVariable = self.graphToShow
+                    return gc
+                }
+                
+
+            }
+            
+        }
+        return nil
+    }
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+        
+        if let mvc = viewControllerToCommit as? BLEMapViewController{
+            presentViewController(mvc, animated: true, completion: nil)
+        } else {
+           showViewController(viewControllerToCommit, sender: self)
         }
         
     }
