@@ -21,7 +21,11 @@
 
 import UIKit
 
-class ViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
+/**
+ Main Class shows a list of runs ordered by date.
+ Allows to share/export tracks, visualize data and access general settinfs
+ */
+ class ViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
     
     enum stateValues {
         case Waiting
@@ -30,6 +34,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         case Server
     }
     
+    /// Describes a file date section : Today, Yesterday, last week, last month ...
     struct fileSection {
         
         var section : Int
@@ -37,8 +42,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         var files : [NSURL]
     }
     
-    let kTextMode = "enabled_test"
+    let kTestMode = "enabled_test"
+    let kDashboardMode = "dashboard_mode"
     
+   
     
     // weak var ninebot : BLENinebot?
     var server : BLESimulatedServer?
@@ -59,8 +66,13 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     
     @IBOutlet weak var tableView : UITableView!
     
+    var docc : UIDocumentInteractionController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        registerForPreviewingWithDelegate(self, sourceView: tableView)
+        
         // Do any additional setup after loading the view, typically from a nib.
         let editButton = self.editButtonItem();
         editButton.target = self
@@ -79,11 +91,12 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         // Dispose of any resources that can be recreated.
     }
     
-    
+    /// Called when the actual run has stopped to update runs list
     func hasStopped(not : NSNotification){
         self.reloadFiles()
     }
     
+    /// Legacy...
     func connectionStarted(not : NSNotification){
         
         if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
@@ -95,6 +108,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    /// Loads current document directory data into array
     func reloadFiles(){
         guard let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate else {return}
         guard let docsUrl = appDelegate.applicationDocumentsDirectory() else {return}
@@ -103,6 +117,11 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
     }
     
+    
+    /// Returns creation date of a file
+    ///
+    /// - parameter url:  url of the file
+    /// - returns: The creation date of the file
     func creationDate(url : NSURL) -> NSDate?{
         var rsrc : AnyObject? = nil
         
@@ -119,7 +138,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
     }
     
-    
+    /// Converts a date to a section number
+    /// - Parameter dat: The date
+    /// - Returns : The section number
     func dateToSection(dat : NSDate) -> Int{
         
         let today = NSDate()
@@ -161,6 +182,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
     }
     
+    /// Converts a section number to a string label
+    /// - Parameter section: The section number
+    /// - Returns: The corresponding string label
     func sectionLabel(section : Int) -> String{
         
         let today = NSDate()
@@ -195,6 +219,11 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
     }
     
+    /// Processes an array of files and sort them into sections in self.sections
+    /// according its *creation date*
+    ///
+    /// - Parameter files: The array of files
+    ///
     func sortFilesIntoSections(files:[NSURL]){
         
         
@@ -232,6 +261,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    /// Checks if a file is a directory
+    /// 
+    /// - Parameter url : The url of the file
+    /// - Returns : true or false depending if the url corresponds ot not to a directory
     func isDirectory(url : NSURL) -> Bool{
         
         var isDirectory: ObjCBool = ObjCBool(false)
@@ -243,6 +276,13 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         }
         return false
     }
+    
+    /// Does the actual load of a local directory data.
+    ///
+    /// Updates self.actualDir, files and self.sections
+    ///
+    /// - Parameter dir: The URL of the directory
+    ///
     func loadLocalDirectoryData(dir : NSURL){
         
         self.actualDir = dir
@@ -291,6 +331,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
     }
     
+    /// Returns the url which correspond to an indexpath int the table
+    /// - Parameter indexPath : The indexPath (section, row)
+    /// - Returns : The URL from the sections table corresponding to the indexPath
     func urlForIndexPath(indexPath: NSIndexPath) -> NSURL?{
         
         if indexPath.section < self.sections.count {
@@ -323,13 +366,35 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
     }
     
-    
+    /**
+        opens the running dashboard according preferences
+        - Parameter src : Source of command
+    */
+    @IBAction func startRun(src : AnyObject){
+        openRunningDashboard(self)
+    }
+    func openRunningDashboard(src : AnyObject?){
+        let store = NSUserDefaults.standardUserDefaults()
+        let graphMode = store.boolForKey(kDashboardMode)
+        
+        if graphMode {
+            performSegueWithIdentifier("GraphicRunningDashboardSegue", sender: self)
+        }else{
+            performSegueWithIdentifier("runningDashboardSegue", sender: self)
+        }
+    }
+
+    /**
+        Builds and opens the general settings dialog
+ 
+        - Parameter src : The origin of the event
+    */
     @IBAction func openSettings(src : AnyObject){
         
         let but = src as? UIButton
         
         let store = NSUserDefaults.standardUserDefaults()
-        let testMode = store.boolForKey(kTextMode)
+        let testMode = store.boolForKey(kTestMode)
         
         
         let alert = UIAlertController(title: "Options", message: "Select an option", preferredStyle: UIAlertControllerStyle.ActionSheet);
@@ -365,18 +430,8 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             
             alert.addAction(action)
             
-            action = UIAlertAction(title: "Test Widgets", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
-                self.performSegueWithIdentifier("testSegue", sender: self)
-            })
             
-            alert.addAction(action)
-
-            action = UIAlertAction(title: "Test Collection", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction) -> Void in
-                self.performSegueWithIdentifier("openDataSegue", sender: self)
-            })
             
-            alert.addAction(action)
-
         }
         
         
@@ -453,7 +508,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 try url.getPromisedItemResourceValue(&obj, forKey: NSURLThumbnailDictionaryKey)
                 
                 if let dict = obj as? NSDictionary {
-                
+                    
                     icon = dict[NSThumbnail1024x1024SizeKey] as? UIImage
                 }
                 else {
@@ -468,7 +523,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                     imv.image = img
                 }
             }
-         }
+        }
         
         return cell
     }
@@ -541,13 +596,18 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         }
     }
     
+    /**
+        Loads the contents of an url in the datos variable in the delegate
+        calling loadPackage() or loadTextFile() depending on the extension of the file (.9bm or .txt)
+    
+        - Parameter url : The url of the file
+ 
+    */
+    
     func openUrl(url : NSURL){
         self.currentFile = url
-        
         if let file = self.currentFile{
-            
             if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
-                
                 if url.pathExtension! == "9bm"{
                     dele.datos.loadPackage(file)
                 }
@@ -557,7 +617,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             }
         }
         //self.performSegueWithIdentifier("openFileSegue", sender: self)
-       
+        
         self.performSegueWithIdentifier("openDataSegue", sender: self)
     }
     
@@ -579,6 +639,20 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "runningDashboardSegue" {
             if let dash = segue.destinationViewController as? BLERunningDashboard{
+                
+                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    dash.client = dele.client
+                    if let cli = dele.client{
+                        
+                        if !cli.connection.subscribed && !cli.connection.connecting {
+                            cli.connect()
+                        }
+                    }
+                }
+                
+            }
+        }else if segue.identifier == "GraphicRunningDashboardSegue" {
+            if let dash = segue.destinationViewController as? BLEGraphicRunningDashboard{
                 
                 if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
                     dash.client = dele.client
@@ -614,7 +688,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 
             }
         }
-         else if segue.identifier == "settingsSegue"{
+        else if segue.identifier == "settingsSegue"{
             
             if let settings = segue.destinationViewController as? SettingsViewController{
                 
@@ -669,23 +743,42 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
     }
     
-    // Create a file with actual data and share it
+    // Create a file with actual data and share it. Delete is useless here. It always deletes the zip file
     
+    /**
+        Creates a zip file (.9bz) from a package and shares it with the usual share dialog
+ 
+        - Parameter file : The url of the package
+        - Parameter src : The object to which anchor the dialog
+        - Parameter delete : If the .9bz file shoud be deleted of not, Not used and always true
+ 
+    */
+ 
     func shareData(file: NSURL?, src:AnyObject, delete: Bool){
         
         
         if let aFile = file {
-            
-            var activityItems : [NSURL] = []
-            
-            
             let url = WheelTrack.createZipFile(aFile)
-            
-            if let u = url {
-                activityItems = [u]
-            } else {
-                AppDelegate.debugLog("Error creating Zip file")
-            }
+            shareFile(url, src: src, delete: true)
+        }
+    }
+    
+    /**
+     Shares a file with the usual share dialog. Appends PickerActivity to access iCloud Server
+     
+     - Parameter file : The url of the package
+     - Parameter src : The object to which anchor the dialog
+     - Parameter delete : If file shoud be deleted of not once shared
+     
+     */
+    
+    func shareFile(file: NSURL?, src:AnyObject, delete: Bool){
+        
+        
+        var activityItems : [NSURL] = []
+        
+        if let f = file {
+            activityItems = [f]
             
             let activityViewController = UIActivityViewController(
                 activityItems: activityItems,
@@ -696,14 +789,14 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 
                 
                 do{
-                    if activityItems.count >= 0{
+                    if activityItems.count >= 0 && delete{
                         for item in activityItems {
                             try NSFileManager.defaultManager().removeItemAtURL(item)
                         }
- 
+                        
                     }
                 }catch{
-                    AppDelegate.debugLog("Error al esborrar %@", aFile)
+                    AppDelegate.debugLog("Error al esborrar %@", f)
                 }
                 
             }
@@ -716,10 +809,34 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                                        animated: true,
                                        completion: nil)
             
+            
+            
+            
+        }else {
+            AppDelegate.debugLog("Error creating Zip file")
         }
         
     }
     
+    /**
+     Opens a file in another application
+     
+     - Parameter file : The url of the package
+     - Parameter src : The object to which anchor the dialog
+     - Parameter delete : If file shoud be deleted of not once shared. Not used
+     
+     */
+    func openFileIn(file: NSURL, src:AnyObject, delete: Bool){
+        self.docc = UIDocumentInteractionController(URL: file)
+        if let doc = docc{
+            doc.delegate = self
+            if let uv = src as? UIViewController{
+                doc.presentOpenInMenuFromRect(uv.view.bounds, inView: uv.view, animated: true)
+            }
+        }
+        
+        
+    }
     
     // MARK: Other functions
     
@@ -732,8 +849,6 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     
     
     //MARK: View management
-    
-    
     
     override func viewWillAppear(animated: Bool) {
         
@@ -762,7 +877,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                     dele.launchedShortcutItem  = nil
                     AppDelegate.debugLog("Following dashboardSegue")
                     
-                    self.performSegueWithIdentifier("runningDashboardSegue", sender: self)
+                    openRunningDashboard(self)
+                    
+                    //self.performSegueWithIdentifier("runningDashboardSegue", sender: self)
                     
                 }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
                     dele.launchedShortcutItem  = nil
@@ -799,4 +916,44 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
     }
 }
 
+extension ViewController : UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerDidDismissOpenInMenu(controller: UIDocumentInteractionController) {
+        docc = nil
+    }
+}
 
+extension ViewController : UIViewControllerPreviewingDelegate{
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if let indexPath = tableView.indexPathForRowAtPoint(location) {
+            //This will show the cell clearly and blur the rest of the screen for our peek.
+            previewingContext.sourceRect = tableView.rectForRowAtIndexPath(indexPath)
+            let urls = urlForIndexPath(indexPath)
+            self.currentFile = urls
+            if let file = self.currentFile{
+                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    if file.pathExtension! == "9bm"{
+                        dele.datos.loadPackage(file)
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        if let  dash = storyboard.instantiateViewControllerWithIdentifier("BLEHistoDashboardIdentifier") as? BLEHistoDashboard{
+                            dash.ninebot = dele.datos
+                            
+                            return dash
+                        }
+                        
+                    }
+                }
+            }
+            
+        }
+        return nil
+    }
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+
+        showViewController(viewControllerToCommit, sender: self)
+        
+        
+    }
+    
+}
