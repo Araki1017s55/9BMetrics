@@ -23,17 +23,41 @@ import UIKit
 class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     @IBOutlet weak var graphView : TMKGraphView!
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var fDataView: UIView!
    // weak var delegate : BLENinebotDashboard?
+    @IBOutlet weak var fVariableName: UILabel!
+    @IBOutlet weak var fAverageValue: UILabel!
+    @IBOutlet weak var fExtremeValues: UILabel!
+    @IBOutlet weak var fNumberOfValues: UILabel!
+    
     weak var ninebot : WheelTrack?
     var shownVariable = 0
+    let displayableVariables : [WheelTrack.WheelValue] = [.Speed, .Temperature,
+                                                      .Voltage, .Current, .Battery, .Pitch, .Roll,
+                                                      .Distance, .Altitude, .Power, .Energy]
+  
+    let scales : [Double] = [3.6, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.001, 1.0, 1.0, 1.0 / 3600.0]
+        
+    let units : [String] = ["km/h", "ºC", "V", "A", "%", "º", "º", "km", "m", "v"  , "wh"]
+    
+
+    var resampledLog : [WheelTrack.LogEntry]?
+    var step = 0.1
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.hidden = true
         self.graphView.yValue = shownVariable
+        self.buildLog(shownVariable)
         self.graphView.setup()
+        
+      
+        
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.updateStats()
             self.graphView.setNeedsDisplay()
         })
         
@@ -47,6 +71,19 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     }
     
 
+    func updateStats(){
+        if self.ninebot != nil{
+            
+            fVariableName.text = nameOfValue(shownVariable)
+            let (minv, maxv, avgv, _) = getLogStats(shownVariable, from: 0.0, to: 86400.0)
+            
+            fAverageValue.text = String(format:"Average Value : %0.2f", avgv)
+            fExtremeValues.text = String(format:"Minimum : %0.2f Maximum : %0.2f", minv, maxv)
+            fNumberOfValues.text = String(format:"Samples %d", numberOfPointsForSerie(0, value: shownVariable))
+            
+        }
+        
+    }
     /*
     // MARK: - Navigation
 
@@ -58,10 +95,17 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     */
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-
-        if size.width < size.height{
-            self.navigationController?.popViewControllerAnimated(true)
+            if size.width > size.height{
+                // graphToShow = graphValue[0]
+                // self.performSegueWithIdentifier("graphicSegue", sender: self)
+                
+                bottomConstraint.constant = 0.0
+                
+                
+            } else {
+                bottomConstraint.constant = fDataView.bounds.size.height
         }
+        
     }
     
     
@@ -85,11 +129,9 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     func numberOfPointsForSerie(serie : Int, value: Int) -> Int{
         
         let val = valueForSerie(serie, value: value)
-        let v = WheelTrack.displayableVariables[val]
-        
-        
-        if let nb = self.ninebot{
-            return nb.countLogForVariable(v)
+         
+        if self.ninebot != nil{
+            return countLog(val)
         }
         else{
             return 0
@@ -117,11 +159,10 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     func value(value : Int, axis: Int,  forPoint point: Int,  forSerie serie:Int) -> CGPoint{
         
         let val = valueForSerie(serie, value: value)
-        if let nb = self.ninebot{
+        if self.ninebot != nil{
 
-            let v = nb.getLogValue(val, index: point)
-            
-            guard let t = nb.timeAtPointForVariable(WheelTrack.displayableVariables[val], atPoint: point) else  { return CGPoint(x:0.0, y:0.0)}
+            let v = getLogValue(val, index: point)
+            let t = getTimeValue(val, index: point)
             return CGPoint(x: CGFloat(t), y:CGFloat(v) )
         }
         else{
@@ -133,9 +174,9 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     func value(value : Int, axis: Int,  forX x:CGFloat,  forSerie serie:Int) -> CGPoint{
  
         let val = valueForSerie(serie, value: value)
-        if let nb = self.ninebot{
+        if self.ninebot != nil{
             
-            let v = nb.getLogValue(val, time: NSTimeInterval(x))
+            let v = getLogValue(val, time: NSTimeInterval(x))
             return CGPoint(x: x, y:CGFloat(v))
             
         }else{
@@ -166,7 +207,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         return BLENinebot.displayableVariables.count
     }
     func nameOfValue(value: Int) -> String{
-        return WheelTrack.displayableVariables[value].rawValue
+        return displayableVariables[value].rawValue
     }
     func numberOfPins() -> Int{
         return 0
@@ -180,9 +221,9 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     func statsForSerie(value: Int, from t0: NSTimeInterval, to t1: NSTimeInterval) -> String{
         
-        if let nb = self.ninebot{
+        if self.ninebot != nil{
             
-            let (min, max, avg, acum) = nb.getLogStats(value, from: t0, to: t1)
+            let (min, max, avg, acum) = getLogStats(value, from: t0, to: t1)
             let (h, m, s) = BLENinebot.HMSfromSeconds(t1 - t0)
             
             var answer = String(format: "%02d:%02d:%02d",  h, m, s)
@@ -330,4 +371,127 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
                 completion: nil)
         }
     }
-}
+    
+    //MARK: Log Management
+    
+    func buildLog(variable : Int){
+        
+        if shownVariable == variable && resampledLog != nil {
+            return
+        }
+        
+        let v = displayableVariables[variable]
+        
+    
+        if let nb = self.ninebot{
+            let t = nb.getLastTimeValueForVariable(v)
+            step = t / 2000.0
+            
+            if step == 0.0 {
+                resampledLog = nil
+            }else{
+                resampledLog = nb.resample(v, from: 0.0, to: t, step: step)    // Will update with othe data
+            }
+            shownVariable = variable
+        }
+    }
+    
+    func countLog(variable : Int) -> Int{
+        buildLog(variable)
+        
+        if let log = resampledLog {
+            return log.count
+        }else{
+            return 0        }
+        
+    }
+
+    
+    func getLogValue(variable : Int, time : NSTimeInterval) -> Double{
+        buildLog(variable)
+ 
+        if resampledLog == nil{
+            return 0.0
+        }
+        let i = Int(round(time / step))
+        
+        if let log = resampledLog where log.count > i{
+            return log[i].value * scales[variable]
+        }else{
+            return 0.0
+        }
+        
+    }
+    
+    func getLogValuex(variable : Int, time : NSTimeInterval) -> Double{
+        
+        
+        
+        if variable >= 0 && variable < displayableVariables.count{
+            if let nb = self.ninebot{
+                return nb.getValueForVariable(displayableVariables[variable], time: time)
+            }else{
+                return 0.0
+            }
+            
+        }else{
+            return 0.0
+        }
+    }
+    
+    
+    func getLogStats(variable : Int, from t0 : NSTimeInterval, to t1 : NSTimeInterval) -> (Double, Double, Double, Double){
+        buildLog(variable)
+        
+        if variable >= 0 && variable < displayableVariables.count{
+            if let nb = self.ninebot{
+                let (m0, m1, av, ii) = nb.stats(displayableVariables[variable], from: t0, to: t1)
+                let s = scales[variable]
+                return (m0 * s, m1*s, av*s, ii*s)
+  
+            }else{
+                return (0.0, 0.0, 0.0, 0.0)
+            }
+
+        } else {
+            return (0.0, 0.0, 0.0, 0.0)
+        }
+    }
+    
+    func getLogValue(variable : Int, index : Int) -> Double{
+        buildLog(variable)
+        
+        if let log = resampledLog where log.count > index{
+            return log[index].value * scales[variable]
+        }else{
+            return 0.0
+        }
+    }
+    
+    func getTimeValue(variable : Int, index : Int) -> Double{
+        buildLog(variable)
+        
+        if let log = resampledLog where log.count > index{
+            return log[index].timestamp
+        }else{
+            return 0.0
+        }
+    }
+    
+        
+        func getLogValuex(variable : Int, index : Int) -> Double{
+       
+        
+        if variable >= 0 && variable < displayableVariables.count{
+            if let nb = self.ninebot{
+                return nb.getValueForVariable(displayableVariables[variable], atPoint: index)
+            }else{
+                return 0.0
+            }
+        }else{
+            return 0.0
+        }
+    }
+
+    
+ }
