@@ -411,7 +411,11 @@ extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
         
         var no = ""
         
+        
+        
         for i in 16 ..< 23{
+            
+        
             let v = values[i]
             
             
