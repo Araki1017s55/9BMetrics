@@ -20,7 +20,7 @@ class TMKClockView: UIView {
     let openAngle = 30.0
     let startEndLength : CGFloat = 0.1   // Percentatge del radi
     let sphereWidth : CGFloat = 1.0
-    let sphereColor = UIColor.yellowColor()
+    var sphereColor = UIColor.yellowColor()
     let cursorWidth : CGFloat = 1.0
     let cursorColor = UIColor.redColor()
     let cursorSize : CGFloat = 0.9
@@ -30,6 +30,7 @@ class TMKClockView: UIView {
     
     var label : UILabel = UILabel()
     var unitsLabel : UILabel = UILabel()
+    var labelsColor = UIColor.whiteColor()
     
     var backImage : UIImage?
 
@@ -39,10 +40,11 @@ class TMKClockView: UIView {
     
     var arcWidth : CGFloat = 0.1     // Percentage of r
     
+    
+    
     var value = ""
     
     var units = ""
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -97,6 +99,8 @@ class TMKClockView: UIView {
         
         self.addConstraint(c1)
         self.addConstraint(c2)
+        
+        
 
         
     }
@@ -113,8 +117,14 @@ class TMKClockView: UIView {
     }
     
     func drawCursor(value : Double, len : CGFloat, width : CGFloat, color : UIColor, center : CGPoint ){
+        
+        let semiBlackColor : UIColor
 
-        let semiBlackColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
+        if let bc = self.backgroundColor{
+            semiBlackColor = bc.colorWithAlphaComponent(0.5)
+        }else{
+            semiBlackColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
+        }
 
         // OK now draw cursor
         
@@ -214,7 +224,7 @@ class TMKClockView: UIView {
         
         let attributes = [
             NSFontAttributeName: xfont!,
-            NSForegroundColorAttributeName: UIColor.whiteColor(),
+            NSForegroundColorAttributeName: labelsColor,
             NSParagraphStyleAttributeName: paraStyle
         ]
         // NSFontAttributeName: UIFont.systemFontOfSize(r / 6.0)
