@@ -13,6 +13,7 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
     
     @IBOutlet weak var mapView: MKMapView!
     weak var dades : WheelTrack?
+    
     var fullRect = MKMapRect(origin: MKMapPoint(x:0.0, y:0.0), size: MKMapSize(width: 100.0, height: 100.0))
     
 
@@ -128,6 +129,49 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
         }
     }
 
+    override func previewActionItems() -> [UIPreviewActionItem] {
+        let shareGPX = UIPreviewAction(title: "Share GPX", style: .Default)
+            {(action, viewController) in
+                
+                if let wheel = self.dades {
+                    if let gpxurl = wheel.getGPXURL(){
+                        
+                        // get ViewController 
+                        
+                        if let theDelegate = UIApplication.sharedApplication().delegate as? AppDelegate{
+                            if let vc = theDelegate.mainController{
+                                vc.shareFile(gpxurl, src: vc.view, delete: false)
+                            }
+                        
+                        }
+                    }
+                }
+            }
+        
+        let openInTraces = UIPreviewAction(title: "Open GPX In", style: .Default)
+        {(action, viewController) in
+            if let wheel = self.dades {
+                if let gpxurl = wheel.getGPXURL(){
+                    
+                    // get ViewController
+                    
+                    if let theDelegate = UIApplication.sharedApplication().delegate as? AppDelegate{
+                        if let vc = theDelegate.mainController{
+
+                            vc.openFileIn(gpxurl, src: vc, delete: false)
+                        }
+                        
+                    }
+                }
+            }
+        
+        }
+
+        
+        return [shareGPX, openInTraces]
+    }
     
+    
+ 
 }
 
