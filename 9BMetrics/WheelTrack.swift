@@ -124,9 +124,6 @@ class WheelTrack: NSObject {
         .Temperature : .Celsius_Degrees]
     
     
-    static var displayableVariables : [WheelValue] = [.Speed, .Temperature,
-                                                      .Voltage, .Current, .Battery, .Pitch, .Roll,
-                                                      .Distance, .Altitude, .Power, .Energy]
     var url : NSURL?
     private var name : String?
     private var serialNo : String?
@@ -982,39 +979,76 @@ class WheelTrack: NSObject {
         return (ascent, descent)
     }
     
+    // resample resamples a subset of the variable generating a new log with 
+    // samples distanced a fixed amount.
+    
+    func resample(variable:WheelValue, from:NSTimeInterval, to:NSTimeInterval, step:Double) -> [LogEntry]?{
+        
+        if let vv = data[variable] {
+            if !vv.loaded {
+                loadVariableFromPackage(variable)
+            }
+        } else {
+            return nil
+        }
+        
+        if data[variable]!.log.count <= 1{
+            return nil
+        }
+        
+        var sampledLog : [LogEntry] = []
+        
+        var t0 : NSTimeInterval = 0
+        var t1 : NSTimeInterval = step
+        
+        var lp : LogEntry = LogEntry(timestamp: 0.0 , value : data[variable]!.log[0].value)
+        var acum : Double = 0.0
+        
+        
+        for e in data[variable]!.log {
+            
+            while e.timestamp >= t1 && e.timestamp != lp.timestamp{
+                
+                
+                let np = LogEntry(timestamp: t1, value: (e.value - lp.value) / (e.timestamp - lp.timestamp) * (t1 - lp.timestamp) + lp.value)
+                
+                acum = acum + (np.value  + lp.value) / 2.0 * (np.timestamp - lp.timestamp)
+                
+                
+                let newEntry = LogEntry(timestamp: (t0 + t1) / 2.0, value: acum / step)
+                sampledLog.append(newEntry)
+                
+                acum = 0.0
+                lp = np
+                t0 = t1
+                t1 = t0 + step
+                
+            }
+            
+            acum = acum + (e.value  + lp.value) / 2.0 * (e.timestamp - lp.timestamp)
+            lp = e
+        }
+        
+        return sampledLog
+     }
+    //MARK: Access to some files 
+    
+    func getGPXURL() -> NSURL?{
+        
+        if let myUrl = self.url {
+            let gpxURL = myUrl.URLByAppendingPathComponent("track.gpx")
+            
+            return gpxURL
+        }
+        else{
+            return nil
+        }
+    }
     
     //MARK: Log Functions
     //TODO: Must go to GraphicsController
     
     
-    func getLogValue(variable : Int, time : NSTimeInterval) -> Double{
-        
-        if variable >= 0 && variable < WheelTrack.displayableVariables.count{
-            
-            return getValueForVariable(WheelTrack.displayableVariables[variable], time: time)
-            
-        }else{
-            return 0.0
-        }
-    }
-    
-    func getLogStats(variable : Int, from t0 : NSTimeInterval, to t1 : NSTimeInterval) -> (Double, Double, Double, Double){
-        
-        if variable >= 0 && variable < WheelTrack.displayableVariables.count{
-            return stats(WheelTrack.displayableVariables[variable], from: t0, to: t1)
-        } else {
-            return (0.0, 0.0, 0.0, 0.0)
-        }
-    }
-    
-    func getLogValue(variable : Int, index : Int) -> Double{
-        if variable >= 0 && variable < WheelTrack.displayableVariables.count{
-            
-            return getValueForVariable(WheelTrack.displayableVariables[variable], atPoint: index)
-        }else{
-            return 0.0
-        }
-    }
     
     
     //MARK: File Management
@@ -1448,8 +1482,7 @@ class WheelTrack: NSObject {
                         
                         
                     }else if fw.regularFile {
-                        NSLog("loading %@", fw.filename!)
-                        
+ 
                         if let fnam = fw.filename where fnam.hasSuffix(".bin"){
                             binaryEnabled = true
                         }
