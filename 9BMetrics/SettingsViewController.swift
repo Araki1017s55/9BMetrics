@@ -22,19 +22,26 @@
 import UIKit
 
 class SettingsViewController: UIViewController {
-
+    
+ 
     @IBOutlet weak var refreshField: UISlider!
     @IBOutlet weak var uuidLabel: UILabel!
     
+    @IBOutlet weak var fGraphicDashboard: UISwitch!
     weak var delegate : ViewController?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let dele = delegate {
             
-            refreshField.value = Float(dele.timerStep)
             let store = NSUserDefaults.standardUserDefaults()
+            let dashboardMode = store.boolForKey(dele.kDashboardMode)
+            fGraphicDashboard.on = dashboardMode
+            
+            refreshField.value = Float(dele.timerStep)
+
             if let uuid = store.objectForKey(BLESimulatedClient.kLast9BDeviceAccessedKey) as? String{
                 uuidLabel.text = uuid 
             }
@@ -113,5 +120,22 @@ class SettingsViewController: UIViewController {
         }
     }
     
+    
+    @IBAction func setGraphicDashboard(src : UISwitch){
+        
+        let store = NSUserDefaults.standardUserDefaults()
+        if let uuid = store.objectForKey(BLESimulatedClient.kLast9BDeviceAccessedKey) as? String{
+            uuidLabel.text = uuid
+        }
+        if let dele = delegate {
+
+            store.setBool(src.on, forKey: dele.kDashboardMode)
+        }
+
+        
+        
+        NSLog("Switch Value %@", src.on)
+        
+    }
  
 }
