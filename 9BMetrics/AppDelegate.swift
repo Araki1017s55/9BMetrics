@@ -187,31 +187,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
         if let cli = self.client {
-            cli.stop()
+            cli.stop()    // In theory must save track
         }
-        
-        if self.datos.hasData() && self.datos.url == nil {
-            let ldateFormatter = NSDateFormatter()
-            let enUSPOSIXLocale = NSLocale(localeIdentifier: "en_US_POSIX")
-            
-            ldateFormatter.locale = enUSPOSIXLocale
-            let name : String
-            
-            ldateFormatter.dateFormat = "yyyyMMdd'_'HHmmss"
-            if let date = self.datos.firstDate{
-                name = ldateFormatter.stringFromDate(date)
-            }else{
-                name = ldateFormatter.stringFromDate(NSDate())
-            }
-            
-            
-            self.datos.createPackage(name)
-        }
-
         
     }
     
     //MARK : Shortcuts
+    
+    
     
     func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
         let handledShortCutItem = handleShortCutItem(shortcutItem)
@@ -229,8 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             guard  let nav : UINavigationController = window?.rootViewController  as? UINavigationController else {return false}
             
             guard let wc = nav.topViewController as? ViewController   else {return false}
-            
-            wc.performSegueWithIdentifier("runningDashboardSegue", sender: wc)
+            wc.openRunningDashboard(wc)
             self.setShortcutItems(true)
 
             
