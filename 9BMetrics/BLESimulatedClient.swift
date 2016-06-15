@@ -383,23 +383,30 @@ class BLESimulatedClient: NSObject {
     }
     
     
-    func setSerialNumber(){
-        var message = BLENinebotMessage(commandToWrite: UInt8(17), dat:[79] )
+    func setSerialNumber(sn : String){
+        
+        if let dat = sn.dataUsingEncoding(NSUTF8StringEncoding){
+            
+            let count = dat.length / sizeof(UInt8)
+            var array = [UInt8](count : count, repeatedValue : 0)
+            dat.getBytes(&array, length: count * sizeof(UInt8))
+            var message = BLENinebotMessage(commandToWrite: UInt8(17), dat:array )
  
         
-        if let st = message?.toString(){
-            AppDelegate.debugLog("Command : %@", st)
-        }
-        
-        if let dat = message?.toNSData(){
+            if let st = message?.toString(){
+                AppDelegate.debugLog("Command : %@", st)
+            }
             
-            self.connection.writeValue(dat)
-        }
-      
-        message = BLENinebotMessage(com: UInt8(17), dat:[UInt8(2)] )
-        
-        if let dat = message?.toNSData(){
-            self.connection.writeValue(dat)
+            if let dat = message?.toNSData(){
+                
+                self.connection.writeValue(dat)
+            }
+          
+            message = BLENinebotMessage(com: UInt8(17), dat:[UInt8(14)] )
+            
+            if let dat = message?.toNSData(){
+                self.connection.writeValue(dat)
+            }
         }
         
         
