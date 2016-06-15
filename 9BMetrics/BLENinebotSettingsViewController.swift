@@ -34,6 +34,8 @@ class BLENinebotSettingsViewController: UIViewController {
     @IBOutlet weak var vMaxSpeedSettings: UILabel!
     @IBOutlet weak var vRidingSettings: UILabel!
     
+    @IBOutlet weak var fSerialNumber: UITextField!
+    
     var oldRidingLevel = 0.0
     var oldSpeedLimit = 0.0
     var oldMaxSpeed = 0.0
@@ -111,9 +113,7 @@ class BLENinebotSettingsViewController: UIViewController {
                 
                 if fabs(v - v0) >= 1.0 {
                     
-                   // nb.setSerialNumber()
-                    nb.setLimitSpeed(v)
-                    vSpeedLimitSetings.textColor = UIColor.redColor()
+                     vSpeedLimitSetings.textColor = UIColor.redColor()
                 }
                 
             }
@@ -142,6 +142,14 @@ class BLENinebotSettingsViewController: UIViewController {
                 
             }
         }
+    }
+    
+    @IBAction func setSerialNumber(src : AnyObject){
+    
+        if let nb = self.ninebotClient, sn = fSerialNumber.text{
+            nb.setSerialNumber(sn)
+        }
+
     }
     
     func rideModeChanged(not : NSNotification){
