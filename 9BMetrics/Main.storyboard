@@ -931,7 +931,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iO1-UH-wOy" customClass="TMKGraphView" customModule="_BMetrics" customModuleProvider="target">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iO1-UH-wOy" customClass="TMKGraphView" customModule="_BMetrics" customModuleProvider="target">
                                 <rect key="frame" x="-4" y="20" width="383" height="497"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -1131,12 +1131,37 @@
                                     <segue destination="NrJ-T5-pos" kind="unwind" unwindAction="prepareForUnwind:" id="4t9-Y7-mdu"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="S/N" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yp2-8w-kmn">
+                                <rect key="frame" x="27" y="183" width="91" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="N1OPA1506A2405" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cue-cu-n0z">
+                                <rect key="frame" x="126" y="179" width="134" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bCe-k1-LVY">
+                                <rect key="frame" x="280" y="179" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="39g-0m-fGU"/>
+                                </constraints>
+                                <state key="normal" title="Set S/N"/>
+                                <connections>
+                                    <action selector="setSerialNumber:" destination="UfK-jf-3En" eventType="primaryActionTriggered" id="hIx-P7-scU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Yp2-8w-kmn" firstAttribute="trailing" secondItem="Zbz-gT-40b" secondAttribute="trailing" id="2CH-9u-8CX"/>
                             <constraint firstItem="O9b-d7-Krk" firstAttribute="leading" secondItem="SEZ-QF-1JU" secondAttribute="trailing" constant="20" id="2y7-et-ClR"/>
                             <constraint firstItem="Bi5-TB-PjH" firstAttribute="centerY" secondItem="t2N-8g-6za" secondAttribute="centerY" id="2yX-Y8-kzU"/>
+                            <constraint firstItem="cue-cu-n0z" firstAttribute="centerY" secondItem="Yp2-8w-kmn" secondAttribute="centerY" id="5Rl-FP-b3i"/>
                             <constraint firstItem="Bi5-TB-PjH" firstAttribute="leading" secondItem="t2N-8g-6za" secondAttribute="trailing" constant="20" id="6Tx-jU-vv8"/>
+                            <constraint firstItem="bCe-k1-LVY" firstAttribute="centerY" secondItem="Yp2-8w-kmn" secondAttribute="centerY" id="88L-SI-dyY"/>
+                            <constraint firstItem="cue-cu-n0z" firstAttribute="leading" secondItem="t2N-8g-6za" secondAttribute="leading" id="A11-8A-g4s"/>
                             <constraint firstItem="t2N-8g-6za" firstAttribute="leading" secondItem="qta-TY-xcm" secondAttribute="leading" id="F0O-rJ-GdP"/>
                             <constraint firstItem="t2N-8g-6za" firstAttribute="centerY" secondItem="Zbz-gT-40b" secondAttribute="centerY" id="Fxa-QI-Bg7"/>
                             <constraint firstItem="ZsA-t4-uD3" firstAttribute="top" secondItem="RAt-bI-naN" secondAttribute="bottom" constant="59" id="JPu-M2-3wh"/>
@@ -1146,10 +1171,12 @@
                             <constraint firstItem="O9b-d7-Krk" firstAttribute="trailing" secondItem="cse-Is-pMx" secondAttribute="trailingMargin" id="Nlx-ty-HXG"/>
                             <constraint firstItem="Zbz-gT-40b" firstAttribute="trailing" secondItem="ZsA-t4-uD3" secondAttribute="trailing" id="R5k-Dr-vta"/>
                             <constraint firstItem="SEZ-QF-1JU" firstAttribute="leading" secondItem="qta-TY-xcm" secondAttribute="leading" id="SBP-6M-bZS"/>
+                            <constraint firstItem="cue-cu-n0z" firstAttribute="trailing" secondItem="t2N-8g-6za" secondAttribute="trailing" id="Tdd-pU-vF3"/>
                             <constraint firstItem="6BQ-c3-Zpx" firstAttribute="trailing" secondItem="cse-Is-pMx" secondAttribute="trailingMargin" id="TwW-JS-HIi"/>
                             <constraint firstItem="WW9-ir-yCm" firstAttribute="trailing" secondItem="Zbz-gT-40b" secondAttribute="trailing" id="WQ1-3J-GTn"/>
                             <constraint firstItem="t2N-8g-6za" firstAttribute="leading" secondItem="qta-TY-xcm" secondAttribute="leading" id="WWX-Cx-hrX"/>
                             <constraint firstItem="qta-TY-xcm" firstAttribute="centerY" secondItem="ZsA-t4-uD3" secondAttribute="centerY" id="cXx-ft-OHC"/>
+                            <constraint firstItem="Yp2-8w-kmn" firstAttribute="top" secondItem="Zbz-gT-40b" secondAttribute="bottom" constant="8" id="cye-eY-CI3"/>
                             <constraint firstItem="CKA-PH-oGN" firstAttribute="top" secondItem="1mm-Yz-bx3" secondAttribute="bottom" constant="20" id="dHs-hI-ko7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ZsA-t4-uD3" secondAttribute="trailing" constant="262" id="hXp-Zd-JBm"/>
                             <constraint firstItem="6BQ-c3-Zpx" firstAttribute="centerY" secondItem="ZsA-t4-uD3" secondAttribute="centerY" id="j2L-51-wPm"/>
@@ -1160,11 +1187,14 @@
                             <constraint firstItem="Bi5-TB-PjH" firstAttribute="trailing" secondItem="cse-Is-pMx" secondAttribute="trailingMargin" id="wnB-Ir-LXJ"/>
                             <constraint firstItem="1mm-Yz-bx3" firstAttribute="centerX" secondItem="cse-Is-pMx" secondAttribute="centerX" id="xVR-tV-Y1Y"/>
                             <constraint firstItem="t2N-8g-6za" firstAttribute="leading" secondItem="Zbz-gT-40b" secondAttribute="trailing" constant="8" id="ypq-Ta-Gke"/>
+                            <constraint firstItem="bCe-k1-LVY" firstAttribute="trailing" secondItem="cse-Is-pMx" secondAttribute="trailingMargin" id="yqY-AF-L45"/>
+                            <constraint firstItem="bCe-k1-LVY" firstAttribute="leading" secondItem="cue-cu-n0z" secondAttribute="trailing" constant="20" id="zpM-T5-kxx"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="400" height="300"/>
                     <connections>
+                        <outlet property="fSerialNumber" destination="cue-cu-n0z" id="Ur9-b3-2v9"/>
                         <outlet property="maxSpeedSlider" destination="SEZ-QF-1JU" id="BGk-9v-Zlj"/>
                         <outlet property="ridingSettingsSlider" destination="t2N-8g-6za" id="V2W-ou-Qid"/>
                         <outlet property="speedLimitSlider" destination="qta-TY-xcm" id="3Ge-7F-hwI"/>
