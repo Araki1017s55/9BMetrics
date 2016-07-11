@@ -80,6 +80,7 @@
 		00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */; };
 		00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB821CD1E5F200EB66FB /* Notifications.swift */; };
 		00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */; };
+		00FFEF001D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FFEEFF1D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -221,6 +222,7 @@
 		00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WheelTrack.swift; path = 9BMetrics/WheelTrack.swift; sourceTree = "<group>"; };
 		00DCEB821CD1E5F200EB66FB /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockView.swift; path = 9BMetrics/TMKClockView.swift; sourceTree = "<group>"; };
+		00FFEEFF1D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEDeviceSelectorDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -428,6 +430,7 @@
 			isa = PBXGroup;
 			children = (
 				007A576F1C85CF39003A2030 /* BLEDeviceSelector.swift */,
+				00FFEEFF1D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift */,
 				007A57681C85CF39003A2030 /* BLENinebotMessage.swift */,
 				007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */,
 				007A576B1C85CF39003A2030 /* BLEConnection.swift */,
@@ -622,6 +625,7 @@
 				007A57761C85CF39003A2030 /* TMKGraphView.swift in Sources */,
 				007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */,
 				007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */,
+				00FFEF001D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift in Sources */,
 				00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */,
 				007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */,
 				00AB59551CAEE64000277859 /* aeskey.c in Sources */,
