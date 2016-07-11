@@ -143,7 +143,7 @@ class BLENinebotSettingsViewController: UIViewController {
             }
         }
     }
-    
+
     @IBAction func setSerialNumber(src : AnyObject){
     
         let newSn = fSerialNumber.text
