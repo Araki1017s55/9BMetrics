@@ -390,7 +390,7 @@ class BLESimulatedClient: NSObject {
             let count = dat.length / sizeof(UInt8)
             var array = [UInt8](count : count, repeatedValue : 0)
             dat.getBytes(&array, length: count * sizeof(UInt8))
-            var message = BLENinebotMessage(commandToWrite: UInt8(17), dat:array )
+            var message = BLENinebotMessage(commandToWrite: UInt8(16), dat:array )
  
         
             if let st = message?.toString(){
@@ -402,11 +402,19 @@ class BLESimulatedClient: NSObject {
                 self.connection.writeValue(dat)
             }
           
-            message = BLENinebotMessage(com: UInt8(17), dat:[UInt8(14)] )
+            message = BLENinebotMessage(com: UInt8(16), dat:[UInt8(14)] )
             
             if let dat = message?.toNSData(){
                 self.connection.writeValue(dat)
             }
+            
+            
+            message = BLENinebotMessage(com: UInt8(27), dat:[UInt8(14)] )
+            
+            if let dat = message?.toNSData(){
+                self.connection.writeValue(dat)
+            }
+
         }
         
         
