@@ -1657,6 +1657,9 @@
                         <outlet property="fStartStopButton" destination="IbX-v8-QQv" id="eU1-rr-rbh"/>
                         <outlet property="fTemperature" destination="nD3-J4-Uo1" id="EBh-tC-TET"/>
                         <outlet property="fTime" destination="9mc-c7-g0X" id="KGO-Kw-AbM"/>
+                        <segue destination="w4n-7a-0ja" kind="popoverPresentation" identifier="grDeviceSelectorSegue" popoverAnchorView="euG-U3-PYv" id="0GB-gO-lWT">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4GH-1a-NzZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1676,7 +1679,8 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ucI-lm-cZv"/>
-        <segue reference="SRt-gK-Tyg"/>
+        <segue reference="0GB-gO-lWT"/>
         <segue reference="nZ7-qu-ujD"/>
+        <segue reference="SRt-gK-Tyg"/>
     </inferredMetricsTieBreakers>
 </document>
