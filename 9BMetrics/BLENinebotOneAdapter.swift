@@ -193,7 +193,12 @@ class BLENinebotOneAdapter : NSObject {
 
                         
                         //TODO: Verify that conversion is OK
-                 
+                        
+                        if k == BLENinebot.kError{
+                            NSLog("Error %d ", v)
+                        }else if k == BLENinebot.kWarn{
+                            NSLog("Warning %d", v)
+                        }
                         let dv = Double(sv) * BLENinebotOneAdapter.scales[k]
                         if let wv = BLENinebotOneAdapter.conversion[k]{
                             outarr!.append((wv, NSDate(), dv))
