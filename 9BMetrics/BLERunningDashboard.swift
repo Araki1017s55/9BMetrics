@@ -9,7 +9,7 @@
 import UIKit
 import CoreBluetooth
 
-class BLERunningDashboard: UIViewController {
+class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     @IBOutlet weak var fTime: UILabel!
     @IBOutlet weak var fDistance: UILabel!
