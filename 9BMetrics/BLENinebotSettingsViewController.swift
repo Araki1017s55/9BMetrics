@@ -146,8 +146,12 @@ class BLENinebotSettingsViewController: UIViewController {
     
     @IBAction func setSerialNumber(src : AnyObject){
     
-        if let nb = self.ninebotClient, sn = fSerialNumber.text{
-            nb.setSerialNumber(sn)
+        let newSn = fSerialNumber.text
+        if let nb = self.ninebotClient{
+            
+            if let sn = newSn{
+                nb.setSerialNumber(sn)
+            }
         }
 
     }
