@@ -8,7 +8,7 @@
 import UIKit
 import CoreBluetooth
 
-class BLEGraphicRunningDashboard: UIViewController {
+class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     //
     //  BLERunningDashboard.swift
     //  9BMetrics
@@ -345,7 +345,7 @@ class BLEGraphicRunningDashboard: UIViewController {
                     self.devList.removeAll()    // Remove old ones
                     self.devList.appendContentsOf(devs)
                     
-                    self.performSegueWithIdentifier("deviceSelectorSegue", sender: self)
+                    self.performSegueWithIdentifier("grDeviceSelectorSegue", sender: self)
                 }
                 else{
                     if let vc = self.devSelector{
@@ -361,10 +361,10 @@ class BLEGraphicRunningDashboard: UIViewController {
             if segue.identifier == "deviceSelectorSegue" {
                 
                 if let vc = segue.destinationViewController as? BLEDeviceSelector{
-                    
+                        
                     self.devSelector = vc
                     vc.addDevices(self.devList)
-                 //TODO: Correct this   vc.delegate = self
+                    vc.delegate = self
                     self.devList.removeAll()
                     self.searching = true
                     
