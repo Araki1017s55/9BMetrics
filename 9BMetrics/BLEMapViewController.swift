@@ -37,7 +37,11 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
         if let nb = self.dades {
             var locs = nb.locationArray()
             
-             
+            if locs.count <= 0{
+                return
+            }
+            
+          
             let pt0 = MKMapPointForCoordinate(locs[0])
             
             var xmin = pt0.x
