@@ -38,6 +38,16 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     var serviceName = "HMSoft"
     var charId = "FFE1"
     
+    var s1ServiceId = "FEE7"
+    var s1ReadChar = "FEC9"
+    var s1WriteChar = "FEC7"
+    var s1IndicateChar = "FEC8"
+    
+    var someServices : [CBUUID]? = [ CBUUID(string: "FFE0"), CBUUID(string: "FEE7")]
+    
+    
+    
+    
     var nordicServiceId = "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
     var nordicServiceCharId = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
     var nordicServiceCharId1 = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
@@ -186,7 +196,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         AppDelegate.debugLog("Start Scanning")
 
         
-        let services = [CBUUID(string:self.serviceId)]
+        let services = someServices!
         let moreDevs : [CBPeripheral] = self.centralManager!.retrieveConnectedPeripheralsWithServices(services)
         
         if  moreDevs.count > 0
@@ -208,7 +218,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         
         
         // Scan for devices    @[[CBUUID UUIDWithString:@"1819"]]
-        self.centralManager!.scanForPeripheralsWithServices([CBUUID(string:self.serviceId)], options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
+        self.centralManager!.scanForPeripheralsWithServices(someServices, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
         
         AppDelegate.debugLog("Scanning started")
     }
@@ -278,7 +288,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         softwareVer = ""
         
         
-        peripheral.discoverServices([CBUUID(string:self.serviceId)])
+        peripheral.discoverServices(someServices)
     }
     
     internal func centralManager(central: CBCentralManager,
