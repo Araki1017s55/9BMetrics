@@ -188,7 +188,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let cli = self.client {
             cli.stop()    // In theory must save track
+            
+           let conn = cli.connection  //** Això no es necessari si desfem la connexio pero no esta de mes
+            
+            if let peri = conn.discoveredPeripheral {
+                if let central = conn.centralManager{
+                    central.cancelPeripheralConnection(peri)
+                }
+            }
         }
+        
+    
         
     }
     
