@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BLEHistoDashboard: UIViewController {
+class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
 
     weak var ninebot : WheelTrack?
     
@@ -71,6 +71,12 @@ class BLEHistoDashboard: UIViewController {
         registerForPreviewingWithDelegate(self, sourceView: collectionView)
        
         fTitle.text = titulo
+        
+        let lpgr : UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        lpgr.minimumPressDuration = 0.5
+        lpgr.delegate = self
+        lpgr.delaysTouchesBegan = true
+        self.collectionView?.addGestureRecognizer(lpgr)
         
         if let nb = self.ninebot {
             
@@ -162,6 +168,23 @@ class BLEHistoDashboard: UIViewController {
             
             
         }
+    }
+    
+    func handleLongPress(gestureRecognizer : UILongPressGestureRecognizer){
+        
+        if (gestureRecognizer.state != UIGestureRecognizerState.Ended){
+            return
+        }
+        
+        let p = gestureRecognizer.locationInView(self.collectionView)
+        
+        if let indexPath : NSIndexPath = (self.collectionView?.indexPathForItemAtPoint(p))!{
+            //do whatever you need to do
+            if indexPath.row == 0{
+                self.performSegueWithIdentifier("otherMapSegue", sender: self)
+            }
+        }
+        
     }
     
     //MARK: Preview Action Items
@@ -275,8 +298,8 @@ extension BLEHistoDashboard : UICollectionViewDelegate {
         
         switch row {
             
-        case 0: // Speed/map , open Map
-            performSegueWithIdentifier("otherMapSegue", sender: self)
+// **       case 0: // Speed/map , open Map
+// **           performSegueWithIdentifier("otherMapSegue", sender: self)
             
             
         default:
