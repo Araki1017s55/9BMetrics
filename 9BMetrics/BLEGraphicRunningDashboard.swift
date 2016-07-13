@@ -226,7 +226,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                         let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.Duration))
                         self.fTime.text = String(format:"%02d:%02d:%02d", h, m, s)
                         
-                        let v = nb.currentValueForVariable(.Speed)! * 3.6 // In Km/h
+                        let v = nb.getCurrentValueForVariable(.Speed) * 3.6 // In Km/h
                         let b = nb.getCurrentValueForVariable(.Battery)
                         let t = nb.getCurrentValueForVariable(.Temperature)
                         let volt = nb.getCurrentValueForVariable(.Voltage)
