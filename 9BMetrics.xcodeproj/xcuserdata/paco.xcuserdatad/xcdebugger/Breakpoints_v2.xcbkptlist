@@ -74,7 +74,7 @@
                   moduleName = "9BMetrics"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLEMim.swift"
-                  timestampString = "488741300.335358"
+                  timestampString = "490089234.868062"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "241"
@@ -89,7 +89,7 @@
                   moduleName = "9BMetrics"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLEMim.swift"
-                  timestampString = "488741300.335553"
+                  timestampString = "490089234.868202"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "240"
@@ -97,22 +97,6 @@
                   offsetFromSymbolStart = "12">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "9BMetrics/WheelTrack.swift"
-            timestampString = "484510971.571054"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1696"
-            endingLineNumber = "1696"
-            landmarkName = "locationArray()"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -186,7 +170,7 @@
                   moduleName = "9BMetrics"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/AppDelegate.swift"
-                  timestampString = "488741300.338073"
+                  timestampString = "490089234.875714"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "189"
@@ -201,7 +185,7 @@
                   moduleName = "9BMetrics"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/AppDelegate.swift"
-                  timestampString = "488741300.338193"
+                  timestampString = "490089234.876396"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "189"
