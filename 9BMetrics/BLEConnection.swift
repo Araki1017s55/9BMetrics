@@ -149,7 +149,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
             }
             if let peri = self.discoveredPeripheral {
                 if let central = self.centralManager{
-                    central.cancelPeripheralConnection(peri)
+                   central.cancelPeripheralConnection(peri) //**
                 }
             }
         }
@@ -157,7 +157,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         self.connected = false
         self.subscribed = false
         self.connecting = false
-        self.discoveredPeripheral = nil;
+        self.discoveredPeripheral = nil //** 
     }
     
     //MARK: CBCentralManagerDelegate
