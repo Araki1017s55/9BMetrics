@@ -335,6 +335,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
                         <outlet property="fMapButton" destination="eNw-AL-hNW" id="Hdn-Eg-Zir"/>
                         <outlet property="titleField" destination="qlD-tt-3Xv" id="dF8-4w-5QP"/>
@@ -821,6 +822,7 @@
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="collectionView" destination="r2B-l9-UD5" id="KUE-F0-fMs"/>
@@ -928,21 +930,21 @@
                         <viewControllerLayoutGuide type="bottom" id="2Pm-8H-Ieu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gjI-Ou-J7X">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iO1-UH-wOy" customClass="TMKGraphView" customModule="_BMetrics" customModuleProvider="target">
-                                <rect key="frame" x="-4" y="20" width="383" height="497"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="497"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="DuF-6H-UYu" id="VbS-8E-bl5"/>
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="31Y-vd-EIt">
-                                <rect key="frame" x="-4" y="517" width="383" height="150"/>
+                                <rect key="frame" x="0.0" y="450" width="600" height="150"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Variable title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D1O-6L-5Or">
-                                        <rect key="frame" x="17" y="8" width="358" height="21"/>
+                                        <rect key="frame" x="17" y="8" width="575" height="21"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                         <color key="textColor" red="0.019607843140000001" green="0.45882352939999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -954,19 +956,19 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Max/min values" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ihq-a5-9GM">
-                                        <rect key="frame" x="17" y="61" width="358" height="18"/>
+                                        <rect key="frame" x="17" y="61" width="575" height="18"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                         <color key="textColor" red="0.019607843140000001" green="0.45882352939999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of points / Average period" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ICs-3L-r3x">
-                                        <rect key="frame" x="17" y="87" width="358" height="18"/>
+                                        <rect key="frame" x="17" y="87" width="575" height="18"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                         <color key="textColor" red="0.019607843140000001" green="0.45882352939999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HXo-9u-B2v">
-                                        <rect key="frame" x="17" y="37" width="358" height="18"/>
+                                        <rect key="frame" x="17" y="37" width="575" height="18"/>
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                         <color key="textColor" red="0.019607843140000001" green="0.45882352939999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1331,6 +1333,7 @@
                             <constraint firstItem="cR9-rK-Itf" firstAttribute="top" secondItem="Jlx-br-CLa" secondAttribute="bottom" constant="8" id="zpn-M5-xKP"/>
                         </constraints>
                     </view>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="fBattery" destination="Km6-XT-bt8" id="4kd-iX-QxX"/>
@@ -1619,13 +1622,22 @@
                                     <constraint firstAttribute="width" constant="100" id="KGq-RR-TY5"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZOU-sD-7AH">
+                                <rect key="frame" x="309" y="600" width="46" height="30"/>
+                                <state key="normal" title="Map"/>
+                                <connections>
+                                    <segue destination="qqE-ny-9Bb" kind="presentation" identifier="graphMapSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="iMQ-He-W2A"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="ZOU-sD-7AH" firstAttribute="trailing" secondItem="X8t-8n-GuC" secondAttribute="trailingMargin" id="33u-Pf-Ymb"/>
                             <constraint firstItem="euG-U3-PYv" firstAttribute="top" secondItem="iKP-76-ilx" secondAttribute="bottom" constant="27" id="5tW-EM-XNt"/>
                             <constraint firstItem="nD3-J4-Uo1" firstAttribute="centerY" secondItem="iKP-76-ilx" secondAttribute="centerY" id="6mo-FM-gjY"/>
                             <constraint firstItem="BuC-97-6nD" firstAttribute="centerX" secondItem="X8t-8n-GuC" secondAttribute="centerX" id="8jU-Wd-rXJ"/>
                             <constraint firstItem="2qc-3D-L4X" firstAttribute="leading" secondItem="X8t-8n-GuC" secondAttribute="leadingMargin" constant="-4" id="Cdc-ME-bj4"/>
+                            <constraint firstItem="ZOU-sD-7AH" firstAttribute="centerY" secondItem="IbX-v8-QQv" secondAttribute="centerY" id="H6f-Rd-5QV"/>
                             <constraint firstItem="huQ-Ha-oN3" firstAttribute="centerY" secondItem="X8t-8n-GuC" secondAttribute="centerY" id="Mdw-hB-QBH"/>
                             <constraint firstItem="BuC-97-6nD" firstAttribute="top" secondItem="lDw-dF-1qi" secondAttribute="bottom" constant="133" id="RP6-Cz-rJv"/>
                             <constraint firstItem="euG-U3-PYv" firstAttribute="leading" secondItem="X8t-8n-GuC" secondAttribute="leadingMargin" id="SWz-XA-m9l"/>
@@ -1645,6 +1657,7 @@
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="fBattery" destination="iKP-76-ilx" id="19w-rv-8Fg"/>
@@ -1678,9 +1691,9 @@
         <image name="reload" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ucI-lm-cZv"/>
+        <segue reference="r1t-1A-a22"/>
         <segue reference="0GB-gO-lWT"/>
         <segue reference="nZ7-qu-ujD"/>
-        <segue reference="SRt-gK-Tyg"/>
+        <segue reference="1AL-ba-LUv"/>
     </inferredMetricsTieBreakers>
 </document>
