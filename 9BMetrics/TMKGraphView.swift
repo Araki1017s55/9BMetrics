@@ -1477,8 +1477,13 @@ class TMKGraphView: UIView {
             
         }
         
+        
         self.computeDataForSeries()
         self.recomputeSelectionPosition()
+        if let ds = self.dataSource  {
+            ds.updateStats()
+            
+        }
         
         self.setNeedsDisplay()
         
