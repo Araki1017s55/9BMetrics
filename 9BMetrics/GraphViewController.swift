@@ -79,7 +79,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
             
             fAverageValue.text = String(format:"Average Value : %0.2f", avgv)
             fExtremeValues.text = String(format:"Minimum : %0.2f Maximum : %0.2f", minv, maxv)
-            fNumberOfValues.text = String(format:"Samples %d", numberOfPointsForSerie(0, value: shownVariable))
+            fNumberOfValues.text = String(format:"Samples %d", originalCountLog(shownVariable))
             
         }
         
@@ -393,6 +393,15 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
                 resampledLog = nb.resample(v, from: 0.0, to: t, step: step)    // Will update with othe data
             }
             shownVariable = variable
+        }
+    }
+    
+    func originalCountLog(variable : Int) -> Int{
+        let v = displayableVariables[variable]
+        if let nb = self.ninebot {
+            return nb.countLogForVariable(v)
+        }else{
+            return 0
         }
     }
     
