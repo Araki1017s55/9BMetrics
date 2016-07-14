@@ -136,7 +136,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         switch segue.identifier! {
             
-            case "otherMapSegue":
+            case "otherMapSegue": //graphMapSegue
                   if let vc = segue.destinationViewController as? BLEMapViewController  {
                     vc.dades = self.ninebot
             }
@@ -170,6 +170,15 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         }
     }
     
+    override func shouldAutorotate() -> Bool {
+        return false
+    }
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return [.Portrait]
+    }
+    override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
+        return .Portrait
+    }
     func handleLongPress(gestureRecognizer : UILongPressGestureRecognizer){
         
         if (gestureRecognizer.state != UIGestureRecognizerState.Ended){
