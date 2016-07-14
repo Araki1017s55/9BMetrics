@@ -388,6 +388,14 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 }
             }
             
+            else if segue.identifier == "graphMapSegue"{
+                if let vc = segue.destinationViewController as? BLEMapViewController,
+                    nb = self.client?.datos{
+                    vc.dades = nb
+                }
+               
+            }
+            
             
         }
         
