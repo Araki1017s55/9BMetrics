@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var genericAlert : UIAlertView?
     
-    var ubiquityUrl : NSURL?
+    var ubiquityUrl : URL?
 
     var datos : WheelTrack = WheelTrack()
     var client : BLESimulatedClient?
@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     weak var mainController : ViewController?
     
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
  
@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
+        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
             
             launchedShortcutItem = shortcutItem
             
@@ -66,36 +66,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    func setShortcutItems(recording : Bool){
+    func setShortcutItems(_ recording : Bool){
         
         var item : UIMutableApplicationShortcutItem?
         
         if recording {
-            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Stop", localizedTitle: "Stop", localizedSubtitle: "Stop recording data", icon: UIApplicationShortcutIcon(type: .Pause), userInfo: [
-                AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.Pause.rawValue
+            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Stop", localizedTitle: "Stop", localizedSubtitle: "Stop recording data", icon: UIApplicationShortcutIcon(type: .pause), userInfo: [
+                AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.pause.rawValue
                 ]
             )
         }
         else{
-            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Record", localizedTitle: "Record", localizedSubtitle: "Start recording data", icon: UIApplicationShortcutIcon(type: .Play), userInfo: [
-                AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.Play.rawValue
+            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Record", localizedTitle: "Record", localizedSubtitle: "Start recording data", icon: UIApplicationShortcutIcon(type: .play), userInfo: [
+                AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.play.rawValue
             ]
             )
         }
         
         
         if let it = item {
-            UIApplication.sharedApplication().shortcutItems = [it]
+            UIApplication.shared.shortcutItems = [it]
         }
         
         
     }
     
-    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        if url.fileURL{
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+        if url.isFileURL{
             
             
-            guard let name = url.URLByDeletingPathExtension?.lastPathComponent else {return false}
+            guard let name = url.deletingPathExtension().lastPathComponent else {return false}
             guard let ext = url.pathExtension else {return false}
             
             var newExt = ext
@@ -104,19 +104,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             
-            guard var newUrl =  self.applicationDocumentsDirectory()?.URLByAppendingPathComponent(name).URLByAppendingPathExtension(newExt) else {return false}
+            guard var newUrl =  self.applicationDocumentsDirectory()?.appendingPathComponent(name).appendingPathExtension(newExt) else {return false}
             
-            let mgr = NSFileManager.defaultManager()
+            let mgr = FileManager.default
             
             // Check if file exists
             
             var ct = 1
             guard var path = newUrl.path else {return false}
             
-            while mgr.fileExistsAtPath(path){
+            while mgr.fileExists(atPath: path){
                 
                 let newName = String(format: "%@(%d)", name, ct)
-                let aUrl = self.applicationDocumentsDirectory()?.URLByAppendingPathComponent(newName).URLByAppendingPathExtension(newExt)
+                let aUrl = self.applicationDocumentsDirectory()?.appendingPathComponent(newName).appendingPathExtension(newExt)
                 if let url = aUrl{
                     path = url.path!
                     newUrl = url
@@ -136,7 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     })
                 }else {
                     
-                    try mgr.moveItemAtURL(url, toURL: newUrl)
+                    try mgr.moveItem(at: url, to: newUrl)
                 }
                 
                 if let wc = self.mainController{
@@ -159,23 +159,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
   
     
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
     
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
     
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         
         NSLog("Foreground")
     }
     
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
         NSLog("Activating")
@@ -183,7 +183,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
         if let cli = self.client {
@@ -206,13 +206,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     
-    func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         let handledShortCutItem = handleShortCutItem(shortcutItem)
         
         completionHandler(handledShortCutItem)
     }
     
-    func handleShortCutItem(shortcut : UIApplicationShortcutItem) -> Bool{
+    func handleShortCutItem(_ shortcut : UIApplicationShortcutItem) -> Bool{
 
         AppDelegate.debugLog("Handle Sort Cut Item")
         launchedShortcutItem = nil // Clear it
@@ -260,7 +260,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    @IBAction func stop(src: AnyObject){
+    @IBAction func stop(_ src: AnyObject){
         
         
         if let cli = self.client{
@@ -274,7 +274,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Missatges de Debug
     
-    static func debugLog(format: String, _ args: CVarArgType...) {
+    static func debugLog(_ format: String, _ args: CVarArg...) {
         
         if AppDelegate.debugging {
             withVaList(args){
@@ -286,19 +286,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //MARK : Directory Management
     
-    func localApplicationDocumentsDirectory() -> NSURL?
+    func localApplicationDocumentsDirectory() -> URL?
     {
-        let docs = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask).last
+        let docs = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last
         
         return docs
         
     }
     
     
-    func applicationDocumentsDirectory() -> NSURL?{
+    func applicationDocumentsDirectory() -> URL?{
         
         if let url = self.ubiquityUrl{
-            return url.URLByAppendingPathComponent("Documents")
+            return url.appendingPathComponent("Documents")
         }
         else{
             return self.localApplicationDocumentsDirectory()
@@ -309,7 +309,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //MARK: - Utilities
     
     
-    func displayMessageWithTitle(title: String, format: String, _ args: CVarArgType...)
+    func displayMessageWithTitle(_ title: String, format: String, _ args: CVarArg...)
     {
         var  msg  = ""
             
@@ -320,16 +320,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.genericAlert =  UIAlertView(title: title, message: msg, delegate: self, cancelButtonTitle: "OK")
         
         if let alert = self.genericAlert{
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 alert.show()
             })
         }
     }
     
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+    func alertView(_ alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if alertView == self.genericAlert
         {
-            alertView.dismissWithClickedButtonIndex(buttonIndex, animated: true)
+            alertView.dismiss(withClickedButtonIndex: buttonIndex, animated: true)
         }
     }
 

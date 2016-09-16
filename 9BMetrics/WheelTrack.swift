@@ -81,13 +81,13 @@ class WheelTrack: NSObject {
     
     
     struct LogEntry {
-        var timestamp : NSTimeInterval
+        var timestamp : TimeInterval
         var value : Double
     }
     
     struct WheelVariable {
         var codi : WheelValue      // Meaning
-        var timeStamp : NSTimeInterval     // Last Update since firstDate
+        var timeStamp : TimeInterval     // Last Update since firstDate
         var currentValue : Double         // Value
         var minValue : Double      // Minimum value
         var maxValue : Double      // Maximum Value
@@ -97,7 +97,7 @@ class WheelTrack: NSObject {
         var log : [LogEntry] // Log Array
     }
     
-    private var units : [WheelValue : Unit] = [
+    fileprivate var units : [WheelValue : Unit] = [
         .StartDate : .Seconds,
         .Name : .String,
         .SerialNo : .String,
@@ -124,40 +124,40 @@ class WheelTrack: NSObject {
         .Temperature : .Celsius_Degrees]
     
     
-    var url : NSURL?
-    private var name : String?
-    private var serialNo : String?
-    private var version : String?
+    var url : URL?
+    fileprivate var name : String?
+    fileprivate var serialNo : String?
+    fileprivate var version : String?
     
-    private var trackImg : UIImage?
+    fileprivate var trackImg : UIImage?
     
     
-    private var data = [WheelValue : WheelVariable]()
+    fileprivate var data = [WheelValue : WheelVariable]()
     
-    var firstDate : NSDate?
+    var firstDate : Date?
     
-    private var distOffset = 0.0  // Just to support stop start without affecting total distance. We supose we start at same place we stopped
+    fileprivate var distOffset = 0.0  // Just to support stop start without affecting total distance. We supose we start at same place we stopped
     
-    private var ascent : Double?
-    private var descent : Double?
-    private var energyUsed : Double?
-    private var energyRecovered : Double?
-    private var batCapacity : Double = 340.0 * 3600.0
+    fileprivate var ascent : Double?
+    fileprivate var descent : Double?
+    fileprivate var energyUsed : Double?
+    fileprivate var energyRecovered : Double?
+    fileprivate var batCapacity : Double = 340.0 * 3600.0
     
     //MARK: Conversion variables
     
-    static var conversion = Array<WheelTrack.WheelValue?>(count : 256, repeatedValue: nil)
-    static var scales = Array<Double>(count : 256, repeatedValue: 1.0)
+    static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
+    static var scales = Array<Double>(repeating: 1.0, count: 256)
     
     
     //MARK: .gpx export variables
     
-    private let xmlHeader : String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<gpx xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.cluetrust.com/XML/GPXDATA/1/0 http://www.cluetrust.com/Schemas/gpxdata10.xsd http://www.gorina.es/XML/TRACESDATA/1/0/tracesdata.xsd\" xmlns:gpxdata=\"http://www.cluetrust.com/XML/GPXDATA/1/0\" xmlns:tracesdata=\"http://www.gorina.es/XML/TRACESDATA/1/0\" version=\"1.1\" creator=\"9BMetrics - http://www.gorina.es/9BMetrics\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n"
+    fileprivate let xmlHeader : String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<gpx xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.cluetrust.com/XML/GPXDATA/1/0 http://www.cluetrust.com/Schemas/gpxdata10.xsd http://www.gorina.es/XML/TRACESDATA/1/0/tracesdata.xsd\" xmlns:gpxdata=\"http://www.cluetrust.com/XML/GPXDATA/1/0\" xmlns:tracesdata=\"http://www.gorina.es/XML/TRACESDATA/1/0\" version=\"1.1\" creator=\"9BMetrics - http://www.gorina.es/9BMetrics\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n"
     
-    private let xmlFooter = "</trkseg>\n</trk>\n</gpx>\n"
+    fileprivate let xmlFooter = "</trkseg>\n</trk>\n</gpx>\n"
     
     
-    private var trackHeader : String {
+    fileprivate var trackHeader : String {
         return "<trk>\n<name>$</name>\n\n<trkseg>\n"
     }
     //MARK: Auxiliary functions
@@ -215,16 +215,16 @@ class WheelTrack: NSObject {
     }
     
     
-    var otherFormatter : NSDateFormatter = NSDateFormatter()
+    var otherFormatter : DateFormatter = DateFormatter()
     
     override init(){
         super.init()
         
         WheelTrack.initConversion()
         
-        otherFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        otherFormatter.locale = Locale(identifier: "en_US_POSIX")
         
-        otherFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
+        otherFormatter.timeZone = TimeZone(abbreviation: "UTC")
         otherFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'.000Z'"
     }
     
@@ -245,7 +245,7 @@ class WheelTrack: NSObject {
         trackImg = nil
     }
     
-    func HMSfromSeconds(secs : NSTimeInterval) -> (Int, Int, Int) {
+    func HMSfromSeconds(_ secs : TimeInterval) -> (Int, Int, Int) {
         
         let hours =  floor(secs / 3600.0)
         let minutes = floor((secs - (hours * 3600.0)) / 60.0)
@@ -256,12 +256,12 @@ class WheelTrack: NSObject {
     }
     
     
-    private func postVariableChanged(variable : WheelVariable){
+    fileprivate func postVariableChanged(_ variable : WheelVariable){
         
-        let info : [NSObject : AnyObject] = ["variable" : variable.codi.rawValue]
-        let not = NSNotification(name: kWheelVariableChangedNotification, object: self, userInfo: info)
+        let info : [AnyHashable: Any] = ["variable" : variable.codi.rawValue]
+        let not = Notification(name: Notification.Name(rawValue: kWheelVariableChangedNotification), object: self, userInfo: info)
         
-        NSNotificationCenter.defaultCenter().postNotification(not)
+        NotificationCenter.default.post(not)
     }
     
     
@@ -275,7 +275,7 @@ class WheelTrack: NSObject {
     // forced forgets optimization if many values
     // silent doesn't posts notification if values change (for loading files, etc.)
     //
-    func addValueWithDate(dat: NSDate, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
+    func addValueWithDate(_ dat: Date, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
         
         // First value of all sets firstDate!!!
         
@@ -284,7 +284,7 @@ class WheelTrack: NSObject {
         }
         
         
-        let t = dat.timeIntervalSinceDate(firstDate!)
+        let t = dat.timeIntervalSince(firstDate!)
         
         if data[variable] == nil {
             
@@ -293,7 +293,7 @@ class WheelTrack: NSObject {
         }
         
         
-        let v = LogEntry(timestamp: dat.timeIntervalSinceDate(firstDate!), value: value)
+        let v = LogEntry(timestamp: dat.timeIntervalSince(firstDate!), value: value)
         
         let postChange = data[variable]!.currentValue != value && !silent
         
@@ -331,32 +331,32 @@ class WheelTrack: NSObject {
     
     // Auxiliary addValue functions
     
-    func addValue(variable:WheelValue, value:Double){
-        addValueWithDate(NSDate(), variable : variable, value : value, forced : false, silent: false)
+    func addValue(_ variable:WheelValue, value:Double){
+        addValueWithDate(Date(), variable : variable, value : value, forced : false, silent: false)
     }
     
-    func addValueWithDate(dat: NSDate, variable : WheelValue, value : Double){
+    func addValueWithDate(_ dat: Date, variable : WheelValue, value : Double){
         addValueWithDate(dat, variable : variable, value : value, forced : false, silent: false)
     }
     
     
-    func addValueWithTimeInterval(time: NSTimeInterval, variable : WheelValue, value : Double){
+    func addValueWithTimeInterval(_ time: TimeInterval, variable : WheelValue, value : Double){
         
         addValueWithTimeInterval(time, variable : variable, value : value, forced : false, silent: false)
     }
     
-    func addValueWithTimeInterval(time: NSTimeInterval, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
+    func addValueWithTimeInterval(_ time: TimeInterval, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
         
         if firstDate == nil {
-            firstDate = NSDate().dateByAddingTimeInterval(-time)
+            firstDate = Date().addingTimeInterval(-time)
         }
         
-        let date = firstDate!.dateByAddingTimeInterval(time)
+        let date = firstDate!.addingTimeInterval(time)
         
         self.addValueWithDate(date, variable: variable, value: value, forced: forced, silent: silent)
     }
     
-    func addLogValue(time: NSTimeInterval, variable : WheelValue, value : Double){
+    func addLogValue(_ time: TimeInterval, variable : WheelValue, value : Double){
         if data[variable] == nil {
             return
         }
@@ -367,13 +367,13 @@ class WheelTrack: NSObject {
     
     // Setting general information
     
-    func setName(name : String){
+    func setName(_ name : String){
         self.name = name
     }
-    func setSerialNo(serialNo : String){
+    func setSerialNo(_ serialNo : String){
         self.serialNo = serialNo
     }
-    func setVersion(version : String){
+    func setVersion(_ version : String){
         self.version = version
     }
     
@@ -381,8 +381,8 @@ class WheelTrack: NSObject {
     // MARK: Query Functions
     
     
-    func hasDataInVariable(v : WheelValue) -> Bool{
-        guard let vv = data[v] where vv.log.count > 0 else {return false}
+    func hasDataInVariable(_ v : WheelValue) -> Bool{
+        guard let vv = data[v] , vv.log.count > 0 else {return false}
         return true
     }
     
@@ -398,7 +398,7 @@ class WheelTrack: NSObject {
         return n1 > 0 && n2 > 0
     }
     
-    func countLogForVariable(v : WheelValue) -> Int{
+    func countLogForVariable(_ v : WheelValue) -> Int{
         
         if let vv = data[v] {
             if !vv.loaded{
@@ -411,7 +411,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func currentValueForVariable(v : WheelValue) -> Double?{
+    func currentValueForVariable(_ v : WheelValue) -> Double?{
         
         if let vv = data[v] {
             return vv.currentValue
@@ -420,7 +420,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func entryAtPointForVariable(v : WheelValue, atPoint point : Int) -> LogEntry?{
+    func entryAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> LogEntry?{
         
         if let vv = data[v] {
             if !vv.loaded {
@@ -437,7 +437,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func valueAtPointForVariable(v : WheelValue, atPoint point : Int) -> Double?{
+    func valueAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> Double?{
         if let e = entryAtPointForVariable(v, atPoint : point){
             return e.value
         }else {
@@ -445,7 +445,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func timeAtPointForVariable(v : WheelValue, atPoint point : Int) -> NSTimeInterval?{
+    func timeAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> TimeInterval?{
         if let e = entryAtPointForVariable(v, atPoint : point){
             return e.timestamp
         }else {
@@ -453,9 +453,9 @@ class WheelTrack: NSObject {
         }
     }
     
-    func dateAtPointForVariable(v : WheelValue, atPoint point : Int) -> NSDate?{
-        if let e = entryAtPointForVariable(v, atPoint : point), date = firstDate{
-            return date.dateByAddingTimeInterval(e.timestamp)
+    func dateAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> Date?{
+        if let e = entryAtPointForVariable(v, atPoint : point), let date = firstDate{
+            return date.addingTimeInterval(e.timestamp)
         }else {
             return nil
         }
@@ -463,7 +463,7 @@ class WheelTrack: NSObject {
     
     
     
-    func value(variable : WheelValue,  forTime t:NSTimeInterval) -> LogEntry?{
+    func value(_ variable : WheelValue,  forTime t:TimeInterval) -> LogEntry?{
         
         if let vv = data[variable] {
             if !vv.loaded {
@@ -471,7 +471,7 @@ class WheelTrack: NSObject {
             }
         }
         
-        guard let v = data[variable] where v.log.count > 0 else {return nil}
+        guard let v = data[variable] , v.log.count > 0 else {return nil}
         
         let x = t
         
@@ -527,7 +527,7 @@ class WheelTrack: NSObject {
     
     // Returns min, max, avg and acum (integral trapezoidal)
     
-    func getFirstLast(variable: WheelValue) -> (Double, Double){
+    func getFirstLast(_ variable: WheelValue) -> (Double, Double){
         if let vv = data[variable] {
             if !vv.loaded {
                 loadVariableFromPackage(vv.codi)
@@ -542,7 +542,7 @@ class WheelTrack: NSObject {
         return (0.0, 0.0)
     }
     
-    func getCurrentStats(variable : WheelValue) -> (Double, Double, Double, Double){
+    func getCurrentStats(_ variable : WheelValue) -> (Double, Double, Double, Double){
         if let vv = data[variable] {
             return (vv.minValue, vv.maxValue, vv.avgValue, vv.intValue)
         } else {
@@ -550,7 +550,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func stats(variable : WheelValue,  from t:NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double, Double, Double){
+    func stats(_ variable : WheelValue,  from t:TimeInterval, to t1: TimeInterval) -> (Double, Double, Double, Double){
         
         if let vv = data[variable] {
             if !vv.loaded {
@@ -558,7 +558,7 @@ class WheelTrack: NSObject {
             }
         }
         
-        guard let v = data[variable] where v.log.count > 0 else {return (0.0, 0.0, 0.0, 0.0)}
+        guard let v = data[variable] , v.log.count > 0 else {return (0.0, 0.0, 0.0, 0.0)}
         let x = t
         
         
@@ -685,7 +685,7 @@ class WheelTrack: NSObject {
             return
         }
         
-        guard let current = data[.Current] where current.log.count > 0 else {return} // Nothing to do :(
+        guard let current = data[.Current] , current.log.count > 0 else {return} // Nothing to do :(
         
         for e in current.log{
             
@@ -704,8 +704,8 @@ class WheelTrack: NSObject {
         }
         buildPower()
         
-        guard let current = self.data[.Current] where current.log.count > 0 else {return}   // No Way
-        guard let power = data[.Power] where power.log.count > 0 else {return}
+        guard let current = self.data[.Current] , current.log.count > 0 else {return}   // No Way
+        guard let power = data[.Power] , power.log.count > 0 else {return}
         
         var acum = 0.0
         var t0 = current.log[0].timestamp
@@ -728,7 +728,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func getLastTimeValueForVariable(variable: WheelValue) -> NSTimeInterval{
+    func getLastTimeValueForVariable(_ variable: WheelValue) -> TimeInterval{
         if let v = data[variable]{
             return v.timeStamp
         }else{
@@ -736,11 +736,11 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getTimeIntervalForVariable(variable: WheelValue, toDate: NSDate) -> NSTimeInterval{
+    func getTimeIntervalForVariable(_ variable: WheelValue, toDate: Date) -> TimeInterval{
         if let v = data[variable]{
             
             if let fd = firstDate{
-                return toDate.timeIntervalSinceDate(fd) - v.timeStamp
+                return toDate.timeIntervalSince(fd) - v.timeStamp
             }else{
                 return 0.0
             }
@@ -749,7 +749,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getCurrentValueForVariable(variable: WheelValue) -> Double{
+    func getCurrentValueForVariable(_ variable: WheelValue) -> Double{
         
         switch variable{
         case .Power:
@@ -767,7 +767,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getValueForVariable(variable:WheelValue, atPoint: Int) -> Double{
+    func getValueForVariable(_ variable:WheelValue, atPoint: Int) -> Double{
         
         switch variable{
         case .Power:
@@ -785,7 +785,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getValueForVariable(variable:WheelValue, time: NSTimeInterval) -> Double {
+    func getValueForVariable(_ variable:WheelValue, time: TimeInterval) -> Double {
         
         switch variable{
         case .Power:
@@ -895,13 +895,13 @@ class WheelTrack: NSObject {
             return img
         }else {
             
-            trackImg = imageWithWidth(350.0,  height:350.0, color:UIColor.yellowColor(), backColor:UIColor.clearColor(), lineWidth: 2.0)
+            trackImg = imageWithWidth(350.0,  height:350.0, color:UIColor.yellow, backColor:UIColor.clear, lineWidth: 2.0)
             
             return trackImg
             
         }
     }
-    func energyDetails(from t0: NSTimeInterval, to t1: NSTimeInterval) -> (Double, Double){
+    func energyDetails(from t0: TimeInterval, to t1: TimeInterval) -> (Double, Double){
         
         if let vv = data[.Energy] {
             if !vv.loaded {
@@ -982,7 +982,7 @@ class WheelTrack: NSObject {
     // resample resamples a subset of the variable generating a new log with 
     // samples distanced a fixed amount.
     
-    func resample(variable:WheelValue, from:NSTimeInterval, to:NSTimeInterval, step:Double) -> [LogEntry]?{
+    func resample(_ variable:WheelValue, from:TimeInterval, to:TimeInterval, step:Double) -> [LogEntry]?{
         
         if let vv = data[variable] {
             if !vv.loaded {
@@ -998,8 +998,8 @@ class WheelTrack: NSObject {
         
         var sampledLog : [LogEntry] = []
         
-        var t0 : NSTimeInterval = 0
-        var t1 : NSTimeInterval = step
+        var t0 : TimeInterval = 0
+        var t1 : TimeInterval = step
         
         var lp : LogEntry = LogEntry(timestamp: 0.0 , value : data[variable]!.log[0].value)
         var acum : Double = 0.0
@@ -1033,10 +1033,10 @@ class WheelTrack: NSObject {
      }
     //MARK: Access to some files 
     
-    func getGPXURL() -> NSURL?{
+    func getGPXURL() -> URL?{
         
         if let myUrl = self.url {
-            let gpxURL = myUrl.URLByAppendingPathComponent("track.gpx")
+            let gpxURL = myUrl.appendingPathComponent("track.gpx")
             
             return gpxURL
         }
@@ -1055,22 +1055,22 @@ class WheelTrack: NSObject {
     
     // Exports a subset of data to a csv, excel compatible file
     
-    func createCSVFileFrom(from : NSTimeInterval, to: NSTimeInterval) -> NSURL?{
+    func createCSVFileFrom(_ from : TimeInterval, to: TimeInterval) -> URL?{
         // Format first date into a filepath
         
         let newName : String
-        let ldateFormatter = NSDateFormatter()
-        let enUSPOSIXLocale = NSLocale(localeIdentifier: "en_US_POSIX")
+        let ldateFormatter = DateFormatter()
+        let enUSPOSIXLocale = Locale(identifier: "en_US_POSIX")
         
         ldateFormatter.locale = enUSPOSIXLocale
         ldateFormatter.dateFormat = "'Sel_'yyyyMMdd'_'HHmmss'.csv'"
         if let date = firstDate{
-            newName = ldateFormatter.stringFromDate(date)
+            newName = ldateFormatter.string(from: date)
         }else{
-            newName = ldateFormatter.stringFromDate(NSDate())
+            newName = ldateFormatter.string(from: Date())
         }
         
-        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
         
         var path : String = ""
         
@@ -1086,27 +1086,27 @@ class WheelTrack: NSObject {
             return nil
         }
         
-        let tempFile = (path + "/" ).stringByAppendingString(newName )
+        let tempFile = (path + "/" ) + newName
         
         
-        let mgr = NSFileManager.defaultManager()
+        let mgr = FileManager.default
         
-        mgr.createFileAtPath(tempFile, contents: nil, attributes: nil)
-        let file = NSURL.fileURLWithPath(tempFile)
+        mgr.createFile(atPath: tempFile, contents: nil, attributes: nil)
+        let file = URL(fileURLWithPath: tempFile)
         
         
         
         do{
-            let hdl = try NSFileHandle(forWritingToURL: file)
+            let hdl = try FileHandle(forWritingTo: file)
             // Get time of first item
             
             if firstDate == nil {
-                firstDate = NSDate()
+                firstDate = Date()
             }
             
             
             let title = String(format: "Time\tCurrent\tVoltage\tPower\tEnergy\tSpeed\tAlt\tDist\tPitch\tRoll\tBatt\tTºC\n")
-            hdl.writeData(title.dataUsingEncoding(NSUTF8StringEncoding)!)
+            hdl.write(title.data(using: String.Encoding.utf8)!)
             
             // Get first ip of current
             
@@ -1132,8 +1132,8 @@ class WheelTrack: NSObject {
                         
                         
                         let s = String(format: "%0.3f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\t%0.2f\n", t, vCurrent, vVoltage, vPower, vEnergy, vSpeed, vAlt, vDistance, vPitch, vRoll, vBattery, vTemp)
-                        if let vn = s.dataUsingEncoding(NSUTF8StringEncoding){
-                            hdl.writeData(vn)
+                        if let vn = s.data(using: String.Encoding.utf8){
+                            hdl.write(vn)
                         }
                     }
                 }
@@ -1146,7 +1146,7 @@ class WheelTrack: NSObject {
             
         }
         catch{
-            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+            if let dele = UIApplication.shared.delegate as? AppDelegate{
                 dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file)
             }
             
@@ -1164,60 +1164,60 @@ class WheelTrack: NSObject {
         guard let date = firstDate else {return nil}    // Timestamps have no sens without firstDate
         
         var str = String(format: "Date,%f\n", date.timeIntervalSince1970)
-        str.appendContentsOf(String(format: "Energy_Used,%f\n", getEnergyUsed()))
-        str.appendContentsOf(String(format: "Energy_Recovered,%f\n", getEnergyRecovered()))
-        str.appendContentsOf(String(format: "Ascent,%f\n", getAscent()))
-        str.appendContentsOf(String(format: "Descent,%f\n", getDescent()))
+        str.append(String(format: "Energy_Used,%f\n", getEnergyUsed()))
+        str.append(String(format: "Energy_Recovered,%f\n", getEnergyRecovered()))
+        str.append(String(format: "Ascent,%f\n", getAscent()))
+        str.append(String(format: "Descent,%f\n", getDescent()))
         
         for (_, v) in data{
             // Linies tenen el nom de la variable + currentValue, min, max, avg, int values
             
-            str.appendContentsOf(String(format: "%@,%.3f,%.2f,%.2f,%.2f,%.2f,%.2f\n", v.codi.rawValue, v.timeStamp,  v.currentValue, v.minValue, v.maxValue, v.avgValue, v.intValue))
+            str.append(String(format: "%@,%.3f,%.2f,%.2f,%.2f,%.2f,%.2f\n", v.codi.rawValue, v.timeStamp,  v.currentValue, v.minValue, v.maxValue, v.avgValue, v.intValue))
         }
         
         return str
         
     }
     
-    func loadSummary(str : String) {
+    func loadSummary(_ str : String) {
         
-        let lines = str.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        let lines = str.components(separatedBy: CharacterSet.newlines)
         for line in lines {
-            let fields = line.componentsSeparatedByString(",")
+            let fields = line.components(separatedBy: ",")
             let codeStr = fields[0]
             
             switch codeStr {
                 
             case "Date":
-                guard let dt = Double(fields[1].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
-                firstDate = NSDate(timeIntervalSince1970: dt)
+                guard let dt = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
+                firstDate = Date(timeIntervalSince1970: dt)
                 
             case "Energy_Used":
-                guard let val = Double(fields[1].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
+                guard let val = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
                 energyUsed = val
                 
             case "Energy_Recovered":
-                guard let val = Double(fields[1].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
+                guard let val = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
                 energyRecovered = val
                 
             case "Ascent":
-                guard let val = Double(fields[1].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
+                guard let val = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
                 ascent = val
                 
             case "Descent":
-                guard let val = Double(fields[1].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
+                guard let val = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
                 descent = val
                 
             default:
                 
                 if let codi = WheelValue(rawValue: codeStr){
                     
-                    guard let dt = Double(fields[1].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
-                    guard let curv = Double(fields[2].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
-                    guard let minv = Double(fields[3].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
-                    guard let maxv = Double(fields[4].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
-                    guard let avgv = Double(fields[5].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
-                    guard let intv = Double(fields[6].stringByReplacingOccurrencesOfString(" ", withString: "")) else {continue }
+                    guard let dt = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
+                    guard let curv = Double(fields[2].replacingOccurrences(of: " ", with: "")) else {continue }
+                    guard let minv = Double(fields[3].replacingOccurrences(of: " ", with: "")) else {continue }
+                    guard let maxv = Double(fields[4].replacingOccurrences(of: " ", with: "")) else {continue }
+                    guard let avgv = Double(fields[5].replacingOccurrences(of: " ", with: "")) else {continue }
+                    guard let intv = Double(fields[6].replacingOccurrences(of: " ", with: "")) else {continue }
                     
                     if data[codi] == nil{
                         data[codi] = WheelVariable(codi: codi, timeStamp: dt, currentValue: curv , minValue: minv , maxValue: maxv , avgValue: avgv , intValue: intv, loaded: false, log: [])
@@ -1238,9 +1238,9 @@ class WheelTrack: NSObject {
         }
     }
     
-    func variableLogtoString(variable : WheelValue) -> String?{
+    func variableLogtoString(_ variable : WheelValue) -> String?{
         
-        guard let v = data[variable] where v.log.count > 0 else {return nil}
+        guard let v = data[variable] , v.log.count > 0 else {return nil}
         
         let varName = v.codi.rawValue
         
@@ -1259,19 +1259,19 @@ class WheelTrack: NSObject {
         
     }
     
-    func addValuesFromString(s : String) {
+    func addValuesFromString(_ s : String) {
         
         
-        let lines = s.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        let lines = s.components(separatedBy: CharacterSet.newlines)
         
         var lineNumber = 0
         var version = 1
-        var date0 : NSDate?
+        var date0 : Date?
         var variable : WheelValue?
         
         
         for line in lines {
-            let fields = line.componentsSeparatedByString(",")
+            let fields = line.components(separatedBy: ",")
             
             if lineNumber == 0 {
                 
@@ -1283,9 +1283,9 @@ class WheelTrack: NSObject {
                             
                             // field 3 has first date
                             
-                            guard let dt = Double(fields[3].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return }
-                            date0 = NSDate(timeIntervalSince1970: dt)
-                            let varstr = fields[5].stringByReplacingOccurrencesOfString(" ", withString: "")
+                            guard let dt = Double(fields[3].replacingOccurrences(of: " ", with: "")) else {return }
+                            date0 = Date(timeIntervalSince1970: dt)
+                            let varstr = fields[5].replacingOccurrences(of: " ", with: "")
                             variable = WheelValue(rawValue: varstr)
                             self.firstDate = date0
                             
@@ -1322,15 +1322,15 @@ class WheelTrack: NSObject {
     }
     
     
-    func createPackage(name : String) -> NSURL?{
+    func createPackage(_ name : String) -> URL?{
         
-        guard let docDir = (UIApplication.sharedApplication().delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+        guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
         
-        let pkgURL = docDir.URLByAppendingPathComponent(name).URLByAppendingPathExtension("9bm")
+        let pkgURL = docDir.appendingPathComponent(name)?.appendingPathExtension("9bm")
         
         // Try to use file wrappers (ufff)
         
-        let contents = NSFileWrapper(directoryWithFileWrappers: [:])
+        let contents = FileWrapper(directoryWithFileWrappers: [:])
         
         for(_, v) in self.data {
             NSLog("Data %@, %.2f", v.codi.rawValue, v.currentValue)
@@ -1339,19 +1339,19 @@ class WheelTrack: NSObject {
         
         if let s = createSummaryFile(){
             let filename = "summary.csv"
-            if let dat = s.dataUsingEncoding(NSUTF8StringEncoding){
-                let fWrapper = NSFileWrapper(regularFileWithContents: dat)
+            if let dat = s.data(using: String.Encoding.utf8){
+                let fWrapper = FileWrapper(regularFileWithContents: dat)
                 fWrapper.preferredFilename = filename
                 contents.addFileWrapper(fWrapper)
             }
         }
         
-        trackImg = imageWithWidth(350.0,  height:350.0, color:UIColor.yellowColor(), backColor:UIColor.clearColor(), lineWidth: 2.0)
+        trackImg = imageWithWidth(350.0,  height:350.0, color:UIColor.yellow, backColor:UIColor.clear, lineWidth: 2.0)
         
         if let img = trackImg{
             if let imgData = UIImagePNGRepresentation(img){
                 let filename = "image.png"
-                let fWrapper = NSFileWrapper(regularFileWithContents: imgData)
+                let fWrapper = FileWrapper(regularFileWithContents: imgData)
                 fWrapper.preferredFilename = filename
                 contents.addFileWrapper(fWrapper)
             }
@@ -1360,9 +1360,9 @@ class WheelTrack: NSObject {
         
         if hasGPSData() {
             
-            if let gpxData = self.createGPXString().dataUsingEncoding(NSUTF8StringEncoding) {
+            if let gpxData = self.createGPXString().data(using: String.Encoding.utf8) {
                 let filename = "track.gpx"
-                let fWrapper = NSFileWrapper(regularFileWithContents: gpxData)
+                let fWrapper = FileWrapper(regularFileWithContents: gpxData)
                 fWrapper.preferredFilename = filename
                 contents.addFileWrapper(fWrapper)
             }
@@ -1378,16 +1378,16 @@ class WheelTrack: NSObject {
                 // Save a binary copy of array
                 
                 var l = v.log
-                let nbytes = sizeof(LogEntry) * l.count
-                let dat = NSData(bytes: &l, length: nbytes)
-                let binWrapper = NSFileWrapper(regularFileWithContents: dat)
+                let nbytes = MemoryLayout<LogEntry>.size * l.count
+                let dat = Data(bytes: UnsafePointer<UInt8>(&l), count: nbytes)
+                let binWrapper = FileWrapper(regularFileWithContents: dat)
                 binWrapper.preferredFilename = binName
                 contents.addFileWrapper(binWrapper)
                 
                 
                 if let s = variableLogtoString(v.codi){
-                    if let dat = s.dataUsingEncoding(NSUTF8StringEncoding){
-                        let fWrapper = NSFileWrapper(regularFileWithContents: dat)
+                    if let dat = s.data(using: String.Encoding.utf8){
+                        let fWrapper = FileWrapper(regularFileWithContents: dat)
                         fWrapper.preferredFilename = fileName
                         contents.addFileWrapper(fWrapper)
                     }
@@ -1395,7 +1395,7 @@ class WheelTrack: NSObject {
             }
         }
         do{
-            try contents.writeToURL(pkgURL, options: .WithNameUpdating, originalContentsURL: pkgURL)
+            try contents.write(to: pkgURL!, options: .withNameUpdating, originalContentsURL: pkgURL)
         }catch let err as NSError{
             
             
@@ -1403,30 +1403,30 @@ class WheelTrack: NSObject {
             return nil
         }
         
-        setThumbImage(pkgURL)
+        setThumbImage(pkgURL!)
         
         return pkgURL
     }
     
-    func loadVariableFromPackage(variable: WheelValue){
+    func loadVariableFromPackage(_ variable: WheelValue){
         
         if let pkgURL = self.url{
             
-            let fileURL = pkgURL.URLByAppendingPathComponent(variable.rawValue).URLByAppendingPathExtension("csv")
+            let fileURL = pkgURL.appendingPathComponent(variable.rawValue).appendingPathExtension("csv")
             
             
-            let binURL = pkgURL.URLByAppendingPathComponent(variable.rawValue).URLByAppendingPathExtension("bin")
+            let binURL = pkgURL.appendingPathComponent(variable.rawValue).appendingPathExtension("bin")
             
             
             // Try to load the binary values
             
-                if let logData = NSData(contentsOfURL: binURL){
+                if let logData = try? Data(contentsOf: binURL){
                     
-                    let n = logData.length / sizeof(LogEntry)
+                    let n = logData.count / MemoryLayout<LogEntry>.size
                     
-                    var newLog : [LogEntry] = Array<LogEntry>(count: n, repeatedValue: LogEntry(timestamp: 0.0, value: 0.0))
+                    var newLog : [LogEntry] = Array<LogEntry>(repeating: LogEntry(timestamp: 0.0, value: 0.0), count: n)
                     
-                    logData.getBytes(&newLog, length: logData.length)
+                    (logData as NSData).getBytes(&newLog, length: logData.count)
                     
                     if self.data[variable] != nil {
                         self.data[variable]!.log = newLog
@@ -1440,7 +1440,7 @@ class WheelTrack: NSObject {
                 
             
             do {
-                let str = try String(contentsOfURL: fileURL, encoding: NSUTF8StringEncoding)
+                let str = try String(contentsOf: fileURL, encoding: String.Encoding.utf8)
                 addValuesFromString(str)
                 
                 if self.data[variable] != nil{
@@ -1453,37 +1453,37 @@ class WheelTrack: NSObject {
         }
     }
     
-    func loadPackage(url : NSURL) {
+    func loadPackage(_ url : URL) {
         
         clearAll()
         
         do{
-            let pack = try NSFileWrapper(URL: url, options: [])
+            let pack = try FileWrapper(url: url, options: [])
             
-            if pack.directory{
+            if pack.isDirectory{
                 
                 self.url = url
                 
                 var binaryEnabled = false
                 
                 for (name, fw) in pack.fileWrappers!{
-                    if fw.regularFile && name == "summary.csv"{
+                    if fw.isRegularFile && name == "summary.csv"{
                         
-                        if let str = String(data: fw.regularFileContents!, encoding: NSUTF8StringEncoding){
+                        if let str = String(data: fw.regularFileContents!, encoding: String.Encoding.utf8){
                             loadSummary(str)
                         }
                         
-                    } else if fw.regularFile && name == "image.png" {
+                    } else if fw.isRegularFile && name == "image.png" {
                         
                         self.trackImg = UIImage(data: fw.regularFileContents!)
                         
-                    }else if fw.regularFile && name == "map.gpx"{
+                    }else if fw.isRegularFile && name == "map.gpx"{
                         
                         
                         
-                    }else if fw.regularFile {
+                    }else if fw.isRegularFile {
  
-                        if let fnam = fw.filename where fnam.hasSuffix(".bin"){
+                        if let fnam = fw.filename , fnam.hasSuffix(".bin"){
                             binaryEnabled = true
                         }
                         //if let str = String(data: fw.regularFileContents!, encoding: NSUTF8StringEncoding){
@@ -1502,22 +1502,22 @@ class WheelTrack: NSObject {
                     
                     // OK now update the package
                     
-                    if let name = url.URLByDeletingPathExtension?.lastPathComponent {
-                        let fm = NSFileManager.defaultManager()
-                        if let newUrl = url.URLByDeletingPathExtension?.URLByAppendingPathExtension("bu"){
+                    if let name = url.deletingPathExtension().lastPathComponent {
+                        let fm = FileManager.default
+                        if let newUrl = url.deletingPathExtension().appendingPathExtension("bu"){
                             do{
                         
-                                try fm.moveItemAtURL(url, toURL: newUrl)
+                                try fm.moveItem(at: url, to: newUrl)
                                 let okurl = createPackage(name)
                                 if okurl != nil {
-                                    try fm.removeItemAtURL(newUrl)
+                                    try fm.removeItem(at: newUrl)
                                 } else {
                                     do {
-                                        try fm.removeItemAtURL(url)
+                                        try fm.removeItem(at: url)
                                     }catch{
                                         
                                     }
-                                    try fm.moveItemAtURL(newUrl, toURL: url)
+                                    try fm.moveItem(at: newUrl, to: url)
                                 }
                             }catch{
                                 
@@ -1533,27 +1533,27 @@ class WheelTrack: NSObject {
     
     
     
-    static func createZipFile(pkgUrl : NSURL) -> NSURL?{
+    static func createZipFile(_ pkgUrl : URL) -> URL?{
         
         
-        if let name = pkgUrl.URLByDeletingPathExtension?.lastPathComponent{
+        if let name = pkgUrl.deletingPathExtension().lastPathComponent{
             
             
-            let tmpDirURL = NSURL.fileURLWithPath(NSTemporaryDirectory(),isDirectory: true)
-            let zipURL = tmpDirURL.URLByAppendingPathComponent(name).URLByAppendingPathExtension("9bz")
+            let tmpDirURL = URL(fileURLWithPath: NSTemporaryDirectory(),isDirectory: true)
+            let zipURL = tmpDirURL.appendingPathComponent(name).appendingPathExtension("9bz")
             
             do {
-                var files : [NSURL] = [NSURL]()
+                var files : [URL] = [URL]()
                 
                 
-                let pack = try NSFileWrapper(URL: pkgUrl, options: [])
+                let pack = try FileWrapper(url: pkgUrl, options: [])
                 
-                if pack.directory{
+                if pack.isDirectory{
                     for (_, fw) in pack.fileWrappers!{
                         if let fname = fw.filename{
                             
                             if !fname.hasSuffix(".bin"){    // bin files are just for caching
-                                files.append(pkgUrl.URLByAppendingPathComponent(fname))
+                                files.append(pkgUrl.appendingPathComponent(fname))
                             }
                         }
                     }
@@ -1565,7 +1565,7 @@ class WheelTrack: NSObject {
                 
                 return zipURL
             }catch{
-                if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+                if let dele = UIApplication.shared.delegate as? AppDelegate{
                     dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL)
                 }
                 AppDelegate.debugLog("Error al crear zip file")
@@ -1587,8 +1587,8 @@ class WheelTrack: NSObject {
         }
         
         var buff = ""
-        buff.appendContentsOf(xmlHeader)
-        buff.appendContentsOf(trackHeader.stringByReplacingOccurrencesOfString("$", withString: "9BMetricsTrack"))
+        buff.append(xmlHeader)
+        buff.append(trackHeader.replacingOccurrences(of: "$", with: "9BMetricsTrack"))
         
         let n = min(countLogForVariable(.Latitude), countLogForVariable(.Longitude))
         for i in 0..<n {
@@ -1603,23 +1603,23 @@ class WheelTrack: NSObject {
             }// Altitude in m
             
             
-            let timestr =  self.otherFormatter.stringFromDate(date)
+            let timestr =  self.otherFormatter.string(from: date)
             
-            let timeString : String = timestr.stringByReplacingOccurrencesOfString(" ",  withString: "").stringByReplacingOccurrencesOfString("\n",withString: "").stringByReplacingOccurrencesOfString("\r",withString: "")
+            let timeString : String = timestr.replacingOccurrences(of: " ",  with: "").replacingOccurrences(of: "\n",with: "").replacingOccurrences(of: "\r",with: "")
             
             
             let s = String(format:"<trkpt lat=\"%7.5f\" lon=\"%7.5f\">\n<ele>%3.0f</ele>\n<time>\(timeString)</time>\n</trkpt>\n", lat, lon, ele)
             
-            buff.appendContentsOf(s)
+            buff.append(s)
             
         }
         
-        buff.appendContentsOf(xmlFooter)
+        buff.append(xmlFooter)
         return buff
         
     }
     
-    internal func createGPXFile(url : NSURL) -> (Bool)
+    internal func createGPXFile(_ url : URL) -> (Bool)
     {
         //let cord : NSFileCoordinator = NSFileCoordinator(filePresenter: self.doc)
         //var error : NSError?
@@ -1631,24 +1631,24 @@ class WheelTrack: NSObject {
         
         // Check if it exits
         
-        let mgr =  NSFileManager()
+        let mgr =  FileManager()
         
         
         
-        let exists = mgr.fileExistsAtPath(url.path!)
+        let exists = mgr.fileExists(atPath: url.path)
         
         if !exists{
-            mgr.createFileAtPath(url.path!, contents: "Hello".dataUsingEncoding(NSUTF8StringEncoding), attributes:nil)
+            mgr.createFile(atPath: url.path, contents: "Hello".data(using: String.Encoding.utf8), attributes:nil)
         }
         
         
         
-        if let hdl = NSFileHandle(forWritingAtPath: url.path!){
-            hdl.truncateFileAtOffset(0)
-            hdl.writeData(self.xmlHeader.dataUsingEncoding(NSUTF8StringEncoding)!)
+        if let hdl = FileHandle(forWritingAtPath: url.path){
+            hdl.truncateFile(atOffset: 0)
+            hdl.write(self.xmlHeader.data(using: String.Encoding.utf8)!)
             
             
-            hdl.writeData(self.trackHeader.dataUsingEncoding(NSUTF8StringEncoding)!)
+            hdl.write(self.trackHeader.data(using: String.Encoding.utf8)!)
             
             let n = min(countLogForVariable(.Latitude), countLogForVariable(.Longitude))
             for i in 0..<n {
@@ -1663,18 +1663,18 @@ class WheelTrack: NSObject {
                 }// Altitude in m
                 
                 
-                let timestr =  self.otherFormatter.stringFromDate(date)
+                let timestr =  self.otherFormatter.string(from: date)
                 
-                let timeString : String = timestr.stringByReplacingOccurrencesOfString(" ",  withString: "").stringByReplacingOccurrencesOfString("\n",withString: "").stringByReplacingOccurrencesOfString("\r",withString: "")
+                let timeString : String = timestr.replacingOccurrences(of: " ",  with: "").replacingOccurrences(of: "\n",with: "").replacingOccurrences(of: "\r",with: "")
                 
                 
                 let s = String(format:"<trkpt lat=\"%7.5f\" lon=\"%7.5f\">\n<ele>%3.0f</ele>\n<time>\(timeString)</time>\n</trkpt>\n", lat, lon, ele)
                 
-                hdl.writeData(s.dataUsingEncoding(NSUTF8StringEncoding)!)
+                hdl.write(s.data(using: String.Encoding.utf8)!)
                 
             }
             
-            hdl.writeData(self.xmlFooter.dataUsingEncoding(NSUTF8StringEncoding)!)
+            hdl.write(self.xmlFooter.data(using: String.Encoding.utf8)!)
             hdl.closeFile()
             return true
         }
@@ -1710,7 +1710,7 @@ class WheelTrack: NSObject {
         
         // Loop over 3 and 4
         
-        if let latArray = self.data[.Latitude]?.log, lonArray = self.data[.Longitude]?.log {
+        if let latArray = self.data[.Latitude]?.log, let lonArray = self.data[.Longitude]?.log {
             
             let n = min(latArray.count, lonArray.count)
             
@@ -1725,7 +1725,7 @@ class WheelTrack: NSObject {
     
     //MARK: Legacy
     
-    func wheelValueFor9Bvalue(nbValue : Int) -> WheelValue?{
+    func wheelValueFor9Bvalue(_ nbValue : Int) -> WheelValue?{
         if let wv = WheelTrack.conversion[nbValue] {
             return wv
         }else{
@@ -1734,23 +1734,23 @@ class WheelTrack: NSObject {
         
     }
     
-    func loadTextFile(url:NSURL){
+    func loadTextFile(_ url:URL){
         
         self.clearAll()
         self.url = url
         
         do{
             
-            let data = try String(contentsOfURL: url, encoding: NSUTF8StringEncoding)
-            let lines = data.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+            let data = try String(contentsOf: url, encoding: String.Encoding.utf8)
+            let lines = data.components(separatedBy: CharacterSet.newlines)
             
             var lineNumber = 0
             var version = 1
-            var date0 : NSDate?
+            var date0 : Date?
             var variable : Int = -1
             
             for line in lines {
-                let fields = line.componentsSeparatedByString("\t")
+                let fields = line.components(separatedBy: "\t")
                 
                 if lineNumber == 0 {
                     
@@ -1762,8 +1762,8 @@ class WheelTrack: NSObject {
                                 
                                 // field 3 has first date
                                 
-                                guard let dt = Double(fields[3].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return}
-                                date0 = NSDate(timeIntervalSince1970: dt)
+                                guard let dt = Double(fields[3].replacingOccurrences(of: " ", with: "")) else {return}
+                                date0 = Date(timeIntervalSince1970: dt)
                                 self.firstDate = date0
                                 
                             } else {
@@ -1789,11 +1789,11 @@ class WheelTrack: NSObject {
                 
                 if version == 1 && fields.count == 3{   // Old filea
                     
-                    let time = Double(fields[0].stringByReplacingOccurrencesOfString(" ", withString: ""))
+                    let time = Double(fields[0].replacingOccurrences(of: " ", with: ""))
                     let variable = Int(fields[1])
                     let value = Int(fields[2])
                     
-                    if let t = time, i = variable, v = value {
+                    if let t = time, let i = variable, let v = value {
                         if let wh = wheelValueFor9Bvalue(i){
                             let vd = Double(v) * WheelTrack.scales[i]
                             
@@ -1813,10 +1813,10 @@ class WheelTrack: NSObject {
                     
                 }else if version == 2 && fields.count == 2 {
                     
-                    guard let dt = Double(fields[0].stringByReplacingOccurrencesOfString(" ", withString: "")) else {return}
+                    guard let dt = Double(fields[0].replacingOccurrences(of: " ", with: "")) else {return}
                     
                     if let d = date0{
-                        let t = NSDate(timeInterval: dt, sinceDate: d)
+                        let t = Date(timeInterval: dt, since: d)
                         let value = Int(fields[1])
                         
                         if  let v = value {
@@ -1842,8 +1842,8 @@ class WheelTrack: NSObject {
         
         // OK now build package.
         
-        if let name = url.URLByDeletingPathExtension?.lastPathComponent {
-            let newName = name.stringByReplacingOccurrencesOfString("9B_", withString: "")
+        if let name = url.deletingPathExtension().lastPathComponent {
+            let newName = name.replacingOccurrences(of: "9B_", with: "")
             if let url = createPackage(newName){
                 AppDelegate.debugLog("Package %@ created", url)
             }else{
@@ -1889,7 +1889,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func setThumbImage(url : NSURL){
+    func setThumbImage(_ url : URL){
         
         var thumb : UIImage?
         
@@ -1900,11 +1900,11 @@ class WheelTrack: NSObject {
         }
         
         
-        let dict = [NSThumbnail1024x1024SizeKey: thumb!] as NSDictionary
+        let dict = [URLThumbnailDictionaryItem.NSThumbnail1024x1024SizeKey: thumb!] as NSDictionary
         
         do {
-            try url.setResourceValue( dict,
-                                      forKey:NSURLThumbnailDictionaryKey)
+            try (url as NSURL).setResourceValue( dict,
+                                      forKey:URLResourceKey.thumbnailDictionaryKey)
         }
         catch _{
             NSLog("No puc gravar la imatge :)")
@@ -1915,18 +1915,18 @@ class WheelTrack: NSObject {
     }
     
     
-    internal func imageWithWidth(wid:Double,  height:Double) -> UIImage? {
-        return imageWithWidth(wid,  height:height, color:UIColor.redColor(), backColor:UIColor.whiteColor(), lineWidth: 5.0)
+    internal func imageWithWidth(_ wid:Double,  height:Double) -> UIImage? {
+        return imageWithWidth(wid,  height:height, color:UIColor.red, backColor:UIColor.white, lineWidth: 5.0)
     }
     
-    internal func imageWithWidth(wid:Double,  height:Double, color:UIColor, backColor:UIColor, lineWidth: Double) -> UIImage? {
+    internal func imageWithWidth(_ wid:Double,  height:Double, color:UIColor, backColor:UIColor, lineWidth: Double) -> UIImage? {
         
         if !hasGPSData(){
             return nil
         }
-        TMKImage.beginImageContextWithSize(CGSizeMake(CGFloat(wid) , CGFloat(height)))
+        TMKImage.beginImageContextWithSize(CGSize(width: CGFloat(wid) , height: CGFloat(height)))
         
-        var rect = CGRectMake(0, 0, CGFloat(wid), CGFloat(height))   // Total rectangle
+        var rect = CGRect(x: 0, y: 0, width: CGFloat(wid), height: CGFloat(height))   // Total rectangle
         
         var bz = UIBezierPath(rect: rect)
         
@@ -1934,7 +1934,7 @@ class WheelTrack: NSObject {
         bz.fill()
         bz.stroke()
         
-        rect = CGRectInset(rect, 3.0, 3.0);
+        rect = rect.insetBy(dx: 3.0, dy: 3.0);
         
         bz = UIBezierPath(rect:rect)
         bz.lineWidth = 2.0
@@ -1942,7 +1942,7 @@ class WheelTrack: NSObject {
         
         let (loc0, loc1) = self.computeTrackSize()
         
-        if let locmin = loc0, locmax = loc1 {
+        if let locmin = loc0, let locmax = loc1 {
             
             let p0 = MKMapPointForCoordinate(locmin.coordinate)
             
@@ -1985,17 +1985,17 @@ class WheelTrack: NSObject {
                 let y : CGFloat = CGFloat((p.y-miny) * scale + offset.y)
                 if primer
                 {
-                    bz.moveToPoint(CGPointMake(x,y))
+                    bz.move(to: CGPoint(x: x,y: y))
                     primer = false
                 }
                 else{
-                    bz.addLineToPoint(CGPointMake(x,y))
+                    bz.addLine(to: CGPoint(x: x,y: y))
                 }
                 
             }
             
             bz.lineWidth = CGFloat(lineWidth)
-            bz.lineJoinStyle = CGLineJoin.Round
+            bz.lineJoinStyle = CGLineJoin.round
             color.setStroke()
             bz.stroke()
             let img = UIGraphicsGetImageFromCurrentImageContext()

@@ -83,17 +83,17 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     }
     
     
-    internal func connectToDeviceWithUUID(device : String){
+    internal func connectToDeviceWithUUID(_ device : String){
         AppDelegate.debugLog("Connect to device")
         
         if let central = self.centralManager{
             self.connecting = true
             
-            if central.state == CBCentralManagerState.PoweredOn{
+            if central.state == CBCentralManagerState.poweredOn{
                 
-                let ids = [NSUUID(UUIDString:device)!]
+                let ids = [UUID(uuidString:device)!]
                 
-                let devs : [CBPeripheral] = self.centralManager!.retrievePeripheralsWithIdentifiers(ids)
+                let devs : [CBPeripheral] = self.centralManager!.retrievePeripherals(withIdentifiers: ids)
                 if devs.count > 0
                 {
                     let peripheral : CBPeripheral = devs[0]
@@ -113,7 +113,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
  
         self.scanning = false
         if let cm = self.centralManager {
-            if cm.state == CBCentralManagerState.PoweredOn{
+            if cm.state == CBCentralManagerState.poweredOn{
                 cm.stopScan()
             }
         }
@@ -136,9 +136,9 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
                     
                     if let theCharacteristics = service.characteristics {
                         for characteristic : CBCharacteristic in theCharacteristics {
-                            if characteristic.UUID == CBUUID(string:self.charId) {
+                            if characteristic.uuid == CBUUID(string:self.charId) {
                                 if characteristic.isNotifying {
-                                    self.discoveredPeripheral!.setNotifyValue(false, forCharacteristic:characteristic)
+                                    self.discoveredPeripheral!.setNotifyValue(false, for:characteristic)
                                     //return;
                                 }
                             }
@@ -163,16 +163,16 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     //MARK: CBCentralManagerDelegate
     
     
-    internal func centralManagerDidUpdateState(central : CBCentralManager)
+    internal func centralManagerDidUpdateState(_ central : CBCentralManager)
     {
         AppDelegate.debugLog("Update state")
         
         self.scanning = false;
         
-        if central.state == CBCentralManagerState.PoweredOn && connecting {
+        if central.state == CBCentralManagerState.poweredOn && connecting {
             
-            let store = NSUserDefaults.standardUserDefaults()
-            let device = store.stringForKey(BLESimulatedClient.kLast9BDeviceAccessedKey)
+            let store = UserDefaults.standard
+            let device = store.string(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey)
             
             if let dev = device {
                 self.connectToDeviceWithUUID(dev)
@@ -191,7 +191,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
 
         
         let services = [CBUUID(string:self.serviceId)]
-        let moreDevs : [CBPeripheral] = self.centralManager!.retrieveConnectedPeripheralsWithServices(services)
+        let moreDevs : [CBPeripheral] = self.centralManager!.retrieveConnectedPeripherals(withServices: services)
         
         if  moreDevs.count > 0
         {
@@ -212,16 +212,16 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         
         
         // Scan for devices    @[[CBUUID UUIDWithString:@"1819"]]
-        self.centralManager!.scanForPeripheralsWithServices([CBUUID(string:self.serviceId)], options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
+        self.centralManager!.scanForPeripherals(withServices: [CBUUID(string:self.serviceId)], options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
         
         AppDelegate.debugLog("Scanning started")
     }
     
     
-    internal func centralManager(central: CBCentralManager,
-        didDiscoverPeripheral peripheral: CBPeripheral,
-        advertisementData: [String : AnyObject],
-        RSSI: NSNumber){
+    internal func centralManager(_ central: CBCentralManager,
+        didDiscover peripheral: CBPeripheral,
+        advertisementData: [String : Any],
+        rssi RSSI: NSNumber){
             
             BLESimulatedClient.sendNotification(BLESimulatedClient.kdevicesDiscoveredNotification, data: ["peripherals" : [peripheral]])
 
@@ -229,7 +229,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
             return
     }
     
-    func connectPeripheral(peripheral : CBPeripheral)
+    func connectPeripheral(_ peripheral : CBPeripheral)
     {
         AppDelegate.debugLog("Connect to peripheral")
         
@@ -240,11 +240,11 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
             central.stopScan()     // Just in the case, stop scan when finished to looking for more devices
         
             self.discoveredPeripheral = peripheral;
-            central.connectPeripheral(peripheral, options:nil)
+            central.connect(peripheral, options:nil)
         }
         else{
             
-            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+            if let dele = UIApplication.shared.delegate as? AppDelegate{
                 dele.displayMessageWithTitle("Error",format:"There is no Central Manager!!!")
             }
 
@@ -253,14 +253,14 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     }
     
     
-    internal func centralManager(central : CBCentralManager, didFailToConnectPeripheral peripheral : CBPeripheral,  error : NSError?)
+    internal func centralManager(_ central : CBCentralManager, didFailToConnect peripheral : CBPeripheral,  error : Error?)
     {
         BLESimulatedClient.sendNotification(BLESimulatedClient.kConnectionLostNotification, data: ["peripheral" : peripheral])
         self.cleanup()
         
     }
     
-    internal func centralManager(central : CBCentralManager, didConnectPeripheral peripheral :CBPeripheral){
+    internal func centralManager(_ central : CBCentralManager, didConnect peripheral :CBPeripheral){
         AppDelegate.debugLog("Connected");
         
         if self.scanning    // Just in case!!!
@@ -285,9 +285,9 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         peripheral.discoverServices([CBUUID(string:self.serviceId)])
     }
     
-    internal func centralManager(central: CBCentralManager,
+    internal func centralManager(_ central: CBCentralManager,
         didDisconnectPeripheral peripheral: CBPeripheral,
-        error: NSError?)
+        error: Error?)
         
     {
         AppDelegate.debugLog("DidDisconnectPeripheral")
@@ -300,16 +300,16 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
             self.connectionRetries = connectionRetries + 1
             
             if connectionRetries < maxConnectionRetries{
-                let store = NSUserDefaults.standardUserDefaults()
-                let device = store.stringForKey(BLESimulatedClient.kLast9BDeviceAccessedKey)
+                let store = UserDefaults.standard
+                let device = store.string(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey)
                 
                 if let dev = device  // Try to connect to last connected peripheral
                 {
                     
-                    if let theId = NSUUID(UUIDString:dev){
+                    if let theId = UUID(uuidString:dev){
                         
                         let ids  = [theId]
-                        let devs : [CBPeripheral] = self.centralManager!.retrievePeripheralsWithIdentifiers(ids)
+                        let devs : [CBPeripheral] = self.centralManager!.retrievePeripherals(withIdentifiers: ids)
                         
                         if devs.count > 0
                         {
@@ -342,55 +342,55 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
     
     //MARK: writeValue
     
-    func writeValue(data : NSData){
+    func writeValue(_ data : Data){
         if let peri = self.discoveredPeripheral {
-            peri.writeValue(data, forCharacteristic: self.caracteristica!, type: .WithoutResponse)
+            peri.writeValue(data, for: self.caracteristica!, type: .withoutResponse)
         }
     }
     
     //MARK: CBPeripheralDelegate
     
-    internal func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?)
+    internal func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?)
     {
         
         
         if let serv = peripheral.services{
             for sr in serv
             {
-                AppDelegate.debugLog("Service %@", sr.UUID.UUIDString)
+                AppDelegate.debugLog("Service %@", sr.uuid.uuidString)
                 
-                if sr.UUID.UUIDString == self.serviceId
+                if sr.uuid.uuidString == self.serviceId
                 {
                     let charUUIDs = [CBUUID(string:self.charId)]
-                    peripheral.discoverCharacteristics(charUUIDs, forService:sr)
+                    peripheral.discoverCharacteristics(charUUIDs, for:sr)
                 }
             }
         }
     }
     
     
-    internal func peripheral(peripheral: CBPeripheral,
-        didDiscoverCharacteristicsForService service: CBService,
-        error: NSError?)
+    internal func peripheral(_ peripheral: CBPeripheral,
+        didDiscoverCharacteristicsFor service: CBService,
+        error: Error?)
     {
         
         // Sembla una bona conexio, la guardem per mes endavant
         
         
         // Sembla una bona conexio, la guardem per mes endavant
-        let store = NSUserDefaults.standardUserDefaults()
-        let idPeripheral = peripheral.identifier.UUIDString
+        let store = UserDefaults.standard
+        let idPeripheral = peripheral.identifier.uuidString
         
-        store.setObject(idPeripheral, forKey:BLESimulatedClient.kLast9BDeviceAccessedKey)
+        store.set(idPeripheral, forKey:BLESimulatedClient.kLast9BDeviceAccessedKey)
         
         
         if let characteristics = service.characteristics {
             for ch in characteristics {
                 
-                if ch.UUID.UUIDString == self.charId
+                if ch.uuid.uuidString == self.charId
                 {
                     self.caracteristica = ch
-                    peripheral.setNotifyValue(true, forCharacteristic:ch)
+                    peripheral.setNotifyValue(true, for:ch)
                     self.connected = true
                     self.subscribed = true
                     self.connectionRetries = 0
@@ -410,13 +410,13 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         
     }
     
-    internal func peripheral(peripheral: CBPeripheral,
-        didUpdateValueForCharacteristic characteristic: CBCharacteristic,
-        error: NSError?){
+    internal func peripheral(_ peripheral: CBPeripheral,
+        didUpdateValueFor characteristic: CBCharacteristic,
+        error: Error?){
             
             // Primer obtenim el TMKPeripheralObject
             
-            if characteristic.UUID.UUIDString == self.charId    // Ninebot Char
+            if characteristic.uuid.uuidString == self.charId    // Ninebot Char
             {
                 if let data = characteristic.value {
                      self.delegate?.charUpdated(characteristic, data: data)
@@ -424,45 +424,45 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
                 
             }
                 
-            else if characteristic.UUID.UUIDString==self.kUUIDManufacturerNameVariable  {
+            else if characteristic.uuid.uuidString==self.kUUIDManufacturerNameVariable  {
                 
                 if let data = characteristic.value {
-                    self.manufacturer = String(data:data, encoding: NSUTF8StringEncoding)
+                    self.manufacturer = String(data:data, encoding: String.Encoding.utf8)
                     AppDelegate.debugLog("Manufacturer : %@", self.manufacturer!)
                 }
             }
-            else if characteristic.UUID.UUIDString==self.kUUIDModelNameVariable  {
+            else if characteristic.uuid.uuidString==self.kUUIDModelNameVariable  {
                 
                 if let data = characteristic.value {
-                    self.model = String(data:data, encoding: NSUTF8StringEncoding)
+                    self.model = String(data:data, encoding: String.Encoding.utf8)
                     AppDelegate.debugLog("Model : %@", self.model!)
                 }
             }
-            else if characteristic.UUID.UUIDString==self.kUUIDSerialNumberVariable  {
+            else if characteristic.uuid.uuidString==self.kUUIDSerialNumberVariable  {
                 
                 if let data = characteristic.value {
-                    self.serial = String(data:data, encoding: NSUTF8StringEncoding)
+                    self.serial = String(data:data, encoding: String.Encoding.utf8)
                     AppDelegate.debugLog("Serial : %@", self.serial!)
                 }
             }
-            else if characteristic.UUID.UUIDString==self.kUUIDHardwareVersion  {
+            else if characteristic.uuid.uuidString==self.kUUIDHardwareVersion  {
                 
                 if let data = characteristic.value {
-                    self.hardwareVer = String(data:data, encoding: NSUTF8StringEncoding)
+                    self.hardwareVer = String(data:data, encoding: String.Encoding.utf8)
                     AppDelegate.debugLog("Hardware Version : %@", self.hardwareVer!)
                 }
             }
-            else if characteristic.UUID.UUIDString==self.kUUIDFirmwareVersion  {
+            else if characteristic.uuid.uuidString==self.kUUIDFirmwareVersion  {
                 
                 if let data = characteristic.value {
-                    self.firmwareVer = String(data:data, encoding: NSUTF8StringEncoding)
+                    self.firmwareVer = String(data:data, encoding: String.Encoding.utf8)
                     AppDelegate.debugLog("Firmware Version : %@", self.firmwareVer!)
                 }
             }
-            else if characteristic.UUID.UUIDString==self.kUUIDSoftwareVersion {
+            else if characteristic.uuid.uuidString==self.kUUIDSoftwareVersion {
                 
                 if let data = characteristic.value {
-                    self.softwareVer = String(data:data, encoding: NSUTF8StringEncoding)
+                    self.softwareVer = String(data:data, encoding: String.Encoding.utf8)
                     AppDelegate.debugLog("Software Ver : %@", self.softwareVer!)
                 }
             }

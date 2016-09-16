@@ -52,16 +52,16 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var oldColorLevel : Int = 0
     var stateChanged = false
     
-    var wcsession : WCSession? = WCSession.defaultSession()
+    var wcsession : WCSession? = WCSession.default()
     
     
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
         
         if let session = wcsession{
             session.delegate = self
-            session.activateSession()
-            addMenuItemWithItemIcon(WKMenuItemIcon.Play, title: "Start", action: #selector(InterfaceController.start))
+            session.activate()
+            addMenuItem(with: WKMenuItemIcon.play, title: "Start", action: #selector(InterfaceController.start))
             
         }
     }
@@ -77,7 +77,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         super.didDeactivate()
     }
     
-    func updateData(applicationContext: [String : AnyObject]){
+    func updateData(_ applicationContext: [String : AnyObject]){
         
         if applicationContext.count == 0 {
             return
@@ -126,21 +126,21 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             switch (ci) {
                 
             case 1 :
-                self.color = UIColor.orangeColor()
+                self.color = UIColor.orange
                 
             case 2 :
-                self.color = UIColor.redColor()
+                self.color = UIColor.red
                 
             default :
                 self.color = skyColor
             }
             
             if ci > self.colorLevel {
-                WKInterfaceDevice.currentDevice().playHaptic(WKHapticType.DirectionUp)
+                WKInterfaceDevice.current().play(WKHapticType.directionUp)
                 self.colorLevel = ci
             }
             else if ci < self.colorLevel {
-                WKInterfaceDevice.currentDevice().playHaptic(WKHapticType.DirectionDown)
+                WKInterfaceDevice.current().play(WKHapticType.directionDown)
                 self.colorLevel = ci
             }
         }
@@ -156,7 +156,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     func updateFields(){
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             if self.distancia < 1.0 {
                 
@@ -187,9 +187,9 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             self.remainingLabel.setText(String(format: "%3.0f%@", self.temperature, "ºC"))
             
             if self.battery < 30.0{
-                self.batteryLabel.setTextColor(UIColor.redColor())
+                self.batteryLabel.setTextColor(UIColor.red)
             }else{
-                self.batteryLabel.setTextColor(UIColor.greenColor())
+                self.batteryLabel.setTextColor(UIColor.green)
             }
             
             if self.oldColorLevel != self.colorLevel {
@@ -202,11 +202,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             if self.recording != self.oldRecording{
                 if self.recording {
                     self.clearAllMenuItems()
-                    self.addMenuItemWithItemIcon(WKMenuItemIcon.Play, title: "Stop", action: #selector(InterfaceController.stop))
+                    self.addMenuItem(with: WKMenuItemIcon.play, title: "Stop", action: #selector(InterfaceController.stop))
                 }
                 else {
                     self.clearAllMenuItems()
-                    self.addMenuItemWithItemIcon(WKMenuItemIcon.Play, title: "Start", action: #selector(InterfaceController.start))
+                    self.addMenuItem(with: WKMenuItemIcon.play, title: "Start", action: #selector(InterfaceController.start))
                 }
                 self.oldRecording = self.recording
             }
@@ -224,12 +224,12 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
     
 
-    func sendOp(op : String, value : AnyObject?){
+    func sendOp(_ op : String, value : AnyObject?){
         if let session = self.wcsession{
             
-            if session.reachable {
+            if session.isReachable {
                 
-                var dict : [String : AnyObject] = ["op" : op]
+                var dict : [String : AnyObject] = ["op" : op as AnyObject]
                 if let v = value {
                     dict["value"] = v
                 }
@@ -242,16 +242,16 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     }
 
     
-    func sessionWatchStateDidChange(session: WCSession) {
+    func sessionWatchStateDidChange(_ session: WCSession) {
         
        // NSLog("WCSessionState changed. Reachable %@", session.reachable)
     }
     
-    func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]){
+    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]){
         
         if let v = applicationContext as? [String : Double]{
             
-            self.updateData(v)
+            self.updateData(v as [String : AnyObject])
             self.updateFields()
         }
     }

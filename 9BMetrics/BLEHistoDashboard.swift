@@ -49,14 +49,14 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     @IBOutlet weak var fTitle : UILabel!
     @IBOutlet weak var fVersion : UILabel!
 
-    private let sectionInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+    fileprivate let sectionInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
 
     static var displayableVariables : [Int] = [BLENinebot.kCurrentSpeed, BLENinebot.kTemperature,
                                                BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
                                                BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower, BLENinebot.kEnergy]
     
     
-    private let graphValue = [0, 4, 9, 10, 1, 6, 5]
+    fileprivate let graphValue = [0, 4, 9, 10, 1, 6, 5]
     
     var graphToShow : Int = 0
     
@@ -68,11 +68,11 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         
         // Register for peek
         
-        registerForPreviewingWithDelegate(self, sourceView: collectionView)
+        registerForPreviewing(with: self, sourceView: collectionView)
        
         fTitle.text = titulo
         
-        let lpgr : UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        let lpgr : UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(BLEHistoDashboard.handleLongPress(_:)))
         lpgr.minimumPressDuration = 0.5
         lpgr.delegate = self
         lpgr.delaysTouchesBegan = true
@@ -81,7 +81,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         if let nb = self.ninebot {
             
             if let myUrl = nb.url{
-                if let str = myUrl.URLByDeletingPathExtension?.lastPathComponent{
+                if let str = myUrl.deletingPathExtension?.lastPathComponent{
                     fTitle.text = str
                 }
             }else{
@@ -121,29 +121,29 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         // Dispose of any resources that can be recreated.
     }
     
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
         self.collectionView.performBatchUpdates(nil, completion: nil)
     }
     
-    override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBar.hidden = true
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
     }
     
-    @IBAction func goBack(src : AnyObject){
-        self.navigationController?.popViewControllerAnimated(true)
+    @IBAction func goBack(_ src : AnyObject){
+        self.navigationController?.popViewController(animated: true)
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
             
             case "otherMapSegue": //graphMapSegue
-                  if let vc = segue.destinationViewController as? BLEMapViewController  {
+                  if let vc = segue.destination as? BLEMapViewController  {
                     vc.dades = self.ninebot
             }
             
         case "graphicSegue":
 
-            if let vc = segue.destinationViewController as? GraphViewController  {
+            if let vc = segue.destination as? GraphViewController  {
                 
                 vc.ninebot = self.ninebot
                 vc.shownVariable = self.graphToShow
@@ -154,14 +154,14 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         }
     }
     
-    @IBAction func prepareForUnwind(segue: UIStoryboardSegue){
+    @IBAction func prepareForUnwind(_ segue: UIStoryboardSegue){
         
-        self.dismissViewControllerAnimated(true) {
+        self.dismiss(animated: true) {
             
         }
         
     }
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
            // graphToShow = graphValue[0]
            // self.performSegueWithIdentifier("graphicSegue", sender: self)
@@ -170,27 +170,27 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         }
     }
     
-    override func shouldAutorotate() -> Bool {
+    override var shouldAutorotate : Bool {
         return false
     }
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return [.Portrait]
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        return [.portrait]
     }
-    override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
-        return .Portrait
+    override var preferredInterfaceOrientationForPresentation : UIInterfaceOrientation {
+        return .portrait
     }
-    func handleLongPress(gestureRecognizer : UILongPressGestureRecognizer){
+    func handleLongPress(_ gestureRecognizer : UILongPressGestureRecognizer){
         
-        if (gestureRecognizer.state != UIGestureRecognizerState.Ended){
+        if (gestureRecognizer.state != UIGestureRecognizerState.ended){
             return
         }
         
-        let p = gestureRecognizer.locationInView(self.collectionView)
+        let p = gestureRecognizer.location(in: self.collectionView)
         
-        if let indexPath : NSIndexPath = (self.collectionView?.indexPathForItemAtPoint(p))!{
+        if let indexPath : IndexPath = (self.collectionView?.indexPathForItem(at: p))!{
             //do whatever you need to do
-            if indexPath.row == 0{
-                self.performSegueWithIdentifier("otherMapSegue", sender: self)
+            if (indexPath as NSIndexPath).row == 0{
+                self.performSegue(withIdentifier: "otherMapSegue", sender: self)
             }
         }
         
@@ -198,16 +198,16 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     
     //MARK: Preview Action Items
     
-    override func previewActionItems() -> [UIPreviewActionItem] {
-        let shareTrack = UIPreviewAction(title: "Share Track", style: .Default)
+    override var previewActionItems : [UIPreviewActionItem] {
+        let shareTrack = UIPreviewAction(title: "Share Track", style: .default)
         {(action, viewController) in
             
             if let wheel = self.ninebot {
-                if let trackUrl : NSURL = wheel.url{
+                if let trackUrl : URL = wheel.url as URL?{
                     
                     // get ViewController
                     
-                    if let theDelegate = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    if let theDelegate = UIApplication.shared.delegate as? AppDelegate{
                         if let vc = theDelegate.mainController{
                             vc.shareData(trackUrl, src: vc.view, delete: false)
                         }
@@ -217,14 +217,14 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
             }
         }
         
-        let openTrackIn = UIPreviewAction(title: "Open GPX In", style: .Default)
+        let openTrackIn = UIPreviewAction(title: "Open GPX In", style: .default)
         {(action, viewController) in
             if let wheel = self.ninebot {
-                if let trackUrl : NSURL = wheel.url{
+                if let trackUrl : URL = wheel.url as URL?{
                     
                     // get ViewController
                     
-                    if let theDelegate = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    if let theDelegate = UIApplication.shared.delegate as? AppDelegate{
                         if let vc = theDelegate.mainController{
                             
                             vc.openFileIn(trackUrl, src: vc, delete: false)
@@ -243,7 +243,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
 
 extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         
         let vbounds = collectionView.bounds
@@ -275,7 +275,7 @@ extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
         }
 
         
-        let row = indexPath.row
+        let row = (indexPath as NSIndexPath).row
         switch row {
             
         case 0...3:
@@ -292,9 +292,9 @@ extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
         
     }
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
-                               insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+                               insetForSectionAt section: Int) -> UIEdgeInsets {
         return sectionInsets
     }
     
@@ -302,8 +302,8 @@ extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
 }
 extension BLEHistoDashboard : UICollectionViewDelegate {
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let row = indexPath.row
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let row = (indexPath as NSIndexPath).row
         
         switch row {
             
@@ -314,7 +314,7 @@ extension BLEHistoDashboard : UICollectionViewDelegate {
         default:
             graphToShow = self.graphValue[row]
             
-            performSegueWithIdentifier("graphicSegue", sender: self)
+            performSegue(withIdentifier: "graphicSegue", sender: self)
             
             
         }
@@ -325,32 +325,32 @@ extension BLEHistoDashboard : UICollectionViewDelegate {
 
 extension BLEHistoDashboard : UICollectionViewDataSource{
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 7
     }
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
             
         case 0:
             
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("clockCellIdentifier", forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
             
             var speedView : TMKClockView?
             var title : UILabel?
             
             for v in cell.contentView.subviews{
-                if v.isKindOfClass(TMKClockView){
+                if v.isKind(of: TMKClockView.self){
                     speedView = v as? TMKClockView
-                } else if v.isKindOfClass(UILabel){
+                } else if v.isKind(of: UILabel.self){
                     title = v as? UILabel
                 }
             }
@@ -365,15 +365,15 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
             }
             
             if let sv = speedView {
-                var limits = [TMKClockView.arc(start: 0.0, end: 23.0/topSpeed, color: UIColor.greenColor())]
+                var limits = [TMKClockView.arc(start: 0.0, end: 23.0/topSpeed, color: UIColor.green)]
                 
                 if maxSpeed > secureSpeed{
-                    limits.append( TMKClockView.arc(start: 23.0/topSpeed, end: maxSpeed / topSpeed, color: UIColor.redColor()))
+                    limits.append( TMKClockView.arc(start: 23.0/topSpeed, end: maxSpeed / topSpeed, color: UIColor.red))
                     
                 }
                 
                 
-                let speeds : [TMKClockView.arc] = [TMKClockView.arc(start: avgSpeed / topSpeed, end: 0.5, color: UIColor.greenColor()), TMKClockView.arc(start: maxSpeed / topSpeed, end: 0.9, color: UIColor.redColor())]
+                let speeds : [TMKClockView.arc] = [TMKClockView.arc(start: avgSpeed / topSpeed, end: 0.5, color: UIColor.green), TMKClockView.arc(start: maxSpeed / topSpeed, end: 0.9, color: UIColor.red)]
                 
                 sv.backImage = self.trackImg
                 
@@ -384,15 +384,15 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
             
         case 1:
             
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("clockCellIdentifier", forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
 
             var batteryView : TMKClockView?
             var title : UILabel?
             
             for v in cell.contentView.subviews{
-                if v.isKindOfClass(TMKClockView){
+                if v.isKind(of: TMKClockView.self){
                     batteryView = v as? TMKClockView
-                } else if v.isKindOfClass(UILabel){
+                } else if v.isKind(of: UILabel.self){
                     title = v as? UILabel
                 }
             }
@@ -406,16 +406,16 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 var batAreas : [TMKClockView.arc] = []
                 
                 if batMin < 20.0 && batMax <= 20.0 {
-                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: batMax/100.0, color: UIColor.redColor()))
+                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: batMax/100.0, color: UIColor.red))
                 }else if batMin < 20.0 && batMax > 20.0 {
-                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: 20.0/100.0, color: UIColor.redColor()))
-                    batAreas.append(TMKClockView.arc(start: 20.0 / 100.0, end: batMax/100.0, color: UIColor.greenColor()))
+                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: 20.0/100.0, color: UIColor.red))
+                    batAreas.append(TMKClockView.arc(start: 20.0 / 100.0, end: batMax/100.0, color: UIColor.green))
                 }else {
-                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: batMax/100.0, color: UIColor.greenColor()))
+                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: batMax/100.0, color: UIColor.green))
                 }
                 
-                let batLevels : [TMKClockView.arc] = [TMKClockView.arc(start: bat0 / 100.0, end: 0.5, color: UIColor.greenColor()),
-                                                      TMKClockView.arc(start: bat1 / 100.0, end: 0.9, color: UIColor.redColor())]
+                let batLevels : [TMKClockView.arc] = [TMKClockView.arc(start: bat0 / 100.0, end: 0.5, color: UIColor.green),
+                                                      TMKClockView.arc(start: bat1 / 100.0, end: 0.9, color: UIColor.red)]
                 
                 bv.backImage = nil
                 
@@ -426,16 +426,16 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
 
         case 2:
             
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("clockCellIdentifier", forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
             
             
             var powerView : TMKClockView?
             var title : UILabel?
             
             for v in cell.contentView.subviews{
-                if v.isKindOfClass(TMKClockView){
+                if v.isKind(of: TMKClockView.self){
                     powerView = v as? TMKClockView
-                } else if v.isKindOfClass(UILabel){
+                } else if v.isKind(of: UILabel.self){
                     title = v as? UILabel
                 }
             }
@@ -451,18 +451,18 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 let pwRange = ceil(max(pwMax, 1500.0) / 100.0) * 100.0
                 var pwAreas : [TMKClockView.arc] = []
                 
-                pwAreas.append(TMKClockView.arc(start: 0.0 / pwRange, end:min(pwMax, pwCont) / pwRange, color: UIColor.greenColor()))
+                pwAreas.append(TMKClockView.arc(start: 0.0 / pwRange, end:min(pwMax, pwCont) / pwRange, color: UIColor.green))
                 
                 if pwMax > pwCont {
-                    pwAreas.append(TMKClockView.arc(start: pwCont / pwRange, end:min(pwMax, pwPeak) / pwRange, color: UIColor.orangeColor()))
+                    pwAreas.append(TMKClockView.arc(start: pwCont / pwRange, end:min(pwMax, pwPeak) / pwRange, color: UIColor.orange))
                 }
                 
                 if pwMax > pwPeak {
-                    pwAreas.append(TMKClockView.arc(start: pwPeak / pwRange, end:pwMax / pwRange, color: UIColor.redColor()))
+                    pwAreas.append(TMKClockView.arc(start: pwPeak / pwRange, end:pwMax / pwRange, color: UIColor.red))
                 }
                 
-                let pwLevels : [TMKClockView.arc] = [TMKClockView.arc(start: pwAvg / pwRange, end: 0.5, color: UIColor.greenColor()),
-                                                     TMKClockView.arc(start: pwMax / pwRange, end: 0.9, color: UIColor.redColor())]
+                let pwLevels : [TMKClockView.arc] = [TMKClockView.arc(start: pwAvg / pwRange, end: 0.5, color: UIColor.green),
+                                                     TMKClockView.arc(start: pwMax / pwRange, end: 0.9, color: UIColor.red)]
                 
                 pw.backImage = nil
                
@@ -473,15 +473,15 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
             
         case 3:
             
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("clockCellIdentifier", forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
             
             var energyView : TMKClockView?
             var title : UILabel?
             
             for v in cell.contentView.subviews{
-                if v.isKindOfClass(TMKClockView){
+                if v.isKind(of: TMKClockView.self){
                     energyView = v as? TMKClockView
-                } else if v.isKindOfClass(UILabel){
+                } else if v.isKind(of: UILabel.self){
                     title = v as? UILabel
                 }
             }
@@ -498,12 +498,12 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 
                 let emax = eplus
                 
-                eAreas.append(TMKClockView.arc(start: 0.0, end: (eplus-erec) / emax, color: UIColor.greenColor()))
+                eAreas.append(TMKClockView.arc(start: 0.0, end: (eplus-erec) / emax, color: UIColor.green))
                 
-                eAreas.append(TMKClockView.arc(start: (eplus-erec) / emax, end: eplus/emax, color: UIColor.redColor()))
+                eAreas.append(TMKClockView.arc(start: (eplus-erec) / emax, end: eplus/emax, color: UIColor.red))
                 
-                let eLevels =  [TMKClockView.arc(start: (eplus-erec) / emax, end: 0.5, color: UIColor.greenColor()),
-                                TMKClockView.arc(start: eplus/emax, end: 0.9, color: UIColor.redColor())]
+                let eLevels =  [TMKClockView.arc(start: (eplus-erec) / emax, end: 0.5, color: UIColor.green),
+                                TMKClockView.arc(start: eplus/emax, end: 0.9, color: UIColor.red)]
                 
                 ew.backImage = nil
 
@@ -514,16 +514,16 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
             
         case 4:
             
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("clockCellIdentifier", forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
             
             
             var tempView : TMKClockView?
             var title : UILabel?
             
             for v in cell.contentView.subviews{
-                if v.isKindOfClass(TMKClockView){
+                if v.isKind(of: TMKClockView.self){
                     tempView = v as? TMKClockView
-                } else if v.isKindOfClass(UILabel){
+                } else if v.isKind(of: UILabel.self){
                     title = v as? UILabel
                 }
             }
@@ -545,16 +545,16 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
                 var tempAreas : [TMKClockView.arc] = []
                 
                 if tmin < tempOk {
-                    tempAreas.append(TMKClockView.arc(start: tmin / tempRange, end:min(tmax, tempOk) / tempRange, color: UIColor.greenColor()))
+                    tempAreas.append(TMKClockView.arc(start: tmin / tempRange, end:min(tmax, tempOk) / tempRange, color: UIColor.green))
                 }
                 
                 if tmax > tempOk{
-                    tempAreas.append(TMKClockView.arc(start: max(tmin, tempOk) / tempRange, end:tmax / tempRange, color: UIColor.redColor()))
+                    tempAreas.append(TMKClockView.arc(start: max(tmin, tempOk) / tempRange, end:tmax / tempRange, color: UIColor.red))
                 }
                 
                 
-                let tempLevels : [TMKClockView.arc] = [TMKClockView.arc(start: tavg / tempRange, end: 0.5, color: UIColor.greenColor()),
-                                                       TMKClockView.arc(start: tmax / tempRange, end: 0.9, color: UIColor.redColor())]
+                let tempLevels : [TMKClockView.arc] = [TMKClockView.arc(start: tavg / tempRange, end: 0.5, color: UIColor.green),
+                                                       TMKClockView.arc(start: tmax / tempRange, end: 0.9, color: UIColor.red)]
                 
                 
                 tw.backImage = nil
@@ -565,15 +565,15 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
             return cell
             
         case 5:
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("verticalCellIdentifier", forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "verticalCellIdentifier", for: indexPath)
 
             var rollView : TMKVerticalView?
             var title : UILabel?
             
             for v in cell.contentView.subviews{
-                if v.isKindOfClass(TMKVerticalView){
+                if v.isKind(of: TMKVerticalView.self){
                     rollView = v as? TMKVerticalView
-                } else if v.isKindOfClass(UILabel){
+                } else if v.isKind(of: UILabel.self){
                     title = v as? UILabel
                 }
             }
@@ -590,15 +590,15 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
 
             
         case 6:
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("levelCellIdentifier", forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "levelCellIdentifier", for: indexPath)
             
             var pitchView : TMKLevelView?
             var title : UILabel?
             
             for v in cell.contentView.subviews{
-                if v.isKindOfClass(TMKLevelView){
+                if v.isKind(of: TMKLevelView.self){
                     pitchView = v as? TMKLevelView
-                } else if v.isKindOfClass(UILabel){
+                } else if v.isKind(of: UILabel.self){
                     title = v as? UILabel
                 }
             }
@@ -628,17 +628,17 @@ extension BLEHistoDashboard : UICollectionViewDataSource{
 
 extension BLEHistoDashboard : UIViewControllerPreviewingDelegate{
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        if let indexPath = collectionView.indexPathForItemAtPoint(location), cellAttributes = collectionView.layoutAttributesForItemAtIndexPath(indexPath) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if let indexPath = collectionView.indexPathForItem(at: location), let cellAttributes = collectionView.layoutAttributesForItem(at: indexPath) {
             //This will show the cell clearly and blur the rest of the screen for our peek.
             previewingContext.sourceRect = cellAttributes.frame
             
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
                 
             case 0:
                 
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let  mpc = storyboard.instantiateViewControllerWithIdentifier("mapViewControllerIdentifier") as? BLEMapViewController{
+                if let  mpc = storyboard.instantiateViewController(withIdentifier: "mapViewControllerIdentifier") as? BLEMapViewController{
                     
                     mpc.dades = self.ninebot
                     return mpc
@@ -647,10 +647,10 @@ extension BLEHistoDashboard : UIViewControllerPreviewingDelegate{
             default:
                 
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let  gc = storyboard.instantiateViewControllerWithIdentifier("graphViewControllerIdentifier") as? GraphViewController{
+                if let  gc = storyboard.instantiateViewController(withIdentifier: "graphViewControllerIdentifier") as? GraphViewController{
                     
                     gc.ninebot = self.ninebot
-                    graphToShow = self.graphValue[indexPath.row]
+                    graphToShow = self.graphValue[(indexPath as NSIndexPath).row]
                     gc.shownVariable = self.graphToShow
                     return gc
                 }
@@ -662,12 +662,12 @@ extension BLEHistoDashboard : UIViewControllerPreviewingDelegate{
         return nil
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         
         if let mvc = viewControllerToCommit as? BLEMapViewController{
-            presentViewController(mvc, animated: true, completion: nil)
+            present(mvc, animated: true, completion: nil)
         } else {
-           showViewController(viewControllerToCommit, sender: self)
+           show(viewControllerToCommit, sender: self)
         }
         
     }

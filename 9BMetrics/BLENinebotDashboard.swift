@@ -36,11 +36,11 @@ class BLENinebotDashboard: UITableViewController {
     
     var searching = false
     
-    var file : NSURL?
+    var file : URL?
     
     // Connected is not necessary because when disconnected client is nill
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         self.initNotifications()
@@ -64,10 +64,10 @@ class BLENinebotDashboard: UITableViewController {
         
         }
         if let nb = self.ninebot{
-           self.fMapButton.enabled = nb.hasGPSData()
+           self.fMapButton.isEnabled = nb.hasGPSData()
         }
         else{
-            self.fMapButton.enabled = false
+            self.fMapButton.isEnabled = false
         }
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -88,22 +88,22 @@ class BLENinebotDashboard: UITableViewController {
     
     func initNotifications()
     {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotDashboard.updateTitle(_:)), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotDashboard.updateTitle(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kHeaderDataReadyNotification), object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotDashboard.update(_:)), name: BLESimulatedClient.kNinebotDataUpdatedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotDashboard.update(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kNinebotDataUpdatedNotification), object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLENinebotDashboard.listDevices(_:)), name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotDashboard.listDevices(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kdevicesDiscoveredNotification), object: nil)
         
     }
     
-    func update(not : NSNotification?){
+    func update(_ not : Notification?){
         self.tableView.reloadData()
     }
     
     
-    func updateTitle(not : NSNotification?){
+    func updateTitle(_ not : Notification?){
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             
             
             if let nb = self.ninebot {
@@ -115,7 +115,7 @@ class BLENinebotDashboard: UITableViewController {
                     
                     self.titleField.title = title
                     
-                    let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+                    let appDelegate = UIApplication.shared.delegate as? AppDelegate
                     if let dele = appDelegate {
                         dele.setShortcutItems(true)
                     }
@@ -132,7 +132,7 @@ class BLENinebotDashboard: UITableViewController {
     
     func addStopButton(){
         
-        let stopButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Stop, target: self, action: #selector(BLENinebotDashboard.stop(_:)))
+        let stopButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.stop, target: self, action: #selector(BLENinebotDashboard.stop(_:)))
         self.navigationItem.rightBarButtonItem = stopButton
         
     }
@@ -144,9 +144,9 @@ class BLENinebotDashboard: UITableViewController {
     // MARK: Device Selection
     
     
-    func listDevices(notification: NSNotification){
+    func listDevices(_ notification: Notification){
         
-        let devices = notification.userInfo?["peripherals"] as? [CBPeripheral]
+        let devices = (notification as NSNotification).userInfo?["peripherals"] as? [CBPeripheral]
         
         // if searching is false we must create a selector
         
@@ -155,9 +155,9 @@ class BLENinebotDashboard: UITableViewController {
             if !self.searching{
                 
                 self.devList.removeAll()    // Remove old ones
-                self.devList.appendContentsOf(devs)
+                self.devList.append(contentsOf: devs)
                 
-                self.performSegueWithIdentifier("deviceSelectorSegue", sender: self)
+                self.performSegue(withIdentifier: "deviceSelectorSegue", sender: self)
             }
             else{
                 if let vc = self.devSelector{
@@ -172,16 +172,16 @@ class BLENinebotDashboard: UITableViewController {
         
         self.titleField.title = "Connecting..."
         
-        if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+        if let dele = UIApplication.shared.delegate as? AppDelegate{
             dele.connect()
         }
      }
     
-    @IBAction func stop(src: AnyObject){
+    @IBAction func stop(_ src: AnyObject){
         
         AppDelegate.debugLog("Dashboard Stop");
         
-        if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+        if let dele = UIApplication.shared.delegate as? AppDelegate{
             dele.stop(src)
         }
         
@@ -190,15 +190,15 @@ class BLENinebotDashboard: UITableViewController {
         //TODO: Clear stop button
     }
     
-    func connectToPeripheral(peripheral : CBPeripheral){
+    func connectToPeripheral(_ peripheral : CBPeripheral){
         
         
-        if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+        if let dele = UIApplication.shared.delegate as? AppDelegate{
             if let cli = dele.client {
                 cli.connection.connectPeripheral(peripheral)
             }
         }
-        self.dismissViewControllerAnimated(true) { () -> Void in
+        self.dismiss(animated: true) { () -> Void in
             
             self.searching = false
             self.devSelector = nil
@@ -209,12 +209,12 @@ class BLENinebotDashboard: UITableViewController {
     
     // MARK: - Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         
         return 3
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         
         switch(section){
@@ -233,7 +233,7 @@ class BLENinebotDashboard: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch(section){
         case 0:
             return "Technical Info"
@@ -249,17 +249,17 @@ class BLENinebotDashboard: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("dashboardCellIdentifier", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "dashboardCellIdentifier", for: indexPath)
         
         if let nb = self.ninebot{
             
-            let section = indexPath.section
-            let i = indexPath.row
+            let section = (indexPath as NSIndexPath).section
+            let i = (indexPath as NSIndexPath).row
             
             if  section == 0 {
                 
-                cell.detailTextLabel!.textColor = UIColor.lightGrayColor()
+                cell.detailTextLabel!.textColor = UIColor.lightGray
                 
                 switch(i) {
                     
@@ -270,9 +270,9 @@ class BLENinebotDashboard: UITableViewController {
                     cell.detailTextLabel!.text = String(format:"%5.2f Km/h", v)
                     
                     if v >= 15.0 && v < 20.0{
-                        cell.detailTextLabel!.textColor = UIColor.orangeColor()
+                        cell.detailTextLabel!.textColor = UIColor.orange
                     }else if v > 20.0 {
-                        cell.detailTextLabel!.textColor = UIColor.redColor()
+                        cell.detailTextLabel!.textColor = UIColor.red
                     }
                     
                     
@@ -378,11 +378,11 @@ class BLENinebotDashboard: UITableViewController {
         return cell
     }
         
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if indexPath.section == 2{
-            self.performSegueWithIdentifier("ninebotSettingsSegue", sender: self)
+        tableView.deselectRow(at: indexPath, animated: true)
+        if (indexPath as NSIndexPath).section == 2{
+            self.performSegue(withIdentifier: "ninebotSettingsSegue", sender: self)
         }
     }
     
@@ -426,10 +426,10 @@ class BLENinebotDashboard: UITableViewController {
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "turnSegueIdentifier" {
-            if let vc = segue.destinationViewController as? GraphViewController  {
+            if let vc = segue.destination as? GraphViewController  {
                 
                 if let nb = self.ninebot{
                     nb.buildEnergy()
@@ -440,30 +440,30 @@ class BLENinebotDashboard: UITableViewController {
             
         } else if segue.identifier == "mapViewSegue" {
             
-            if let vc = segue.destinationViewController as? BLEMapViewController  {
+            if let vc = segue.destination as? BLEMapViewController  {
                 vc.dades = self.ninebot
             }
         }
         
      }
     
-    @IBAction func prepareForUnwind(segue: UIStoryboardSegue){
+    @IBAction func prepareForUnwind(_ segue: UIStoryboardSegue){
         
-        self.dismissViewControllerAnimated(true) {
+        self.dismiss(animated: true) {
             
         }
         
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
-            self.performSegueWithIdentifier("turnSegueIdentifier", sender: self)
+            self.performSegue(withIdentifier: "turnSegueIdentifier", sender: self)
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.isHidden = false
 
     }
 }

@@ -34,8 +34,8 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
         @IBOutlet weak var fCCurrent : TMKClockView!
     
     
-    let sphereColor = UIColor.blackColor()
-    let labelColor = UIColor.blackColor()
+    let sphereColor = UIColor.black
+    let labelColor = UIColor.black
     
     let batTop = 1.0
 
@@ -70,21 +70,21 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
         
         var state : connectionState = connectionState.stopped
     
-    var timer : NSTimer?
+    var timer : Timer?
     
     required init?(coder aDecoder: NSCoder) {
         
         
-        battAreas = [TMKClockView.arc(start: 0.0, end: 0.2, color: UIColor.redColor()),
-                     TMKClockView.arc(start: 0.2, end: 1.0, color: UIColor.greenColor())]
+        battAreas = [TMKClockView.arc(start: 0.0, end: 0.2, color: UIColor.red),
+                     TMKClockView.arc(start: 0.2, end: 1.0, color: UIColor.green)]
         
         
-        tempAreas = [TMKClockView.arc(start: 0.0, end: tempOK / tempTop, color: UIColor.greenColor()),
-                     TMKClockView.arc(start: tempOK / tempTop, end: 1.0, color: UIColor.redColor())]
+        tempAreas = [TMKClockView.arc(start: 0.0, end: tempOK / tempTop, color: UIColor.green),
+                     TMKClockView.arc(start: tempOK / tempTop, end: 1.0, color: UIColor.red)]
         
         
-        speedAreas = [TMKClockView.arc(start: 0.0, end: speedOK/speedTop, color: UIColor.greenColor()),
-                      TMKClockView.arc(start: speedOK/speedTop, end: 1.0, color: UIColor.redColor())]
+        speedAreas = [TMKClockView.arc(start: 0.0, end: speedOK/speedTop, color: UIColor.green),
+                      TMKClockView.arc(start: speedOK/speedTop, end: 1.0, color: UIColor.red)]
         
 
         super.init(coder: aDecoder)
@@ -101,7 +101,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             if let cli = self.client {
                 if cli.connection.connecting {
                     
-                    self.connectionStarted(NSNotification(name: BLESimulatedClient.kStartConnection, object: ["state" : "connecting"]))
+                    self.connectionStarted(Notification(name: Notification.Name(rawValue: BLESimulatedClient.kStartConnection), object: ["state" : "connecting"]))
                 }
             }
             
@@ -131,14 +131,14 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             // Dispose of any resources that can be recreated.
         }
         
-    func testSpeed (timer : NSTimer){
+    func testSpeed (_ timer : Timer){
         //  Tests
         
         // Get a value
         
         let val = fabs(Double(arc4random()) / Double(UINT32_MAX)) * speedTop;
         
-        let speedLevels = [TMKClockView.arc(start:val/speedTop, end: 0.5, color: UIColor.redColor())]
+        let speedLevels = [TMKClockView.arc(start:val/speedTop, end: 0.5, color: UIColor.red)]
         
         
         self.fSpeed.updateData(String(format:"%0.2f", val) , units: "Km/h", value: val, minValue: 0, maxValue: self.speedTop)
@@ -148,22 +148,22 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
         func initNotifications(){
             
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.connectionStarted(_:)), name: BLESimulatedClient.kStartConnection, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.connectionStarted(_:)), name: BLESimulatedClient.kStartConnection, object: nil)
             
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.hasStopped(_:)), name: BLESimulatedClient.kStoppedRecording, object: nil)
-            
-            
-            
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
-            
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: BLESimulatedClient.kNinebotDataUpdatedNotification, object: nil)
-            
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.listDevices(_:)), name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.hasStopped(_:)), name: BLESimulatedClient.kStoppedRecording, object: nil)
             
             
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kConnectionReadyNotification, object: nil)
             
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: kWheelVariableChangedNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: BLESimulatedClient.kNinebotDataUpdatedNotification, object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.listDevices(_:)), name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
+            
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kConnectionReadyNotification, object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: kWheelVariableChangedNotification, object: nil)
             
             
             
@@ -171,11 +171,11 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
         
         func removeNotifications(){
             
-            NSNotificationCenter.defaultCenter().removeObserver(self)
+            NotificationCenter.default.removeObserver(self)
             
         }
         
-        @IBAction func startStop(src : AnyObject){
+        @IBAction func startStop(_ src : AnyObject){
             
             if let cl = self.client {
                 
@@ -184,7 +184,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 }
                 else if cl.connection.connecting {
                     cl.stop()
-                    self.hasStopped(NSNotification(name: BLESimulatedClient.kStoppedRecording, object: nil))
+                    self.hasStopped(Notification(name: Notification.Name(rawValue: BLESimulatedClient.kStoppedRecording), object: nil))
                 }
                 else{
                     cl.connect()
@@ -193,27 +193,27 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             
         }
         
-        func hasStopped(not : NSNotification){
+        func hasStopped(_ not : Notification){
             let img = UIImage(named: "record")
-            self.fStartStopButton.setImage(img, forState: UIControlState.Normal)
+            self.fStartStopButton.setImage(img, for: UIControlState())
             self.state = connectionState.stopped
-            self.navigationController!.popViewControllerAnimated(true)
+            self.navigationController!.popViewController(animated: true)
             self.headersReceived = false
         }
         
         
-        func dataUpdated(not : NSNotification){
+        func dataUpdated(_ not : Notification){
             
-            if !(UIApplication.sharedApplication().applicationState == UIApplicationState.Active) {
+            if !(UIApplication.shared.applicationState == UIApplicationState.active) {
                 return
             }
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 if let cli = self.client{
                     if let nb = cli.datos{
                         
-                        if let name = nb.getName() where !name.isEmpty && !self.headersReceived{
+                        if let name = nb.getName() , !name.isEmpty && !self.headersReceived{
                             self.headersReceived = true
                             self.fSeriaNumber.text = nb.getName()
                         }
@@ -231,8 +231,8 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                         let t = nb.getCurrentValueForVariable(.Temperature)
                         let volt = nb.getCurrentValueForVariable(.Voltage)
                         
-                        let battLevels = [TMKClockView.arc(start: b / 100.0, end: 0.5, color: UIColor.redColor())]
-                        let tempLevels = [TMKClockView.arc(start: t / self.tempTop, end: 0.5, color: UIColor.redColor())]
+                        let battLevels = [TMKClockView.arc(start: b / 100.0, end: 0.5, color: UIColor.red)]
+                        let tempLevels = [TMKClockView.arc(start: t / self.tempTop, end: 0.5, color: UIColor.red)]
                         
                         
                         self.fSpeed.updateData(String(format:"%0.2f", v) , units: "Km/h", value: v, minValue: 0, maxValue: self.speedTop)
@@ -256,11 +256,11 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             
         }
         
-        func connectionStarted(not: NSNotification){
+        func connectionStarted(_ not: Notification){
             
             self.state = connectionState.connecting
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 var imageArray : [UIImage] = [UIImage]()
                 
@@ -271,7 +271,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                     }
                 }
                 
-                self.fStartStopButton.setImage(UIImage(named:"record_0"), forState: UIControlState.Normal)
+                self.fStartStopButton.setImage(UIImage(named:"record_0"), for: UIControlState())
                 
                 if let iv = self.fStartStopButton.imageView{
                     iv.animationImages = imageArray
@@ -282,15 +282,15 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             })
         }
         
-        func recordingStarted(not: NSNotification){
+        func recordingStarted(_ not: Notification){
             
             self.state = connectionState.connected
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 self.stopAnimation()
                 let img = UIImage(named: "recordOn")
-                self.fStartStopButton.setImage(img, forState: UIControlState.Normal)
+                self.fStartStopButton.setImage(img, for: UIControlState())
                 if let cli = self.client{
                     if let nb = cli.datos{
                         self.fSeriaNumber.text = nb.getSerialNo()
@@ -299,11 +299,11 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             })
         }
         
-        func recordingStopped(not: NSNotification){
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        func recordingStopped(_ not: Notification){
+            DispatchQueue.main.async(execute: { () -> Void in
                 
                 let img = UIImage(named: "record")
-                self.fStartStopButton.setImage(img, forState: UIControlState.Normal)
+                self.fStartStopButton.setImage(img, for: UIControlState())
             })
         }
         
@@ -316,13 +316,13 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             }
         }
         
-        func connectToPeripheral(peripheral : CBPeripheral){
+        func connectToPeripheral(_ peripheral : CBPeripheral){
             
             
             if let cli = self.client {
                 cli.connection.connectPeripheral(peripheral)
             }
-            self.dismissViewControllerAnimated(true) { () -> Void in
+            self.dismiss(animated: true) { () -> Void in
                 
                 self.searching = false
                 self.devSelector = nil
@@ -332,9 +332,9 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
         }
         
         
-        func listDevices(notification: NSNotification){
+        func listDevices(_ notification: Notification){
             
-            let devices = notification.userInfo?["peripherals"] as? [CBPeripheral]
+            let devices = (notification as NSNotification).userInfo?["peripherals"] as? [CBPeripheral]
             
             // if searching is false we must create a selector
             
@@ -343,9 +343,9 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 if !self.searching {
                     
                     self.devList.removeAll()    // Remove old ones
-                    self.devList.appendContentsOf(devs)
+                    self.devList.append(contentsOf: devs)
                     
-                    self.performSegueWithIdentifier("grDeviceSelectorSegue", sender: self)
+                    self.performSegue(withIdentifier: "grDeviceSelectorSegue", sender: self)
                 }
                 else{
                     if let vc = self.devSelector{
@@ -356,11 +356,11 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             }
         }
         
-        override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             
             if segue.identifier == "deviceSelectorSegue" {
                 
-                if let vc = segue.destinationViewController as? BLEDeviceSelector{
+                if let vc = segue.destination as? BLEDeviceSelector{
                         
                     self.devSelector = vc
                     vc.addDevices(self.devList)
@@ -372,7 +372,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             }
                 
             else if segue.identifier == "graphSegueIdentifier" {
-                if let vc = segue.destinationViewController as? GraphViewController  {
+                if let vc = segue.destination as? GraphViewController  {
                     if let nb = self.client?.datos {
                         nb.buildEnergy()
                         
@@ -382,15 +382,15 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 
             }
             else if segue.identifier == "graphicSettingsSegue"{
-                if let vc = segue.destinationViewController as? BLENinebotSettingsViewController{
+                if let vc = segue.destination as? BLENinebotSettingsViewController{
                     vc.ninebotClient = self.client
                     
                 }
             }
             
             else if segue.identifier == "graphMapSegue"{
-                if let vc = segue.destinationViewController as? BLEMapViewController,
-                    nb = self.client?.datos{
+                if let vc = segue.destination as? BLEMapViewController,
+                    let nb = self.client?.datos{
                     vc.dades = nb
                 }
                
@@ -399,36 +399,36 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             
         }
         
-        @IBAction func prepareForUnwind(segue: UIStoryboardSegue){
+        @IBAction func prepareForUnwind(_ segue: UIStoryboardSegue){
             
-            self.dismissViewControllerAnimated(true) { 
+            self.dismiss(animated: true) { 
                 
                 
             }
             
         }
         
-        override func viewWillAppear(animated: Bool) {
-            self.navigationController?.navigationBar.hidden = true
+        override func viewWillAppear(_ animated: Bool) {
+            self.navigationController?.navigationBar.isHidden = true
             self.initNotifications()
             
-            let store = NSUserDefaults.standardUserDefaults()
-            let testMode = store.boolForKey(kTextMode)
+            let store = UserDefaults.standard
+            let testMode = store.bool(forKey: kTextMode)
             
-            self.fSettingsButton.hidden = !testMode
-            self.fSettingsButton.enabled = testMode
+            self.fSettingsButton.isHidden = !testMode
+            self.fSettingsButton.isEnabled = testMode
             
             super.viewWillAppear(animated)
             
         }
         
-        override func viewWillDisappear(animated: Bool) {
+        override func viewWillDisappear(_ animated: Bool) {
             self.removeNotifications()
             super.viewWillDisappear(animated)
         }
         
         
-        override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
             if size.width > size.height{
                 // self.performSegueWithIdentifier("graphSegueIdentifier", sender: self)
             }

@@ -31,7 +31,7 @@ class TMKGraphContentView: UIView {
         }
     }
     
-    func stepStep(st : CGFloat) -> CGFloat{
+    func stepStep(_ st : CGFloat) -> CGFloat{
         
         var step : CGFloat = st
         if st <= 0.1{
@@ -59,7 +59,7 @@ class TMKGraphContentView: UIView {
         
     }
     
-    override func drawRect(dirtyRect: CGRect)
+    override func draw(_ dirtyRect: CGRect)
     {
         // Get the Context
         
@@ -68,18 +68,18 @@ class TMKGraphContentView: UIView {
             
             let font = UIFont(name: "Helvetica", size: 10.0)
             
-            let fmt = NSNumberFormatter()
-            fmt.numberStyle = NSNumberFormatterStyle.DecimalStyle
+            let fmt = NumberFormatter()
+            fmt.numberStyle = NumberFormatter.Style.decimal
             fmt.maximumFractionDigits = 0
             
-            CGContextSaveGState(aContext)
+            aContext?.saveGState()
             
             let backColor = UIColor(red: 0.15, green: 0.15, blue: 0.15, alpha: 1.0)
             backColor.setFill()
             var bbox = UIBezierPath(rect:self.bounds)
             bbox.fill()
             
-            CGContextRestoreGState(aContext)
+            aContext?.restoreGState()
             
             
             v.computeDataForSeries()
@@ -101,7 +101,7 @@ class TMKGraphContentView: UIView {
                 
                 if selSerie != -1{
                     
-                    CGContextSaveGState(aContext)
+                    aContext?.saveGState()
                     let backColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
                     backColor.setFill()
                     backColor.set()
@@ -123,7 +123,7 @@ class TMKGraphContentView: UIView {
                     if x < v.xmax{
                         
                         let bz = UIBezierPath()
-                        bz.lineJoinStyle =   CGLineJoin.Round
+                        bz.lineJoinStyle =   CGLineJoin.round
                         
                         // Move to a point minimum
                         
@@ -133,7 +133,7 @@ class TMKGraphContentView: UIView {
                         pt.y = v.yminH
                         
                         pt = v.heightPointFromTrackPoint(pt)
-                        bz.moveToPoint(pt)
+                        bz.move(to: pt)
                         
                         
                         if x < v.selectionLeftUnits{
@@ -153,7 +153,7 @@ class TMKGraphContentView: UIView {
                             
                             pt = ds.value(v.yValue, axis: v.xAxis, forX: x, forSerie: selSerie)
                             pt = v.heightPointFromTrackPoint(pt)
-                            bz.addLineToPoint(pt)
+                            bz.addLine(to: pt)
                             
                             if x < v.selectionLeftUnits{
                                 x = x + dminus
@@ -170,13 +170,13 @@ class TMKGraphContentView: UIView {
                         //pt = ds.value(v.yValue, axis:v.xAxis, forPoint:n-1, forSerie:selSerie) // Abans v.yValue
                         pt.y = v.yminH
                         pt = v.heightPointFromTrackPoint(pt)
-                        bz.addLineToPoint(pt)
+                        bz.addLine(to: pt)
                         
                         
                         bz.fill()
                     }
                     
-                    CGContextRestoreGState(aContext)
+                    aContext?.restoreGState()
                 }
                 
                 
@@ -191,9 +191,9 @@ class TMKGraphContentView: UIView {
                 
                 // Draw coordinate horizontal lines
                 
-                CGContextSaveGState(aContext)
+                aContext?.saveGState()
                 
-                UIColor.whiteColor().set()
+                UIColor.white.set()
                 
                 var j  = Int(floor(v.ymin / step))
                 
@@ -210,8 +210,8 @@ class TMKGraphContentView: UIView {
                         
                         if(ix % ss) == 0 || firstLine
                         {
-                            bz.moveToPoint(CGPointMake(0.0, height - (y - v.ymin) * sy))
-                            bz.addLineToPoint(CGPointMake(deltax, height - (y-v.ymin) * sy))
+                            bz.move(to: CGPoint(x: 0.0, y: height - (y - v.ymin) * sy))
+                            bz.addLine(to: CGPoint(x: deltax, y: height - (y-v.ymin) * sy))
                             bz.lineWidth = 1.0
                             bz.stroke()
                             
@@ -220,8 +220,8 @@ class TMKGraphContentView: UIView {
                         }
                         else
                         {
-                            bz .moveToPoint(CGPointMake(0.0, height - (y - v.ymin) * sy))
-                            bz.addLineToPoint(CGPointMake(deltax, height - (y - v.ymin) * sy))
+                            bz .move(to: CGPoint(x: 0.0, y: height - (y - v.ymin) * sy))
+                            bz.addLine(to: CGPoint(x: deltax, y: height - (y - v.ymin) * sy))
                             bz.lineWidth = 1.0
                             bz.stroke()
                         }
@@ -255,23 +255,23 @@ class TMKGraphContentView: UIView {
                     while x < v.xmax{
                         if x >= v.xmin{
                             
-                            let ptLoc = CGPointMake(x, 0.0)
+                            let ptLoc = CGPoint(x: x, y: 0.0)
                             
                             var ptView =  v.viewPointFromTrackPoint(ptLoc)
                             
-                            if let lab = fmt.stringFromNumber(x){
+                            if let lab = fmt.string(from: NSNumber(x)){
                                 
-                                let attr : [String : AnyObject] = NSDictionary(objects: NSArray(objects:font!, UIColor.whiteColor()) as [AnyObject],
+                                let attr : [String : AnyObject] = NSDictionary(objects: NSArray(objects:font!, UIColor.white) as [AnyObject],
                                     forKeys: NSArray(objects:NSFontAttributeName, NSForegroundColorAttributeName) as! [NSCopying]) as! [String : AnyObject]
                                 
                                 
-                                let w = lab.sizeWithAttributes(attr)
+                                let w = lab.size(attributes: attr)
                                 
                                 ptView.y =  self.bounds.size.height
                                 ptView.x = ptView.x - w.width / 2.0
                                 
                                 
-                                lab.drawAtPoint(ptView, withAttributes:attr)
+                                lab.draw(at: ptView, withAttributes:attr)
                             }
                             
                         }
@@ -296,7 +296,7 @@ class TMKGraphContentView: UIView {
                     while x < v.xmax{
                         if x >= v.xmin{
                             
-                            let ptLoc = CGPointMake(x, 0.0)
+                            let ptLoc = CGPoint(x: x, y: 0.0)
                             
                             var ptView =  v.viewPointFromTrackPoint(ptLoc)
                             
@@ -307,22 +307,22 @@ class TMKGraphContentView: UIView {
                             
                             let lab = String(format:"%d:%d", h, m)
                             
-                            let attr : [String : AnyObject] = NSDictionary(objects: NSArray(objects:font!, UIColor.whiteColor()) as [AnyObject],
+                            let attr : [String : AnyObject] = NSDictionary(objects: NSArray(objects:font!, UIColor.white) as [AnyObject],
                                 forKeys: NSArray(objects:NSFontAttributeName, NSForegroundColorAttributeName) as! [NSCopying]) as! [String : AnyObject]
                             
                             
-                            let w = lab.sizeWithAttributes(attr)
+                            let w = lab.size(attributes: attr)
                             ptView.y =  self.bounds.size.height
                             ptView.x = ptView.x - w.width/2.0
                             
                             
-                            lab.drawAtPoint(ptView, withAttributes:attr)
+                            lab.draw(at: ptView, withAttributes:attr)
                         }
                         x = x + step
                     }
                 }
                 
-                CGContextRestoreGState(aContext)
+                aContext?.restoreGState()
                 
                 
                 // Draw data points
@@ -330,7 +330,7 @@ class TMKGraphContentView: UIView {
                 for serie : Int in 0 ..< ds.numberOfSeries() {
                     
                     
-                    CGContextSaveGState(aContext)
+                    aContext?.saveGState()
                     
                     ds.colorForSerie(serie).set()
                     
@@ -345,7 +345,7 @@ class TMKGraphContentView: UIView {
                     if x < v.xmax{
                         
                         let bz = UIBezierPath()
-                        bz.lineJoinStyle = CGLineJoin.Round
+                        bz.lineJoinStyle = CGLineJoin.round
                         
                         if ds.isSelectedSerie(serie){
                             bz.lineWidth = 2.0
@@ -355,7 +355,7 @@ class TMKGraphContentView: UIView {
                         var pt = ds.value(v.yValue, axis: v.xAxis, forX: x, forSerie: serie)
                         
                         pt = v.viewPointFromTrackPoint(pt)
-                        bz.moveToPoint(pt)
+                        bz.move(to: pt)
                         
                         if x < v.selectionLeftUnits{
                             x = x + dminus
@@ -379,7 +379,7 @@ class TMKGraphContentView: UIView {
                                 pt = v.rightViewPointFromTrackPoint(pt, serie:serie)
                             }
                             
-                            bz.addLineToPoint(pt)
+                            bz.addLine(to: pt)
                             
                             if x < v.selectionLeftUnits{
                                 x = x + dminus
@@ -395,7 +395,7 @@ class TMKGraphContentView: UIView {
                         bz.stroke()
                     }
                     
-                    CGContextRestoreGState(aContext)
+                    aContext?.restoreGState()
                     
                 }
                 
@@ -403,10 +403,10 @@ class TMKGraphContentView: UIView {
                 
                 for serie in 0..<ds.numberOfSeries() {
                     
-                    CGContextSaveGState(aContext)
+                    aContext?.saveGState()
                     let n = ds.numberOfWaypointsForSerie(serie)
                     if(n > 0){
-                        UIColor.redColor().set()
+                        UIColor.red.set()
                         
                         for  i in 0..<n {
                             let bz = UIBezierPath()
@@ -414,8 +414,8 @@ class TMKGraphContentView: UIView {
                             var pt = ds.valueForWaypoint(i, axis:v.xAxis, serie:serie)
                             pt = v.viewPointFromTrackPoint(pt)
                             
-                            bz.moveToPoint(CGPointMake(pt.x, 0.0))
-                            bz.addLineToPoint(CGPointMake(pt.x, self.bounds.size.height))
+                            bz.move(to: CGPoint(x: pt.x, y: 0.0))
+                            bz.addLine(to: CGPoint(x: pt.x, y: self.bounds.size.height))
                             
                             
                             if ds.isSelectedWaypoint(i, forSerie:serie) {
@@ -430,25 +430,25 @@ class TMKGraphContentView: UIView {
                         
                     }
                     
-                    CGContextRestoreGState(aContext)
+                    aContext?.restoreGState()
                 }
                 
                 // Draw Pins
                 
                 
-                CGContextSaveGState(aContext)
+                aContext?.saveGState()
                 let n = ds.numberOfPins()
                 
                 if n > 0 {
-                    UIColor.purpleColor().set()
+                    UIColor.purple.set()
                     
                     for  i in 0..<n {
                         let bz = UIBezierPath()
                         
                         var pt = ds.valueForPin(i,  axis:v.xAxis)
                         pt = v.viewPointFromTrackPoint(pt)
-                        bz.moveToPoint(CGPointMake(pt.x, 0.0))
-                        bz.addLineToPoint(CGPointMake(pt.x, self.bounds.size.height))
+                        bz.move(to: CGPoint(x: pt.x, y: 0.0))
+                        bz.addLine(to: CGPoint(x: pt.x, y: self.bounds.size.height))
                         
                         bz.lineWidth = 1.0
                         
@@ -461,25 +461,25 @@ class TMKGraphContentView: UIView {
                     
                 }
                 
-                CGContextRestoreGState(aContext)
+                aContext?.restoreGState()
                 
                 
                 // Now draw selection
                 
                 if ds.numberOfSeries() > 0{
-                    CGContextSaveGState(aContext)
+                    aContext?.saveGState()
                     
                     if !v.clampDown {
-                        UIColor.greenColor().set()
+                        UIColor.green.set()
                     }
                     else{
-                        UIColor.cyanColor().set()
+                        UIColor.cyan.set()
                     }
                     
                     bbox = UIBezierPath()
                     
-                    bbox.moveToPoint(CGPointMake(v.selectionLeft-v.leftMargin, 0.0))
-                    bbox.addLineToPoint(CGPointMake(v.selectionLeft-v.leftMargin, self.bounds.size.height))
+                    bbox.move(to: CGPoint(x: v.selectionLeft-v.leftMargin, y: 0.0))
+                    bbox.addLine(to: CGPoint(x: v.selectionLeft-v.leftMargin, y: self.bounds.size.height))
                     if v.movingLeftSelection{
                         bbox.lineWidth = 3.0
                     }else{
@@ -491,8 +491,8 @@ class TMKGraphContentView: UIView {
                     if fabs(v.selectionLeft - v.selectionRight) > 2.0 {
                         bbox = UIBezierPath()
                         
-                        bbox.moveToPoint(CGPointMake(v.selectionRight-v.leftMargin, 0.0))
-                        bbox.addLineToPoint(CGPointMake(v.selectionRight-v.leftMargin, self.bounds.size.height))
+                        bbox.move(to: CGPoint(x: v.selectionRight-v.leftMargin, y: 0.0))
+                        bbox.addLine(to: CGPoint(x: v.selectionRight-v.leftMargin, y: self.bounds.size.height))
                         
                         if v.movingRightSelection {
                             bbox.lineWidth = 3.0
@@ -503,7 +503,7 @@ class TMKGraphContentView: UIView {
                         bbox.stroke()
                         
                         
-                        CGContextRestoreGState(aContext)
+                        aContext?.restoreGState()
                     }
                 }
                 

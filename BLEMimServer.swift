@@ -48,7 +48,7 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
         
     }
     
-    func lookupChar(uuid : String) -> CBMutableCharacteristic? {
+    func lookupChar(_ uuid : String) -> CBMutableCharacteristic? {
         
              return caracteristicas[uuid]
     }
@@ -57,11 +57,11 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
     
     // MARK: PeripheralManagerDelegate
     
-    func peripheralManagerDidUpdateState(peripheral : CBPeripheralManager){
+    func peripheralManagerDidUpdateState(_ peripheral : CBPeripheralManager){
         
         switch(peripheral.state){
             
-        case .PoweredOn: // Configurem el servei
+        case .poweredOn: // Configurem el servei
            // self.buildService()
             //self.startTransmiting()
             break
@@ -74,7 +74,7 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
         
     }
     
-    func peripheralManager(peripheral: CBPeripheralManager, central: CBCentral, didSubscribeToCharacteristic characteristic: CBCharacteristic) {
+    func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
         
         if let del = self.delegate {
             
@@ -93,7 +93,7 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
         
     }
     
-    func peripheralManager(peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFromCharacteristic characteristic: CBCharacteristic) {
+    func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFrom characteristic: CBCharacteristic) {
         
         if let del = self.delegate {
             
@@ -104,18 +104,18 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
     }
     
     
-    func peripheralManager(peripheral: CBPeripheralManager, didReceiveReadRequest request: CBATTRequest){
+    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest){
         
         if let dele = self.delegate{
             dele.readReceived(request.characteristic)
         }
         
-        peripheral.respondToRequest(request, withResult: CBATTError.Success)
+        peripheral.respond(to: request, withResult: CBATTError.Code.success)
         
     }
     
     
-    func peripheralManager(peripheral: CBPeripheralManager, didReceiveWriteRequests requests: [CBATTRequest]) {
+    func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
         
         for request in requests {
             let value = request.value
@@ -127,7 +127,7 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
                     
                 }
             }
-            peripheral.respondToRequest(request, withResult: CBATTError.Success)
+            peripheral.respond(to: request, withResult: CBATTError.Code.success)
         }
     }
     
@@ -136,11 +136,11 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
     
     //MARK: Auxiliar
     
-    func updateValue(uuid: String, data : NSData){
+    func updateValue(_ uuid: String, data : Data){
         
          if let car = lookupChar(uuid){
             
-            self.manager.updateValue(data, forCharacteristic: car, onSubscribedCentrals: nil);
+            self.manager.updateValue(data, for: car, onSubscribedCentrals: nil);
         }
         
     }
@@ -168,7 +168,7 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
                 for (_, ch) in srv.characteristics{
                     
                     if let cha = ch.characteristic{
-                        let caracteristica = CBMutableCharacteristic(type: CBUUID(string: ch.id), properties: cha.properties, value: nil, permissions: [CBAttributePermissions.Readable,CBAttributePermissions.Writeable])
+                        let caracteristica = CBMutableCharacteristic(type: CBUUID(string: ch.id), properties: cha.properties, value: nil, permissions: [CBAttributePermissions.readable,CBAttributePermissions.writeable])
                         caracteristica.descriptors = cha.descriptors
                         chars.append(caracteristica)
                         
@@ -178,7 +178,7 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
                 }
                 
                 servei.characteristics = chars
-                self.manager.addService(servei)
+                self.manager.add(servei)
                 
             }
          }
@@ -186,18 +186,18 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
      }
     func startTransmiting(){
         
-        _ = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(BLEMimServer.checkState(_:)), userInfo: nil, repeats: false)
+        _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(BLEMimServer.checkState(_:)), userInfo: nil, repeats: false)
         
     }
     
-    func checkState(tim : NSTimer){
+    func checkState(_ tim : Timer){
         
         tim.invalidate()
         
-        if self.manager.state == .PoweredOn {
+        if self.manager.state == .poweredOn {
             startTransmitingReal()
         }else {
-            _ = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(BLEMimServer.checkState(_:)), userInfo: nil, repeats: false)
+            _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(BLEMimServer.checkState(_:)), userInfo: nil, repeats: false)
         }
         
     }
@@ -207,7 +207,7 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
         self.buildService()
     
         let dict : Dictionary = [CBAdvertisementDataServiceUUIDsKey : [CBUUID(string: self.serviceId)],
-                                 CBAdvertisementDataLocalNameKey : "NOE002"]
+                                 CBAdvertisementDataLocalNameKey : "NOE002"] as [String : Any]
         
         self.manager.startAdvertising(dict)
         self.transmiting = true

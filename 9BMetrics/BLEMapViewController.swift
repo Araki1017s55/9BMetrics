@@ -73,17 +73,17 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
             
             
             let polyline = MKPolyline(coordinates: &locs, count: locs.count)
-            mapView.addOverlay(polyline)
+            mapView.add(polyline)
             
             mapView.setVisibleMapRect(fullRect, animated: false )
         }
     }
     
-    @IBAction func reload(src: AnyObject){
+    @IBAction func reload(_ src: AnyObject){
         mapView.setVisibleMapRect(fullRect, animated: true)
     }
     
-    @IBAction func selectMap(src: AnyObject){
+    @IBAction func selectMap(_ src: AnyObject){
         
         if let sc = src as? UISegmentedControl{
             
@@ -93,19 +93,19 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
                 
                 
             case 0:
-                self.mapView.mapType = MKMapType.Standard
+                self.mapView.mapType = MKMapType.standard
                 
             case 1:
-                self.mapView.mapType = MKMapType.Satellite
+                self.mapView.mapType = MKMapType.satellite
                
                 
             case 2:
-                self.mapView.mapType = MKMapType.Hybrid
+                self.mapView.mapType = MKMapType.hybrid
                 
                 
             default:
                 
-                self.mapView.mapType = MKMapType.Standard
+                self.mapView.mapType = MKMapType.standard
               
             }
         }
@@ -113,19 +113,19 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
         
     }
  
-    override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBar.hidden = true
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
         super.viewWillAppear(animated)
     }
     
-    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
         if let poly = overlay as? MKPolyline{
             let routeLineView = MKPolylineRenderer(polyline: poly)
-            routeLineView.fillColor = UIColor.redColor()
-            routeLineView.lineCap = CGLineCap.Round
+            routeLineView.fillColor = UIColor.red
+            routeLineView.lineCap = CGLineCap.round
             routeLineView.lineWidth = 4.0
-            routeLineView.strokeColor = UIColor.redColor()
+            routeLineView.strokeColor = UIColor.red
             return routeLineView
             
         }else {
@@ -133,8 +133,8 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
         }
     }
 
-    override func previewActionItems() -> [UIPreviewActionItem] {
-        let shareGPX = UIPreviewAction(title: "Share GPX", style: .Default)
+    override var previewActionItems : [UIPreviewActionItem] {
+        let shareGPX = UIPreviewAction(title: "Share GPX", style: .default)
             {(action, viewController) in
                 
                 if let wheel = self.dades {
@@ -142,7 +142,7 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
                         
                         // get ViewController 
                         
-                        if let theDelegate = UIApplication.sharedApplication().delegate as? AppDelegate{
+                        if let theDelegate = UIApplication.shared.delegate as? AppDelegate{
                             if let vc = theDelegate.mainController{
                                 vc.shareFile(gpxurl, src: vc.view, delete: false)
                             }
@@ -152,14 +152,14 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
                 }
             }
         
-        let openInTraces = UIPreviewAction(title: "Open GPX In", style: .Default)
+        let openInTraces = UIPreviewAction(title: "Open GPX In", style: .default)
         {(action, viewController) in
             if let wheel = self.dades {
                 if let gpxurl = wheel.getGPXURL(){
                     
                     // get ViewController
                     
-                    if let theDelegate = UIApplication.sharedApplication().delegate as? AppDelegate{
+                    if let theDelegate = UIApplication.shared.delegate as? AppDelegate{
                         if let vc = theDelegate.mainController{
 
                             vc.openFileIn(gpxurl, src: vc, delete: false)

@@ -11,15 +11,15 @@ import UIKit
 
 class KTCenterFlowLayout: UICollectionViewFlowLayout {
     
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]?{
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?{
     
-        guard let superAttributes = NSArray(array: super.layoutAttributesForElementsInRect(rect)!, copyItems: true) as?[UICollectionViewLayoutAttributes] else {return nil}
+        guard let superAttributes = NSArray(array: super.layoutAttributesForElements(in: rect)!, copyItems: true) as?[UICollectionViewLayoutAttributes] else {return nil}
         
         var rowCollections = [Float:[UICollectionViewLayoutAttributes]] ()
         
         guard let flowDelegate = self.collectionView!.delegate as? UICollectionViewDelegateFlowLayout else {return nil}
         
-        let delegateSupportsInteritemSpacing = flowDelegate.respondsToSelector(#selector(UICollectionViewDelegateFlowLayout.collectionView(_:layout:minimumInteritemSpacingForSectionAtIndex:)))
+        let delegateSupportsInteritemSpacing = flowDelegate.responds(to: #selector(UICollectionViewDelegateFlowLayout.collectionView(_:layout:minimumInteritemSpacingForSectionAt:)))
         
     
         for itemAttributes in superAttributes{
@@ -28,7 +28,7 @@ class KTCenterFlowLayout: UICollectionViewFlowLayout {
             // with variable cell heights the midYs can be ever so slightly
             // different.
             
-            let midYRound = roundf(Float(CGRectGetMidY(itemAttributes.frame)))
+            let midYRound = roundf(Float(itemAttributes.frame.midY))
             let midYPlus = midYRound + 1.0
             let midYMinus = midYRound - 1.0
             
@@ -53,7 +53,7 @@ class KTCenterFlowLayout: UICollectionViewFlowLayout {
             rowCollections[key!]!.append(itemAttributes)
        }
         
-        let collectionViewWidth = CGRectGetWidth(self.collectionView!.bounds) - self.collectionView!.contentInset.left - self.collectionView!.contentInset.right
+        let collectionViewWidth = self.collectionView!.bounds.width - self.collectionView!.contentInset.left - self.collectionView!.contentInset.right
         
         for (_, itemAttributesCollection) in rowCollections {
             let itemsInRow = itemAttributesCollection.count
@@ -63,8 +63,8 @@ class KTCenterFlowLayout: UICollectionViewFlowLayout {
             
             if delegateSupportsInteritemSpacing && itemsInRow > 0
             {
-                let section : Int = itemAttributesCollection[0].indexPath.section
-                interitemSpacing = flowDelegate.collectionView!(self.collectionView!,layout:self,minimumInteritemSpacingForSectionAtIndex:section)
+                let section : Int = (itemAttributesCollection[0].indexPath as NSIndexPath).section
+                interitemSpacing = flowDelegate.collectionView!(self.collectionView!,layout:self,minimumInteritemSpacingForSectionAt:section)
             }
  
                 // Sum the width of all elements in the row
@@ -74,7 +74,7 @@ class KTCenterFlowLayout: UICollectionViewFlowLayout {
             var aggregateItemWidths : CGFloat = 0.0
             
             for itemAttributes in itemAttributesCollection{
-                aggregateItemWidths += CGRectGetWidth(itemAttributes.frame)
+                aggregateItemWidths += itemAttributes.frame.width
             }
             
             // Build an alignment rect
@@ -83,17 +83,17 @@ class KTCenterFlowLayout: UICollectionViewFlowLayout {
             let alignmentXOffset = (collectionViewWidth - alignmentWidth) / 2.0
            
             // Adjust each item's position to be centered
-            var previousFrame = CGRectZero
+            var previousFrame = CGRect.zero
             
             for itemAttributes in itemAttributesCollection
             {
                 var itemFrame = itemAttributes.frame
                 
-                if CGRectEqualToRect(previousFrame, CGRectZero){
+                if previousFrame.equalTo(CGRect.zero){
                     itemFrame.origin.x = alignmentXOffset
                     
                 }else{
-                    itemFrame.origin.x = CGRectGetMaxX(previousFrame) + interitemSpacing
+                    itemFrame.origin.x = previousFrame.maxX + interitemSpacing
                 }
                 
                 itemAttributes.frame = itemFrame

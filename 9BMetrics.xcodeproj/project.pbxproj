@@ -538,6 +538,7 @@
 					007A57131C85CE49003A2030 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = N72U6DTDRE;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -553,10 +554,12 @@
 					007A57251C85CE49003A2030 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = N72U6DTDRE;
+						LastSwiftMigration = 0800;
 					};
 					007A57341C85CE49003A2030 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = N72U6DTDRE;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -807,6 +810,7 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.1;
 			};
@@ -824,6 +828,7 @@
 				PROVISIONING_PROFILE = "81f1dac8-c7d9-4437-b062-cba0d796fee3";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.1;
 			};
@@ -842,6 +847,7 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.1;
 			};
@@ -861,6 +867,7 @@
 				PROVISIONING_PROFILE = "81f1dac8-c7d9-4437-b062-cba0d796fee3";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.1;
 			};
@@ -887,6 +894,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "9BMetrics-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -910,6 +918,7 @@
 				PROVISIONING_PROFILE = "a358aa2d-ea89-454f-9f89-f480db6e2458";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "9BMetrics-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

@@ -11,6 +11,6 @@ import CoreBluetooth
 
 
 protocol BLEDeviceSelectorDelegate {
-    func connectToPeripheral(peripheral : CBPeripheral)
+    func connectToPeripheral(_ peripheral : CBPeripheral)
 
 }

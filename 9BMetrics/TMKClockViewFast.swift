@@ -14,9 +14,9 @@ class TMKClockViewFast: UIView {
     let openAngle = 30.0
     let startEndLength : CGFloat = 0.1   // Percentatge del radi
     let sphereWidth : CGFloat = 1.0
-    var sphereColor = UIColor.blackColor()
+    var sphereColor = UIColor.black
     let cursorWidth : CGFloat = 1.0
-    let cursorColor = UIColor.redColor()
+    let cursorColor = UIColor.red
     let cursorSize : CGFloat = 0.9
     
     var minValue = 0.0
@@ -24,7 +24,7 @@ class TMKClockViewFast: UIView {
     
     var label : UILabel = UILabel()
     var unitsLabel : UILabel = UILabel()
-    var labelsColor = UIColor.whiteColor()
+    var labelsColor = UIColor.white
     
     var backImage : UIImage?
     
@@ -69,41 +69,41 @@ class TMKClockViewFast: UIView {
         }
  
         label.text = String(format: "%0.2f", value)
-        label.textAlignment = .Center
+        label.textAlignment = .center
         //label.font = UIFont.systemFontOfSize(r / 4.0)
         
         label.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
         
         label.textColor = labelsColor
-        label.backgroundColor = UIColor.clearColor()
+        label.backgroundColor = UIColor.clear
         //label!.bounds = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 20.0)
         label.translatesAutoresizingMaskIntoConstraints = false
 
         self.addSubview(label)
         
-        var c1 = NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
+        var c1 = NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
         
-        var c2 = NSLayoutConstraint(item: label, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: -(r / 8.0) - (r * 0.1) )
+        var c2 = NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -(r / 8.0) - (r * 0.1) )
         
             
         self.addConstraint(c1)
         self.addConstraint(c2)
   
         unitsLabel.text = String(format: "%@", units)
-        unitsLabel.textAlignment = .Center
+        unitsLabel.textAlignment = .center
         //unitsLabel.font = UIFont.systemFontOfSize(r / 6.0)
         unitsLabel.font = UIFont(name: ".SFUIText-Light", size: r / 6.0)
         unitsLabel.textColor = labelsColor
-        unitsLabel.backgroundColor = UIColor.clearColor()
+        unitsLabel.backgroundColor = UIColor.clear
         //label!.bounds = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 20.0)
         unitsLabel.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(unitsLabel)
         
         
-        c1 = NSLayoutConstraint(item: unitsLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
+        c1 = NSLayoutConstraint(item: unitsLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
         
-        c2 = NSLayoutConstraint(item: unitsLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: -(r / 12.0) )
+        c2 = NSLayoutConstraint(item: unitsLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -(r / 12.0) )
         
         
         self.addConstraint(c1)
@@ -125,7 +125,7 @@ class TMKClockViewFast: UIView {
             let angle = self.valueToAngle(0.0)
             let tr = CATransform3DMakeRotation(angle, 0.0, 0.0 , 1.0)
             
-            UIView.animateWithDuration(0.05, animations: {
+            UIView.animate(withDuration: 0.05, animations: {
                 
                 acursor.transform = tr
                 
@@ -137,7 +137,7 @@ class TMKClockViewFast: UIView {
         
     }
     
-    func arcLayers(rect: CGRect, arcs : [TMKClockView.arc]) -> [CAShapeLayer]{
+    func arcLayers(_ rect: CGRect, arcs : [TMKClockView.arc]) -> [CAShapeLayer]{
         
         var out : [CAShapeLayer] = []
         
@@ -157,15 +157,15 @@ class TMKClockViewFast: UIView {
             let endAng = valueToAngle(arc.end)
 
             
-            let path = CGPathCreateMutable()
+            let path = CGMutablePath()
             CGPathAddArc(path, nil, center.x, center.y, r, CGFloat(startAng), CGFloat(endAng), false)
             back.path = path
             back.lineWidth = w
             back.lineCap = kCALineCapButt
 
-            back.strokeColor = arc.color.CGColor
-            back.fillColor = UIColor.clearColor().CGColor
-            back.rasterizationScale = UIScreen.mainScreen().scale * 2.0;
+            back.strokeColor = arc.color.cgColor
+            back.fillColor = UIColor.clear.cgColor
+            back.rasterizationScale = UIScreen.main.scale * 2.0;
             back.shouldRasterize = true
             
             out.append(back)
@@ -176,24 +176,24 @@ class TMKClockViewFast: UIView {
         
     }
     
-    func cursorLayer (rect: CGRect) -> CAShapeLayer{
+    func cursorLayer (_ rect: CGRect) -> CAShapeLayer{
         
         let cursor = CAShapeLayer()
         cursor.frame = rect
-        let path = CGPathCreateMutable()
+        let path = CGMutablePath()
 
         let r : CGFloat = (min(self.bounds.width, self.bounds.height) / 2.0) - 1.0
         let l  : CGFloat = r * cursorSize
 
-        CGPathMoveToPoint(path, nil, CGRectGetMidX(rect), CGRectGetMidY(rect))
-        CGPathAddLineToPoint(path, nil, CGRectGetMidX(rect) + l, CGRectGetMidY(rect))
+        CGPathMoveToPoint(path, nil, rect.midX, rect.midY)
+        CGPathAddLineToPoint(path, nil, rect.midX + l, rect.midY)
         cursor.path = path
         cursor.lineWidth = 1.0
         cursor.lineCap = kCALineCapRound
-        cursor.strokeColor = cursorColor.CGColor
+        cursor.strokeColor = cursorColor.cgColor
         
         // see for rasterization advice http://stackoverflow.com/questions/24316705/how-to-draw-a-smooth-circle-with-cashapelayer-and-uibezierpath
-        cursor.rasterizationScale = UIScreen.mainScreen().scale;
+        cursor.rasterizationScale = UIScreen.main.scale;
         cursor.shouldRasterize = true
         
         
@@ -201,7 +201,7 @@ class TMKClockViewFast: UIView {
         
     }
 
-    func backLayer(rect: CGRect) -> CAShapeLayer{
+    func backLayer(_ rect: CGRect) -> CAShapeLayer{
         
         let back = CAShapeLayer()
         back.frame = rect
@@ -213,7 +213,7 @@ class TMKClockViewFast: UIView {
         
         let center = CGPoint(x: self.bounds.width/2.0, y:self.bounds.height/2.0)
         
-        let path = CGPathCreateMutable()
+        let path = CGMutablePath()
         
         let pt0 = CGPoint(x: center.x + (r - l) * CGFloat(cos(start)), y: center.y + (r - l) * CGFloat(sin(start)))
         let pt1 = CGPoint(x: center.x + r * CGFloat(cos(start)), y: center.y + r * CGFloat(sin(start)))
@@ -228,15 +228,15 @@ class TMKClockViewFast: UIView {
         back.path = path
         back.lineWidth = 1.0
         back.lineCap = kCALineCapRound
-        back.strokeColor = sphereColor.CGColor
-        back.fillColor = UIColor.clearColor().CGColor
-        back.rasterizationScale = UIScreen.mainScreen().scale * 2.0;
+        back.strokeColor = sphereColor.cgColor
+        back.fillColor = UIColor.clear.cgColor
+        back.rasterizationScale = UIScreen.main.scale * 2.0;
         back.shouldRasterize = true
         return back
     }
     
     
-    func updateData(displayValue : String, units : String, value : Double, minValue : Double, maxValue : Double){
+    func updateData(_ displayValue : String, units : String, value : Double, minValue : Double, maxValue : Double){
         
         
         self.label.text = displayValue
@@ -251,7 +251,7 @@ class TMKClockViewFast: UIView {
             let angle = self.valueToAngle((value - minValue) / (maxValue - minValue))
             let tr = CATransform3DMakeRotation(angle, 0.0, 0.0 , 1.0)
             
-            UIView.animateWithDuration(0.05, animations: {
+            UIView.animate(withDuration: 0.05, animations: {
                 
                 acursor.transform = tr
                 
@@ -263,11 +263,11 @@ class TMKClockViewFast: UIView {
     }
     
     
-    func d2R(degs : Double ) -> CGFloat{
+    func d2R(_ degs : Double ) -> CGFloat{
         return CGFloat(degs / 180.0 * M_PI)
     }
     
-    func valueToAngle(val : Double) -> CGFloat{
+    func valueToAngle(_ val : Double) -> CGFloat{
         
         
         //return d2R(val*360.0)

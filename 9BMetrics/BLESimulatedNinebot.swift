@@ -16,15 +16,15 @@ class BLESimulatedNinebot: UIViewController {
     @IBOutlet weak var fMessages: UITextView!
     @IBOutlet weak var fSlider: UISlider!
     
-    var url : NSURL?
+    var url : URL?
     var ninebot : BLENinebot = BLENinebot()
     var logData : [BLENinebot.LogEntry] = Array<BLENinebot.LogEntry>()
     
     var ip = 0  // Instruction pointer
     
-    var firstDate : NSDate?
-    var startDate = NSDate()
-    var timer : NSTimer?
+    var firstDate : Date?
+    var startDate = Date()
+    var timer : Timer?
     
     var server : BLESimulatedServer?
     
@@ -34,11 +34,11 @@ class BLESimulatedNinebot: UIViewController {
         super.viewDidLoad()
         
         let cursor = UIImage(named: "9bcursor")
-        self.fSlider.setThumbImage(cursor, forState: UIControlState.Normal)
+        self.fSlider.setThumbImage(cursor, for: UIControlState())
         // Load data file
         
-        let bundle = NSBundle.mainBundle()
-        url = bundle.URLForResource("simulated_log", withExtension: "txt")
+        let bundle = Bundle.main
+        url = bundle.url(forResource: "simulated_log", withExtension: "txt")
         if let u = url {
             self.loadURL(u)
             
@@ -54,11 +54,11 @@ class BLESimulatedNinebot: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.start()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         self.stop()
     }
     
@@ -71,31 +71,31 @@ class BLESimulatedNinebot: UIViewController {
         }
         
         self.server!.startTransmiting()
-        self.fNinebot.enabled = true
+        self.fNinebot.isEnabled = true
         
     }
     
-    func loadURL(url : NSURL){
+    func loadURL(_ url : URL){
         self.ninebot.clearAll()
         self.logData.removeAll()
         do{
             
             
-            let data = try String(contentsOfURL: url, encoding: NSUTF8StringEncoding)
-            let lines = data.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+            let data = try String(contentsOf: url, encoding: String.Encoding.utf8)
+            let lines = data.components(separatedBy: CharacterSet.newlines)
             
             for line in lines {
-                let fields = line.componentsSeparatedByString("\t")
+                let fields = line.components(separatedBy: "\t")
                 
                 if fields.count == 3{   // Good Data
                     
-                    let time = Double(fields[0].stringByReplacingOccurrencesOfString(" ", withString: ""))
+                    let time = Double(fields[0].replacingOccurrences(of: " ", with: ""))
                     let variable = Int(fields[1])
                     let value = Int(fields[2])
                     
-                    if let t = time, i = variable, v = value {
+                    if let t = time, let i = variable, let v = value {
                         
-                        let date =  NSDate(timeIntervalSince1970: t)
+                        let date =  Date(timeIntervalSince1970: t)
                         
                         if firstDate == nil {
                             firstDate = date
@@ -116,11 +116,11 @@ class BLESimulatedNinebot: UIViewController {
         
         // OK now we must sort in place logData 
         
-        logData.sortInPlace { (b0 :BLENinebot.LogEntry, b1 : BLENinebot.LogEntry) -> Bool in
-            return b0.time.compare(b1.time) == NSComparisonResult.OrderedAscending
+        logData.sort { (b0 :BLENinebot.LogEntry, b1 : BLENinebot.LogEntry) -> Bool in
+            return b0.time.compare(b1.time as Date) == ComparisonResult.orderedAscending
         }
         
-        self.firstDate = logData[0].time
+        self.firstDate = logData[0].time as Date
         
         self.fSlider.maximumValue = Float(logData.count)
         
@@ -143,14 +143,14 @@ class BLESimulatedNinebot: UIViewController {
         if let srv = self.server{
             srv.stopTransmiting()
         }
-        self.fNinebot.enabled = false
+        self.fNinebot.isEnabled = false
     }
     
     func startSimulate(){
         self.simulating = true
         self.ip = 0
         self.fSlider.value = 0.0
-        self.startDate = NSDate()
+        self.startDate = Date()
         
        // dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             self.processData()
@@ -170,9 +170,9 @@ class BLESimulatedNinebot: UIViewController {
         }
         
         var w = self.logData[ip]
-        let now = NSDate()
+        let now = Date()
         
-        while w.time.timeIntervalSinceDate(self.firstDate!) < now.timeIntervalSinceDate(self.startDate){
+        while w.time.timeIntervalSince(self.firstDate!) < now.timeIntervalSince(self.startDate){
             
             
             self.ninebot.addValueWithDate(now, variable: w.variable, value: w.value)
@@ -189,17 +189,17 @@ class BLESimulatedNinebot: UIViewController {
          }
         
         w = self.logData[ip]
-        var ti = w.time.timeIntervalSinceDate(self.firstDate!) - now.timeIntervalSinceDate(self.startDate)
+        var ti = w.time.timeIntervalSince(self.firstDate!) - now.timeIntervalSince(self.startDate)
         
         if ti < 0 {
             ti = 0.01
         }
         
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(ti, target: self, selector: #selector(BLESimulatedNinebot.processData), userInfo: nil, repeats: false)
+        self.timer = Timer.scheduledTimer(timeInterval: ti, target: self, selector: #selector(BLESimulatedNinebot.processData), userInfo: nil, repeats: false)
     }
     
     
-    func getVariable(variable : Int) -> Int{
+    func getVariable(_ variable : Int) -> Int{
         return self.ninebot.currentValueForVariable(variable)
     }
     
@@ -221,34 +221,34 @@ extension BLESimulatedNinebot : BLENinebotServerDelegate{
     
     
     
-    func remoteDeviceSubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
+    func remoteDeviceSubscribedToCharacteristic(_ characteristic : CBCharacteristic, central : CBCentral){
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.fMessages.text = self.fMessages.text + String(format: "Device %@ subscribed.\n", central.identifier.UUIDString)
+        DispatchQueue.main.async(execute: { () -> Void in
+            self.fMessages.text = self.fMessages.text + String(format: "Device %@ subscribed.\n", central.identifier.uuidString)
         })
 
         
         self.startSimulate()
-        self.fIphone.enabled = true
+        self.fIphone.isEnabled = true
         
         
     }
     
-    func remoteDeviceUnsubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
+    func remoteDeviceUnsubscribedToCharacteristic(_ characteristic : CBCharacteristic, central : CBCentral){
  
-        self.fMessages.text = self.fMessages.text + String(format: "Device %@ unsubscribed.\n", central.identifier.UUIDString)
+        self.fMessages.text = self.fMessages.text + String(format: "Device %@ unsubscribed.\n", central.identifier.uuidString)
 
         self.stopSimulate()
-        self.fIphone.enabled = false
+        self.fIphone.isEnabled = false
         
     }
     //TODO: Seria interessant canviar les nostres variables per les que fa servir Ninebot per compat
-    func readReceived(char: CBCharacteristic) {
+    func readReceived(_ char: CBCharacteristic) {
         
         
     }
     
-    func writeReceived(char : CBCharacteristic, data: NSData){
+    func writeReceived(_ char : CBCharacteristic, data: Data){
         
         if let msg = BLENinebotMessage(data: data){
         

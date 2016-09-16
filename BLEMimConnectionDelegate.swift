@@ -13,5 +13,5 @@ import CoreBluetooth
 protocol BLEMimConnectionDelegate : BLENinebotConnectionDelegate {
     
     
-    func deviceAnalyzed( peripheral : CBPeripheral, services : [String : BLEService])    
+    func deviceAnalyzed( _ peripheral : CBPeripheral, services : [String : BLEService])    
 }

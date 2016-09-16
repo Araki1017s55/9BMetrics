@@ -20,9 +20,9 @@ class TMKClockView: UIView {
     let openAngle = 30.0
     let startEndLength : CGFloat = 0.1   // Percentatge del radi
     let sphereWidth : CGFloat = 1.0
-    var sphereColor = UIColor.yellowColor()
+    var sphereColor = UIColor.yellow
     let cursorWidth : CGFloat = 1.0
-    let cursorColor = UIColor.redColor()
+    let cursorColor = UIColor.red
     let cursorSize : CGFloat = 0.9
     
     var minValue = 0.0
@@ -30,7 +30,7 @@ class TMKClockView: UIView {
     
     var label : UILabel = UILabel()
     var unitsLabel : UILabel = UILabel()
-    var labelsColor = UIColor.whiteColor()
+    var labelsColor = UIColor.white
     
     var backImage : UIImage?
 
@@ -61,40 +61,40 @@ class TMKClockView: UIView {
         let r : CGFloat = (min(self.bounds.width, self.bounds.height) / 2.0)-1.0
 
         label.text = String(format: "%0.2f", value)
-        label.textAlignment = .Center
+        label.textAlignment = .center
         //label.font = UIFont.systemFontOfSize(r / 4.0)
         
         label.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
         
-        label.textColor = UIColor.whiteColor()
-        label.backgroundColor = UIColor.clearColor()
+        label.textColor = UIColor.white
+        label.backgroundColor = UIColor.clear
         //label!.bounds = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 20.0)
         label.translatesAutoresizingMaskIntoConstraints = false
 
         self.addSubview(label)
         
-        var c1 = NSLayoutConstraint(item: label, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
+        var c1 = NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
         
-        var c2 = NSLayoutConstraint(item: label, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: -(r / 8.0) - (r * 0.1) )
+        var c2 = NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -(r / 8.0) - (r * 0.1) )
         
             
         self.addConstraint(c1)
         self.addConstraint(c2)
   
         unitsLabel.text = String(format: "%@", units)
-        unitsLabel.textAlignment = .Center
+        unitsLabel.textAlignment = .center
         //unitsLabel.font = UIFont.systemFontOfSize(r / 6.0)
         unitsLabel.font = UIFont(name: ".SFUIText-Light", size: r / 6.0)
-        unitsLabel.textColor = UIColor.whiteColor()
-        unitsLabel.backgroundColor = UIColor.clearColor()
+        unitsLabel.textColor = UIColor.white
+        unitsLabel.backgroundColor = UIColor.clear
         //label!.bounds = CGRect(x: 0.0, y: 0.0, width: 100.0, height: 20.0)
         unitsLabel.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubview(unitsLabel)
         
-        c1 = NSLayoutConstraint(item: unitsLabel, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
+        c1 = NSLayoutConstraint(item: unitsLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
         
-        c2 = NSLayoutConstraint(item: unitsLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0, constant: -(r / 12.0) )
+        c2 = NSLayoutConstraint(item: unitsLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -(r / 12.0) )
         
         
         self.addConstraint(c1)
@@ -105,35 +105,35 @@ class TMKClockView: UIView {
         
     }
     
-    func d2R(degs : Double ) -> CGFloat{
+    func d2R(_ degs : Double ) -> CGFloat{
         return CGFloat(degs / 180.0 * M_PI)
     }
     
-    func valueToAngle(val : Double) -> CGFloat{
+    func valueToAngle(_ val : Double) -> CGFloat{
         
         let angle = val * (360.0 - (2 * openAngle)) + (-270.0 + openAngle)
         
         return d2R(angle)
     }
     
-    func drawCursor(value : Double, len : CGFloat, width : CGFloat, color : UIColor, center : CGPoint ){
+    func drawCursor(_ value : Double, len : CGFloat, width : CGFloat, color : UIColor, center : CGPoint ){
         
         let semiBlackColor : UIColor
 
         if let bc = self.backgroundColor{
-            semiBlackColor = bc.colorWithAlphaComponent(0.5)
+            semiBlackColor = bc.withAlphaComponent(0.5)
         }else{
-            semiBlackColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
+            semiBlackColor = UIColor.black.withAlphaComponent(0.5)
         }
 
         // OK now draw cursor
         
         let bz = UIBezierPath()
-        bz.lineCapStyle = .Round
+        bz.lineCapStyle = .round
         let ang = valueToAngle(value)
         let pt = CGPoint(x: center.x + len * CGFloat(cos(ang)), y: center.y + len * CGFloat(sin(ang)))
-        bz.moveToPoint(center)
-        bz.addLineToPoint(pt)
+        bz.move(to: center)
+        bz.addLine(to: pt)
         
         bz.lineWidth = width + 2.0
         semiBlackColor.setStroke()
@@ -146,7 +146,7 @@ class TMKClockView: UIView {
 
     }
 
-    func drawArc(start : Double, end : Double, r : CGFloat, width : CGFloat, color : UIColor, center : CGPoint){
+    func drawArc(_ start : Double, end : Double, r : CGFloat, width : CGFloat, color : UIColor, center : CGPoint){
         let bz = UIBezierPath()
         
         color.setStroke()
@@ -155,7 +155,7 @@ class TMKClockView: UIView {
         let startAng = valueToAngle(start)
         let endAng = valueToAngle(end)
         
-        bz.addArcWithCenter(center, radius: r * (1.0-width), startAngle:startAng, endAngle:endAng, clockwise: true)
+        bz.addArc(withCenter: center, radius: r * (1.0-width), startAngle:startAng, endAngle:endAng, clockwise: true)
         
         bz.stroke()
     
@@ -163,12 +163,12 @@ class TMKClockView: UIView {
 
     
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         // Get graphics context
         let aContext = UIGraphicsGetCurrentContext()
         
-        CGContextSaveGState(aContext)
+        aContext?.saveGState()
         
         // Get the radius
         
@@ -185,7 +185,7 @@ class TMKClockView: UIView {
             
             let rect = CGRect(x: center.x - side/2.0, y: center.y - side/2.0, width: side, height: side)
             
-            img.drawInRect(rect)
+            img.draw(in: rect)
         }
         
         
@@ -200,15 +200,15 @@ class TMKClockView: UIView {
             let pt0 = CGPoint(x: center.x + (r - l) * CGFloat(cos(start)), y: center.y + (r - l) * CGFloat(sin(start)))
             let pt1 = CGPoint(x: center.x + r * CGFloat(cos(start)), y: center.y + r * CGFloat(sin(start)))
 
-            bz.moveToPoint(pt0)
-            bz.addLineToPoint(pt1)
+            bz.move(to: pt0)
+            bz.addLine(to: pt1)
          }
         
-        bz.addArcWithCenter(center, radius: r, startAngle:start, endAngle:end, clockwise: true)
+        bz.addArc(withCenter: center, radius: r, startAngle:start, endAngle:end, clockwise: true)
         
         if l > 0.0 {
             let pt0 = CGPoint(x: center.x + (r - l) * CGFloat(cos(end)), y: center.y + (r - l) * CGFloat(sin(end)))
-            bz.addLineToPoint(pt0)
+            bz.addLine(to: pt0)
         }
         
         bz.stroke()
@@ -218,7 +218,7 @@ class TMKClockView: UIView {
         var ptl = CGPoint(x: center.x + (r + l) * CGFloat(cos(start)), y: center.y + (r + l) * CGFloat(sin(start)))
         
         let paraStyle = NSMutableParagraphStyle()
-        paraStyle.alignment = .Center
+        paraStyle.alignment = .center
         
         let xfont = UIFont(name: ".SFUIText-Light", size: r / 6.0)
         
@@ -226,22 +226,22 @@ class TMKClockView: UIView {
             NSFontAttributeName: xfont!,
             NSForegroundColorAttributeName: labelsColor,
             NSParagraphStyleAttributeName: paraStyle
-        ]
+        ] as [String : Any]
         // NSFontAttributeName: UIFont.systemFontOfSize(r / 6.0)
         
         let minS = NSString(format:"%0.0f", minValue)
-        let minSiz = minS.sizeWithAttributes(attributes)
+        let minSiz = minS.size(attributes: attributes)
         let minRect = CGRect(x: ptl.x - (minSiz.width / 2.0), y: ptl.y - (minSiz.height / 2.0), width: minSiz.width, height: minSiz.height)
 
-        minS.drawInRect(minRect, withAttributes: attributes)
+        minS.draw(in: minRect, withAttributes: attributes)
         
         ptl = CGPoint(x: center.x + (r + l) * CGFloat(cos(end)), y: center.y + (r + l) * CGFloat(sin(end)))
         
         let maxS = NSString(format:"%0.0f", maxValue)
-        let maxSiz = maxS.sizeWithAttributes(attributes)
+        let maxSiz = maxS.size(attributes: attributes)
         let maxRect = CGRect(x: ptl.x - (maxSiz.width / 2.0), y: ptl.y - (maxSiz.height / 2.0), width: maxSiz.width, height: maxSiz.height)
         
-        maxS.drawInRect(maxRect, withAttributes: attributes)
+        maxS.draw(in: maxRect, withAttributes: attributes)
         
         // Now the arcs
         
@@ -256,14 +256,14 @@ class TMKClockView: UIView {
         
         
         
-        CGContextRestoreGState(aContext)
+        aContext?.restoreGState()
         
         // Drawing code
         
-        super.drawRect(rect)
+        super.draw(rect)
     }
     
-    func updateData(value : String, units : String, radis : [arc], arcs : [arc], minValue : Double, maxValue : Double){
+    func updateData(_ value : String, units : String, radis : [arc], arcs : [arc], minValue : Double, maxValue : Double){
         
         self.label.text = value
         self.value = value

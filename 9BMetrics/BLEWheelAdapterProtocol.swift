@@ -63,15 +63,15 @@ protocol BLEWheelAdapterProtocol {
  
     // Called by connection when we got device characteristics
 
-    func deviceConnected(connection: BLEConnection, peripheral : CBPeripheral )
+    func deviceConnected(_ connection: BLEConnection, peripheral : CBPeripheral )
     
     // Called when lost connection. perhaps should do something. If not forget it
     
-    func deviceDisconnected(connection: BLEConnection, peripheral : CBPeripheral )
+    func deviceDisconnected(_ connection: BLEConnection, peripheral : CBPeripheral )
     
     // Data Received. Analyze, extract, convert and prosibly return a dictionary of characteristics and values
     
-    func charUpdated(connection: BLEConnection,  char : CBCharacteristic, data: NSData) -> [(WheelTrack.WheelValue, NSDate, Double)]?
+    func charUpdated(_ connection: BLEConnection,  char : CBCharacteristic, data: Data) -> [(WheelTrack.WheelValue, Date, Double)]?
     
     // name, version, sn may return empty
     

@@ -20,7 +20,7 @@
 
 import UIKit
 
-class BLERequestOperation: NSOperation {
+class BLERequestOperation: Operation {
     
     let adapter : BLENinebotOneAdapter
     let connection : BLEConnection
@@ -32,7 +32,7 @@ class BLERequestOperation: NSOperation {
     
     override func main() {
    
-        if self.cancelled {
+        if self.isCancelled {
             return
         }
         adapter.sendData(connection)

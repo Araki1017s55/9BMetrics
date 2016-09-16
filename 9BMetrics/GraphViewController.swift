@@ -49,14 +49,14 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.hidden = true
+        self.navigationController?.navigationBar.isHidden = true
         self.graphView.yValue = shownVariable
         self.buildLog(shownVariable)
         self.graphView.setup()
         
       
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.async(execute: { () -> Void in
             self.updateStats()
             self.graphView.setNeedsDisplay()
         })
@@ -94,7 +94,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     }
     */
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
             if size.width > size.height{
                 // graphToShow = graphValue[0]
                 // self.performSegueWithIdentifier("graphicSegue", sender: self)
@@ -111,7 +111,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     // MARK: TMKGraphViewDataSource
     
-    func valueForSerie(serie : Int, value : Int) -> Int{
+    func valueForSerie(_ serie : Int, value : Int) -> Int{
         
         switch serie {
         case 1:
@@ -126,7 +126,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     func numberOfSeries() -> Int{
         return 1 //  Put 3 but for the moment too slow
     }
-    func numberOfPointsForSerie(serie : Int, value: Int) -> Int{
+    func numberOfPointsForSerie(_ serie : Int, value: Int) -> Int{
         
         let val = valueForSerie(serie, value: value)
          
@@ -137,26 +137,26 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
             return 0
         }
     }
-    func styleForSerie(serie : Int) -> Int{
+    func styleForSerie(_ serie : Int) -> Int{
         return 0
     }
-    func colorForSerie(serie : Int) -> UIColor{
+    func colorForSerie(_ serie : Int) -> UIColor{
         
         switch  serie {
         case 1:
-            return UIColor.greenColor()
+            return UIColor.green
         case 2:
-            return UIColor.cyanColor()
+            return UIColor.cyan
         default:
-            return UIColor.redColor()
+            return UIColor.red
         }
         
     }
-    func offsetForSerie(serie : Int) -> CGPoint{
+    func offsetForSerie(_ serie : Int) -> CGPoint{
         return CGPoint(x: 0, y: 0)
     }
     
-    func value(value : Int, axis: Int,  forPoint point: Int,  forSerie serie:Int) -> CGPoint{
+    func value(_ value : Int, axis: Int,  forPoint point: Int,  forSerie serie:Int) -> CGPoint{
         
         let val = valueForSerie(serie, value: value)
         if self.ninebot != nil{
@@ -171,12 +171,12 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     }
     
-    func value(value : Int, axis: Int,  forX x:CGFloat,  forSerie serie:Int) -> CGPoint{
+    func value(_ value : Int, axis: Int,  forX x:CGFloat,  forSerie serie:Int) -> CGPoint{
  
         let val = valueForSerie(serie, value: value)
         if self.ninebot != nil{
             
-            let v = getLogValue(val, time: NSTimeInterval(x))
+            let v = getLogValue(val, time: TimeInterval(x))
             return CGPoint(x: x, y:CGFloat(v))
             
         }else{
@@ -184,42 +184,42 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         }
       }
 
-    func numberOfWaypointsForSerie(serie: Int) -> Int{
+    func numberOfWaypointsForSerie(_ serie: Int) -> Int{
             return 0
      
     }
-    func valueForWaypoint(point : Int,  axis:Int,  serie: Int) -> CGPoint{
+    func valueForWaypoint(_ point : Int,  axis:Int,  serie: Int) -> CGPoint{
         return CGPoint(x: 0, y: 0)
     }
-    func isSelectedWaypoint(point: Int, forSerie serie:Int) -> Bool{
+    func isSelectedWaypoint(_ point: Int, forSerie serie:Int) -> Bool{
         return false
     }
-    func isSelectedSerie(serie: Int) -> Bool{
+    func isSelectedSerie(_ serie: Int) -> Bool{
         return serie == 0
      }
     func numberOfXAxis() -> Int {
         return 1
     }
-    func nameOfXAxis(axis: Int) -> String{
+    func nameOfXAxis(_ axis: Int) -> String{
         return "t"
     }
     func numberOfValues() -> Int{
         return BLENinebot.displayableVariables.count
     }
-    func nameOfValue(value: Int) -> String{
+    func nameOfValue(_ value: Int) -> String{
         return displayableVariables[value].rawValue
     }
     func numberOfPins() -> Int{
         return 0
     }
-    func valueForPin(point:Int, axis:Int) -> CGPoint{
+    func valueForPin(_ point:Int, axis:Int) -> CGPoint{
         return CGPoint(x: 0, y: 0)
     }
-    func isSelectedPin(pin: Int) -> Bool{
+    func isSelectedPin(_ pin: Int) -> Bool{
         return false
     }
     
-    func statsForSerie(value: Int, from t0: NSTimeInterval, to t1: NSTimeInterval) -> String{
+    func statsForSerie(_ value: Int, from t0: TimeInterval, to t1: TimeInterval) -> String{
         
         if self.ninebot != nil{
             
@@ -233,43 +233,43 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
             case 0: // Speed
                 
                 let dist = acum / 3600.0
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Dist: %4.2f Km", min, avg, max, dist))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Dist: %4.2f Km", min, avg, max, dist))
                 
             case 1: //T
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
                 
             case 2:                 // Voltage
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
                 
             case 3:                 // Current
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Q: %4.2fC", min, avg, max, acum))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Q: %4.2fC", min, avg, max, acum))
                 
             case 4:     //Battery
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
                 
             case 5:     // Pitch
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
                 
             case 6:     //Roll
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
                 
             case 7:     //Distance
-                answer.appendContentsOf(String(format:" Dist: %4.2f Km ", max - min))
+                answer.append(String(format:" Dist: %4.2f Km ", max - min))
                 
             case 8:     //Altitude
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
                 
             case 9:     //Power
                 let wh = acum / 3600.0
-                answer.appendContentsOf(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f W: %4.2f wh", min, avg, max, wh))
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f W: %4.2f wh", min, avg, max, wh))
                 
             case 10:     //Energy
-                answer.appendContentsOf(String(format:" Energy: %4.2f wh ", max - min))
+                answer.append(String(format:" Energy: %4.2f wh ", max - min))
 
                 
                 
             default:
-                answer.appendContentsOf(" ")
+                answer.append(" ")
                 
             }
               return answer
@@ -279,7 +279,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         }
     }
     
-    func minMaxForSerie(serie : Int, value: Int) -> (CGFloat, CGFloat){
+    func minMaxForSerie(_ serie : Int, value: Int) -> (CGFloat, CGFloat){
         
         let val = valueForSerie(serie, value: value)
         
@@ -327,8 +327,8 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         
     }
     
-    func doGearActionFrom(from: Double, to: Double, src: AnyObject){
-        var url : NSURL?
+    func doGearActionFrom(_ from: Double, to: Double, src: AnyObject){
+        var url : URL?
         
         if let nb = self.ninebot{
             url = nb.createCSVFileFrom(from, to: to)
@@ -344,18 +344,18 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     // Create a file with actual data and share it
     
-    func shareData(file: NSURL?, src:AnyObject, delete: Bool){
+    func shareData(_ file: URL?, src:AnyObject, delete: Bool){
         
         if let aFile = file {
             let activityViewController = UIActivityViewController(
-                activityItems: [aFile.lastPathComponent!,   aFile],
+                activityItems: [aFile.lastPathComponent,   aFile],
                 applicationActivities: [PickerActivity()])
             
             activityViewController.completionWithItemsHandler = {(a : String?, completed:Bool, objects:[AnyObject]?, error:NSError?) in
                 
                 if delete {
                     do{
-                        try NSFileManager.defaultManager().removeItemAtURL(aFile)
+                        try FileManager.default.removeItem(at: aFile)
                     }catch{
                         AppDelegate.debugLog("Error al esborrar %@", aFile)
                     }
@@ -364,9 +364,9 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
             
             activityViewController.popoverPresentationController?.sourceView = src as? UIView
             
-            activityViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+            activityViewController.modalPresentationStyle = UIModalPresentationStyle.popover
             
-            self.presentViewController(activityViewController,
+            self.present(activityViewController,
                 animated: true,
                 completion: nil)
         }
@@ -374,7 +374,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     //MARK: Log Management
     
-    func buildLog(variable : Int){
+    func buildLog(_ variable : Int){
         
         if shownVariable == variable && resampledLog != nil {
             return
@@ -396,7 +396,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         }
     }
     
-    func originalCountLog(variable : Int) -> Int{
+    func originalCountLog(_ variable : Int) -> Int{
         let v = displayableVariables[variable]
         if let nb = self.ninebot {
             return nb.countLogForVariable(v)
@@ -405,7 +405,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         }
     }
     
-    func countLog(variable : Int) -> Int{
+    func countLog(_ variable : Int) -> Int{
         buildLog(variable)
         
         if let log = resampledLog {
@@ -416,7 +416,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     }
 
     
-    func getLogValue(variable : Int, time : NSTimeInterval) -> Double{
+    func getLogValue(_ variable : Int, time : TimeInterval) -> Double{
         buildLog(variable)
  
         if resampledLog == nil{
@@ -424,7 +424,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         }
         let i = Int(round(time / step))
         
-        if let log = resampledLog where log.count > i{
+        if let log = resampledLog , log.count > i{
             return log[i].value * scales[variable]
         }else{
             return 0.0
@@ -432,7 +432,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         
     }
     
-    func getLogValuex(variable : Int, time : NSTimeInterval) -> Double{
+    func getLogValuex(_ variable : Int, time : TimeInterval) -> Double{
         
         
         
@@ -449,7 +449,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     }
     
     
-    func getLogStats(variable : Int, from t0 : NSTimeInterval, to t1 : NSTimeInterval) -> (Double, Double, Double, Double){
+    func getLogStats(_ variable : Int, from t0 : TimeInterval, to t1 : TimeInterval) -> (Double, Double, Double, Double){
         buildLog(variable)
         
         if variable >= 0 && variable < displayableVariables.count{
@@ -467,20 +467,20 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         }
     }
     
-    func getLogValue(variable : Int, index : Int) -> Double{
+    func getLogValue(_ variable : Int, index : Int) -> Double{
         buildLog(variable)
         
-        if let log = resampledLog where log.count > index{
+        if let log = resampledLog , log.count > index{
             return log[index].value * scales[variable]
         }else{
             return 0.0
         }
     }
     
-    func getTimeValue(variable : Int, index : Int) -> Double{
+    func getTimeValue(_ variable : Int, index : Int) -> Double{
         buildLog(variable)
         
-        if let log = resampledLog where log.count > index{
+        if let log = resampledLog , log.count > index{
             return log[index].timestamp
         }else{
             return 0.0
@@ -488,7 +488,7 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     }
     
         
-        func getLogValuex(variable : Int, index : Int) -> Double{
+        func getLogValuex(_ variable : Int, index : Int) -> Double{
        
         
         if variable >= 0 && variable < displayableVariables.count{

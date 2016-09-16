@@ -12,7 +12,7 @@ import CoreBluetooth
 class BLENinebotOneAdapter : NSObject {
     
     var headersOk = false
-    var sendTimer : NSTimer?    // Timer per enviar les dades periodicament
+    var sendTimer : Timer?    // Timer per enviar les dades periodicament
     var timerStep = 0.1        // Get data every step
     var contadorOp = 0          // Normal data updated every second
     var contadorOpFast = 0      // Special data updated every 1/10th of second
@@ -23,13 +23,13 @@ class BLENinebotOneAdapter : NSObject {
     
     var buffer = [UInt8]()
     
-    var queryQueue : NSOperationQueue?
+    var queryQueue : OperationQueue?
     
-    static var conversion = Array<WheelTrack.WheelValue?>(count : 256, repeatedValue: nil)
-    static var scales = Array<Double>(count : 256, repeatedValue: 1.0)
-    static var signed = [Bool](count: 256, repeatedValue: false)
+    static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
+    static var scales = Array<Double>(repeating: 1.0, count: 256)
+    static var signed = [Bool](repeating: false, count: 256)
     
-    var values : [Int] = Array(count: 256, repeatedValue: -1)
+    var values : [Int] = Array(repeating: -1, count: 256)
 
     
     
@@ -43,7 +43,7 @@ class BLENinebotOneAdapter : NSObject {
     
     override init(){
         super.init()
-        queryQueue = NSOperationQueue()
+        queryQueue = OperationQueue()
         queryQueue!.maxConcurrentOperationCount = 1
         
         BLENinebotOneAdapter.initConversion()
@@ -106,13 +106,13 @@ class BLENinebotOneAdapter : NSObject {
    
     //MARK: Receiving Data. Append data to buffer
     
-    func appendToBuffer(data : NSData){
+    func appendToBuffer(_ data : Data){
         
-        let count = data.length
-        var buf = [UInt8](count: count, repeatedValue: 0)
-        data.getBytes(&buf, length:count * sizeof(UInt8))
+        let count = data.count
+        var buf = [UInt8](repeating: 0, count: count)
+        (data as NSData).getBytes(&buf, length:count * MemoryLayout<UInt8>.size)
         
-        buffer.appendContentsOf(buf)
+        buffer.append(contentsOf: buf)
     }
     
     // Here we process received information.
@@ -125,11 +125,11 @@ class BLENinebotOneAdapter : NSObject {
     // and SI units
     
     
-    func procesaBuffer(connection: BLEConnection) -> [(WheelTrack.WheelValue, NSDate, Double)]?
+    func procesaBuffer(_ connection: BLEConnection) -> [(WheelTrack.WheelValue, Date, Double)]?
     {
         // Wait till header. We wait till we find a 0x55
         
-        var outarr : [(WheelTrack.WheelValue, NSDate, Double)]?
+        var outarr : [(WheelTrack.WheelValue, Date, Double)]?
         
         repeat {
             
@@ -150,7 +150,7 @@ class BLENinebotOneAdapter : NSObject {
                     outarr = []
                 }
                 if let  moreData = procesaBuffer(connection){
-                    outarr!.appendContentsOf(moreData)
+                    outarr!.append(contentsOf: moreData)
                 }
                 
                 return outarr
@@ -177,7 +177,7 @@ class BLENinebotOneAdapter : NSObject {
             
             let block = Array(buffer[0..<(l+6)])
             
-            if let q = self.queryQueue where q.operationCount < 4{
+            if let q = self.queryQueue , q.operationCount < 4{
                 self.sendNewRequest(connection)
             }
             
@@ -223,7 +223,7 @@ class BLENinebotOneAdapter : NSObject {
                         
                         let dv = Double(sv) * BLENinebotOneAdapter.scales[k]
                         if let wv = BLENinebotOneAdapter.conversion[k]{
-                            outarr!.append((wv, NSDate(), dv))
+                            outarr!.append((wv, Date(), dv))
                                                         
                         }
                     }
@@ -285,7 +285,7 @@ class BLENinebotOneAdapter : NSObject {
     
     //MARK: Sending Requests
     
-    func sendData(connection : BLEConnection){
+    func sendData(_ connection : BLEConnection){
         
         
         if self.headersOk {  // Get normal data
@@ -337,14 +337,14 @@ class BLENinebotOneAdapter : NSObject {
     
     // MARK: NSOperationSupport
     
-    func injectRequest(tim : NSTimer){
+    func injectRequest(_ tim : Timer){
         
         if let connection = tim.userInfo as? BLEConnection {
             self.sendNewRequest(connection)
         }
     }
     
-    func sendNewRequest(connection : BLEConnection){
+    func sendNewRequest(_ connection : BLEConnection){
         
         let request = BLERequestOperation(adapter: self, connection: connection)
         
@@ -385,7 +385,7 @@ extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
         }
     }
     
-    func deviceConnected(connection: BLEConnection, peripheral : CBPeripheral ){
+    func deviceConnected(_ connection: BLEConnection, peripheral : CBPeripheral ){
         
         
         self.contadorOp = 0
@@ -396,11 +396,11 @@ extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
         // Just to be sure we start another timer to correct cases where we loose all requests
         // Will inject one request every timerStep
         
-        self.sendTimer = NSTimer.scheduledTimerWithTimeInterval(timerStep, target: self, selector:#selector(BLENinebotOneAdapter.injectRequest(_:)), userInfo: connection, repeats: true)
+        self.sendTimer = Timer.scheduledTimer(timeInterval: timerStep, target: self, selector:#selector(BLENinebotOneAdapter.injectRequest(_:)), userInfo: connection, repeats: true)
         
         
     }
-    func deviceDisconnected(connection: BLEConnection, peripheral : CBPeripheral ){
+    func deviceDisconnected(_ connection: BLEConnection, peripheral : CBPeripheral ){
         
         
         if let tim = self.sendTimer {
@@ -410,7 +410,7 @@ extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
         
     }
     
-    func charUpdated(connection: BLEConnection,  char : CBCharacteristic, data: NSData) -> [(WheelTrack.WheelValue, NSDate, Double)]?{
+    func charUpdated(_ connection: BLEConnection,  char : CBCharacteristic, data: Data) -> [(WheelTrack.WheelValue, Date, Double)]?{
         
         self.appendToBuffer(data)
         return self.procesaBuffer(connection)
@@ -451,8 +451,8 @@ extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
             let v1 = v % 256
             let v2 = v / 256
             
-            let ch1 = Character(UnicodeScalar(v1))
-            let ch2 = Character(UnicodeScalar( v2))
+            let ch1 = Character(UnicodeScalar(v1)!)
+            let ch2 = Character(UnicodeScalar( v2)!)
             
             no.append(ch1)
             no.append(ch2)

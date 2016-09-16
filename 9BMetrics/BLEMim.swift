@@ -57,11 +57,11 @@ class BLEMim: UIViewController {
     let client : BLEMimConnection = BLEMimConnection()
     let server : BLEMimServer = BLEMimServer()
     
-    var startDate : NSDate?
+    var startDate : Date?
     
     var log = [Exchange]()
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         self.setup()
@@ -76,15 +76,15 @@ class BLEMim: UIViewController {
     }
     
     override func viewDidLoad() {
-        self.iPhoneButton.enabled = false
-        self.ninebotButton.enabled = false
+        self.iPhoneButton.isEnabled = false
+        self.ninebotButton.isEnabled = false
         
-        performSegueWithIdentifier("debugDeviceSelector", sender: self)
+        performSegue(withIdentifier: "debugDeviceSelector", sender: self)
     }
     
-    func deviceDiscovered(not : NSNotification){
+    func deviceDiscovered(_ not : Notification){
         
-        if let devices  = not.userInfo?["peripherals"] as? [CBPeripheral] {
+        if let devices  = (not as NSNotification).userInfo?["peripherals"] as? [CBPeripheral] {
             
             if let dv = deviceSelector {
                 dv.addDevices(devices)
@@ -98,7 +98,7 @@ class BLEMim: UIViewController {
         client.delegate = self
         server.delegate = self
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLEMim.deviceDiscovered(_:)), name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BLEMim.deviceDiscovered(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kdevicesDiscoveredNotification), object: nil)
        
         
     }
@@ -114,8 +114,8 @@ class BLEMim: UIViewController {
         
         // First we recover the last device and try to connect directly
         
-        let store = NSUserDefaults.standardUserDefaults()
-        let device = store.stringForKey(BLESimulatedClient.kLast9BDeviceAccessedKey)
+        let store = UserDefaults.standard
+        let device = store.string(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey)
         
         if let dev = device {
             self.client.connectToDeviceWithUUID(dev)
@@ -146,7 +146,7 @@ class BLEMim: UIViewController {
     
     }
     
-    @IBAction func flip(src: AnyObject){
+    @IBAction func flip(_ src: AnyObject){
         
         if isConnected() {
             stop()
@@ -155,24 +155,24 @@ class BLEMim: UIViewController {
             start()
         }
     }
-    @IBAction func doSave(src: AnyObject){
+    @IBAction func doSave(_ src: AnyObject){
         _ = self.save()
     }
     
-    func save() -> NSURL?{
+    func save() -> URL?{
         
         if startDate == nil {
-            startDate = NSDate()
+            startDate = Date()
         }
        
-        let ldateFormatter = NSDateFormatter()
-        let enUSPOSIXLocale = NSLocale(localeIdentifier: "en_US_POSIX")
+        let ldateFormatter = DateFormatter()
+        let enUSPOSIXLocale = Locale(identifier: "en_US_POSIX")
         
         ldateFormatter.locale = enUSPOSIXLocale
         ldateFormatter.dateFormat = "'9B_'yyyyMMdd'_'HHmmss'.log'"
-        let newName = ldateFormatter.stringFromDate(startDate!)
+        let newName = ldateFormatter.string(from: startDate!)
         
-        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
         
         let path : String
         
@@ -184,24 +184,24 @@ class BLEMim: UIViewController {
             return nil
         }
         
-        let tempFile = (path + "/" ).stringByAppendingString(newName )
+        let tempFile = (path + "/" ) + newName
         
         
-        let mgr = NSFileManager.defaultManager()
+        let mgr = FileManager.default
         
-        mgr.createFileAtPath(tempFile, contents: nil, attributes: nil)
-        let file = NSURL.fileURLWithPath(tempFile)
+        mgr.createFile(atPath: tempFile, contents: nil, attributes: nil)
+        let file = URL(fileURLWithPath: tempFile)
         
         
         
         do{
-            let hdl = try NSFileHandle(forWritingToURL: file)
+            let hdl = try FileHandle(forWritingTo: file)
             // Get time of first item
             
             ldateFormatter.dateFormat = "yyyy MM dd'_'HH:mm:ss"
            
-            let s = ldateFormatter.stringFromDate(startDate!) + "\n"
-            hdl.writeData(s.dataUsingEncoding(NSUTF8StringEncoding)!)
+            let s = ldateFormatter.string(from: startDate!) + "\n"
+            hdl.write(s.data(using: String.Encoding.utf8)!)
             
             
             for v in self.log {
@@ -216,8 +216,8 @@ class BLEMim: UIViewController {
                     s = String(format:"> %@ %@ %@\n", v.op.rawValue, v.characteristic, v.data)
                 }
                 
-                if let vn = s!.dataUsingEncoding(NSUTF8StringEncoding){
-                    hdl.writeData(vn)
+                if let vn = s!.data(using: String.Encoding.utf8){
+                    hdl.write(vn)
                 }
                 
              }
@@ -228,7 +228,7 @@ class BLEMim: UIViewController {
             
         }
         catch{
-            if let dele = UIApplication.sharedApplication().delegate as? AppDelegate{
+            if let dele = UIApplication.shared.delegate as? AppDelegate{
                 dele.displayMessageWithTitle("Error",format:"Error when creating file handle for %@", file)
             }
 
@@ -238,29 +238,29 @@ class BLEMim: UIViewController {
         return nil
     }
     
-    func nsdata2HexString(data : NSData) -> String{
+    func nsdata2HexString(_ data : Data) -> String{
         
         
-        let count = data.length
-        var buffer = [UInt8](count: count, repeatedValue: 0)
-        data.getBytes(&buffer, length:count * sizeof(UInt8))
+        let count = data.count
+        var buffer = [UInt8](repeating: 0, count: count)
+        (data as NSData).getBytes(&buffer, length:count * MemoryLayout<UInt8>.size)
 
         var out = ""
         
         for i in 0..<count {
             let str = String(format: "%02x", buffer[i])
-            out.appendContentsOf(str)
+            out.append(str)
         }
         
         return out
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "debugDeviceSelector" {
             
-            if let dv = segue.destinationViewController as? BLEDeviceSelector {
+            if let dv = segue.destination as? BLEDeviceSelector {
                 deviceSelector = dv
                 dv.delegate = self
                 client.doRealScan()
@@ -274,27 +274,27 @@ class BLEMim: UIViewController {
 
 extension BLEMim : BLEMimConnectionDelegate{
 
-    func deviceConnected(peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol ){
+    func deviceConnected(_ peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol ){
         if let s = peripheral.name{
             AppDelegate.debugLog("Device %@ connected", s)
-            self.ninebotButton.enabled = true
-            self.startDate = NSDate()
+            self.ninebotButton.isEnabled = true
+            self.startDate = Date()
         }
     }
-    func deviceDisconnected(peripheral : CBPeripheral ){
+    func deviceDisconnected(_ peripheral : CBPeripheral ){
         if let s = peripheral.name{
             AppDelegate.debugLog("Device %@ disconnected", s)
-            self.ninebotButton.enabled = false
+            self.ninebotButton.isEnabled = false
             
         }
     }
-    func charUpdated(char : CBCharacteristic, data: NSData){
-        self.server.updateValue(char.UUID.UUIDString, data: data)
+    func charUpdated(_ char : CBCharacteristic, data: Data){
+        self.server.updateValue(char.uuid.uuidString, data: data)
         let hexdat = self.nsdata2HexString(data)
         
         
         
-        let entry = Exchange(dir: .nb2iphone, op:.update, characteristic : char.UUID.UUIDString, data: hexdat)
+        let entry = Exchange(dir: .nb2iphone, op:.update, characteristic : char.uuid.uuidString, data: hexdat)
         
         self.log.append(entry)
         self.tableView.reloadData() 
@@ -302,7 +302,7 @@ extension BLEMim : BLEMimConnectionDelegate{
         
     }
     
-    func deviceAnalyzed( peripheral : CBPeripheral, services : [String : BLEService]) {
+    func deviceAnalyzed( _ peripheral : CBPeripheral, services : [String : BLEService]) {
         
         AppDelegate.debugLog("Device analyzed %@", peripheral)
         
@@ -322,65 +322,65 @@ extension BLEMim : BLEMimConnectionDelegate{
 }
 extension BLEMim : BLENinebotServerDelegate {
 
-    func readReceived(char : CBCharacteristic){
+    func readReceived(_ char : CBCharacteristic){
         
         self.client.readValue(char)
-        let entry = Exchange(dir: .iphone2nb, op: .read, characteristic: char.UUID.UUIDString, data: "")
+        let entry = Exchange(dir: .iphone2nb, op: .read, characteristic: char.uuid.uuidString, data: "")
         self.log.append(entry)
         self.tableView.reloadData()
     }
     
-    func writeReceived(char : CBCharacteristic, data: NSData){
+    func writeReceived(_ char : CBCharacteristic, data: Data){
         self.client.writeValue(char, data:data)
 
         let hexdat = self.nsdata2HexString(data)
         
-        let entry = Exchange(dir: .iphone2nb, op: .write, characteristic: char.UUID.UUIDString, data: hexdat)
+        let entry = Exchange(dir: .iphone2nb, op: .write, characteristic: char.uuid.uuidString, data: hexdat)
         self.log.append(entry)
         self.tableView.reloadData()
         
     }
-    func remoteDeviceSubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
+    func remoteDeviceSubscribedToCharacteristic(_ characteristic : CBCharacteristic, central : CBCentral){
         
         self.client.subscribeToChar(characteristic)
-        let entry = Exchange(dir: .iphone2nb, op: .subscribe, characteristic: characteristic.UUID.UUIDString, data: "")
+        let entry = Exchange(dir: .iphone2nb, op: .subscribe, characteristic: characteristic.uuid.uuidString, data: "")
         self.log.append(entry)
         self.tableView.reloadData()
 
         AppDelegate.debugLog("Device subscribed %@", central)
         
         
-        self.iPhoneButton.enabled = true
+        self.iPhoneButton.isEnabled = true
     }
-    func remoteDeviceUnsubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
+    func remoteDeviceUnsubscribedToCharacteristic(_ characteristic : CBCharacteristic, central : CBCentral){
         self.client.unsubscribeToChar(characteristic)
         
-        let entry = Exchange(dir: .iphone2nb, op: .unsubscribe, characteristic: characteristic.UUID.UUIDString, data: "")
+        let entry = Exchange(dir: .iphone2nb, op: .unsubscribe, characteristic: characteristic.uuid.uuidString, data: "")
         self.log.append(entry)
         self.tableView.reloadData()
 
         AppDelegate.debugLog("Device unsubscribed %@", central)
-        self.iPhoneButton.enabled = false
+        self.iPhoneButton.isEnabled = false
     }
 
 }
 
 extension BLEMim : UITableViewDataSource{
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.log.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("logEntryCellIdentifier", forIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "logEntryCellIdentifier", for: indexPath)
         
-        let entry = log[indexPath.row]
+        let entry = log[(indexPath as NSIndexPath).row]
         
         let img : UIImage?
         
@@ -407,10 +407,10 @@ extension BLEMim : UITableViewDataSource{
 }
 
 extension BLEMim : BLEDeviceSelectorDelegate {
-    func connectToPeripheral(peripheral : CBPeripheral){
+    func connectToPeripheral(_ peripheral : CBPeripheral){
         
         self.client.connectPeripheral(peripheral)
-        self.dismissViewControllerAnimated(true) { 
+        self.dismiss(animated: true) { 
             
             
         }
