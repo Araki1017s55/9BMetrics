@@ -27,5 +27,5 @@ import CoreBluetooth
     func remoteDeviceSubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral)
     func remoteDeviceUnsubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral)
     func writeReceived(char : CBCharacteristic, data: NSData)
-    
+    func readReceived(char : CBCharacteristic)    
 }

@@ -292,6 +292,7 @@ class BLENinebotMessage: NSObject {
         
     }
     
+    // parse the message and returns a dictionary (hash table)
     // -> Interpreta el missatge i retorna un Diccionari amb el numero de variable i el valor
     
     func interpret() -> [Int :Int]{

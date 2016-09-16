@@ -30,19 +30,32 @@ class BLEMim: UIViewController {
     @IBOutlet weak var ninebotButton : UIButton!
     @IBOutlet weak var iPhoneButton : UIButton!
     
+    var deviceSelector : BLEDeviceSelector?
+    
     
     enum Direction : Int {
         case nb2iphone = 0
         case iphone2nb
     }
     
+    enum Op : String {
+        case read = "r"
+        case write = "w"
+        case update = "d"
+        case subscribe = "s"
+        case unsubscribe = "u"
+        case comment = "c"
+    }
+    
     struct Exchange {
         var dir : Direction = .nb2iphone
+        var op : Op = .read
+        var characteristic : String = ""
         var data : String = ""
     }
     
-    let client : BLEConnection = BLEConnection()
-    let server : BLESimulatedServer = BLESimulatedServer()
+    let client : BLEMimConnection = BLEMimConnection()
+    let server : BLEMimServer = BLEMimServer()
     
     var startDate : NSDate?
     
@@ -65,25 +78,35 @@ class BLEMim: UIViewController {
     override func viewDidLoad() {
         self.iPhoneButton.enabled = false
         self.ninebotButton.enabled = false
+        
+        performSegueWithIdentifier("debugDeviceSelector", sender: self)
     }
+    
+    func deviceDiscovered(not : NSNotification){
+        
+        if let devices  = not.userInfo?["peripherals"] as? [CBPeripheral] {
+            
+            if let dv = deviceSelector {
+                dv.addDevices(devices)
+            }
+        }
+    }
+
+    
     func setup(){
         
         client.delegate = self
         server.delegate = self
         
-        // start connection
-        self.connectToClient()
-        
-        // Start Connection
-        // Start Server
-        
-        // Wait by bye
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(BLEMim.deviceDiscovered(_:)), name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
+       
         
     }
     
+    
     func isConnected() -> Bool{
         
-        return self.client.subscribed && self.server.transmiting
+        return  self.server.transmiting
         
     }
     
@@ -187,10 +210,10 @@ class BLEMim: UIViewController {
                 
                 if v.dir == .iphone2nb {
                     
-                    s = String(format:"< %@\n", v.data)
+                    s = String(format:"< %@ %@ %@\n", v.op.rawValue, v.characteristic, v.data)
                     
                 }else {
-                    s = String(format:"> %@\n", v.data)
+                    s = String(format:"> %@ %@ %@\n", v.op.rawValue, v.characteristic, v.data)
                 }
                 
                 if let vn = s!.dataUsingEncoding(NSUTF8StringEncoding){
@@ -232,10 +255,24 @@ class BLEMim: UIViewController {
         return out
         
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "debugDeviceSelector" {
+            
+            if let dv = segue.destinationViewController as? BLEDeviceSelector {
+                deviceSelector = dv
+                dv.delegate = self
+                client.doRealScan()
+
+            }
+            
+        }
+    }
 
 }
 
-extension BLEMim : BLENinebotConnectionDelegate{
+extension BLEMim : BLEMimConnectionDelegate{
 
     func deviceConnected(peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol ){
         if let s = peripheral.name{
@@ -252,34 +289,76 @@ extension BLEMim : BLENinebotConnectionDelegate{
         }
     }
     func charUpdated(char : CBCharacteristic, data: NSData){
-        self.server.updateValue(data)
+        self.server.updateValue(char.UUID.UUIDString, data: data)
         let hexdat = self.nsdata2HexString(data)
         
-        let entry = Exchange(dir: .nb2iphone, data: hexdat)
+        
+        
+        let entry = Exchange(dir: .nb2iphone, op:.update, characteristic : char.UUID.UUIDString, data: hexdat)
+        
         self.log.append(entry)
         self.tableView.reloadData() 
 
         
     }
+    
+    func deviceAnalyzed( peripheral : CBPeripheral, services : [String : BLEService]) {
+        
+        AppDelegate.debugLog("Device analyzed %@", peripheral)
+        
+        for (_, srv) in services {
+            AppDelegate.debugLog("Services %@", srv.id)
+            
+            for (_, ch) in srv.characteristics{
+                AppDelegate.debugLog("    Char  %@ (%@)",ch.id, ch.flags)
+            }
+        }
+        
+        server.services = services
+        server.startTransmiting()
+        
+    }
 
 }
 extension BLEMim : BLENinebotServerDelegate {
+
+    func readReceived(char : CBCharacteristic){
+        
+        self.client.readValue(char)
+        let entry = Exchange(dir: .iphone2nb, op: .read, characteristic: char.UUID.UUIDString, data: "")
+        self.log.append(entry)
+        self.tableView.reloadData()
+    }
     
     func writeReceived(char : CBCharacteristic, data: NSData){
-        self.client.writeValue(data)
+        self.client.writeValue(char, data:data)
 
         let hexdat = self.nsdata2HexString(data)
         
-        let entry = Exchange(dir: .iphone2nb, data: hexdat)
+        let entry = Exchange(dir: .iphone2nb, op: .write, characteristic: char.UUID.UUIDString, data: hexdat)
         self.log.append(entry)
         self.tableView.reloadData()
         
     }
     func remoteDeviceSubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
+        
+        self.client.subscribeToChar(characteristic)
+        let entry = Exchange(dir: .iphone2nb, op: .subscribe, characteristic: characteristic.UUID.UUIDString, data: "")
+        self.log.append(entry)
+        self.tableView.reloadData()
+
         AppDelegate.debugLog("Device subscribed %@", central)
+        
+        
         self.iPhoneButton.enabled = true
     }
     func remoteDeviceUnsubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
+        self.client.unsubscribeToChar(characteristic)
+        
+        let entry = Exchange(dir: .iphone2nb, op: .unsubscribe, characteristic: characteristic.UUID.UUIDString, data: "")
+        self.log.append(entry)
+        self.tableView.reloadData()
+
         AppDelegate.debugLog("Device unsubscribed %@", central)
         self.iPhoneButton.enabled = false
     }
@@ -319,11 +398,23 @@ extension BLEMim : UITableViewDataSource{
         
         
         
-        cell.textLabel!.text = entry.data
+        cell.textLabel!.text = entry.op.rawValue + " - " +    entry.data
+        cell.detailTextLabel!.text = entry.characteristic
         
         return cell
     }
     
+}
+
+extension BLEMim : BLEDeviceSelectorDelegate {
+    func connectToPeripheral(peripheral : CBPeripheral){
+        
+        self.client.connectPeripheral(peripheral)
+        self.dismissViewControllerAnimated(true) { 
+            
+            
+        }
+    }
     
-    
+
 }

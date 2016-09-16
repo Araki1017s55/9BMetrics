@@ -34,8 +34,14 @@ class BLEDeviceSelector: UIViewController {
         self.devices.removeAll()
     }
     
-    func addDevices(devices : [CBPeripheral]){
-        self.devices.appendContentsOf(devices)
+    func addDevices(devices: [CBPeripheral]){
+        
+        for d in devices {
+            
+            if getDevice(d.identifier.UUIDString) == nil {
+                self.devices.append(d)
+            }
+        }
         
         if let table = self.tableView{
             table.reloadData()
@@ -48,6 +54,19 @@ class BLEDeviceSelector: UIViewController {
             dele.connectToPeripheral(peripheral)
         }
          
+    }
+    
+    func getDevice(uuid : String) -> CBPeripheral?{
+        
+        for d in self.devices {
+            
+            if d.identifier.UUIDString == uuid {
+                return d
+            }
+            
+        }
+        
+        return nil
     }
 }
 
@@ -70,10 +89,16 @@ extension BLEDeviceSelector : UITableViewDataSource{
         let cell = tableView.dequeueReusableCellWithIdentifier("peripheralCellIdentifier", forIndexPath: indexPath)
         
         let name = self.devices[indexPath.row].name
+        let uuid = self.devices[indexPath.row].identifier.UUIDString
     
         if let nam = name {
-            cell.textLabel!.text = nam 
+            
+             cell.textLabel!.text = nam
+        }else {
+            cell.textLabel!.text = "No Name"
         }
+       
+        cell.detailTextLabel!.text = uuid
         
         return cell
     }
@@ -82,6 +107,8 @@ extension BLEDeviceSelector : UITableViewDataSource{
 extension BLEDeviceSelector : UITableViewDelegate{
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     
         let peripheral = self.devices[indexPath.row]
         self.deviceSelected(peripheral)

@@ -758,8 +758,12 @@ import UIKit
         
         
         if let aFile = file {
-            let url = WheelTrack.createZipFile(aFile)
-            shareFile(url, src: src, delete: true)
+            if aFile.lastPathComponent == "9bm"{
+                let url = WheelTrack.createZipFile(aFile)
+                shareFile(url, src: src, delete: true)
+            }else {
+                shareFile(aFile, src: src, delete: true)
+            }
         }
     }
     

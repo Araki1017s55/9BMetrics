@@ -104,7 +104,7 @@ class BLENinebotOneAdapter : NSObject {
 
     }
    
-    //MARK: Receiving Data
+    //MARK: Receiving Data. Append data to buffer
     
     func appendToBuffer(data : NSData){
         
@@ -115,9 +115,19 @@ class BLENinebotOneAdapter : NSObject {
         buffer.appendContentsOf(buf)
     }
     
+    // Here we process received information.
+    // We maintain a buffer (buffer) and data is appended in appendToBuffer
+    // as each block is received. Logical Data may span more than one block and not be aligned.
+    //
+    //
+    //  So we call procesaBuffer to extract any posible data. It is returned as an array of 
+    //  3 values, the variable, the date and the value all aready converted to ggeneric values
+    // and SI units
+    
+    
     func procesaBuffer(connection: BLEConnection) -> [(WheelTrack.WheelValue, NSDate, Double)]?
     {
-        // Wait till header
+        // Wait till header. We wait till we find a 0x55
         
         var outarr : [(WheelTrack.WheelValue, NSDate, Double)]?
         
@@ -127,7 +137,8 @@ class BLENinebotOneAdapter : NSObject {
                 buffer.removeFirst()
             }
             
-            // OK, ara hem de veure si el caracter següent es un aa
+            // Following character must be 0xaa, if not is noise
+            
             
             if buffer.count < 2{    // Wait for more data
                 return outarr
@@ -169,9 +180,14 @@ class BLENinebotOneAdapter : NSObject {
             if let q = self.queryQueue where q.operationCount < 4{
                 self.sendNewRequest(connection)
             }
+            
+            // BLENinebotMessage interprets a logical block of information
+            
             let msg = BLENinebotMessage(buffer: block)
             
             if let m = msg {
+                
+                // Here we do the actual interpretation and convert byte values to variable/value
                 
                 let d = m.interpret()
                 
@@ -185,6 +201,9 @@ class BLENinebotOneAdapter : NSObject {
                         values[k] = v   // Will use current value for checkHeaders
                         
                         var sv = v
+                        
+                        // Treat signed values 
+                        
                         if BLENinebotOneAdapter.signed[k]{
                             if v >= 32768 {
                                 sv = v - 65536
@@ -192,13 +211,16 @@ class BLENinebotOneAdapter : NSObject {
                         }
 
                         
-                        //TODO: Verify that conversion is OK
+                        //TODO: Verify that conversion is OK. First treat two Ninebot variables
+                        // For the moment not found any value
                         
                         if k == BLENinebot.kError{
                             NSLog("Error %d ", v)
                         }else if k == BLENinebot.kWarn{
                             NSLog("Warning %d", v)
                         }
+                        // Convert to SI by an scale and assign to generic variable
+                        
                         let dv = Double(sv) * BLENinebotOneAdapter.scales[k]
                         if let wv = BLENinebotOneAdapter.conversion[k]{
                             outarr!.append((wv, NSDate(), dv))
@@ -207,6 +229,9 @@ class BLENinebotOneAdapter : NSObject {
                     }
                 }
                 
+                
+                // Checkheaders is used to know if we have already received static information
+                // That is asked at the beginning, as the model, serial number...
                 _ = checkHeaders()
                 
             }
@@ -281,7 +306,6 @@ class BLENinebotOneAdapter : NSObject {
             }
             
             let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-            
             
             if let dat = message?.toNSData(){
                 connection.writeValue(dat)

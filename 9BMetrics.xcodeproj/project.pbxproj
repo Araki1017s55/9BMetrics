@@ -18,6 +18,9 @@
 		004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */; };
 		004A297E1CCA36F300D6A9A1 /* TMKLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */; };
 		004F45CB1CAD9DE10071B7C4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004F45CA1CAD9DE10071B7C4 /* MapKit.framework */; };
+		0066C8AD1D86CE0F005DE94F /* BLEMimServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */; };
+		0066C8AF1D86CE93005DE94F /* BLEMimConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */; };
+		0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */; };
 		007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */; };
 		007A31FF1CB820DA00BB928D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A31FE1CB820DA00BB928D /* Main.storyboard */; };
 		007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57171C85CE49003A2030 /* AppDelegate.swift */; };
@@ -137,6 +140,9 @@
 		004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKVerticalView.swift; path = 9BMetrics/TMKVerticalView.swift; sourceTree = "<group>"; };
 		004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKLevelView.swift; path = 9BMetrics/TMKLevelView.swift; sourceTree = "<group>"; };
 		004F45CA1CAD9DE10071B7C4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMimServer.swift; sourceTree = "<group>"; };
+		0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMimConnection.swift; path = 9BMetrics/BLEMimConnection.swift; sourceTree = "<group>"; };
+		0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMimConnectionDelegate.swift; sourceTree = "<group>"; };
 		007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMapViewController.swift; path = 9BMetrics/BLEMapViewController.swift; sourceTree = "<group>"; };
 		007A31FE1CB820DA00BB928D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		007A57141C85CE49003A2030 /* 9BMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9BMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -419,9 +425,12 @@
 			isa = PBXGroup;
 			children = (
 				0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */,
-				007A57701C85CF39003A2030 /* BLEMim.swift */,
 				007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */,
 				007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */,
+				007A57701C85CF39003A2030 /* BLEMim.swift */,
+				0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */,
+				0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */,
+				0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */,
 			);
 			name = Simulation;
 			sourceTree = "<group>";
@@ -634,6 +643,7 @@
 				00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */,
 				00AB595B1CAEE64000277859 /* pwd2key.c in Sources */,
 				00AB595C1CAEE64000277859 /* sha1.c in Sources */,
+				0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */,
 				007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */,
 				007A57851C85CF39003A2030 /* DocController.swift in Sources */,
 				00AB593C1CAEE61700277859 /* minizip.c in Sources */,
@@ -645,6 +655,7 @@
 				00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */,
 				00AB595A1CAEE64000277859 /* prng.c in Sources */,
 				007A57821C85CF39003A2030 /* BLEMim.swift in Sources */,
+				0066C8AF1D86CE93005DE94F /* BLEMimConnection.swift in Sources */,
 				007A571A1C85CE49003A2030 /* ViewController.swift in Sources */,
 				0002C47E1CAABF0E0060CFA5 /* BLERunningDashboard.swift in Sources */,
 				007A57771C85CF39003A2030 /* GraphViewController.swift in Sources */,
@@ -665,6 +676,7 @@
 				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
 				0016670C1C9958B70048344F /* BLESimulatedNinebot.swift in Sources */,
 				00C4EE601CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift in Sources */,
+				0066C8AD1D86CE0F005DE94F /* BLEMimServer.swift in Sources */,
 				007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */,
 				00AB59541CAEE64000277859 /* aescrypt.c in Sources */,
 				00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */,

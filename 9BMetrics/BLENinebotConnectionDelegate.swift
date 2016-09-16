@@ -27,5 +27,6 @@ protocol BLENinebotConnectionDelegate {
     func deviceConnected(peripheral : CBPeripheral, adapter:BLEWheelAdapterProtocol )
     func deviceDisconnected(peripheral : CBPeripheral )
     func charUpdated(char : CBCharacteristic, data: NSData)
+    
 
 }

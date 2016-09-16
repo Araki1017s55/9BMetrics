@@ -218,6 +218,9 @@ class BLESimulatedNinebot: UIViewController {
 
 extension BLESimulatedNinebot : BLENinebotServerDelegate{
     
+    
+    
+    
     func remoteDeviceSubscribedToCharacteristic(characteristic : CBCharacteristic, central : CBCentral){
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -240,6 +243,10 @@ extension BLESimulatedNinebot : BLENinebotServerDelegate{
         
     }
     //TODO: Seria interessant canviar les nostres variables per les que fa servir Ninebot per compat
+    func readReceived(char: CBCharacteristic) {
+        
+        
+    }
     
     func writeReceived(char : CBCharacteristic, data: NSData){
         
