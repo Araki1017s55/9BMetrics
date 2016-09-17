@@ -148,22 +148,22 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
         func initNotifications(){
             
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.connectionStarted(_:)), name: BLESimulatedClient.kStartConnection, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.connectionStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kStartConnection), object: nil)
             
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.hasStopped(_:)), name: BLESimulatedClient.kStoppedRecording, object: nil)
-            
-            
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kHeaderDataReadyNotification, object: nil)
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: BLESimulatedClient.kNinebotDataUpdatedNotification, object: nil)
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.listDevices(_:)), name: BLESimulatedClient.kdevicesDiscoveredNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.hasStopped(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kStoppedRecording), object: nil)
             
             
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: BLESimulatedClient.kConnectionReadyNotification, object: nil)
             
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: kWheelVariableChangedNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kHeaderDataReadyNotification), object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kNinebotDataUpdatedNotification), object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.listDevices(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kdevicesDiscoveredNotification), object: nil)
+            
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kConnectionReadyNotification), object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: NSNotification.Name(rawValue: kWheelVariableChangedNotification), object: nil)
             
             
             

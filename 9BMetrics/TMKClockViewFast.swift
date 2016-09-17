@@ -158,7 +158,8 @@ class TMKClockViewFast: UIView {
 
             
             let path = CGMutablePath()
-            CGPathAddArc(path, nil, center.x, center.y, r, CGFloat(startAng), CGFloat(endAng), false)
+            path.addArc(center: center, radius: r, startAngle: startAng, endAngle: endAng, clockwise: false)
+            //CGPathAddArc(path, null, center.x, center.y, r, CGFloat(startAng), CGFloat(endAng), false)
             back.path = path
             back.lineWidth = w
             back.lineCap = kCALineCapButt
@@ -185,8 +186,12 @@ class TMKClockViewFast: UIView {
         let r : CGFloat = (min(self.bounds.width, self.bounds.height) / 2.0) - 1.0
         let l  : CGFloat = r * cursorSize
 
-        CGPathMoveToPoint(path, nil, rect.midX, rect.midY)
-        CGPathAddLineToPoint(path, nil, rect.midX + l, rect.midY)
+        path.move(to: CGPoint(x: rect.midX, y: rect.midY))
+        //CGPathMoveToPoint(path, nil, rect.midX, rect.midY)
+        
+        path.addLine(to: CGPoint(x: rect.midX + l, y: rect.midY))
+        //CGPathAddLineToPoint(path, nil, rect.midX + l, rect.midY)
+        
         cursor.path = path
         cursor.lineWidth = 1.0
         cursor.lineCap = kCALineCapRound
@@ -218,12 +223,20 @@ class TMKClockViewFast: UIView {
         let pt0 = CGPoint(x: center.x + (r - l) * CGFloat(cos(start)), y: center.y + (r - l) * CGFloat(sin(start)))
         let pt1 = CGPoint(x: center.x + r * CGFloat(cos(start)), y: center.y + r * CGFloat(sin(start)))
 
+        path.move(to: pt0)
+        //CGPathMoveToPoint(path, nil, pt0.x, pt0.y)
+
+        path.addLine(to: pt1)
+        //CGPathAddLineToPoint(path, nil, pt1.x, pt1.y)
         
-        CGPathMoveToPoint(path, nil, pt0.x, pt0.y)
-        CGPathAddLineToPoint(path, nil, pt1.x, pt1.y)
-        CGPathAddArc(path, nil, center.x, center.y, r, start, end, false)
+        path.addArc(center: center, radius: r, startAngle: start, endAngle: end, clockwise: false)
+        //CGPathAddArc(path, nil, center.x, center.y, r, start, end, false)
+        
         let pt2 = CGPoint(x: center.x + (r - l) * CGFloat(cos(end)), y: center.y + (r - l) * CGFloat(sin(end)))
-        CGPathAddLineToPoint(path, nil, pt2.x, pt2.y)
+        
+        path.addLine(to: pt2)
+        
+        //CGPathAddLineToPoint(path, nil, pt2.x, pt2.y)
         
         back.path = path
         back.lineWidth = 1.0

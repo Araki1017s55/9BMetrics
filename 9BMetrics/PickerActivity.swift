@@ -36,8 +36,10 @@ class PickerActivity: UIActivity, UIDocumentPickerDelegate {
     }
     
     
-    override var activityType : String? {
-        return "es.gorina.exportFile"
+    override var activityType : UIActivityType{
+        
+    
+        return UIActivityType("es.gorina.exportFile")
     }
     
     override var activityTitle : String? {
@@ -54,7 +56,7 @@ class PickerActivity: UIActivity, UIDocumentPickerDelegate {
             //return false
         }
         for obj in activityItems{
-            if (obj as AnyObject).isKind(of: URL){
+            if obj is URL{
                 return true
             }
         }
@@ -63,13 +65,13 @@ class PickerActivity: UIActivity, UIDocumentPickerDelegate {
 
     override func prepare(withActivityItems activityItems: [Any]) {
         for obj in activityItems{
-            if (obj as AnyObject).isKind(of: URL){
+            if obj is URL{
                 self.originalURL = obj as? URL
                 if let url = self.originalURL {
                     self.name = url.lastPathComponent
                 }
                 
-            }else if (obj as AnyObject).isKind(of: NSString){
+            }else if obj is String{
                 self.name = obj as? String
             }
         }

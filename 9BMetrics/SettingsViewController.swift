@@ -132,9 +132,13 @@ class SettingsViewController: UIViewController {
             store.set(src.isOn, forKey: dele.kDashboardMode)
         }
 
+        var state = "Off"
         
+        if src.isOn{
+            state = "On"
+        }
         
-        NSLog("Switch Value %@", src.isOn)
+        AppDelegate.debugLog("Switch Value %@", state)
         
     }
  

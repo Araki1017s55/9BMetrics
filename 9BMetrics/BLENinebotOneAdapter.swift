@@ -215,9 +215,9 @@ class BLENinebotOneAdapter : NSObject {
                         // For the moment not found any value
                         
                         if k == BLENinebot.kError{
-                            NSLog("Error %d ", v)
+                            AppDelegate.debugLog("Error %d ", v)
                         }else if k == BLENinebot.kWarn{
-                            NSLog("Warning %d", v)
+                            AppDelegate.debugLog("Warning %d", v)
                         }
                         // Convert to SI by an scale and assign to generic variable
                         

@@ -229,7 +229,7 @@ class BLEMim: UIViewController {
         }
         catch{
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when creating file handle for %@", file)
+                dele.displayMessageWithTitle("Error",format:"Error when creating file handle for %@", file as CVarArg)
             }
 
             AppDelegate.debugLog("Error al obtenir File Handle")
@@ -307,12 +307,22 @@ extension BLEMim : BLEMimConnectionDelegate{
         AppDelegate.debugLog("Device analyzed %@", peripheral)
         
         for (_, srv) in services {
+            
+            let entry = Exchange(dir: .nb2iphone, op:.comment, characteristic : "Service", data: srv.id)
+            self.log.append(entry)
+            
             AppDelegate.debugLog("Services %@", srv.id)
             
             for (_, ch) in srv.characteristics{
-                AppDelegate.debugLog("    Char  %@ (%@)",ch.id, ch.flags)
+                
+                let desc = String(format: "%@ (%@)", ch.id, ch.flags)
+                let entry = Exchange(dir: .nb2iphone, op:.comment, characteristic : "    Char:", data: desc)
+                self.log.append(entry)
+
+                AppDelegate.debugLog("    Char: " + desc)
             }
         }
+        self.tableView.reloadData()
         
         server.services = services
         server.startTransmiting()

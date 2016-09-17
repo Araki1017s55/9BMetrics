@@ -25,7 +25,7 @@
 import UIKit
 
 class BLENinebotSettingsViewController: UIViewController {
-
+    
     @IBOutlet weak var speedLimitSlider: UISlider!
     @IBOutlet weak var maxSpeedSlider: UISlider!
     @IBOutlet weak var ridingSettingsSlider: UISlider!
@@ -39,12 +39,12 @@ class BLENinebotSettingsViewController: UIViewController {
     var oldRidingLevel = 0.0
     var oldSpeedLimit = 0.0
     var oldMaxSpeed = 0.0
-   
+    
     weak var ninebotClient : BLESimulatedClient?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
                 
@@ -63,7 +63,7 @@ class BLENinebotSettingsViewController: UIViewController {
         }
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -78,7 +78,7 @@ class BLENinebotSettingsViewController: UIViewController {
             vRidingSettings.text = String(format: "%d", v)
             oldRidingLevel = v
         }
-    
+        
         
         if let nb = self.ninebotClient{
             
@@ -91,7 +91,7 @@ class BLENinebotSettingsViewController: UIViewController {
                     //TODO: Set an interface for different charateristics nb.setRidingLevel(v)
                     vRidingSettings.textColor = UIColor.red
                 }
-               
+                
             }
         }
     }
@@ -108,12 +108,12 @@ class BLENinebotSettingsViewController: UIViewController {
         
         
         if let nb = self.ninebotClient{
-             if let dat = nb.datos {
+            if let dat = nb.datos {
                 let v0 = dat.getCurrentValueForVariable(.LimitSpeed)
                 
                 if fabs(v - v0) >= 1.0 {
                     
-                     vSpeedLimitSetings.textColor = UIColor.red
+                    vSpeedLimitSetings.textColor = UIColor.red
                 }
                 
             }
@@ -136,16 +136,16 @@ class BLENinebotSettingsViewController: UIViewController {
                 let v0 = dat.getCurrentValueForVariable(.MaxSpeed)
                 
                 if fabs(v - v0) >= 1.0 {
-                     //nb.setMaxSpeed(v)
+                    //nb.setMaxSpeed(v)
                     vMaxSpeedSettings.textColor = UIColor.red
                 }
                 
             }
         }
     }
-
-    @IBAction func setSerialNumber(_ src : AnyObject){
     
+    @IBAction func setSerialNumber(_ src : AnyObject){
+        
         let newSn = fSerialNumber.text
         if let nb = self.ninebotClient{
             
@@ -153,26 +153,26 @@ class BLENinebotSettingsViewController: UIViewController {
                 nb.setSerialNumber(sn)
             }
         }
-
+        
     }
     
     func rideModeChanged(_ not : Notification){
         
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
-                   // ridingSettingsSlider.value = Float(dat.ridingLevel())
-                    vRidingSettings.text = String(format: "%d", Int(dat.getCurrentValueForVariable(.RidingLevel)))
-                    vRidingSettings.textColor = UIColor.black
+                // ridingSettingsSlider.value = Float(dat.ridingLevel())
+                vRidingSettings.text = String(format: "%d", Int(dat.getCurrentValueForVariable(.RidingLevel)))
+                vRidingSettings.textColor = UIColor.black
             }
         }
         
     }
- 
+    
     func limitSpeedChanged(_ not : Notification){
         
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
-               // speedLimitSlider.value = Float(dat.limitSpeed())
+                // speedLimitSlider.value = Float(dat.limitSpeed())
                 vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.LimitSpeed)*3.6)
                 vSpeedLimitSetings.textColor = UIColor.black
             }
@@ -182,7 +182,7 @@ class BLENinebotSettingsViewController: UIViewController {
         
         if let nb = self.ninebotClient{
             if let dat = nb.datos {
-               // maxSpeedSlider.value = Float(dat.maxSpeed())
+                // maxSpeedSlider.value = Float(dat.maxSpeed())
                 vMaxSpeedSettings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.MaxSpeed)*3.6)
                 speedLimitSlider.maximumValue = Float(dat.getCurrentValueForVariable(.MaxSpeed)*3.6)
                 vMaxSpeedSettings.textColor = UIColor.black
@@ -196,26 +196,26 @@ class BLENinebotSettingsViewController: UIViewController {
         let notRidingName = BLENinebot.nameOfVariableChangedNotification(BLENinebot.kvRideMode)
         let notSpeedLimitName = BLENinebot.nameOfVariableChangedNotification(BLENinebot.kSpeedLimit)
         let maxSpeedName = BLENinebot.nameOfVariableChangedNotification(BLENinebot.kAbsoluteSpeedLimit)
-      
-        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotSettingsViewController.rideModeChanged(_:)), name: notRidingName, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotSettingsViewController.limitSpeedChanged(_:)), name: notSpeedLimitName, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotSettingsViewController.maxSpeedChanged(_:)), name: maxSpeedName, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotSettingsViewController.rideModeChanged(_:)), name: NSNotification.Name(rawValue: notRidingName), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotSettingsViewController.limitSpeedChanged(_:)), name: NSNotification.Name(rawValue: notSpeedLimitName), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(BLENinebotSettingsViewController.maxSpeedChanged(_:)), name: NSNotification.Name(rawValue: maxSpeedName), object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
     }
-     
+    
     // Necessitem
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

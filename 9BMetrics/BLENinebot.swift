@@ -445,7 +445,7 @@ class  BLENinebot : NSObject{
             let docs = dele.applicationDocumentsDirectory()
             
             if let d = docs {
-                path = d.path!
+                path = d.path
             }
         }
         else
@@ -513,7 +513,7 @@ class  BLENinebot : NSObject{
         }
         catch{
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file)
+                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file as CVarArg)
             }
             
             AppDelegate.debugLog("Error al obtenir File Handle")
@@ -553,7 +553,7 @@ class  BLENinebot : NSObject{
             let docs = dele.applicationDocumentsDirectory()
             
             if let d = docs {
-                path = d.path!
+                path = d.path
             }
         }
         else
@@ -616,7 +616,7 @@ class  BLENinebot : NSObject{
         }
         catch{
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file)
+                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file as CVarArg)
             }
             
             AppDelegate.debugLog("Error al obtenir File Handle")
@@ -725,7 +725,7 @@ class  BLENinebot : NSObject{
         
         guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
         
-        let pkgURL = docDir.appendingPathComponent(name)?.appendingPathExtension("9bm")
+        let pkgURL = docDir.appendingPathComponent(name).appendingPathExtension("9bm")
 
         // Try to use file wrappers (ufff)
         
@@ -746,7 +746,7 @@ class  BLENinebot : NSObject{
             }
         }
         do{
-            try contents.write(to: pkgURL!, options: .withNameUpdating, originalContentsURL: pkgURL)
+            try contents.write(to: pkgURL, options: .withNameUpdating, originalContentsURL: pkgURL)
         }catch let err as NSError{
             
             
@@ -760,12 +760,12 @@ class  BLENinebot : NSObject{
     func loadVariableFromPackage(_ packageName : String, variableName: String) -> NinebotVariable?{
         guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
         
-        let pkgURL = docDir.appendingPathComponent(packageName)?.appendingPathExtension("9bm")
+        let pkgURL = docDir.appendingPathComponent(packageName).appendingPathExtension("9bm")
         
-        let fileURL = pkgURL?.appendingPathComponent(variableName)
+        let fileURL = pkgURL.appendingPathComponent(variableName)
         
         do {
-             let str = try String(contentsOf: fileURL!, encoding: String.Encoding.utf8)
+             let str = try String(contentsOf: fileURL, encoding: String.Encoding.utf8)
             return stringToVariableLog(str)
             
         }catch{
@@ -832,7 +832,7 @@ class  BLENinebot : NSObject{
                     let vn = v.codi
                     let fileName = String(format: "%03d", vn)
                     let fileUrl = pkgUrl.appendingPathComponent(fileName).appendingPathExtension("csv")
-                    if let path = fileUrl.path {
+                    let path = fileUrl.path
                         
                         fmgr.createFile(atPath: path, contents: nil, attributes: nil)
                         let hdl = try FileHandle(forWritingTo: fileUrl)
@@ -860,7 +860,7 @@ class  BLENinebot : NSObject{
                         hdl.closeFile()
                         
                         files.append(fileUrl)
-                    }
+                    
                     
                     
                 }
@@ -883,7 +883,7 @@ class  BLENinebot : NSObject{
                 
                 
                 try Zip.zipFiles(files, zipFilePath: zipURL, password: nil, progress: { (progress) -> () in
-                    NSLog("Zip %f", progress)
+                    AppDelegate.debugLog("Zip %f", progress)
                 })
                 
                 // OK finished so remove directory
@@ -891,7 +891,7 @@ class  BLENinebot : NSObject{
                 try fmgr.removeItem(at: pkgUrl)
             }catch{
                 if let dele = UIApplication.shared.delegate as? AppDelegate{
-                    dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL)
+                    dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL as CVarArg)
                 }
                 AppDelegate.debugLog("Error al crear zip file")
             }
@@ -1145,14 +1145,14 @@ class  BLENinebot : NSObject{
         
         // OK now build package.
         
-        if let name = url.deletingPathExtension().lastPathComponent {
+        let name = url.deletingPathExtension().lastPathComponent 
             let newName = name.replacingOccurrences(of: "9B_", with: "")
             if let url = createPackage(newName){
-                AppDelegate.debugLog("Package %@ created", url)
+                AppDelegate.debugLog("Package %@ created", url as CVarArg)
             }else{
                 AppDelegate.debugLog("Error al crear Package")
             }
-        }
+        
         
     }
     func computeTrackSize() -> (l0 : CLLocation?, l1 : CLLocation? ){
@@ -1208,7 +1208,7 @@ class  BLENinebot : NSObject{
                                       forKey:URLResourceKey.thumbnailDictionaryKey)
         }
         catch _{
-            NSLog("No puc gravar la imatge :)")
+            AppDelegate.debugLog("No puc gravar la imatge :)")
         }
         
         

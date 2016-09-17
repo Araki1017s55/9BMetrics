@@ -9,7 +9,7 @@
 import UIKit
 
 class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
-
+    
     weak var ninebot : WheelTrack?
     
     var titulo = ""
@@ -48,9 +48,9 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     @IBOutlet  weak var collectionView : UICollectionView!
     @IBOutlet weak var fTitle : UILabel!
     @IBOutlet weak var fVersion : UILabel!
-
+    
     fileprivate let sectionInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-
+    
     static var displayableVariables : [Int] = [BLENinebot.kCurrentSpeed, BLENinebot.kTemperature,
                                                BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
                                                BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower, BLENinebot.kEnergy]
@@ -60,16 +60,16 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     
     var graphToShow : Int = 0
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         
         // Register for peek
         
         registerForPreviewing(with: self, sourceView: collectionView)
-       
+        
         fTitle.text = titulo
         
         let lpgr : UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(BLEHistoDashboard.handleLongPress(_:)))
@@ -81,9 +81,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         if let nb = self.ninebot {
             
             if let myUrl = nb.url{
-                if let str = myUrl.deletingPathExtension?.lastPathComponent{
-                    fTitle.text = str
-                }
+                fTitle.text = myUrl.deletingPathExtension().lastPathComponent
             }else{
                 fTitle.text = "Unknown"
             }
@@ -107,7 +105,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
             (tmin, tmax, tavg, _) = nb.getCurrentStats(.Temperature)
             (pmin, pmax, pavg, _) = nb.getCurrentStats(.Pitch)
             (rmin, rmax, ravg, _) = nb.getCurrentStats(.Roll)
-                        
+            
             eplus = nb.getEnergyUsed() / 3600.0
             erec = nb.getEnergyRecovered() / 3600.0
             
@@ -115,7 +113,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
             
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -130,19 +128,22 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     }
     
     @IBAction func goBack(_ src : AnyObject){
-        self.navigationController?.popViewController(animated: true)
+        
+        if let nv = self.navigationController{
+            _ = nv.popViewController(animated: true)
+        }
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier! {
             
-            case "otherMapSegue": //graphMapSegue
-                  if let vc = segue.destination as? BLEMapViewController  {
-                    vc.dades = self.ninebot
+        case "otherMapSegue": //graphMapSegue
+            if let vc = segue.destination as? BLEMapViewController  {
+                vc.dades = self.ninebot
             }
             
         case "graphicSegue":
-
+            
             if let vc = segue.destination as? GraphViewController  {
                 
                 vc.ninebot = self.ninebot
@@ -163,8 +164,8 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
-           // graphToShow = graphValue[0]
-           // self.performSegueWithIdentifier("graphicSegue", sender: self)
+            // graphToShow = graphValue[0]
+            // self.performSegueWithIdentifier("graphicSegue", sender: self)
             
             
         }
@@ -187,489 +188,490 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         
         let p = gestureRecognizer.location(in: self.collectionView)
         
-        if let indexPath : IndexPath = (self.collectionView?.indexPathForItem(at: p))!{
+        let indexPath : IndexPath = (self.collectionView?.indexPathForItem(at: p))!
             //do whatever you need to do
-            if (indexPath as NSIndexPath).row == 0{
-                self.performSegue(withIdentifier: "otherMapSegue", sender: self)
-            }
+        if (indexPath as NSIndexPath).row == 0{
+            self.performSegue(withIdentifier: "otherMapSegue", sender: self)
         }
         
     }
-    
-    //MARK: Preview Action Items
-    
-    override var previewActionItems : [UIPreviewActionItem] {
-        let shareTrack = UIPreviewAction(title: "Share Track", style: .default)
-        {(action, viewController) in
             
-            if let wheel = self.ninebot {
-                if let trackUrl : URL = wheel.url as URL?{
-                    
-                    // get ViewController
-                    
-                    if let theDelegate = UIApplication.shared.delegate as? AppDelegate{
-                        if let vc = theDelegate.mainController{
-                            vc.shareData(trackUrl, src: vc.view, delete: false)
-                        }
-                        
-                    }
-                }
-            }
-        }
         
-        let openTrackIn = UIPreviewAction(title: "Open GPX In", style: .default)
-        {(action, viewController) in
-            if let wheel = self.ninebot {
-                if let trackUrl : URL = wheel.url as URL?{
-                    
-                    // get ViewController
-                    
-                    if let theDelegate = UIApplication.shared.delegate as? AppDelegate{
-                        if let vc = theDelegate.mainController{
+        
+        //MARK: Preview Action Items
+        
+        override var previewActionItems : [UIPreviewActionItem] {
+            let shareTrack = UIPreviewAction(title: "Share Track", style: .default)
+            {(action, viewController) in
+                
+                if let wheel = self.ninebot {
+                    if let trackUrl : URL = wheel.url as URL?{
+                        
+                        // get ViewController
+                        
+                        if let theDelegate = UIApplication.shared.delegate as? AppDelegate{
+                            if let vc = theDelegate.mainController{
+                                vc.shareData(trackUrl, src: vc.view, delete: false)
+                            }
                             
-                            vc.openFileIn(trackUrl, src: vc, delete: false)
                         }
-                        
                     }
                 }
             }
             
-        }
-        return [shareTrack, openTrackIn]
-    }
-
-
-}
-
-extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        
-        let vbounds = collectionView.bounds
-        let vsize = vbounds.size
-        
-        var s = CGFloat(150.0)
-        var s1 = CGFloat(0.0)
-        
-       if vsize.height > vsize.width {
-            
-            var w = Double(vsize.width / 2.0) - 5.0
-            var h = Double(vsize.height / 3.0) - 10.0
-            
-            s = CGFloat(min(w, h))
-
-            w = Double(vsize.width / 3.0) - 10.0
-            h = Double(vsize.height / 3.0) - 10.0
-        
-            s1 = CGFloat(min(w, h))
-        
-        
-        }else {
-            let h = Double(vsize.width / 4.0) - 15.0
-            let w = Double(vsize.height / 2.0) - 5.0
-            
-            s = CGFloat(min(w, h)) - 20.0
-        
-            s1 = s
-        }
-
-        
-        let row = (indexPath as NSIndexPath).row
-        switch row {
-            
-        case 0...3:
-            return CGSize(width: s, height: s+20.0)
-        
-        
-        case 4...6:
-            return CGSize(width: s1, height :s1 + 20.0)
-        
-        
-        default:
-            return CGSize(width: 100.0, height : 120.0)
+            let openTrackIn = UIPreviewAction(title: "Open GPX In", style: .default)
+            {(action, viewController) in
+                if let wheel = self.ninebot {
+                    if let trackUrl : URL = wheel.url as URL?{
+                        
+                        // get ViewController
+                        
+                        if let theDelegate = UIApplication.shared.delegate as? AppDelegate{
+                            if let vc = theDelegate.mainController{
+                                
+                                vc.openFileIn(trackUrl, src: vc, delete: false)
+                            }
+                            
+                        }
+                    }
+                }
+                
+            }
+            return [shareTrack, openTrackIn]
         }
         
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                               insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInsets
-    }
-    
-    
-}
-extension BLEHistoDashboard : UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let row = (indexPath as NSIndexPath).row
         
-        switch row {
-            
-// **       case 0: // Speed/map , open Map
-// **           performSegueWithIdentifier("otherMapSegue", sender: self)
-            
-            
-        default:
-            graphToShow = self.graphValue[row]
-            
-            performSegue(withIdentifier: "graphicSegue", sender: self)
-            
-            
-        }
     }
     
-    
-}
-
-extension BLEHistoDashboard : UICollectionViewDataSource{
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    extension BLEHistoDashboard : UICollectionViewDelegateFlowLayout{
         
-        
-        switch (indexPath as NSIndexPath).row {
-            
-        case 0:
-            
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
-            
-            var speedView : TMKClockView?
-            var title : UILabel?
-            
-            for v in cell.contentView.subviews{
-                if v.isKind(of: TMKClockView.self){
-                    speedView = v as? TMKClockView
-                } else if v.isKind(of: UILabel.self){
-                    title = v as? UILabel
-                }
-            }
-            if let tit = title {
-                tit.text = "Speed"
-            }
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             
             
-            var topSpeed = defaultTopSpeed
-            if maxSpeed > defaultTopSpeed {
-                topSpeed = ceil(maxSpeed / 10.0) * 10.0
-            }
+            let vbounds = collectionView.bounds
+            let vsize = vbounds.size
             
-            if let sv = speedView {
-                var limits = [TMKClockView.arc(start: 0.0, end: 23.0/topSpeed, color: UIColor.green)]
+            var s = CGFloat(150.0)
+            var s1 = CGFloat(0.0)
+            
+            if vsize.height > vsize.width {
                 
-                if maxSpeed > secureSpeed{
-                    limits.append( TMKClockView.arc(start: 23.0/topSpeed, end: maxSpeed / topSpeed, color: UIColor.red))
-                    
-                }
+                var w = Double(vsize.width / 2.0) - 5.0
+                var h = Double(vsize.height / 3.0) - 10.0
+                
+                s = CGFloat(min(w, h))
+                
+                w = Double(vsize.width / 3.0) - 10.0
+                h = Double(vsize.height / 3.0) - 10.0
+                
+                s1 = CGFloat(min(w, h))
                 
                 
-                let speeds : [TMKClockView.arc] = [TMKClockView.arc(start: avgSpeed / topSpeed, end: 0.5, color: UIColor.green), TMKClockView.arc(start: maxSpeed / topSpeed, end: 0.9, color: UIColor.red)]
+            }else {
+                let h = Double(vsize.width / 4.0) - 15.0
+                let w = Double(vsize.height / 2.0) - 5.0
                 
-                sv.backImage = self.trackImg
+                s = CGFloat(min(w, h)) - 20.0
                 
-                
-                sv.updateData(String(format:"%0.2f", dist) , units: "Km", radis: speeds, arcs: limits, minValue: 0.0, maxValue: topSpeed)
-            }
-            return cell
-            
-        case 1:
-            
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
-
-            var batteryView : TMKClockView?
-            var title : UILabel?
-            
-            for v in cell.contentView.subviews{
-                if v.isKind(of: TMKClockView.self){
-                    batteryView = v as? TMKClockView
-                } else if v.isKind(of: UILabel.self){
-                    title = v as? UILabel
-                }
+                s1 = s
             }
             
-            if let tit = title {
-                tit.text = "Battery"
+            
+            let row = (indexPath as NSIndexPath).row
+            switch row {
+                
+            case 0...3:
+                return CGSize(width: s, height: s+20.0)
+                
+                
+            case 4...6:
+                return CGSize(width: s1, height :s1 + 20.0)
+                
+                
+            default:
+                return CGSize(width: 100.0, height : 120.0)
             }
-            
-            if let bv = batteryView{
-
-                var batAreas : [TMKClockView.arc] = []
-                
-                if batMin < 20.0 && batMax <= 20.0 {
-                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: batMax/100.0, color: UIColor.red))
-                }else if batMin < 20.0 && batMax > 20.0 {
-                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: 20.0/100.0, color: UIColor.red))
-                    batAreas.append(TMKClockView.arc(start: 20.0 / 100.0, end: batMax/100.0, color: UIColor.green))
-                }else {
-                    batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: batMax/100.0, color: UIColor.green))
-                }
-                
-                let batLevels : [TMKClockView.arc] = [TMKClockView.arc(start: bat0 / 100.0, end: 0.5, color: UIColor.green),
-                                                      TMKClockView.arc(start: bat1 / 100.0, end: 0.9, color: UIColor.red)]
-                
-                bv.backImage = nil
-                
-                bv.updateData(String(format:"%0.0f", (bat0 - bat1)) , units: "%", radis: batLevels, arcs: batAreas, minValue: 0.0, maxValue: 100.0)
-            }
-            
-            return cell
-
-        case 2:
-            
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
-            
-            
-            var powerView : TMKClockView?
-            var title : UILabel?
-            
-            for v in cell.contentView.subviews{
-                if v.isKind(of: TMKClockView.self){
-                    powerView = v as? TMKClockView
-                } else if v.isKind(of: UILabel.self){
-                    title = v as? UILabel
-                }
-            }
-            
-            if let tit = title {
-                tit.text = "Power"
-            }
-            if let pw = powerView{
-
-                let pwCont = 500.0
-                let pwPeak = 1000.0
-                
-                let pwRange = ceil(max(pwMax, 1500.0) / 100.0) * 100.0
-                var pwAreas : [TMKClockView.arc] = []
-                
-                pwAreas.append(TMKClockView.arc(start: 0.0 / pwRange, end:min(pwMax, pwCont) / pwRange, color: UIColor.green))
-                
-                if pwMax > pwCont {
-                    pwAreas.append(TMKClockView.arc(start: pwCont / pwRange, end:min(pwMax, pwPeak) / pwRange, color: UIColor.orange))
-                }
-                
-                if pwMax > pwPeak {
-                    pwAreas.append(TMKClockView.arc(start: pwPeak / pwRange, end:pwMax / pwRange, color: UIColor.red))
-                }
-                
-                let pwLevels : [TMKClockView.arc] = [TMKClockView.arc(start: pwAvg / pwRange, end: 0.5, color: UIColor.green),
-                                                     TMKClockView.arc(start: pwMax / pwRange, end: 0.9, color: UIColor.red)]
-                
-                pw.backImage = nil
-               
-                pw.updateData(String(format:"%0.0f", pwMax) , units: "w", radis: pwLevels, arcs: pwAreas, minValue: 0.0, maxValue: pwRange / 100.0)
-            }
-            
-            return cell
-            
-        case 3:
-            
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
-            
-            var energyView : TMKClockView?
-            var title : UILabel?
-            
-            for v in cell.contentView.subviews{
-                if v.isKind(of: TMKClockView.self){
-                    energyView = v as? TMKClockView
-                } else if v.isKind(of: UILabel.self){
-                    title = v as? UILabel
-                }
-            }
-            
-            if let tit = title {
-                tit.text = "Energy"
-            }
-            if let ew = energyView{
-
-            // Energy  eplus / erec
-            
-            
-                var eAreas : [TMKClockView.arc] = []
-                
-                let emax = eplus
-                
-                eAreas.append(TMKClockView.arc(start: 0.0, end: (eplus-erec) / emax, color: UIColor.green))
-                
-                eAreas.append(TMKClockView.arc(start: (eplus-erec) / emax, end: eplus/emax, color: UIColor.red))
-                
-                let eLevels =  [TMKClockView.arc(start: (eplus-erec) / emax, end: 0.5, color: UIColor.green),
-                                TMKClockView.arc(start: eplus/emax, end: 0.9, color: UIColor.red)]
-                
-                ew.backImage = nil
-
-                ew.updateData(String(format:"%0.0f", eplus-erec) , units: "wh", radis: eLevels, arcs: eAreas, minValue: 0.0, maxValue: emax)
-            }
-            
-            return cell
-            
-        case 4:
-            
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
-            
-            
-            var tempView : TMKClockView?
-            var title : UILabel?
-            
-            for v in cell.contentView.subviews{
-                if v.isKind(of: TMKClockView.self){
-                    tempView = v as? TMKClockView
-                } else if v.isKind(of: UILabel.self){
-                    title = v as? UILabel
-                }
-            }
-            
-            if let tit = title {
-                tit.text = "T ºC"
-            }
-            
-            // Temperature
-            //
-            //  let's say ti 60ºC is OK
-            // maxT = 90
-            // minT = 0
-            
-            if let tw = tempView{
-                let tempOk = 60.0
-                
-                let tempRange = ceil(max(tmax, 60.0) / 10.0) * 10.0
-                var tempAreas : [TMKClockView.arc] = []
-                
-                if tmin < tempOk {
-                    tempAreas.append(TMKClockView.arc(start: tmin / tempRange, end:min(tmax, tempOk) / tempRange, color: UIColor.green))
-                }
-                
-                if tmax > tempOk{
-                    tempAreas.append(TMKClockView.arc(start: max(tmin, tempOk) / tempRange, end:tmax / tempRange, color: UIColor.red))
-                }
-                
-                
-                let tempLevels : [TMKClockView.arc] = [TMKClockView.arc(start: tavg / tempRange, end: 0.5, color: UIColor.green),
-                                                       TMKClockView.arc(start: tmax / tempRange, end: 0.9, color: UIColor.red)]
-                
-                
-                tw.backImage = nil
-                
-                tw.updateData(String(format:"%0.0f", tmax) , units: "ºC", radis: tempLevels, arcs: tempAreas, minValue: 0.0, maxValue: tempRange)
-            }
-            
-            return cell
-            
-        case 5:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "verticalCellIdentifier", for: indexPath)
-
-            var rollView : TMKVerticalView?
-            var title : UILabel?
-            
-            for v in cell.contentView.subviews{
-                if v.isKind(of: TMKVerticalView.self){
-                    rollView = v as? TMKVerticalView
-                } else if v.isKind(of: UILabel.self){
-                    title = v as? UILabel
-                }
-            }
-            
-            if let tit = title {
-                tit.text = "Roll"
-            }
-            if let rw = rollView{
-  
-                rw.updateData(ravg, minValue: rmin, maxValue: rmax, scale: 1.0)
-            }
-            
-            return cell
-
-            
-        case 6:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "levelCellIdentifier", for: indexPath)
-            
-            var pitchView : TMKLevelView?
-            var title : UILabel?
-            
-            for v in cell.contentView.subviews{
-                if v.isKind(of: TMKLevelView.self){
-                    pitchView = v as? TMKLevelView
-                } else if v.isKind(of: UILabel.self){
-                    title = v as? UILabel
-                }
-            }
-            
-            if let tit = title {
-                tit.text = "Pitch"
-            }
-            if let pw = pitchView{
-                pw.updateData(pavg, minValue: pmin, maxValue: pmax, scale: 1.0)
-
-            }
-            return cell
-           
-            
-          
-        default:
-            
-            return UICollectionViewCell()
-            
-            
             
         }
         
+        func collectionView(_ collectionView: UICollectionView,
+                            layout collectionViewLayout: UICollectionViewLayout,
+                            insetForSectionAt section: Int) -> UIEdgeInsets {
+            return sectionInsets
+        }
+        
+        
+    }
+    extension BLEHistoDashboard : UICollectionViewDelegate {
+        
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            let row = (indexPath as NSIndexPath).row
+            
+            switch row {
+                
+                // **       case 0: // Speed/map , open Map
+                // **           performSegueWithIdentifier("otherMapSegue", sender: self)
+                
+                
+            default:
+                graphToShow = self.graphValue[row]
+                
+                performSegue(withIdentifier: "graphicSegue", sender: self)
+                
+                
+            }
+        }
+        
+        
     }
     
-}
-
-extension BLEHistoDashboard : UIViewControllerPreviewingDelegate{
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        if let indexPath = collectionView.indexPathForItem(at: location), let cellAttributes = collectionView.layoutAttributesForItem(at: indexPath) {
-            //This will show the cell clearly and blur the rest of the screen for our peek.
-            previewingContext.sourceRect = cellAttributes.frame
+    extension BLEHistoDashboard : UICollectionViewDataSource{
+        
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            return 7
+        }
+        
+        func numberOfSections(in collectionView: UICollectionView) -> Int {
+            return 1
+        }
+        
+        
+        
+        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            
             
             switch (indexPath as NSIndexPath).row {
                 
             case 0:
                 
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let  mpc = storyboard.instantiateViewController(withIdentifier: "mapViewControllerIdentifier") as? BLEMapViewController{
-                    
-                    mpc.dades = self.ninebot
-                    return mpc
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
+                
+                var speedView : TMKClockView?
+                var title : UILabel?
+                
+                for v in cell.contentView.subviews{
+                    if v.isKind(of: TMKClockView.self){
+                        speedView = v as? TMKClockView
+                    } else if v.isKind(of: UILabel.self){
+                        title = v as? UILabel
+                    }
                 }
+                if let tit = title {
+                    tit.text = "Speed"
+                }
+                
+                
+                var topSpeed = defaultTopSpeed
+                if maxSpeed > defaultTopSpeed {
+                    topSpeed = ceil(maxSpeed / 10.0) * 10.0
+                }
+                
+                if let sv = speedView {
+                    var limits = [TMKClockView.arc(start: 0.0, end: 23.0/topSpeed, color: UIColor.green)]
+                    
+                    if maxSpeed > secureSpeed{
+                        limits.append( TMKClockView.arc(start: 23.0/topSpeed, end: maxSpeed / topSpeed, color: UIColor.red))
+                        
+                    }
+                    
+                    
+                    let speeds : [TMKClockView.arc] = [TMKClockView.arc(start: avgSpeed / topSpeed, end: 0.5, color: UIColor.green), TMKClockView.arc(start: maxSpeed / topSpeed, end: 0.9, color: UIColor.red)]
+                    
+                    sv.backImage = self.trackImg
+                    
+                    
+                    sv.updateData(String(format:"%0.2f", dist) , units: "Km", radis: speeds, arcs: limits, minValue: 0.0, maxValue: topSpeed)
+                }
+                return cell
+                
+            case 1:
+                
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
+                
+                var batteryView : TMKClockView?
+                var title : UILabel?
+                
+                for v in cell.contentView.subviews{
+                    if v.isKind(of: TMKClockView.self){
+                        batteryView = v as? TMKClockView
+                    } else if v.isKind(of: UILabel.self){
+                        title = v as? UILabel
+                    }
+                }
+                
+                if let tit = title {
+                    tit.text = "Battery"
+                }
+                
+                if let bv = batteryView{
+                    
+                    var batAreas : [TMKClockView.arc] = []
+                    
+                    if batMin < 20.0 && batMax <= 20.0 {
+                        batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: batMax/100.0, color: UIColor.red))
+                    }else if batMin < 20.0 && batMax > 20.0 {
+                        batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: 20.0/100.0, color: UIColor.red))
+                        batAreas.append(TMKClockView.arc(start: 20.0 / 100.0, end: batMax/100.0, color: UIColor.green))
+                    }else {
+                        batAreas.append(TMKClockView.arc(start: batMin / 100.0, end: batMax/100.0, color: UIColor.green))
+                    }
+                    
+                    let batLevels : [TMKClockView.arc] = [TMKClockView.arc(start: bat0 / 100.0, end: 0.5, color: UIColor.green),
+                                                          TMKClockView.arc(start: bat1 / 100.0, end: 0.9, color: UIColor.red)]
+                    
+                    bv.backImage = nil
+                    
+                    bv.updateData(String(format:"%0.0f", (bat0 - bat1)) , units: "%", radis: batLevels, arcs: batAreas, minValue: 0.0, maxValue: 100.0)
+                }
+                
+                return cell
+                
+            case 2:
+                
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
+                
+                
+                var powerView : TMKClockView?
+                var title : UILabel?
+                
+                for v in cell.contentView.subviews{
+                    if v.isKind(of: TMKClockView.self){
+                        powerView = v as? TMKClockView
+                    } else if v.isKind(of: UILabel.self){
+                        title = v as? UILabel
+                    }
+                }
+                
+                if let tit = title {
+                    tit.text = "Power"
+                }
+                if let pw = powerView{
+                    
+                    let pwCont = 500.0
+                    let pwPeak = 1000.0
+                    
+                    let pwRange = ceil(max(pwMax, 1500.0) / 100.0) * 100.0
+                    var pwAreas : [TMKClockView.arc] = []
+                    
+                    pwAreas.append(TMKClockView.arc(start: 0.0 / pwRange, end:min(pwMax, pwCont) / pwRange, color: UIColor.green))
+                    
+                    if pwMax > pwCont {
+                        pwAreas.append(TMKClockView.arc(start: pwCont / pwRange, end:min(pwMax, pwPeak) / pwRange, color: UIColor.orange))
+                    }
+                    
+                    if pwMax > pwPeak {
+                        pwAreas.append(TMKClockView.arc(start: pwPeak / pwRange, end:pwMax / pwRange, color: UIColor.red))
+                    }
+                    
+                    let pwLevels : [TMKClockView.arc] = [TMKClockView.arc(start: pwAvg / pwRange, end: 0.5, color: UIColor.green),
+                                                         TMKClockView.arc(start: pwMax / pwRange, end: 0.9, color: UIColor.red)]
+                    
+                    pw.backImage = nil
+                    
+                    pw.updateData(String(format:"%0.0f", pwMax) , units: "w", radis: pwLevels, arcs: pwAreas, minValue: 0.0, maxValue: pwRange / 100.0)
+                }
+                
+                return cell
+                
+            case 3:
+                
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
+                
+                var energyView : TMKClockView?
+                var title : UILabel?
+                
+                for v in cell.contentView.subviews{
+                    if v.isKind(of: TMKClockView.self){
+                        energyView = v as? TMKClockView
+                    } else if v.isKind(of: UILabel.self){
+                        title = v as? UILabel
+                    }
+                }
+                
+                if let tit = title {
+                    tit.text = "Energy"
+                }
+                if let ew = energyView{
+                    
+                    // Energy  eplus / erec
+                    
+                    
+                    var eAreas : [TMKClockView.arc] = []
+                    
+                    let emax = eplus
+                    
+                    eAreas.append(TMKClockView.arc(start: 0.0, end: (eplus-erec) / emax, color: UIColor.green))
+                    
+                    eAreas.append(TMKClockView.arc(start: (eplus-erec) / emax, end: eplus/emax, color: UIColor.red))
+                    
+                    let eLevels =  [TMKClockView.arc(start: (eplus-erec) / emax, end: 0.5, color: UIColor.green),
+                                    TMKClockView.arc(start: eplus/emax, end: 0.9, color: UIColor.red)]
+                    
+                    ew.backImage = nil
+                    
+                    ew.updateData(String(format:"%0.0f", eplus-erec) , units: "wh", radis: eLevels, arcs: eAreas, minValue: 0.0, maxValue: emax)
+                }
+                
+                return cell
+                
+            case 4:
+                
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "clockCellIdentifier", for: indexPath)
+                
+                
+                var tempView : TMKClockView?
+                var title : UILabel?
+                
+                for v in cell.contentView.subviews{
+                    if v.isKind(of: TMKClockView.self){
+                        tempView = v as? TMKClockView
+                    } else if v.isKind(of: UILabel.self){
+                        title = v as? UILabel
+                    }
+                }
+                
+                if let tit = title {
+                    tit.text = "T ºC"
+                }
+                
+                // Temperature
+                //
+                //  let's say ti 60ºC is OK
+                // maxT = 90
+                // minT = 0
+                
+                if let tw = tempView{
+                    let tempOk = 60.0
+                    
+                    let tempRange = ceil(max(tmax, 60.0) / 10.0) * 10.0
+                    var tempAreas : [TMKClockView.arc] = []
+                    
+                    if tmin < tempOk {
+                        tempAreas.append(TMKClockView.arc(start: tmin / tempRange, end:min(tmax, tempOk) / tempRange, color: UIColor.green))
+                    }
+                    
+                    if tmax > tempOk{
+                        tempAreas.append(TMKClockView.arc(start: max(tmin, tempOk) / tempRange, end:tmax / tempRange, color: UIColor.red))
+                    }
+                    
+                    
+                    let tempLevels : [TMKClockView.arc] = [TMKClockView.arc(start: tavg / tempRange, end: 0.5, color: UIColor.green),
+                                                           TMKClockView.arc(start: tmax / tempRange, end: 0.9, color: UIColor.red)]
+                    
+                    
+                    tw.backImage = nil
+                    
+                    tw.updateData(String(format:"%0.0f", tmax) , units: "ºC", radis: tempLevels, arcs: tempAreas, minValue: 0.0, maxValue: tempRange)
+                }
+                
+                return cell
+                
+            case 5:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "verticalCellIdentifier", for: indexPath)
+                
+                var rollView : TMKVerticalView?
+                var title : UILabel?
+                
+                for v in cell.contentView.subviews{
+                    if v.isKind(of: TMKVerticalView.self){
+                        rollView = v as? TMKVerticalView
+                    } else if v.isKind(of: UILabel.self){
+                        title = v as? UILabel
+                    }
+                }
+                
+                if let tit = title {
+                    tit.text = "Roll"
+                }
+                if let rw = rollView{
+                    
+                    rw.updateData(ravg, minValue: rmin, maxValue: rmax, scale: 1.0)
+                }
+                
+                return cell
+                
+                
+            case 6:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "levelCellIdentifier", for: indexPath)
+                
+                var pitchView : TMKLevelView?
+                var title : UILabel?
+                
+                for v in cell.contentView.subviews{
+                    if v.isKind(of: TMKLevelView.self){
+                        pitchView = v as? TMKLevelView
+                    } else if v.isKind(of: UILabel.self){
+                        title = v as? UILabel
+                    }
+                }
+                
+                if let tit = title {
+                    tit.text = "Pitch"
+                }
+                if let pw = pitchView{
+                    pw.updateData(pavg, minValue: pmin, maxValue: pmax, scale: 1.0)
+                    
+                }
+                return cell
+                
+                
                 
             default:
                 
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let  gc = storyboard.instantiateViewController(withIdentifier: "graphViewControllerIdentifier") as? GraphViewController{
-                    
-                    gc.ninebot = self.ninebot
-                    graphToShow = self.graphValue[(indexPath as NSIndexPath).row]
-                    gc.shownVariable = self.graphToShow
-                    return gc
-                }
+                return UICollectionViewCell()
                 
-
+                
+                
             }
             
         }
-        return nil
+        
     }
     
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+    extension BLEHistoDashboard : UIViewControllerPreviewingDelegate{
         
-        if let mvc = viewControllerToCommit as? BLEMapViewController{
-            present(mvc, animated: true, completion: nil)
-        } else {
-           show(viewControllerToCommit, sender: self)
+        func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+            if let indexPath = collectionView.indexPathForItem(at: location), let cellAttributes = collectionView.layoutAttributesForItem(at: indexPath) {
+                //This will show the cell clearly and blur the rest of the screen for our peek.
+                previewingContext.sourceRect = cellAttributes.frame
+                
+                switch (indexPath as NSIndexPath).row {
+                    
+                case 0:
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    if let  mpc = storyboard.instantiateViewController(withIdentifier: "mapViewControllerIdentifier") as? BLEMapViewController{
+                        
+                        mpc.dades = self.ninebot
+                        return mpc
+                    }
+                    
+                default:
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    if let  gc = storyboard.instantiateViewController(withIdentifier: "graphViewControllerIdentifier") as? GraphViewController{
+                        
+                        gc.ninebot = self.ninebot
+                        graphToShow = self.graphValue[(indexPath as NSIndexPath).row]
+                        gc.shownVariable = self.graphToShow
+                        return gc
+                    }
+                    
+                    
+                }
+                
+            }
+            return nil
         }
         
-    }
-    
+        func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+            
+            if let mvc = viewControllerToCommit as? BLEMapViewController{
+                present(mvc, animated: true, completion: nil)
+            } else {
+                show(viewControllerToCommit, sender: self)
+            }
+            
+        }
+        
 }

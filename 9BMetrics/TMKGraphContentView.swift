@@ -259,7 +259,7 @@ class TMKGraphContentView: UIView {
                             
                             var ptView =  v.viewPointFromTrackPoint(ptLoc)
                             
-                            if let lab = fmt.string(from: NSNumber(x)){
+                            if let lab = fmt.string(from: NSNumber(value: Double(x))){
                                 
                                 let attr : [String : AnyObject] = NSDictionary(objects: NSArray(objects:font!, UIColor.white) as [AnyObject],
                                     forKeys: NSArray(objects:NSFontAttributeName, NSForegroundColorAttributeName) as! [NSCopying]) as! [String : AnyObject]

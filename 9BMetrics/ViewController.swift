@@ -129,7 +129,7 @@ import UIKit
             try (url as NSURL).getResourceValue(&rsrc, forKey: URLResourceKey.creationDateKey)
         }
         catch{
-            AppDelegate.debugLog("Error reading creation date of file %", url)
+            AppDelegate.debugLog("Error reading creation date of file %", url as CVarArg)
         }
         
         let date = rsrc as? Date
@@ -268,10 +268,11 @@ import UIKit
     func isDirectory(_ url : URL) -> Bool{
         
         var isDirectory: ObjCBool = ObjCBool(false)
-        guard let path = url.path else {return false}
+        let path = url.path
         
+  
         if FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) {
-            return Bool(isDirectory)
+            return isDirectory.boolValue
             
         }
         return false
@@ -291,18 +292,23 @@ import UIKit
         
         let mgr = FileManager()
         
-        
-        let enumerator = mgr.enumerator(at: dir, includingPropertiesForKeys: nil, options: [FileManager.DirectoryEnumerationOptions.skipsHiddenFiles, FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants]) { (url:URL, err:NSError) -> Bool in
-            AppDelegate.debugLog("Error enumerating files %@", err)
+        let enumerator = mgr.enumerator(at: dir, includingPropertiesForKeys: nil, options: [FileManager.DirectoryEnumerationOptions.skipsHiddenFiles, FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants]) { (URL, Error) -> Bool in
+            
+            let err = Error as NSError
+            AppDelegate.debugLog("Error enumerating files %@", err.localizedDescription)
             return true
         }
+        
+        
+        
+        
         
         if let arch = enumerator{
             
             for item in arch  {
                 
                 if let url = item as? URL , !self.isDirectory(url)  || url.pathExtension == "9bm"{
-                    if let ext = url.pathExtension , ext != "gpx"{
+                    if url.pathExtension  != "gpx"{
                         files.append(url)
                     }
                 }
@@ -557,7 +563,7 @@ import UIKit
                     tableView.deleteSections(IndexSet(integer: (indexPath as NSIndexPath).section), with: UITableViewRowAnimation.automatic)
                 }
             }catch{
-                AppDelegate.debugLog("Error removing %@", url)
+                AppDelegate.debugLog("Error removing %@", url as CVarArg)
             }
             // Delete the row from the data source
             
@@ -701,9 +707,9 @@ import UIKit
                     testC.ninebot = dele.datos
                     
                     if let url = self.currentFile{
-                        if let name = url.lastPathComponent{
-                            testC.titulo = name
-                        }
+                       
+                            testC.titulo = url.lastPathComponent
+                        
                     }
                 }
             }
@@ -789,7 +795,7 @@ import UIKit
                 applicationActivities: [PickerActivity()])
             
             
-            activityViewController.completionWithItemsHandler = {(a : String?, completed:Bool, objects:[AnyObject]?, error:NSError?) in
+            activityViewController.completionWithItemsHandler = {(a : UIActivityType?, completed:Bool, objects:[Any]?, error:Error?) in
                 
                 
                 do{
@@ -800,7 +806,7 @@ import UIKit
                         
                     }
                 }catch{
-                    AppDelegate.debugLog("Error al esborrar %@", f)
+                    AppDelegate.debugLog("Error al esborrar %@", f as CVarArg)
                 }
                 
             }

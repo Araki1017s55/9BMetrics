@@ -95,8 +95,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if url.isFileURL{
             
             
-            guard let name = url.deletingPathExtension().lastPathComponent else {return false}
-            guard let ext = url.pathExtension else {return false}
+            let name = url.deletingPathExtension().lastPathComponent
+            let ext = url.pathExtension
             
             var newExt = ext
             if ext == "9bz" {   // Will unpack
@@ -111,14 +111,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Check if file exists
             
             var ct = 1
-            guard var path = newUrl.path else {return false}
+            var path = newUrl.path
             
             while mgr.fileExists(atPath: path){
                 
                 let newName = String(format: "%@(%d)", name, ct)
                 let aUrl = self.applicationDocumentsDirectory()?.appendingPathComponent(newName).appendingPathExtension(newExt)
                 if let url = aUrl{
-                    path = url.path!
+                    path = url.path
                     newUrl = url
                     ct += 1
                 }
@@ -132,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if ext == "9bz" {
                     
                     try Zip.unzipFile(url, destination: newUrl, overwrite: false, password: nil, progress: { (progress) in
-                        NSLog("Unzipping %f", progress)
+                        AppDelegate.debugLog("Unzipping %f", progress)
                     })
                 }else {
                     
@@ -146,8 +146,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
             }catch {
                 
-                self.displayMessageWithTitle("Error",format:"ERROR al copiar url %@ a %@", url, newUrl)
-                AppDelegate.debugLog("ERROR al copiar url %@ a %@", url, newUrl)
+                self.displayMessageWithTitle("Error",format:"ERROR al copiar url %@ a %@", url as CVarArg, newUrl as CVarArg)
+                AppDelegate.debugLog("ERROR al copiar url %@ a %@", url as CVarArg, newUrl as CVarArg)
                 return false
             }
             
@@ -172,13 +172,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         
-        NSLog("Foreground")
+        AppDelegate.debugLog("Foreground")
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        NSLog("Activating")
+        AppDelegate.debugLog("Activating")
         
         
     }
@@ -313,8 +313,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     {
         var  msg  = ""
             
-        withVaList(args){
-            msg = String(format, $0)
+        withVaList(args){_ in
+            msg = String(format: format, args)
         }
         
         self.genericAlert =  UIAlertView(title: title, message: msg, delegate: self, cancelButtonTitle: "OK")

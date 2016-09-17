@@ -168,7 +168,7 @@ class BLENinebotMessage: NSObject {
         
         for  i in 0..<ni{
             index = i2
-            i2 = <#T##Collection corresponding to `index`##Collection#>.index(index, offsetBy: 2)
+            i2 = string.index(index, offsetBy: 2)
             
             let s = string.substring(with: index..<i2)
             

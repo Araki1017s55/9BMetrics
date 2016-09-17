@@ -1078,7 +1078,7 @@ class WheelTrack: NSObject {
             let docs = dele.applicationDocumentsDirectory()
             
             if let d = docs {
-                path = d.path!
+                path = d.path
             }
         }
         else
@@ -1147,7 +1147,7 @@ class WheelTrack: NSObject {
         }
         catch{
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file)
+                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file.absoluteString)
             }
             
             AppDelegate.debugLog("Error al obtenir File Handle")
@@ -1326,14 +1326,14 @@ class WheelTrack: NSObject {
         
         guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
         
-        let pkgURL = docDir.appendingPathComponent(name)?.appendingPathExtension("9bm")
+        let pkgURL = docDir.appendingPathComponent(name).appendingPathExtension("9bm")
         
         // Try to use file wrappers (ufff)
         
         let contents = FileWrapper(directoryWithFileWrappers: [:])
         
         for(_, v) in self.data {
-            NSLog("Data %@, %.2f", v.codi.rawValue, v.currentValue)
+            AppDelegate.debugLog("Data %@, %.2f", v.codi.rawValue, v.currentValue)
             
         }
         
@@ -1379,7 +1379,8 @@ class WheelTrack: NSObject {
                 
                 var l = v.log
                 let nbytes = MemoryLayout<LogEntry>.size * l.count
-                let dat = Data(bytes: UnsafePointer<UInt8>(&l), count: nbytes)
+                let dat = Data(bytes: &l, count: nbytes)
+                
                 let binWrapper = FileWrapper(regularFileWithContents: dat)
                 binWrapper.preferredFilename = binName
                 contents.addFileWrapper(binWrapper)
@@ -1395,7 +1396,7 @@ class WheelTrack: NSObject {
             }
         }
         do{
-            try contents.write(to: pkgURL!, options: .withNameUpdating, originalContentsURL: pkgURL)
+            try contents.write(to: pkgURL, options: .withNameUpdating, originalContentsURL: pkgURL)
         }catch let err as NSError{
             
             
@@ -1403,7 +1404,7 @@ class WheelTrack: NSObject {
             return nil
         }
         
-        setThumbImage(pkgURL!)
+        setThumbImage(pkgURL)
         
         return pkgURL
     }
@@ -1502,9 +1503,9 @@ class WheelTrack: NSObject {
                     
                     // OK now update the package
                     
-                    if let name = url.deletingPathExtension().lastPathComponent {
-                        let fm = FileManager.default
-                        if let newUrl = url.deletingPathExtension().appendingPathExtension("bu"){
+                    let name = url.deletingPathExtension().lastPathComponent
+                    let fm = FileManager.default
+                    let newUrl = url.deletingPathExtension().appendingPathExtension("bu")
                             do{
                         
                                 try fm.moveItem(at: url, to: newUrl)
@@ -1522,8 +1523,8 @@ class WheelTrack: NSObject {
                             }catch{
                                 
                             }
-                        }
-                    }
+                    
+                    
                 }
             }
         }catch{
@@ -1536,7 +1537,7 @@ class WheelTrack: NSObject {
     static func createZipFile(_ pkgUrl : URL) -> URL?{
         
         
-        if let name = pkgUrl.deletingPathExtension().lastPathComponent{
+        let name = pkgUrl.deletingPathExtension().lastPathComponent
             
             
             let tmpDirURL = URL(fileURLWithPath: NSTemporaryDirectory(),isDirectory: true)
@@ -1560,24 +1561,19 @@ class WheelTrack: NSObject {
                 }
                 
                 try Zip.zipFiles(files, zipFilePath: zipURL, password: nil, progress: { (progress) -> () in
-                    NSLog("Zip %f", progress)
+                    AppDelegate.debugLog("Zip %f", progress)
                 })
                 
                 return zipURL
             }catch{
                 if let dele = UIApplication.shared.delegate as? AppDelegate{
-                    dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL)
+                    dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL as CVarArg)
                 }
                 AppDelegate.debugLog("Error al crear zip file")
                 
                 return nil
             }
-            
-            
-        }
-        
-        return nil
-    }
+     }
     
     
     internal func createGPXString() -> String{
@@ -1842,14 +1838,14 @@ class WheelTrack: NSObject {
         
         // OK now build package.
         
-        if let name = url.deletingPathExtension().lastPathComponent {
+        let name = url.deletingPathExtension().lastPathComponent
             let newName = name.replacingOccurrences(of: "9B_", with: "")
             if let url = createPackage(newName){
-                AppDelegate.debugLog("Package %@ created", url)
+                AppDelegate.debugLog("Package %@ created", url as CVarArg)
             }else{
                 AppDelegate.debugLog("Error al crear Package")
             }
-        }
+        
         
     }
     
@@ -1907,7 +1903,7 @@ class WheelTrack: NSObject {
                                       forKey:URLResourceKey.thumbnailDictionaryKey)
         }
         catch _{
-            NSLog("No puc gravar la imatge :)")
+            AppDelegate.debugLog("No puc gravar la imatge :)")
         }
         
         

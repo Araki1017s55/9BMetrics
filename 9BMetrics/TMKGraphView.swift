@@ -461,11 +461,11 @@ class TMKGraphView: UIView {
                 y: height - ((pt.y - self.yminH ) * sy) - self.bottomMargin);
         }
         
-        if(isnan(myPt.x)){
+        if(myPt.x.isNaN){
             myPt.x = 0.0
         }
         
-        if(isnan(myPt.y)){
+        if(myPt.y.isNaN){
             myPt.y = 0.0
         }
         
@@ -526,11 +526,11 @@ class TMKGraphView: UIView {
                 y: height - ((pt.y - ybot ) * self.sy) - self.bottomMargin);
         }
         
-        if(isnan(myPt.x)){
+        if(myPt.x.isNaN){
             myPt.x = 0.0
         }
         
-        if(isnan(myPt.y)){
+        if(myPt.y.isNaN){
             myPt.y = 0.0
         }
         
@@ -992,7 +992,7 @@ class TMKGraphView: UIView {
                     else{
                         fmt.maximumFractionDigits = 0
                     }
-                    let lab = fmt.string(from: NSNumber(y))!
+                    let lab = fmt.string(from: NSNumber(value: Double(y)))!
                     
                     let attr : [String : AnyObject] = NSDictionary(objects: NSArray(objects:font!, UIColor.white) as [AnyObject],
                         forKeys: NSArray(objects:NSFontAttributeName, NSForegroundColorAttributeName) as! [NSCopying]) as! [String : AnyObject]
@@ -1069,7 +1069,7 @@ class TMKGraphView: UIView {
                     
                     ptView = CGPoint(x: ptView.x+self.leftMargin, y: ptView.y)
                     
-                    let lab = fmt.string(from: NSNumber(x))
+                    let lab = fmt.string(from: NSNumber(value: Double(x)))
                     
                     let attr : [String : AnyObject] = NSDictionary(objects: NSArray(objects:font!, UIColor.white) as [AnyObject],
                         forKeys: NSArray(objects:NSFontAttributeName, NSForegroundColorAttributeName) as! [NSCopying]) as! [String : AnyObject]

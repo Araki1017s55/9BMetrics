@@ -24,6 +24,7 @@ import WatchConnectivity
 
 
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
+
     
     
     @IBOutlet weak  var distLabel : WKInterfaceLabel!
@@ -54,6 +55,14 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     var wcsession : WCSession? = WCSession.default()
     
+
+    /** Called when the session has completed activation. If session state is WCSessionActivationStateNotActivated there will be an error with more details. */
+    @available(watchOS 2.2, *)
+    public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        
+        // To Do when we know what to do
+    }
+ 
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
@@ -233,20 +242,23 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 if let v = value {
                     dict["value"] = v
                 }
-                session.sendMessage(dict, replyHandler: nil, errorHandler: { (err : NSError) -> Void in
+                session.sendMessage(dict, replyHandler: nil, errorHandler: { (err : Error) -> Void in
                     
-                    NSLog("Error al enviar missatge %@", err)
+                    if let nerr : NSError = err as? NSError{
+                        NSLog("Error al enviar missatge %@", nerr)
+                    }
                 })
             }
         }
     }
 
     
-    func sessionWatchStateDidChange(_ session: WCSession) {
+/*
+ func sessionWatchStateDidChange(_ session: WCSession) {
         
        // NSLog("WCSessionState changed. Reachable %@", session.reachable)
     }
-    
+*/
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]){
         
         if let v = applicationContext as? [String : Double]{

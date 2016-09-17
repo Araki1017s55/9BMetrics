@@ -89,7 +89,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         if let central = self.centralManager{
             self.connecting = true
             
-            if central.state == CBCentralManagerState.poweredOn{
+            if central.state == .poweredOn{
                 
                 let ids = [UUID(uuidString:device)!]
                 
@@ -113,7 +113,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
  
         self.scanning = false
         if let cm = self.centralManager {
-            if cm.state == CBCentralManagerState.poweredOn{
+            if cm.state == .poweredOn{
                 cm.stopScan()
             }
         }
@@ -169,7 +169,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
         
         self.scanning = false;
         
-        if central.state == CBCentralManagerState.poweredOn && connecting {
+        if central.state == .poweredOn && connecting {
             
             let store = UserDefaults.standard
             let device = store.string(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey)
@@ -225,7 +225,7 @@ class BLEConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
             
             BLESimulatedClient.sendNotification(BLESimulatedClient.kdevicesDiscoveredNotification, data: ["peripherals" : [peripheral]])
 
-            AppDelegate.debugLog("Discovered %@ - %@ (%@)", peripheral.name!, peripheral.identifier, BLESimulatedClient.kdevicesDiscoveredNotification );
+            AppDelegate.debugLog("Discovered %@ - %@ (%@)", peripheral.name!, peripheral.identifier as CVarArg, BLESimulatedClient.kdevicesDiscoveredNotification );
             return
     }
     

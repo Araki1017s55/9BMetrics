@@ -99,7 +99,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         if let central = self.centralManager{
             self.connecting = true
             
-            if central.state == CBCentralManagerState.poweredOn{
+            if central.state == .poweredOn{
                 
                 let ids = [UUID(uuidString:device)!]
                 
@@ -136,7 +136,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         
         self.scanning = false
         if let cm = self.centralManager {
-            if cm.state == CBCentralManagerState.poweredOn{
+            if cm.state == .poweredOn{
                 cm.stopScan()
             }
         }
@@ -189,7 +189,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         
         self.scanning = false;
         
-        if central.state == CBCentralManagerState.poweredOn && connecting {
+        if central.state == .poweredOn && connecting {
             
             let store = UserDefaults.standard
             let device = store.string(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey)
@@ -235,7 +235,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         tim.invalidate()
     
         if let central = self.centralManager{
-            if central.state == CBCentralManagerState.poweredOn{
+            if central.state == .poweredOn{
                  self.centralManager!.scanForPeripherals(withServices: nil, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
                  self.scanning = true
                  AppDelegate.debugLog("Scanning started")
@@ -262,7 +262,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             name = nam
         }
         
-        AppDelegate.debugLog("Discovered %@ - %@ (%@)", name, peripheral.identifier, BLESimulatedClient.kdevicesDiscoveredNotification );
+        AppDelegate.debugLog("Discovered %@ - %@ (%@)", name, peripheral.identifier as CVarArg, BLESimulatedClient.kdevicesDiscoveredNotification );
         return
     }
     
@@ -508,7 +508,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
                 self.connecting = false
             }
 
-            NSLog("All services read")
+            AppDelegate.debugLog("All services read")
         }
     }
     

@@ -346,22 +346,34 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
     
     func shareData(_ file: URL?, src:AnyObject, delete: Bool){
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if let aFile = file {
             let activityViewController = UIActivityViewController(
                 activityItems: [aFile.lastPathComponent,   aFile],
                 applicationActivities: [PickerActivity()])
             
-            activityViewController.completionWithItemsHandler = {(a : String?, completed:Bool, objects:[AnyObject]?, error:NSError?) in
+            
+            let handler =  {(a : UIActivityType?, completed:Bool, objects:[Any]?, error: Error?) -> Void in
                 
                 if delete {
                     do{
                         try FileManager.default.removeItem(at: aFile)
                     }catch{
-                        AppDelegate.debugLog("Error al esborrar %@", aFile)
+                        AppDelegate.debugLog("Error al esborrar %@", aFile as CVarArg)
                     }
                 }
             }
             
+            activityViewController.completionWithItemsHandler = handler
+
             activityViewController.popoverPresentationController?.sourceView = src as? UIView
             
             activityViewController.modalPresentationStyle = UIModalPresentationStyle.popover
