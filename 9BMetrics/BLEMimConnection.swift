@@ -40,7 +40,7 @@ struct BLECharacteristic {
 }
 
 
-class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate  {
+class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
     
     internal let kUUIDDeviceInfoService = "180A"
     internal let kUUIDManufacturerNameVariable = "2A29"
@@ -117,10 +117,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     func lookupChar(_ uuid : String) -> CBCharacteristic? {
         
-  
-        
         for (_, srv) in wheelServices{
-            
             if let blch = srv.characteristics[uuid] {
                 return blch.characteristic
             }
@@ -227,32 +224,32 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     func doRealScan(){
         
         let _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(BLEMimConnection.scanForDevices(_:)), userInfo: nil, repeats: false)
-    
+        
     }
     
     func scanForDevices(_ tim : Timer){
         
         tim.invalidate()
-    
+        
         if let central = self.centralManager{
             if central.state == .poweredOn{
-                 self.centralManager!.scanForPeripherals(withServices: nil, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
-                 self.scanning = true
-                 AppDelegate.debugLog("Scanning started")
+                self.centralManager!.scanForPeripherals(withServices: nil, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
+                self.scanning = true
+                AppDelegate.debugLog("Scanning started")
             }else{
                 doRealScan()
             }
         }
         
     }
-        
-        
+    
+    
     
     
     internal func centralManager(_ central: CBCentralManager,
                                  didDiscover peripheral: CBPeripheral,
-                                                       advertisementData: [String : Any],
-                                                       rssi RSSI: NSNumber){
+                                 advertisementData: [String : Any],
+                                 rssi RSSI: NSNumber){
         
         BLESimulatedClient.sendNotification(BLESimulatedClient.kdevicesDiscoveredNotification, data: ["peripherals" : [peripheral]])
         
@@ -263,6 +260,10 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         }
         
         AppDelegate.debugLog("Discovered %@ - %@ (%@)", name, peripheral.identifier as CVarArg, BLESimulatedClient.kdevicesDiscoveredNotification );
+        
+        for (k, v) in advertisementData{
+            AppDelegate.debugLog("   Advertising  %@ = %@", k, v as! CVarArg)
+        }
         return
     }
     
@@ -321,12 +322,12 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         
         peripheral.discoverServices(nil)
         AppDelegate.debugLog("Discovering services");
-
+        
     }
     
     internal func centralManager(_ central: CBCentralManager,
                                  didDisconnectPeripheral peripheral: CBPeripheral,
-                                                         error: Error?)
+                                 error: Error?)
         
     {
         AppDelegate.debugLog("DidDisconnectPeripheral")
@@ -355,10 +356,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
                             let peri : CBPeripheral = devs[0]
                             
                             self.connectPeripheral(peri)
-                            
-                            //TODO: Probablement modificar per establir la connexio directament
-                            //self.centralManager(central,  didDiscoverPeripheral:peri,  advertisementData:["Hello" : "Hello"],  RSSI:NSNumber())
-                            return;
+                            return
                         }
                     }
                 }
@@ -379,44 +377,63 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         self.discoveredPeripheral = nil;
     }
     
-    //MARK: writeValue
+    //MARK: Exchanging data
     
-    func subscribeToChar(_ char: CBCharacteristic){
-        if let ch = lookupChar(char.uuid.uuidString){
+    func subscribeToChar(_ char: String){
+        
+        if !self.connected {
+            AppDelegate.debugLog("Trying to subscribeToChar without being connected")
+            return
+        }
+        if let ch = lookupChar(char){
             if let peri = self.discoveredPeripheral {
                 peri.setNotifyValue(true, for:ch)
+                self.subscribed = true
             }
         }
     }
     
-    func unsubscribeToChar(_ char: CBCharacteristic){
-        if let ch = lookupChar(char.uuid.uuidString){
+    func unsubscribeToChar(_ char: String){
+        if !self.connected {
+            AppDelegate.debugLog("Trying to unsubscribeToChar without being connected")
+            return
+        }
+        if let ch = lookupChar(char){
             if let peri = self.discoveredPeripheral {
                 peri.setNotifyValue(false, for:ch)
+                self.subscribed = false
             }
         }
     }
     
-    func writeValue(_ char : CBCharacteristic, data : Data){
+    func writeValue(_ char : String, data : Data){
+        if !self.connected {
+            AppDelegate.debugLog("Trying to writeValue without being connected")
+            return
+        }
         
-        if let ch = lookupChar(char.uuid.uuidString){
+        if let ch = lookupChar(char){
             if let peri = self.discoveredPeripheral {
                 peri.writeValue(data, for: ch, type: .withoutResponse)
             }
         }
     }
     
-    func readValue(_ char : CBCharacteristic){
+    func readValue(_ char : String){
+        if !self.connected {
+            AppDelegate.debugLog("Trying to readValue without being connected")
+            return
+        }
         
-        if let ch = lookupChar(char.uuid.uuidString){
+        if let ch = lookupChar(char){
             if let peri = self.discoveredPeripheral {
                 peri.readValue(for: ch)
             }
         }
     }
-
     
-    //MARK: CBPeripheralDelegate
+}
+extension BLEMimConnection : CBPeripheralDelegate{
     
     internal func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?)
     {
@@ -441,11 +458,11 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     internal func peripheral(_ peripheral: CBPeripheral,
                              didDiscoverCharacteristicsFor service: CBService,
-                                                                  error: Error?)
+                             error: Error?)
     {
         
         AppDelegate.debugLog("Characteristics discovered");
-
+        
         // Sembla una bona conexio, la guardem per mes endavant
         
         
@@ -474,11 +491,11 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
                     if ch.properties.contains(.write){
                         flags = flags + "w"
                     }
-
+                    
                     if ch.properties.contains(.writeWithoutResponse){
                         flags = flags + "x"
                     }
-
+                    
                     if ch.properties.contains(.notify){
                         flags = flags + "n"
                     }
@@ -489,8 +506,8 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
                     let blechr = BLECharacteristic(service: sr.id, id: ch.uuid.uuidString, flags: flags, characteristic: ch)
                     
                     sr.characteristics[ch.uuid.uuidString] = blechr
-               
-                     AppDelegate.debugLog("Characteristic  %@ / %@ (%@)", blechr.service, blechr.id,flags)
+                    
+                    AppDelegate.debugLog("Characteristic  %@ / %@ (%@)", blechr.service, blechr.id,flags)
                 }
             }
             
@@ -501,14 +518,22 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         if allDone() {
             
             // OK Now we send back to interestes parties the complete service
-            
+            AppDelegate.debugLog("All services read")
+            self.connected = true
+            self.connecting = false
+           
             if let dele = delegate {
                 dele.deviceAnalyzed(peripheral, services: self.wheelServices)
-                self.connected = true
-                self.connecting = false
+                
+                if let adapter = BLEWheelSelector.sharedInstance.getAdapter(wheelServices: self.wheelServices){
+                    dele.deviceConnected(peripheral, adapter: adapter)
+                    
+                }else {
+                    let dele = UIApplication.shared.delegate as! AppDelegate
+                    dele.displayMessageWithTitle("No driver available"   , format: "I don't have a driver for this device")
+                    AppDelegate.debugLog("I don't have a driver to connect to his device.")
+                }
             }
-
-            AppDelegate.debugLog("All services read")
         }
     }
     
@@ -526,7 +551,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     func peripheral(_ peripheral: CBPeripheral,
                     didUpdateValueFor characteristic: CBCharacteristic,
-                                                    error: Error?){
+                    error: Error?){
         
         // Primer obtenim el TMKPeripheralObject
         

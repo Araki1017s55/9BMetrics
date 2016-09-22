@@ -244,9 +244,9 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 }
                 session.sendMessage(dict, replyHandler: nil, errorHandler: { (err : Error) -> Void in
                     
-                    if let nerr : NSError = err as? NSError{
-                        NSLog("Error al enviar missatge %@", nerr)
-                    }
+                    let nerr  = err as NSError
+                    NSLog("Error al enviar missatge %@", nerr.localizedDescription)
+                    
                 })
             }
         }

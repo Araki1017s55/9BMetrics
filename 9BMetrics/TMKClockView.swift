@@ -25,6 +25,11 @@ class TMKClockView: UIView {
     let cursorColor = UIColor.red
     let cursorSize : CGFloat = 0.9
     
+    var c1 : NSLayoutConstraint?
+    var c2 : NSLayoutConstraint?
+    var c3 : NSLayoutConstraint?
+    var c4 : NSLayoutConstraint?
+    
     var minValue = 0.0
     var maxValue = 100.0
     
@@ -73,13 +78,13 @@ class TMKClockView: UIView {
 
         self.addSubview(label)
         
-        var c1 = NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
+        c1 = NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
         
-        var c2 = NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -(r / 8.0) - (r * 0.1) )
+        c2 = NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -(r / 8.0) - (r * 0.1) )
         
             
-        self.addConstraint(c1)
-        self.addConstraint(c2)
+        self.addConstraint(c1!)
+        self.addConstraint(c2!)
   
         unitsLabel.text = String(format: "%@", units)
         unitsLabel.textAlignment = .center
@@ -92,17 +97,28 @@ class TMKClockView: UIView {
         
         self.addSubview(unitsLabel)
         
-        c1 = NSLayoutConstraint(item: unitsLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
+        c3 = NSLayoutConstraint(item: unitsLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0.0)
         
-        c2 = NSLayoutConstraint(item: unitsLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -(r / 12.0) )
-        
-        
-        self.addConstraint(c1)
-        self.addConstraint(c2)
+        c4 = NSLayoutConstraint(item: unitsLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -(r / 12.0) )
         
         
-
+        self.addConstraint(c3!)
+        self.addConstraint(c4!)
+    }
+    
+    func updateSizes(){
+        let r : CGFloat = (min(self.bounds.width, self.bounds.height) / 2.0)-1.0
         
+        if let c = c2{
+            c.constant = -(r / 8.0) - (r * 0.1)
+        }
+        
+        if let c = c4{
+            c.constant = -(r / 12.0)
+        }
+        
+        unitsLabel.font = UIFont(name: ".SFUIText-Light", size: r / 6.0)
+        label.font = UIFont(name: ".SFUIText-Light", size: r / 4.0)
     }
     
     func d2R(_ degs : Double ) -> CGFloat{
@@ -161,7 +177,11 @@ class TMKClockView: UIView {
     
     }
 
-    
+    override func layoutSubviews() {
+        updateSizes()
+        super.layoutSubviews()
+        
+    }
     
     override func draw(_ rect: CGRect) {
         

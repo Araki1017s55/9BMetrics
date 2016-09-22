@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "9BMetrics WatchKit Extension/InterfaceController.swift"
-            timestampString = "480180304.341385"
+            filePath = "9BMetrics/BLEMimConnection.swift"
+            timestampString = "496222835.073676"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "session(_:activationDidCompleteWith:error:)"
+            startingLineNumber = "386"
+            endingLineNumber = "386"
+            landmarkName = "subscribeToChar(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,29 +25,45 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "9BMetrics WatchKit Extension/InterfaceController.swift"
-            timestampString = "481134243.821832"
+            filePath = "9BMetrics/BLEMimConnection.swift"
+            timestampString = "496222835.073676"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
-            landmarkName = "updateData(_:)"
+            startingLineNumber = "412"
+            endingLineNumber = "412"
+            landmarkName = "writeValue(_:data:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "9BMetrics/BLENinebot.swift"
-            timestampString = "483464011.876505"
+            filePath = "9BMetrics/BLEMimConnection.swift"
+            timestampString = "496222835.073676"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1548"
-            endingLineNumber = "1548"
-            landmarkName = "totalRuntimeHMS()"
+            startingLineNumber = "399"
+            endingLineNumber = "399"
+            landmarkName = "unsubscribeToChar(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLEMimConnection.swift"
+            timestampString = "496222835.073676"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "425"
+            endingLineNumber = "425"
+            landmarkName = "readValue(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,59 +74,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/BLESimulatedClient.swift"
-            timestampString = "495732232.136511"
+            timestampString = "495979969.210596"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "621"
-            endingLineNumber = "621"
-            landmarkName = "BLESimulatedClient"
-            landmarkType = "4">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "9BMetrics/AppDelegate.swift"
-            timestampString = "495733245.248553"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "316"
-            endingLineNumber = "316"
-            landmarkName = "displayMessageWithTitle(_:format:_:)"
+            startingLineNumber = "688"
+            endingLineNumber = "688"
+            landmarkName = "session(_:didReceiveMessage:)"
             landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "_BMetrics.AppDelegate.displayMessageWithTitle (Swift.String, format : Swift.String, Swift.Array&lt;Swift.CVarArg&gt;...) -&gt; ()"
+                  symbolName = "_BMetrics.BLESimulatedClient.session (__ObjC.WCSession, didReceiveMessage : Swift.Dictionary&lt;Swift.String, Any&gt;) -&gt; ()"
                   moduleName = "9BMetrics"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/AppDelegate.swift"
-                  timestampString = "495815855.414103"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLESimulatedClient.swift"
+                  timestampString = "496231038.981982"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "316"
-                  endingLineNumber = "316"
-                  offsetFromSymbolStart = "124">
+                  startingLineNumber = "688"
+                  endingLineNumber = "688"
+                  offsetFromSymbolStart = "28">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "_BMetrics.AppDelegate.(displayMessageWithTitle (Swift.String, format : Swift.String, Swift.Array&lt;Swift.CVarArg&gt;...) -&gt; ()).(closure #1)"
+                  symbolName = "_BMetrics.BLESimulatedClient.session (__ObjC.WCSession, didReceiveMessage : Swift.Dictionary&lt;Swift.String, Any&gt;) -&gt; ()"
                   moduleName = "9BMetrics"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/AppDelegate.swift"
-                  timestampString = "495815855.419008"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLESimulatedClient.swift"
+                  timestampString = "496231038.985106"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "317"
-                  endingLineNumber = "317"
-                  offsetFromSymbolStart = "36">
+                  startingLineNumber = "688"
+                  endingLineNumber = "688"
+                  offsetFromSymbolStart = "376">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -121,13 +121,45 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Zip.swift"
-            timestampString = "495733766.895432"
+            filePath = "9BMetrics/BLENinebotOneAdapter.swift"
+            timestampString = "495993959.316701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
-            landmarkName = "unzipFile(_:destination:overwrite:password:progress:)"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
+            landmarkName = "BLENinebotOneAdapter"
+            landmarkType = "4">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLEWheelSelector.swift"
+            timestampString = "495995589.261516"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "getAdapter(wheelServices:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLEWheelSelector.swift"
+            timestampString = "495995507.931782"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "registerAdapter(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

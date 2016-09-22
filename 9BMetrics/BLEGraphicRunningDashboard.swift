@@ -108,7 +108,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             self.fSpeed.sphereColor = sphereColor
             self.fSpeed.labelsColor = labelColor
             self.fSpeed.arcs = self.speedAreas
-            self.fSpeed.setup()
+            //self.fSpeed.setup()
             
             self.fTemperature.sphereColor = sphereColor
             self.fTemperature.labelsColor = labelColor
@@ -138,7 +138,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
         
         let val = fabs(Double(arc4random()) / Double(UINT32_MAX)) * speedTop;
         
-        let speedLevels = [TMKClockView.arc(start:val/speedTop, end: 0.5, color: UIColor.red)]
+        let _ = [TMKClockView.arc(start:val/speedTop, end: 0.5, color: UIColor.red)] // Speed Levels
         
         
         self.fSpeed.updateData(String(format:"%0.2f", val) , units: "Km/h", value: val, minValue: 0, maxValue: self.speedTop)

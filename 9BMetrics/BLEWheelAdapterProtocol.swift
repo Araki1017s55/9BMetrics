@@ -51,6 +51,19 @@
 import Foundation
 import CoreBluetooth
 
+// Types of known wheels
+
+enum WheelType : String{
+    
+    case Unknown = "Unknown"
+    case NinebotOne = "Ninebot One"
+    case NinebotS2 = "Ninebot S2"
+    case Gotaway = "Gotaway"
+    case Kingsong = "Kingsong"
+}
+
+
+
 protocol BLEWheelAdapterProtocol {
     
     // Just init, reset State and let everything perfect for when first connection will be started
@@ -63,19 +76,25 @@ protocol BLEWheelAdapterProtocol {
  
     // Called by connection when we got device characteristics
 
-    func deviceConnected(_ connection: BLEConnection, peripheral : CBPeripheral )
+    func deviceConnected(_ connection: BLEMimConnection, peripheral : CBPeripheral )
     
     // Called when lost connection. perhaps should do something. If not forget it
     
-    func deviceDisconnected(_ connection: BLEConnection, peripheral : CBPeripheral )
+    func deviceDisconnected(_ connection: BLEMimConnection, peripheral : CBPeripheral )
     
     // Data Received. Analyze, extract, convert and prosibly return a dictionary of characteristics and values
     
-    func charUpdated(_ connection: BLEConnection,  char : CBCharacteristic, data: Data) -> [(WheelTrack.WheelValue, Date, Double)]?
+    func charUpdated(_ connection: BLEMimConnection,  char : CBCharacteristic, data: Data) -> [(WheelTrack.WheelValue, Date, Double)]?
     
     // name, version, sn may return empty
     
     func getName() -> String
     func getVersion() -> String
     func getSN() -> String
+    
+    
+    // Returns a name for the wheel adapter (ex. Ninebot One E or Gotaway ....)
+    func wheelName() -> String
+    func isComptatible(services : [String : BLEService]) -> Bool
+    
 }

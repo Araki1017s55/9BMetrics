@@ -22,29 +22,30 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     static var debugging = true
     
     static let applicationShortcutUserInfoIconKey = "applicationShortcutUserInfoIconKey"
     
     /// Saved shortcut item used as a result of an app launch, used later when app is activated.
     var launchedShortcutItem: UIApplicationShortcutItem?
-
+    
     var window: UIWindow?
-    var genericAlert : UIAlertView?
+    var genericAlert : UIAlertController?
     
     var ubiquityUrl : URL?
-
+    
     var datos : WheelTrack = WheelTrack()
     var client : BLESimulatedClient?
-
+    
     weak var mainController : ViewController?
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
- 
+        
+        buildAdapterList()
         if self.client == nil {
             self.client = BLESimulatedClient()
             if let cli = self.client {
@@ -79,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else{
             item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Record", localizedTitle: "Record", localizedSubtitle: "Start recording data", icon: UIApplicationShortcutIcon(type: .play), userInfo: [
                 AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.play.rawValue
-            ]
+                ]
             )
         }
         
@@ -157,7 +158,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return false
     }
     
-  
+    func buildAdapterList(){
+        
+        let wheelSelector = BLEWheelSelector.sharedInstance
+        
+        wheelSelector.registerAdapter(BLENinebotOneAdapter())
+
+    }
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -189,7 +196,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let cli = self.client {
             cli.stop()    // In theory must save track
             
-           let conn = cli.connection  //** Això no es necessari si desfem la connexio pero no esta de mes
+            let conn = cli.connection  //** Això no es necessari si desfem la connexio pero no esta de mes
             
             if let peri = conn.discoveredPeripheral {
                 if let central = conn.centralManager{
@@ -198,7 +205,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-    
+        
         
     }
     
@@ -213,10 +220,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func handleShortCutItem(_ shortcut : UIApplicationShortcutItem) -> Bool{
-
+        
         AppDelegate.debugLog("Handle Sort Cut Item")
         launchedShortcutItem = nil // Clear it
-     
+        
         if shortcut.type == "es.gorina.9BMetrics.Record"{
             
             guard  let nav : UINavigationController = window?.rootViewController  as? UINavigationController else {return false}
@@ -224,15 +231,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             guard let wc = nav.topViewController as? ViewController   else {return false}
             wc.openRunningDashboard(wc)
             self.setShortcutItems(true)
-
+            
             
         }else if shortcut.type == "es.gorina.9BMetrics.Stop"{
-             
+            
             guard let cli = self.client   else {return false}
             
             cli.stop()
             self.setShortcutItems(false)
-
+            
             //guard let ds = wc.dashboard else {return false}
         }
         
@@ -244,7 +251,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func connect(){
         
-       // self.titleField.title = "Connecting..."
+        // self.titleField.title = "Connecting..."
         
         //self.client = BLESimulatedClient()
         
@@ -266,11 +273,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let cli = self.client{
             cli.stop()
         }
-         self.setShortcutItems(false)
+        self.setShortcutItems(false)
     }
     
-        //TODO: Clear stop button
-
+    //TODO: Clear stop button
+    
     
     // Missatges de Debug
     
@@ -312,27 +319,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func displayMessageWithTitle(_ title: String, format: String, _ args: CVarArg...)
     {
         var  msg  = ""
-            
+        
         withVaList(args){_ in
             msg = String(format: format, args)
         }
         
-        self.genericAlert =  UIAlertView(title: title, message: msg, delegate: self, cancelButtonTitle: "OK")
-        
-        if let alert = self.genericAlert{
-            DispatchQueue.main.async(execute: { () -> Void in
-                alert.show()
-            })
+        genericAlert = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.alert)
+        let action = UIAlertAction(title: "Close", style: UIAlertActionStyle.cancel) { (action: UIAlertAction) -> Void in
+            
+            
         }
+        
+        if let alert = genericAlert, let controller = mainController {
+            alert.addAction(action)
+            controller.present(alert, animated: true) { () -> Void in
+                
+            }
+        }
+        
+        
     }
     
-    func alertView(_ alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if alertView == self.genericAlert
-        {
-            alertView.dismiss(withClickedButtonIndex: buttonIndex, animated: true)
-        }
-    }
-
+    
     
 }
 

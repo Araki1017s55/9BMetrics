@@ -9,7 +9,7 @@
 import Foundation
 import CoreBluetooth
 
-class BLENinebotOneAdapter : NSObject {
+class GotawayAdapter : NSObject {
     
     var headersOk = false
     var sendTimer : Timer?    // Timer per enviar les dades periodicament
@@ -30,7 +30,7 @@ class BLENinebotOneAdapter : NSObject {
     static var signed = [Bool](repeating: false, count: 256)
     
     var values : [Int] = Array(repeating: -1, count: 256)
-
+    
     
     
     // Called when lost connection. perhaps should do something. If not forget it
@@ -43,10 +43,7 @@ class BLENinebotOneAdapter : NSObject {
     
     override init(){
         super.init()
-        queryQueue = OperationQueue()
-        queryQueue!.maxConcurrentOperationCount = 1
-        
-        BLENinebotOneAdapter.initConversion()
+        GotawayAdapter.initConversion()
         
     }
     
@@ -101,9 +98,9 @@ class BLENinebotOneAdapter : NSObject {
         signed[BLENinebot.kRollAngleVelocity] = true
         signed[BLENinebot.kCurrent] = true
         signed[BLENinebot.kvPitchAngle] = true
-
+        
     }
-   
+    
     //MARK: Receiving Data. Append data to buffer
     
     func appendToBuffer(_ data : Data){
@@ -120,7 +117,7 @@ class BLENinebotOneAdapter : NSObject {
     // as each block is received. Logical Data may span more than one block and not be aligned.
     //
     //
-    //  So we call procesaBuffer to extract any posible data. It is returned as an array of 
+    //  So we call procesaBuffer to extract any posible data. It is returned as an array of
     //  3 values, the variable, the date and the value all aready converted to ggeneric values
     // and SI units
     
@@ -128,6 +125,7 @@ class BLENinebotOneAdapter : NSObject {
     func procesaBuffer(_ connection: BLEMimConnection) -> [(WheelTrack.WheelValue, Date, Double)]?
     {
         // Wait till header. We wait till we find a 0x55
+        
         
         var outarr : [(WheelTrack.WheelValue, Date, Double)]?
         
@@ -156,30 +154,27 @@ class BLENinebotOneAdapter : NSObject {
                 return outarr
             }
             
-            if buffer.count < 8 {   // Too small. Wait
+            // We have 20 bytes and 10 bytes buffers
+            
+            switch(buffer.count){
+                
+                case 10, 20:
+                    let block = Array(buffer)
+                    
+                break
+                
+                
+            default:
                 return outarr
+                
+                
             }
-            
-            // Extract len and check size
-            
-            let l = Int(buffer[2])
-            
-            if l + 4 > 250 {
-                buffer.removeFirst(3)
-                return outarr
-            }
-            
-            if buffer.count < (6 + l){
-                return outarr
-            }
+            let l = 1
             
             // OK ara ja podem extreure el block. Te len + 6 bytes
             
             let block = Array(buffer[0..<(l+6)])
             
-            if let q = self.queryQueue , q.operationCount < 4{
-                self.sendNewRequest(connection)
-            }
             
             // BLENinebotMessage interprets a logical block of information
             
@@ -202,14 +197,14 @@ class BLENinebotOneAdapter : NSObject {
                         
                         var sv = v
                         
-                        // Treat signed values 
+                        // Treat signed values
                         
                         if BLENinebotOneAdapter.signed[k]{
                             if v >= 32768 {
                                 sv = v - 65536
                             }
                         }
-
+                        
                         
                         //TODO: Verify that conversion is OK. First treat two Ninebot variables
                         // For the moment not found any value
@@ -224,145 +219,32 @@ class BLENinebotOneAdapter : NSObject {
                         let dv = Double(sv) * BLENinebotOneAdapter.scales[k]
                         if let wv = BLENinebotOneAdapter.conversion[k]{
                             outarr!.append((wv, Date(), dv))
-                                                        
+                            
                         }
                     }
                 }
                 
                 
-                // Checkheaders is used to know if we have already received static information
-                // That is asked at the beginning, as the model, serial number...
-                _ = checkHeaders()
                 
             }
             
-            buffer.removeFirst(l+6)
-            
+             
         } while buffer.count > 6
         return outarr
     }
     
-    func checkHeaders() -> Bool{
-        
-        if headersOk {
-            return true
-        }
-        
-        var filled = true
-        
-        for i in 16..<27 {
-            if values[i] == -1{
-                filled = false
-            }
-        }
-        
-        if values[BLENinebot.kSpeedLimit] == -1{
-            filled = false
-        }
-        
-        if values[BLENinebot.kAbsoluteSpeedLimit] == -1{
-            filled = false
-        }
-        
-        if values[BLENinebot.kvRideMode] == -1{
-            filled = false
-        }
-        
-        
-        
-        headersOk = filled
-
-        if headersOk {  // Notify the world we have all the data :)
-            BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
-        }
-        
-        
-        
-        return filled
-    }
-   
     
-    
-    //MARK: Sending Requests
-    
-    func sendData(_ connection : BLEMimConnection){
-        
-        
-        if self.headersOk {  // Get normal data
-            
-              
-            for (op, l) in listaOpFast{
-                let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-                if let dat = message?.toNSData(){
-                    connection.writeValue("FFE1", data:dat)
-                }
-            }
-            
-            let (op, l) = listaOp[contadorOp]
-            contadorOp += 1
-            
-            if contadorOp >= listaOp.count{
-                contadorOp = 0
-            }
-            
-            let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue("FFE1", data:dat)
-            }
-        }else {    // Get One time data (S/N, etc.)
-            
-            
-            var message = BLENinebotMessage(com: UInt8(16), dat: [UInt8(22)])
-            if let dat = message?.toNSData(){
-                connection.writeValue("FFE1", data:dat)
-            }
-            
-            // Get riding Level and max speeds
-            
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat: [UInt8(4)])
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue("FFE1", data:dat)
-            }
-            
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat: [UInt8(2)])
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue("FFE1", data:dat)
-            }
-            
-        }
-    }
-    
-    // MARK: NSOperationSupport
-    
-    func injectRequest(_ tim : Timer){
-        
-        if let connection = tim.userInfo as? BLEMimConnection {
-            self.sendNewRequest(connection)
-        }
-    }
-    
-    func sendNewRequest(_ connection : BLEMimConnection){
-        
-        let request = BLERequestOperation(adapter: self, connection: connection)
-        
-        if let q = self.queryQueue{
-            q.addOperation(request)
-        }
-    }
     
     
 }
 
 //MARK: BLEWheelAdapterProtocol Extension
 
-extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
+extension GotawayAdapter : BLEWheelAdapterProtocol{
     
     
     func wheelName() -> String {
-        return "Ninebot One"
+        return "Gotaway"
     }
     
     func isComptatible(services : [String : BLEService]) -> Bool{
@@ -377,31 +259,16 @@ extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
         
         return false
     }
-
+    
     
     func startRecording(){
-        headersOk = false
-        contadorOp = 0
-        contadorOpFast = 0
+
         buffer.removeAll()
-        if let qu = queryQueue {
-            qu.cancelAllOperations()
-        }
         
     }
     
     func stopRecording(){
-        headersOk = false
-        contadorOp = 0
-        contadorOpFast = 0
         buffer.removeAll()
-        if let qu = queryQueue {
-            qu.cancelAllOperations()
-        }
-        if let tim  = sendTimer {
-            tim.invalidate()
-            sendTimer = nil
-        }
     }
     
     func deviceConnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
@@ -410,27 +277,11 @@ extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
         
         connection.subscribeToChar("FFE1")
         
-        self.contadorOp = 0
-        self.headersOk = false
-        
-        self.sendNewRequest(connection)
-        
-        
-        
-        // Just to be sure we start another timer to correct cases where we loose all requests
-        // Will inject one request every timerStep
-        
-        self.sendTimer = Timer.scheduledTimer(timeInterval: timerStep, target: self, selector:#selector(BLENinebotOneAdapter.injectRequest(_:)), userInfo: connection, repeats: true)
-        
+
         
     }
     func deviceDisconnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
         
-        
-        if let tim = self.sendTimer {
-            tim.invalidate()
-            self.sendTimer = nil
-        }
         
     }
     
@@ -442,47 +293,16 @@ extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
     
     
     func getName() -> String{
-        return getSN()
+        return "Gotaway"
     }
     
     func getVersion() -> String{
         
-        let clean = values[BLENinebot.kVersion] & 4095
-        
-        let v0 = clean / 256
-        let v1 = (clean - (v0 * 256) ) / 16
-        let v2 = clean % 16
-        
-        return String(format: "%d.%d.%d",v0, v1, v2)
+        return "1.0!"
     }
     
     func getSN() -> String{
-        
-        if !self.checkHeaders(){
-            return ""
-        }
-        
-        var no = ""
-        
-        
-        
-        for i in 16 ..< 23{
-            
-        
-            let v = values[i]
-            
-            
-            let v1 = v % 256
-            let v2 = v / 256
-            
-            let ch1 = Character(UnicodeScalar(v1)!)
-            let ch2 = Character(UnicodeScalar( v2)!)
-            
-            no.append(ch1)
-            no.append(ch2)
-        }
-        
-        return no
+        return "0123456789"
     }
 }
 

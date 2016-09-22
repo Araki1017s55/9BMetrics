@@ -77,7 +77,7 @@ class BLESimulatedClient: NSObject {
     
     // Ninebot Connection
     
-    var connection : BLEConnection
+    var connection : BLEMimConnection
     
     // Location Manager
     
@@ -89,7 +89,7 @@ class BLESimulatedClient: NSObject {
     
     override init() {
         
-        self.connection = BLEConnection()
+        self.connection = BLEMimConnection()
         super.init()
         self.connection.delegate = self
         self.queryQueue = OperationQueue()
@@ -270,12 +270,15 @@ class BLESimulatedClient: NSObject {
             if let altm = self.altimeter, let queue = self.altQueue{
                 
                 altm.startRelativeAltitudeUpdates(to: queue,
-                                                         withHandler: { (alts : CMAltitudeData?, error : NSError?) -> Void in
+                                                         withHandler: { (alts : CMAltitudeData?, error : Error?) -> Void in
                                                             
                                                             if let alt = alts, let nb = self.datos {
                                                                 nb.addValue(.Altitude, value: alt.relativeAltitude.doubleValue)
                                                             }
-                } as! CMAltitudeHandler)
+                } )
+                
+                
+
             }
         }
     }
@@ -382,7 +385,9 @@ class BLESimulatedClient: NSObject {
         }
     }
     
+    //MARK: Ninebot specific test functions. Should go to the adapter if generalised
     
+    // setSerialNumber is a test function specific of Ninebot. Not to use in release
     func setSerialNumber(_ sn : String){
         
         if let dat = sn.data(using: String.Encoding.utf8){
@@ -398,21 +403,21 @@ class BLESimulatedClient: NSObject {
             }
             
             if let dat = message?.toNSData(){
-                
-                self.connection.writeValue(dat)
+                self.connection.writeValue("FFE1", data: dat)
+                //self.connection.writeValue(dat)
             }
           
             message = BLENinebotMessage(com: UInt8(16), dat:[UInt8(14)] )
             
             if let dat = message?.toNSData(){
-                self.connection.writeValue(dat)
+                self.connection.writeValue("FFE1", data:dat)
             }
             
             
             message = BLENinebotMessage(com: UInt8(27), dat:[UInt8(14)] )
             
             if let dat = message?.toNSData(){
-                self.connection.writeValue(dat)
+                self.connection.writeValue("FFE1", data:dat)
             }
 
         }
@@ -420,7 +425,8 @@ class BLESimulatedClient: NSObject {
         
     }
     // Sets limit speed in km/h
-    
+    // setLimitSpeed is a test function specific of Ninebot. Not to use in release
+   
     func setLimitSpeed(_ speed : Double){
         // Check that level is between 0..9
         if speed < 0  {
@@ -443,7 +449,7 @@ class BLESimulatedClient: NSObject {
         
         if let dat = message?.toNSData(){
             
-            self.connection.writeValue(dat)
+            self.connection.writeValue("FFE1", data:dat)
         }
         
         // Get value to see if it is OK
@@ -451,9 +457,11 @@ class BLESimulatedClient: NSObject {
         message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat:[UInt8(2)] )
         
         if let dat = message?.toNSData(){
-            self.connection.writeValue(dat)
+            self.connection.writeValue("FFE1", data:dat)
         }
     }
+    
+    // setMaxSpeed is a test function specific of Ninebot. Not to use in release
     func setMaxSpeed(_ speed : Double){
         // Check that level is between 0..9
         if speed < 0  {
@@ -476,7 +484,7 @@ class BLESimulatedClient: NSObject {
         
         if let dat = message?.toNSData(){
             
-            self.connection.writeValue(dat)
+            self.connection.writeValue("FFE1", data:dat)
         }
         
         // Get value to see if it is OK
@@ -484,11 +492,11 @@ class BLESimulatedClient: NSObject {
         message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[UInt8(2)] )
         
         if let dat = message?.toNSData(){
-            self.connection.writeValue(dat)
+            self.connection.writeValue("FFE1", data:dat)
         }
     }
     
-    
+    // setRidingLevel is a test function specific of Ninebot. Not to use in release
     func setRidingLevel(_ level : Int){
         
         // Check that level is between 0..9
@@ -508,7 +516,7 @@ class BLESimulatedClient: NSObject {
         
         if let dat = message?.toNSData(){
             
-            self.connection.writeValue(dat)
+            self.connection.writeValue("FFE1", data:dat)
         }
         
         // Get value to see if it is OK
@@ -516,7 +524,7 @@ class BLESimulatedClient: NSObject {
         message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat:[UInt8(2)] )
         
         if let dat = message?.toNSData(){
-            self.connection.writeValue(dat)
+            self.connection.writeValue("FFE1", data:dat)
         }
         
     }
@@ -524,9 +532,13 @@ class BLESimulatedClient: NSObject {
 
     
 }
-//MARK: BLENinebotConnectionDelegate
+//MARK: BLENMimConnectionDelegate
 
-extension BLESimulatedClient : BLENinebotConnectionDelegate{
+extension BLESimulatedClient : BLEMimConnectionDelegate{
+    internal func deviceAnalyzed(_ peripheral: CBPeripheral, services: [String : BLEService]) {
+        // Don't do anything for the moment.
+    }
+
     
     func deviceConnected(_ peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol ){
         

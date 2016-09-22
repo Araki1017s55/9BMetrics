@@ -23,9 +23,9 @@ import UIKit
 class BLERequestOperation: Operation {
     
     let adapter : BLENinebotOneAdapter
-    let connection : BLEConnection
+    let connection : BLEMimConnection
     
-    init(adapter : BLENinebotOneAdapter, connection : BLEConnection) {
+    init(adapter : BLENinebotOneAdapter, connection : BLEMimConnection) {
         self.adapter = adapter
         self.connection = connection
     }

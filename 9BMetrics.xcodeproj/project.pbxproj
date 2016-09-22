@@ -21,6 +21,8 @@
 		0066C8AD1D86CE0F005DE94F /* BLEMimServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */; };
 		0066C8AF1D86CE93005DE94F /* BLEMimConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */; };
 		0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */; };
+		0079E9891D8E8071004A09BB /* BLEWheelSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */; };
+		0079E98B1D927A0E004A09BB /* GotawayAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0079E98A1D927A0E004A09BB /* GotawayAdapter.swift */; };
 		007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */; };
 		007A31FF1CB820DA00BB928D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A31FE1CB820DA00BB928D /* Main.storyboard */; };
 		007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57171C85CE49003A2030 /* AppDelegate.swift */; };
@@ -45,9 +47,7 @@
 		007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57661C85CF39003A2030 /* PickerActivity.swift */; };
 		007A57791C85CF39003A2030 /* BLENinebot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57671C85CF39003A2030 /* BLENinebot.swift */; };
 		007A577A1C85CF39003A2030 /* BLENinebotMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57681C85CF39003A2030 /* BLENinebotMessage.swift */; };
-		007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */; };
 		007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */; };
-		007A577D1C85CF39003A2030 /* BLEConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576B1C85CF39003A2030 /* BLEConnection.swift */; };
 		007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */; };
 		007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */; };
 		007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */; };
@@ -143,6 +143,8 @@
 		0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMimServer.swift; sourceTree = "<group>"; };
 		0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMimConnection.swift; path = 9BMetrics/BLEMimConnection.swift; sourceTree = "<group>"; };
 		0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMimConnectionDelegate.swift; sourceTree = "<group>"; };
+		0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEWheelSelector.swift; path = 9BMetrics/BLEWheelSelector.swift; sourceTree = "<group>"; };
+		0079E98A1D927A0E004A09BB /* GotawayAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GotawayAdapter.swift; path = 9BMetrics/GotawayAdapter.swift; sourceTree = "<group>"; };
 		007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMapViewController.swift; path = 9BMetrics/BLEMapViewController.swift; sourceTree = "<group>"; };
 		007A31FE1CB820DA00BB928D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		007A57141C85CE49003A2030 /* 9BMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9BMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,9 +174,7 @@
 		007A57661C85CF39003A2030 /* PickerActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PickerActivity.swift; path = 9BMetrics/PickerActivity.swift; sourceTree = "<group>"; };
 		007A57671C85CF39003A2030 /* BLENinebot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebot.swift; path = 9BMetrics/BLENinebot.swift; sourceTree = "<group>"; };
 		007A57681C85CF39003A2030 /* BLENinebotMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotMessage.swift; path = 9BMetrics/BLENinebotMessage.swift; sourceTree = "<group>"; };
-		007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotConnectionDelegate.swift; path = 9BMetrics/BLENinebotConnectionDelegate.swift; sourceTree = "<group>"; };
 		007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotServerDelegate.swift; path = 9BMetrics/BLENinebotServerDelegate.swift; sourceTree = "<group>"; };
-		007A576B1C85CF39003A2030 /* BLEConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEConnection.swift; path = 9BMetrics/BLEConnection.swift; sourceTree = "<group>"; };
 		007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESimulatedClient.swift; sourceTree = "<group>"; };
 		007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLESimulatedServer.swift; path = 9BMetrics/BLESimulatedServer.swift; sourceTree = "<group>"; };
 		007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotDashboard.swift; path = 9BMetrics/BLENinebotDashboard.swift; sourceTree = "<group>"; };
@@ -429,8 +429,6 @@
 				007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */,
 				007A57701C85CF39003A2030 /* BLEMim.swift */,
 				0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */,
-				0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */,
-				0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */,
 			);
 			name = Simulation;
 			sourceTree = "<group>";
@@ -440,12 +438,14 @@
 			children = (
 				007A576F1C85CF39003A2030 /* BLEDeviceSelector.swift */,
 				00FFEEFF1D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift */,
-				007A57681C85CF39003A2030 /* BLENinebotMessage.swift */,
-				007A57691C85CF39003A2030 /* BLENinebotConnectionDelegate.swift */,
-				007A576B1C85CF39003A2030 /* BLEConnection.swift */,
-				0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */,
+				0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */,
+				0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */,
 				008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */,
+				007A57681C85CF39003A2030 /* BLENinebotMessage.swift */,
+				0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */,
 				008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */,
+				0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */,
+				0079E98A1D927A0E004A09BB /* GotawayAdapter.swift */,
 			);
 			name = Communications;
 			sourceTree = "<group>";
@@ -658,6 +658,7 @@
 				00AB59591CAEE64000277859 /* hmac.c in Sources */,
 				0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */,
 				007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */,
+				0079E98B1D927A0E004A09BB /* GotawayAdapter.swift in Sources */,
 				00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */,
 				00AB595A1CAEE64000277859 /* prng.c in Sources */,
 				007A57821C85CF39003A2030 /* BLEMim.swift in Sources */,
@@ -672,9 +673,8 @@
 				00AB593B1CAEE61700277859 /* unzip.c in Sources */,
 				00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */,
 				003CC9161CCA79C50020F83B /* BLEHistoDashboard.swift in Sources */,
-				007A577D1C85CF39003A2030 /* BLEConnection.swift in Sources */,
+				0079E9891D8E8071004A09BB /* BLEWheelSelector.swift in Sources */,
 				004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */,
-				007A577B1C85CF39003A2030 /* BLENinebotConnectionDelegate.swift in Sources */,
 				00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */,
 				008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,

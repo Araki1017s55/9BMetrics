@@ -322,6 +322,10 @@ extension BLEMim : BLEMimConnectionDelegate{
                 AppDelegate.debugLog("    Char: " + desc)
             }
         }
+        
+        let wheelKind = BLEWheelSelector.sharedInstance.wheelKind(wheelServices: services)
+        AppDelegate.debugLog("Recognized wheel as %@", wheelKind)
+        
         self.tableView.reloadData()
         
         server.services = services
@@ -334,14 +338,14 @@ extension BLEMim : BLENinebotServerDelegate {
 
     func readReceived(_ char : CBCharacteristic){
         
-        self.client.readValue(char)
+        self.client.readValue(char.uuid.uuidString)
         let entry = Exchange(dir: .iphone2nb, op: .read, characteristic: char.uuid.uuidString, data: "")
         self.log.append(entry)
         self.tableView.reloadData()
     }
     
     func writeReceived(_ char : CBCharacteristic, data: Data){
-        self.client.writeValue(char, data:data)
+        self.client.writeValue(char.uuid.uuidString, data:data)
 
         let hexdat = self.nsdata2HexString(data)
         
@@ -350,10 +354,10 @@ extension BLEMim : BLENinebotServerDelegate {
         self.tableView.reloadData()
         
     }
-    func remoteDeviceSubscribedToCharacteristic(_ characteristic : CBCharacteristic, central : CBCentral){
+    func remoteDeviceSubscribedToCharacteristic(_ char : CBCharacteristic, central : CBCentral){
         
-        self.client.subscribeToChar(characteristic)
-        let entry = Exchange(dir: .iphone2nb, op: .subscribe, characteristic: characteristic.uuid.uuidString, data: "")
+        self.client.subscribeToChar(char.uuid.uuidString)
+        let entry = Exchange(dir: .iphone2nb, op: .subscribe, characteristic: char.uuid.uuidString, data: "")
         self.log.append(entry)
         self.tableView.reloadData()
 
@@ -362,10 +366,10 @@ extension BLEMim : BLENinebotServerDelegate {
         
         self.iPhoneButton.isEnabled = true
     }
-    func remoteDeviceUnsubscribedToCharacteristic(_ characteristic : CBCharacteristic, central : CBCentral){
-        self.client.unsubscribeToChar(characteristic)
+    func remoteDeviceUnsubscribedToCharacteristic(_ char : CBCharacteristic, central : CBCentral){
+        self.client.unsubscribeToChar(char.uuid.uuidString)
         
-        let entry = Exchange(dir: .iphone2nb, op: .unsubscribe, characteristic: characteristic.uuid.uuidString, data: "")
+        let entry = Exchange(dir: .iphone2nb, op: .unsubscribe, characteristic: char.uuid.uuidString, data: "")
         self.log.append(entry)
         self.tableView.reloadData()
 
