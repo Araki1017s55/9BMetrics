@@ -9,7 +9,7 @@
 import Foundation
 import CoreBluetooth
 
-class BLENinebotOneAdapter : NSObject {
+class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     var headersOk = false
     var sendTimer : Timer?    // Timer per enviar les dades periodicament
@@ -354,11 +354,11 @@ class BLENinebotOneAdapter : NSObject {
     }
     
     
-}
+//}
 
 //MARK: BLEWheelAdapterProtocol Extension
 
-extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
+//extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
     
     
     func wheelName() -> String {

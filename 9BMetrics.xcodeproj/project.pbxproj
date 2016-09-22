@@ -61,6 +61,7 @@
 		007CE2F81CCBD5260005828F /* KTCenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */; };
 		008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */; };
 		008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */; };
+		00A4A1921D943E020058C846 /* NinebotS12Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */; };
 		00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
 		00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
 		00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
@@ -188,6 +189,7 @@
 		007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KTCenterFlowLayout.swift; path = 9BMetrics/KTCenterFlowLayout.swift; sourceTree = "<group>"; };
 		008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEWheelAdapterProtocol.swift; path = 9BMetrics/BLEWheelAdapterProtocol.swift; sourceTree = "<group>"; };
 		008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotOneAdapter.swift; path = 9BMetrics/BLENinebotOneAdapter.swift; sourceTree = "<group>"; };
+		00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NinebotS12Adapter.swift; path = 9BMetrics/NinebotS12Adapter.swift; sourceTree = "<group>"; };
 		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zip.h; sourceTree = "<group>"; };
 		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
 		00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipUtilities.swift; sourceTree = "<group>"; };
@@ -446,6 +448,7 @@
 				008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */,
 				0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */,
 				0079E98A1D927A0E004A09BB /* GotawayAdapter.swift */,
+				00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */,
 			);
 			name = Communications;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,
 				00AB59561CAEE64000277859 /* aestab.c in Sources */,
 				00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */,
+				00A4A1921D943E020058C846 /* NinebotS12Adapter.swift in Sources */,
 				00AB595B1CAEE64000277859 /* pwd2key.c in Sources */,
 				00AB595C1CAEE64000277859 /* sha1.c in Sources */,
 				0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */,
