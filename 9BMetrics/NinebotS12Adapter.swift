@@ -94,7 +94,7 @@ class NinebotS12Adapter : BLENinebotOneAdapter {
     override func isComptatible(services : [String : BLEService]) -> Bool{
         
         if let srv = services["FEE7"]{
-            if let chrw = srv.characteristics["FEC7"], let chri = srv.characteristics["FEC82"], let chrr = srv.characteristics["FEC9"] {
+            if let chrw = srv.characteristics["FEC7"], let chri = srv.characteristics["FEC8"], let chrr = srv.characteristics["FEC9"] {
                 return true
                 
             }
