@@ -163,6 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let wheelSelector = BLEWheelSelector.sharedInstance
         
         wheelSelector.registerAdapter(KingSongAdapter())
+        wheelSelector.registerAdapter(GotawayAdapter())
         wheelSelector.registerAdapter(NinebotS12Adapter())
         wheelSelector.registerAdapter(BLENinebotOneAdapter())
 

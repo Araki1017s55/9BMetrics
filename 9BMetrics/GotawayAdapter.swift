@@ -1,15 +1,16 @@
 //
-//  BLENinebotOneAdapter.swift
+//  GotawayAdapter.swift
 //  9BMetrics
 //
-//  Created by Francisco Gorina Vanrell on 4/5/16.
+//  Created by Francisco Gorina Vanrell on 3/10/16.
 //  Copyright © 2016 Paco Gorina. All rights reserved.
 //
+
 
 import Foundation
 import CoreBluetooth
 
-class KingSongAdapter : NSObject {
+class GotawayAdapter : NSObject {
     
     var headersOk = false
     
@@ -19,8 +20,8 @@ class KingSongAdapter : NSObject {
     
     let NVoltageSamples = 10
     
-    var name = ""
-    var serial = ""
+    var name = "Gotaway"
+    var serial = "12345"
     
     
     // Called when lost connection. perhaps should do something. If not forget it
@@ -57,7 +58,7 @@ class KingSongAdapter : NSObject {
     //  3 values, the variable, the date and the value all aready converted to ggeneric values
     // and SI units
     
-    // KingSong sends buffers containing all the information in one buffer
+    // Gotaway sends buffers containing all the information in one buffer
     
     func procesaBuffer(_ connection: BLEMimConnection) -> [(WheelTrack.WheelValue, Date, Double)]?
     {
@@ -83,7 +84,7 @@ class KingSongAdapter : NSObject {
         }
         
         let date = Date()
-        let block = Array(buffer)
+//        let block = Array(buffer)
         // We have 20 bytes and 10 bytes buffers
         
         switch(buffer.count){
@@ -91,30 +92,28 @@ class KingSongAdapter : NSObject {
         case 10:
             
             
-            let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6])))
+            let totalDistance = Double( (Int(buffer[6]) * 256 + Int(buffer[7]))*65536 + (Int(buffer[8]) * 256 + Int(buffer[9])))
             outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
             
             buffer.removeAll()
             break
             
         case 20:
-            switch(buffer[16]){
-                
-            case 169:
-                let speed = Double(Int(buffer[5]) * 256 + Int(buffer[4])) / 360.0  // Ajusta precissio i km/h a m/s
+                let speed = Double(Int(buffer[4]) * 256 + Int(buffer[5]))
                 //let speed = Double(Int(block[5]) * 256 + Int(block[4]))
                 outarr.append((WheelTrack.WheelValue.Speed, date, speed))
                 
-                let temperature = Double(Int(buffer[13]) * 256 + Int(buffer[12])) / 100.0 // Very strange conversion in Kevin program
+                let temperature = Double(Int(buffer[12]) * 256 + Int(buffer[13])) / 100.0 // Very strange conversion in Kevin program
                 outarr.append((WheelTrack.WheelValue.Temperature, date, temperature))
                 
-                let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6])))
-                outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
+                let distance = Double(Int(buffer[8]) * 256 + Int(buffer[9]))
+                outarr.append((WheelTrack.WheelValue.Distance, date, distance))
                 
-                let voltage = Double(Int(buffer[3]) * 256 + Int(buffer[2])) / 100.0
+                let voltage = Double(Int(buffer[2]) * 256 + Int(buffer[3])) / 100.0
                 outarr.append((WheelTrack.WheelValue.Voltage, date, voltage))
                 
-                let current = Double(Int(buffer[11]) * 256 + Int(buffer[10])) / 100.0
+                
+                let current = Double(Int(buffer[10]) * 256 + Int(buffer[11])) / 100.0  // Comprovar signe
                 outarr.append((WheelTrack.WheelValue.Current, date, current))
                 
                 // filter voltage to get average voltage for battery level
@@ -134,77 +133,21 @@ class KingSongAdapter : NSObject {
                 var battery = 0.0
                 // Compute battery from average voltage
                 
-                if (avgVoltage < 50.0) {
+                if (avgVoltage < 52.9) {
                     battery = 0.0;
-                } else if (avgVoltage >= 66.0) {
+                } else if (avgVoltage >= 65.8) {
                     battery = 100.0;
                 } else {
-                    battery = (avgVoltage - 50.0) / 16.0 * 100.0;
+                    battery = (avgVoltage - 52.9) / 13.0 * 100.0;
                 }
                 
-                
-                /* Gotaway
-                
-                if voltage <= 52.90 {
-                    battery = 0.0
-                }else if (voltage >= 65.80){
-                    battery = 100.0
-                }else {
-                    battery = ((voltage - 52.90) / 13.0) * 100.0
-                }
- */
                 
                 outarr.append((WheelTrack.WheelValue.Battery, date, battery))
                 buffer.removeAll()
                 
                 
                 break
-                
-            case 185:
-                let distance = Double( (Int(buffer[3]) * 256 + Int(buffer[2]))*65536 + (Int(buffer[5]) * 256 + Int(buffer[4])))
-                outarr.append((WheelTrack.WheelValue.Distance, date, distance))
-                
-                let time = Double(Int(buffer[7]) * 256 + Int(buffer[6]))
-                outarr.append((WheelTrack.WheelValue.Duration, date, time))
-                
-            case 187:
-                var lname = ""
-                
-                var i = 2
-                
-                while i < 14 && block[i] != 0{
-                    lname.append(Character(UnicodeScalar(block[i])))
 
-                    i += 1
-                }
-                
-                self.name = lname
- 
-                askSerial(connection)
-
-            case 179:
-                
-                var lserial = ""
-                var i = 2
-                
-                while i < 14 {
-                    lserial.append(Character(UnicodeScalar(block[i])))
-                    i += 1
-                }
-                
-                i = 17
-                while i < 20 {
-                    lserial.append(Character(UnicodeScalar(block[i])))
-                    i += 1
-                }
-                self.serial = lserial
-                BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
-
-            default:
-                break
-                
-            }
-            
             
         default:
             break
@@ -221,11 +164,11 @@ class KingSongAdapter : NSObject {
 
 //MARK: BLEWheelAdapterProtocol Extension
 
-extension KingSongAdapter : BLEWheelAdapterProtocol{
+extension GotawayAdapter : BLEWheelAdapterProtocol{
     
     
     func wheelName() -> String {
-        return "Kingsong"
+        return "Gotaway"
     }
     
     
@@ -233,7 +176,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     
     func isComptatible(services : [String : BLEService]) -> Bool{
         
-        if let srv = services["FFE0"], let srv2 = services["FFF0"] , let srv3 = services["180A"]{
+        if let srv = services["FFE0"], let srv3 = services["180A"]{
             if let chr = srv.characteristics["FFE1"]  {
                 if chr.flags == "rxn"{
                     return true
@@ -248,7 +191,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     func startRecording(){
         
         buffer.removeAll()
-
+        
         
     }
     
@@ -256,49 +199,12 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
         buffer.removeAll()
     }
     
-    func askName(_ connection: BLEMimConnection, peripheral : CBPeripheral){
-        // Write buffer
-        
-        var command : [UInt8] = Array(repeating: 0, count: 20)
-        
-        command[0] = 170
-        command[1] = 85
-        command[16] = 155
-        command[17] = 20
-        command[18] = 90
-        command[19] = 90
-        
-        let data = Data(bytes: UnsafePointer<UInt8>(command), count: command.count)
-        
-        connection.writeValue("FFE1", data : data)
-        
-    }
-    
-    func askSerial(_ connection: BLEMimConnection){
-        // Write buffer
-        
-        var command : [UInt8] = Array(repeating: 0, count: 20)
-        
-        command[0] = 170
-        command[1] = 85
-        command[16] = 99
-        command[17] = 20
-        command[18] = 90
-        command[19] = 90
-        
-        let data = Data(bytes: UnsafePointer<UInt8>(command), count: command.count)
-        
-        connection.writeValue("FFE1", data : data)
-        
-    }
     
     func deviceConnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
         
         // OK, subscribe to characteristif FFE1
         
         connection.subscribeToChar("FFE1")
-        
-        askName(connection, peripheral: peripheral)
         
     }
     
@@ -321,7 +227,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     
     func getVersion() -> String{
         
-        return "1.0!"
+        return "1.0"
     }
     
     func getSN() -> String{

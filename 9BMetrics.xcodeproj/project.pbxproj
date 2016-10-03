@@ -79,6 +79,7 @@
 		00AB595C1CAEE64000277859 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59521CAEE64000277859 /* sha1.c */; };
 		00AB595E1CAEE65E00277859 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB595D1CAEE65E00277859 /* libz.tbd */; };
 		00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */; };
+		00C2667D1DA27D86004D3B02 /* GotawayAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */; };
 		00C4EE601CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */; };
 		00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */; };
 		00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */; };
@@ -225,6 +226,7 @@
 		00AB59531CAEE64000277859 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
 		00AB595D1CAEE65E00277859 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKImage.swift; path = 9BMetrics/TMKImage.swift; sourceTree = "<group>"; };
+		00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GotawayAdapter.swift; path = 9BMetrics/GotawayAdapter.swift; sourceTree = "<group>"; };
 		00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEGraphicRunningDashboard.swift; path = 9BMetrics/BLEGraphicRunningDashboard.swift; sourceTree = "<group>"; };
 		00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockViewFast.swift; path = 9BMetrics/TMKClockViewFast.swift; sourceTree = "<group>"; };
 		00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WheelTrack.swift; path = 9BMetrics/WheelTrack.swift; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 				0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */,
 				0079E98A1D927A0E004A09BB /* KingSongAdapter.swift */,
 				00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */,
+				00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */,
 			);
 			name = Communications;
 			sourceTree = "<group>";
@@ -646,6 +649,7 @@
 				00FFEF001D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift in Sources */,
 				00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */,
 				007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */,
+				00C2667D1DA27D86004D3B02 /* GotawayAdapter.swift in Sources */,
 				00AB59551CAEE64000277859 /* aeskey.c in Sources */,
 				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,
 				00AB59561CAEE64000277859 /* aestab.c in Sources */,
