@@ -251,6 +251,7 @@ class BLESimulatedClient: NSObject {
             wheel.setName(adp.getName())
             wheel.setSerialNo(adp.getSN())
             wheel.setVersion(adp.getVersion())
+            wheel.setAdapter(adp.wheelName())
         }
      }
     
@@ -362,10 +363,18 @@ class BLESimulatedClient: NSObject {
     }
     
     func sendStateToWatch(_ timer: Timer){
-        
-        if self.sendToWatch{
-            sendDataToWatch()
-            
+        if #available(iOS 9.3, *) {     // A veure si així es una mica mes ràpid. Potser enviar coses quan no es activa li feia mal
+            if let session = wcsession , session.activationState == .activated {        
+                if self.sendToWatch {
+                    sendDataToWatch()
+                    
+                }
+            }
+        } else {
+            if self.sendToWatch {
+                sendDataToWatch()
+                
+            }
         }
     }
     
@@ -598,9 +607,10 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                 var addPower = false
                 var curDate = Date()
                 
-                for (variable, date, value) in newData {
-                    wheel.addValueWithDate(date, variable: variable, value: value)
-                    if variable == .Current {
+                for (vari, date, val) in newData {
+                    //AppDelegate.debugLog("%@ = %@", vari.rawValue , val)
+                    wheel.addValueWithDate(date, variable: vari, value: val)
+                    if vari == .Current {
                         addPower = true
                         curDate = date
                     }

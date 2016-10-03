@@ -162,9 +162,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let wheelSelector = BLEWheelSelector.sharedInstance
         
-        wheelSelector.registerAdapter(BLENinebotOneAdapter())
-        wheelSelector.registerAdapter(GotawayAdapter())
+        wheelSelector.registerAdapter(KingSongAdapter())
         wheelSelector.registerAdapter(NinebotS12Adapter())
+        wheelSelector.registerAdapter(BLENinebotOneAdapter())
+
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

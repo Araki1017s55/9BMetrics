@@ -233,7 +233,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         
         if let central = self.centralManager{
             if central.state == .poweredOn{
-                self.centralManager!.scanForPeripherals(withServices: nil, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
+                self.centralManager!.scanForPeripherals(withServices: nil, options:[CBCentralManagerScanOptionAllowDuplicatesKey : true ])
                 self.scanning = true
                 AppDelegate.debugLog("Scanning started")
             }else{

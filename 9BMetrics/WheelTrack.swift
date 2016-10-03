@@ -128,6 +128,7 @@ class WheelTrack: NSObject {
     fileprivate var name : String?
     fileprivate var serialNo : String?
     fileprivate var version : String?
+    fileprivate var adapter : String?
     
     fileprivate var trackImg : UIImage?
     
@@ -375,6 +376,9 @@ class WheelTrack: NSObject {
     }
     func setVersion(_ version : String){
         self.version = version
+    }
+    func setAdapter(_ adapter : String){
+        self.adapter = adapter
     }
     
     
@@ -752,8 +756,8 @@ class WheelTrack: NSObject {
     func getCurrentValueForVariable(_ variable: WheelValue) -> Double{
         
         switch variable{
-        case .Power:
-            buildPower()
+       // case .Power:
+       //     buildPower()
         case .Energy:
             buildEnergy()
         default:
@@ -770,8 +774,8 @@ class WheelTrack: NSObject {
     func getValueForVariable(_ variable:WheelValue, atPoint: Int) -> Double{
         
         switch variable{
-        case .Power:
-            buildPower()
+        //case .Power:
+           // buildPower()
         case .Energy:
             buildEnergy()
         default:
@@ -806,9 +810,13 @@ class WheelTrack: NSObject {
     
     //MARK Specific functions
     
-    func getName() -> String?{
-        return self.name
-    }
+    func getName() -> String{
+        if let v = self.name{
+            return v
+        }else{
+            return ""
+        }
+   }
     
     func getSerialNo() -> String{
         if let v = self.serialNo{
@@ -825,7 +833,15 @@ class WheelTrack: NSObject {
             return ""
         }
     }
-    
+
+    func getAdapter() -> String{
+        if let v = self.adapter{
+            return v
+        }else{
+            return ""
+        }
+    }
+
     func getAscent() -> Double {
         if ascent == nil{
             
@@ -1163,7 +1179,8 @@ class WheelTrack: NSObject {
         
         guard let date = firstDate else {return nil}    // Timestamps have no sens without firstDate
         
-        var str = String(format: "Date,%f\n", date.timeIntervalSince1970)
+        var str = String(format: "Date,%f,Adapter,%@,Name,%@,SN,%@,Version,%@\n",
+                         date.timeIntervalSince1970, getAdapter(), getName(), getSerialNo(), getVersion())
         str.append(String(format: "Energy_Used,%f\n", getEnergyUsed()))
         str.append(String(format: "Energy_Recovered,%f\n", getEnergyRecovered()))
         str.append(String(format: "Ascent,%f\n", getAscent()))
@@ -1192,6 +1209,22 @@ class WheelTrack: NSObject {
                 guard let dt = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
                 firstDate = Date(timeIntervalSince1970: dt)
                 
+                if fields.count >= 4{
+                    self.setAdapter(fields[3])
+                }
+                
+                if fields.count >= 6{
+                   self.setName(fields[5])
+                }
+
+                if fields.count >= 8{
+                    self.setSerialNo(fields[7])
+                }
+
+                if fields.count >= 10{
+                    self.setVersion(fields[9])
+                }
+
             case "Energy_Used":
                 guard let val = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
                 energyUsed = val
@@ -1322,52 +1355,69 @@ class WheelTrack: NSObject {
     }
     
     
-    func createPackage(_ name : String) -> URL?{
+
+   func createPackage(_ name : String) -> URL?{
+    guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+    return createPackage(name, inDirectory: docDir, snapshot: false)
+    }
+
+    
+    func createPackage(_ name : String, inDirectory: URL, snapshot : Bool) -> URL?{
+    
+        let ext : String
         
-        guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+        if snapshot {
+            ext = "snap"
+        } else {
+            ext = "9bm"
+        }
         
-        let pkgURL = docDir.appendingPathComponent(name).appendingPathExtension("9bm")
+        let pkgURL = inDirectory.appendingPathComponent(name).appendingPathExtension(ext)
         
         // Try to use file wrappers (ufff)
         
         let contents = FileWrapper(directoryWithFileWrappers: [:])
         
-        for(_, v) in self.data {
-            AppDelegate.debugLog("Data %@, %.2f", v.codi.rawValue, v.currentValue)
+        if !snapshot {
+            for(_, v) in self.data {
+                AppDelegate.debugLog("Data %@, %.2f", v.codi.rawValue, v.currentValue)
+            
+            }
+            
+            if let s = createSummaryFile(){
+                let filename = "summary.csv"
+                if let dat = s.data(using: String.Encoding.utf8){
+                    let fWrapper = FileWrapper(regularFileWithContents: dat)
+                    fWrapper.preferredFilename = filename
+                    contents.addFileWrapper(fWrapper)
+                }
+            }
+            
+            trackImg = imageWithWidth(350.0,  height:350.0, color:UIColor.yellow, backColor:UIColor.clear, lineWidth: 2.0)
+            
+            if let img = trackImg{
+                if let imgData = UIImagePNGRepresentation(img){
+                    let filename = "image.png"
+                    let fWrapper = FileWrapper(regularFileWithContents: imgData)
+                    fWrapper.preferredFilename = filename
+                    contents.addFileWrapper(fWrapper)
+                }
+                
+            }
+            
+            if hasGPSData() {
+                
+                if let gpxData = self.createGPXString().data(using: String.Encoding.utf8) {
+                    let filename = "track.gpx"
+                    let fWrapper = FileWrapper(regularFileWithContents: gpxData)
+                    fWrapper.preferredFilename = filename
+                    contents.addFileWrapper(fWrapper)
+                }
+            }
             
         }
         
-        if let s = createSummaryFile(){
-            let filename = "summary.csv"
-            if let dat = s.data(using: String.Encoding.utf8){
-                let fWrapper = FileWrapper(regularFileWithContents: dat)
-                fWrapper.preferredFilename = filename
-                contents.addFileWrapper(fWrapper)
-            }
-        }
-        
-        trackImg = imageWithWidth(350.0,  height:350.0, color:UIColor.yellow, backColor:UIColor.clear, lineWidth: 2.0)
-        
-        if let img = trackImg{
-            if let imgData = UIImagePNGRepresentation(img){
-                let filename = "image.png"
-                let fWrapper = FileWrapper(regularFileWithContents: imgData)
-                fWrapper.preferredFilename = filename
-                contents.addFileWrapper(fWrapper)
-            }
-            
-        }
-        
-        if hasGPSData() {
-            
-            if let gpxData = self.createGPXString().data(using: String.Encoding.utf8) {
-                let filename = "track.gpx"
-                let fWrapper = FileWrapper(regularFileWithContents: gpxData)
-                fWrapper.preferredFilename = filename
-                contents.addFileWrapper(fWrapper)
-            }
-        }
-        
+
         for (_, v) in self.data {
             if v.log.count > 0{
                 
@@ -1386,7 +1436,7 @@ class WheelTrack: NSObject {
                 contents.addFileWrapper(binWrapper)
                 
                 
-                if let s = variableLogtoString(v.codi){
+                if let s = variableLogtoString(v.codi) , !snapshot{
                     if let dat = s.data(using: String.Encoding.utf8){
                         let fWrapper = FileWrapper(regularFileWithContents: dat)
                         fWrapper.preferredFilename = fileName
@@ -1404,7 +1454,9 @@ class WheelTrack: NSObject {
             return nil
         }
         
-        setThumbImage(pkgURL)
+        if !snapshot {
+            setThumbImage(pkgURL)
+        }
         
         return pkgURL
     }

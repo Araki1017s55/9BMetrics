@@ -148,22 +148,22 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
         func initNotifications(){
             
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.connectionStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kStartConnection), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLEGraphicRunningDashboard.connectionStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kStartConnection), object: nil)
             
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.hasStopped(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kStoppedRecording), object: nil)
-            
-            
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kHeaderDataReadyNotification), object: nil)
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kNinebotDataUpdatedNotification), object: nil)
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.listDevices(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kdevicesDiscoveredNotification), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLEGraphicRunningDashboard.hasStopped(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kStoppedRecording), object: nil)
             
             
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kConnectionReadyNotification), object: nil)
             
-            NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: NSNotification.Name(rawValue: kWheelVariableChangedNotification), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(BLEGraphicRunningDashboard.recordingStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kHeaderDataReadyNotification), object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLEGraphicRunningDashboard.dataUpdated(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kNinebotDataUpdatedNotification), object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLEGraphicRunningDashboard.listDevices(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kdevicesDiscoveredNotification), object: nil)
+            
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLEGraphicRunningDashboard.recordingStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kConnectionReadyNotification), object: nil)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(BLEGraphicRunningDashboard.dataUpdated(_:)), name: NSNotification.Name(rawValue: kWheelVariableChangedNotification), object: nil)
             
             
             
@@ -213,7 +213,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 if let cli = self.client{
                     if let nb = cli.datos{
                         
-                        if let name = nb.getName() , !name.isEmpty && !self.headersReceived{
+                        if !nb.getName().isEmpty && !self.headersReceived{
                             self.headersReceived = true
                             self.fSeriaNumber.text = nb.getName()
                         }
@@ -358,7 +358,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
         
         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             
-            if segue.identifier == "deviceSelectorSegue" {
+            if segue.identifier == "grDeviceSelectorSegue" {
                 
                 if let vc = segue.destination as? BLEDeviceSelector{
                         

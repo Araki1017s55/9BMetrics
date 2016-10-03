@@ -764,11 +764,11 @@ import UIKit
         
         
         if let aFile = file {
-            if aFile.lastPathComponent == "9bm"{
+            if aFile.pathExtension == "9bm"{
                 let url = WheelTrack.createZipFile(aFile)
                 shareFile(url, src: src, delete: true)
             }else {
-                shareFile(aFile, src: src, delete: true)
+                shareFile(aFile, src: src, delete: false)
             }
         }
     }

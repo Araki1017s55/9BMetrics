@@ -22,7 +22,7 @@
 		0066C8AF1D86CE93005DE94F /* BLEMimConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */; };
 		0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */; };
 		0079E9891D8E8071004A09BB /* BLEWheelSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */; };
-		0079E98B1D927A0E004A09BB /* GotawayAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0079E98A1D927A0E004A09BB /* GotawayAdapter.swift */; };
+		0079E98B1D927A0E004A09BB /* KingSongAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0079E98A1D927A0E004A09BB /* KingSongAdapter.swift */; };
 		007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */; };
 		007A31FF1CB820DA00BB928D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A31FE1CB820DA00BB928D /* Main.storyboard */; };
 		007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57171C85CE49003A2030 /* AppDelegate.swift */; };
@@ -145,7 +145,7 @@
 		0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMimConnection.swift; path = 9BMetrics/BLEMimConnection.swift; sourceTree = "<group>"; };
 		0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMimConnectionDelegate.swift; sourceTree = "<group>"; };
 		0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEWheelSelector.swift; path = 9BMetrics/BLEWheelSelector.swift; sourceTree = "<group>"; };
-		0079E98A1D927A0E004A09BB /* GotawayAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GotawayAdapter.swift; path = 9BMetrics/GotawayAdapter.swift; sourceTree = "<group>"; };
+		0079E98A1D927A0E004A09BB /* KingSongAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KingSongAdapter.swift; path = 9BMetrics/KingSongAdapter.swift; sourceTree = "<group>"; };
 		007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMapViewController.swift; path = 9BMetrics/BLEMapViewController.swift; sourceTree = "<group>"; };
 		007A31FE1CB820DA00BB928D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		007A57141C85CE49003A2030 /* 9BMetrics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 9BMetrics.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -447,7 +447,7 @@
 				0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */,
 				008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */,
 				0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */,
-				0079E98A1D927A0E004A09BB /* GotawayAdapter.swift */,
+				0079E98A1D927A0E004A09BB /* KingSongAdapter.swift */,
 				00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */,
 			);
 			name = Communications;
@@ -662,7 +662,7 @@
 				00AB59591CAEE64000277859 /* hmac.c in Sources */,
 				0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */,
 				007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */,
-				0079E98B1D927A0E004A09BB /* GotawayAdapter.swift in Sources */,
+				0079E98B1D927A0E004A09BB /* KingSongAdapter.swift in Sources */,
 				00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */,
 				00AB595A1CAEE64000277859 /* prng.c in Sources */,
 				007A57821C85CF39003A2030 /* BLEMim.swift in Sources */,

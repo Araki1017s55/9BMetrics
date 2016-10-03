@@ -135,7 +135,7 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             if let cli = self.client{
                 if let nb = cli.datos{
                     
-                    if let name = nb.getName() , !name.isEmpty && !self.headersReceived{
+                    if !nb.getName().isEmpty && !self.headersReceived{
                         self.headersReceived = true
                         self.fSeriaNumber.text = nb.getName()
                     }
