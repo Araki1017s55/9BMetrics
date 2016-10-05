@@ -233,7 +233,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     
     func isComptatible(services : [String : BLEService]) -> Bool{
         
-        if let srv = services["FFE0"], let srv2 = services["FFF0"] , let srv3 = services["180A"]{
+        if let srv = services["FFE0"], let _ = services["FFF0"] , let _ = services["180A"]{
             if let chr = srv.characteristics["FFE1"]  {
                 if chr.flags == "rxn"{
                     return true

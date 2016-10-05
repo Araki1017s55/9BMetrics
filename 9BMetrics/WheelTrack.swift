@@ -60,6 +60,7 @@ class WheelTrack: NSObject {
         case Energy
         case Battery
         case Temperature
+        case DistanceGPS
         
     }
     
@@ -111,6 +112,7 @@ class WheelTrack: NSObject {
         .Latitude : .Degrees,
         .Longitude : .Degrees,
         .AltitudeGPS : .Meters,
+        .DistanceGPS : .Meters,
         .Distance : .Meters,
         .Duration : .Seconds,
         .Speed : .Meters_per_Second,
@@ -275,7 +277,14 @@ class WheelTrack: NSObject {
     // sends a Notification so everybody may update its user interface
     // forced forgets optimization if many values
     // silent doesn't posts notification if values change (for loading files, etc.)
+    //  
+    // As of version 2.3 we change the concept od duration being not what is reported from the wheel but time since beginning of recording
     //
+    // Also when distance falls down to 0 (in case we stop the wheel) distnace NOT goes to 0 but continues to add
+    //
+    // That is diferent from older versions in which the wheel values where respected
+    //
+    
     func addValueWithDate(_ dat: Date, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
         
         // First value of all sets firstDate!!!
@@ -287,18 +296,39 @@ class WheelTrack: NSObject {
         
         let t = dat.timeIntervalSince(firstDate!)
         
+        var myVal = 0.0
+        
+        
+        switch(variable){
+            
+        case .Duration:     // Set duration from the start of recording to be coherent with all the data
+            myVal = t
+            
+        case .Distance:     // When stopped / started recover last distance. Distance shoud always increase
+            let last = getCurrentValueForVariable(.Distance)
+            
+            if (value + distOffset) < last {
+                distOffset = last
+            }
+            
+            myVal = distOffset + value
+            
+        default:
+            myVal = value
+        }
+        
         if data[variable] == nil {
             
-            let varData = WheelVariable(codi: variable, timeStamp: t, currentValue: value, minValue: value, maxValue: value, avgValue: value, intValue: 0.0, loaded: true , log: [])
+            let varData = WheelVariable(codi: variable, timeStamp: t, currentValue: myVal, minValue: myVal, maxValue: myVal, avgValue: myVal, intValue: 0.0, loaded: true , log: [])
             data[variable] = varData
         }
         
         
-        let v = LogEntry(timestamp: dat.timeIntervalSince(firstDate!), value: value)
+        let v = LogEntry(timestamp: dat.timeIntervalSince(firstDate!), value: myVal)
         
-        let postChange = data[variable]!.currentValue != value && !silent
+        let postChange = data[variable]!.currentValue != myVal && !silent
         
-        if data[variable]!.currentValue != value || data[variable]!.log.count <= 1 || forced {
+        if data[variable]!.currentValue != myVal || data[variable]!.log.count <= 1 || forced {
             data[variable]!.log.append(v)
             
         }else {
@@ -306,7 +336,7 @@ class WheelTrack: NSObject {
             let c = data[variable]!.log.count
             let e = data[variable]!.log[c-2]
             
-            if e.value != value{
+            if e.value != myVal{
                 data[variable]!.log.append(v)
             }else {
                 data[variable]!.log[c-1] = v
@@ -316,10 +346,10 @@ class WheelTrack: NSObject {
         
         // OK, now update all acums. That is interesting
         
-        data[variable]!.currentValue = value
-        data[variable]!.minValue = min( data[variable]!.minValue, value)
-        data[variable]!.maxValue = max( data[variable]!.maxValue, value)
-        data[variable]!.intValue =  data[variable]!.intValue + (value * (t -  data[variable]!.timeStamp))
+        data[variable]!.currentValue = myVal
+        data[variable]!.minValue = min( data[variable]!.minValue, myVal)
+        data[variable]!.maxValue = max( data[variable]!.maxValue, myVal)
+        data[variable]!.intValue =  data[variable]!.intValue + (myVal * (t -  data[variable]!.timeStamp))
         data[variable]!.avgValue =  data[variable]!.intValue / t
         data[variable]!.timeStamp = t
         data[variable]!.loaded = true
@@ -1524,6 +1554,17 @@ class WheelTrack: NSObject {
                         
                         if let str = String(data: fw.regularFileContents!, encoding: String.Encoding.utf8){
                             loadSummary(str)
+                            
+                            // OK now load gpx data
+                            
+                            let distanceGPX = getGPXDistance()
+                            let wheelDistance = getCurrentValueForVariable(.Distance)
+                            
+                            AppDelegate.debugLog("Wheel Distance %f GPX Distance %f", wheelDistance, distanceGPX)
+                            
+                            if distanceGPX > 0.0 {
+                                AppDelegate.debugLog("Correction %f", wheelDistance / distanceGPX)
+                            }
                         }
                         
                     } else if fw.isRegularFile && name == "image.png" {
@@ -1769,6 +1810,31 @@ class WheelTrack: NSObject {
         }
         
         return locs
+    }
+    
+    
+    func getGPXDistance() -> Double{
+        
+        let arr = self.locationArray()
+        
+        if arr.count < 2{
+            return 0.0
+        }
+        
+        var dist = 0.0
+        
+        var lastLoc = CLLocation(latitude: arr[0].latitude, longitude: arr[0].longitude)
+        
+        
+        
+        for cord in arr {
+            let newLoc = CLLocation(latitude: cord.latitude, longitude: cord.longitude)
+            dist  += newLoc.distance(from: lastLoc)
+            lastLoc = newLoc
+            
+        }
+        
+        return dist
     }
     
     //MARK: Legacy

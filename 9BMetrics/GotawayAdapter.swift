@@ -67,7 +67,7 @@ class GotawayAdapter : NSObject {
         
         var outarr : [(WheelTrack.WheelValue, Date, Double)] = []
         
-        while buffer.count > 0 && buffer[0] != 0xAA {
+        while buffer.count > 0 && buffer[0] != 0x55 {
             buffer.removeFirst()
         }
         
@@ -78,7 +78,7 @@ class GotawayAdapter : NSObject {
             return outarr
         }
         
-        if buffer[1] != 0x55 {  // Fals header. continue cleaning
+        if buffer[1] != 0xAA {  // Fals header. continue cleaning
             
             return outarr
         }
@@ -176,7 +176,7 @@ extension GotawayAdapter : BLEWheelAdapterProtocol{
     
     func isComptatible(services : [String : BLEService]) -> Bool{
         
-        if let srv = services["FFE0"], let srv3 = services["180A"]{
+        if let srv = services["FFE0"], let _ = services["180A"]{
             if let chr = srv.characteristics["FFE1"]  {
                 if chr.flags == "rxn"{
                     return true

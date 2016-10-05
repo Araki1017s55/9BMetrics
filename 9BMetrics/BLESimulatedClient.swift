@@ -84,6 +84,7 @@ class BLESimulatedClient: NSObject {
     var locm = CLLocationManager()
     var deferringUpdates = false
     var lastLoc : CLLocation?
+    var distanceGPS = 0.0
     
     var adapter : BLEWheelAdapterProtocol?
     
@@ -178,6 +179,7 @@ class BLESimulatedClient: NSObject {
         
             locm.allowsBackgroundLocationUpdates = true
             lastLoc = nil
+            distanceGPS = 0.0
             locm.startUpdatingLocation()
         }
         
@@ -277,9 +279,6 @@ class BLESimulatedClient: NSObject {
                                                                 nb.addValue(.Altitude, value: alt.relativeAltitude.doubleValue)
                                                             }
                 } )
-                
-                
-
             }
         }
     }
@@ -730,6 +729,11 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
         
     }
     
+    // As v. 2.3 added code to compute distance from GPS. That gives us a .DistaceGPS variable.
+    // It will be used to compute a correction factor for wheel distance and speed
+    // Generally shoud work well
+    
+    
     func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation])
     {
@@ -743,13 +747,17 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
                 if loc.horizontalAccuracy <= 20.0{  // Other data is really bad bad bad. probably GPS not fixed
                     
                     if let llc = self.lastLoc{
-                        if llc.distance(from: loc) >= 2.0{       // one point every 5 meters. Not less
+                        if llc.distance(from: loc) >= 2.0{       // one point every 2 meters. Not less
                             
                             nb.addValueWithDate(loc.timestamp, variable: .Latitude, value: loc.coordinate.latitude, forced: true, silent: false)
                             nb.addValueWithDate(loc.timestamp, variable: .Longitude, value: loc.coordinate.longitude, forced: true, silent: false)
                             nb.addValueWithDate(loc.timestamp, variable: .AltitudeGPS, value: loc.altitude, forced: true, silent: false)
                             
-                            self.lastLoc = loc
+                            let d = loc.distance(from: llc)
+                            distanceGPS += d
+                            
+                            nb.addValueWithDate(loc.timestamp, variable: .DistanceGPS, value: distanceGPS, forced: true, silent: false)
+                             self.lastLoc = loc
                         }
                     }
                     else
@@ -758,6 +766,10 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
                         nb.addValueWithDate(loc.timestamp, variable: .Latitude, value: loc.coordinate.latitude, forced: true, silent: false)
                         nb.addValueWithDate(loc.timestamp, variable: .Longitude, value: loc.coordinate.longitude, forced: true, silent: false)
                         nb.addValueWithDate(loc.timestamp, variable: .AltitudeGPS, value: loc.altitude, forced: true, silent: false)
+                        
+                        distanceGPS = 0.0
+                        nb.addValueWithDate(loc.timestamp, variable: .DistanceGPS, value: distanceGPS, forced: true, silent: false)
+
                        self.lastLoc = loc
                     }
                 }
