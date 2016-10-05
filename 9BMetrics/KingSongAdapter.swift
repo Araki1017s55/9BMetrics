@@ -126,8 +126,8 @@ class KingSongAdapter : NSObject {
                     acumVoltage = acumVoltage - v0
                     
                 } else {
-                    voltageArray.append(voltage)
-                    acumVoltage += voltage
+                    voltageArray.append(voltage + current * 0.10)
+                    acumVoltage += (voltage + current * 0.10)
                 }
                 
                 let avgVoltage = acumVoltage / Double(voltageArray.count)

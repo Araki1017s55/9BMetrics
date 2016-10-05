@@ -84,11 +84,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.1</string>
+	<string>2.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -104,6 +104,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Enable 9BMetrics to connect o Ninebot One or Kingsong uniwheels</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Enable to allow 9BMetrics to store position data in log files</string>
 	<key>UIBackgroundModes</key>
