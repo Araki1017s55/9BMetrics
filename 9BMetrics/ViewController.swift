@@ -155,10 +155,10 @@ import UIKit
             return 1
         }
             
-        else if (calendar as NSCalendar).isDate(today, equalTo: dat, toUnitGranularity: NSCalendar.Unit.weekOfYear){
+        else if calendar.compare(today, to: dat, toGranularity: .weekOfYear) == .orderedSame {
             return 2
         }
-        else if (calendar as NSCalendar).isDate(today, equalTo: dat, toUnitGranularity: NSCalendar.Unit.month){
+        else if calendar.compare(today, to: dat, toGranularity: .month) == .orderedSame{
             return 3
         }
         
@@ -166,17 +166,18 @@ import UIKit
         // month of the year
         
         
-        let todayComponents = (calendar as NSCalendar).components([NSCalendar.Unit.year, NSCalendar.Unit.month,NSCalendar.Unit.day], from: today)
+        let ty = calendar.component(.year, from: today)
+        let dy = calendar.component(.year, from: dat)
+        let tm = calendar.component(.month, from: today)
+        let dm = calendar.component(.month, from: dat)
         
-        let dateComponents = (calendar as NSCalendar).components([NSCalendar.Unit.year, NSCalendar.Unit.month,NSCalendar.Unit.day], from: today)
-        
-        if dateComponents.year == todayComponents.year {
-            return 3 + todayComponents.month! - dateComponents.month!
+        if ty == dy {
+            return 3 + tm - dm
         }
         
         // OK now we return just the difference in years. January of this year was
         
-        return 2 + todayComponents.month! + todayComponents.year! - dateComponents.year!
+        return 2 + tm + ty - dy
         
         
         
@@ -188,8 +189,11 @@ import UIKit
     func sectionLabel(_ section : Int) -> String{
         
         let today = Date()
+        let calendar = Calendar.current
         
-        let todayComponents = (Calendar.current as NSCalendar).components(NSCalendar.Unit.day, from: today)
+        let month = calendar.component(.month, from: today)
+        let year = calendar.component(.year, from:today)
+        
         
         
         switch section {
@@ -205,14 +209,14 @@ import UIKit
         case 3:
             return "This Month"
             
-        case 4..<(3 + todayComponents.month!) :
+        case 4..<(3 + month) :
             
-            let month =  todayComponents.month! + 2 - section // Indexed at 0
+            let month =  month + 2 - section // Indexed at 0
             let df = DateFormatter()
             return df.standaloneMonthSymbols[month]
             
         default :
-            return String(todayComponents.year! - (section - 2 - todayComponents.month!))
+            return String(year - (section - 2 - month))
             
             
         }

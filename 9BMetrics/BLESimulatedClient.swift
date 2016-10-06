@@ -757,7 +757,9 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
                             distanceGPS += d
                             
                             nb.addValueWithDate(loc.timestamp, variable: .DistanceGPS, value: distanceGPS, forced: true, silent: false)
-                             self.lastLoc = loc
+                            self.lastLoc = loc
+                            
+                            //nb.computeDistanceCorrection()
                         }
                     }
                     else
@@ -770,7 +772,8 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
                         distanceGPS = 0.0
                         nb.addValueWithDate(loc.timestamp, variable: .DistanceGPS, value: distanceGPS, forced: true, silent: false)
 
-                       self.lastLoc = loc
+                        self.lastLoc = loc
+                        nb.computeDistanceCorrection()
                     }
                 }
             }

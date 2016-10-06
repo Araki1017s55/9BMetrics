@@ -141,6 +141,7 @@ class WheelTrack: NSObject {
     
     fileprivate var distOffset = 0.0  // Just to support stop start without affecting total distance. We supose we start at same place we stopped
     
+    fileprivate var distCorrection = 1.0  // Just to support stop start without affecting total distance. We supose we start at same place we stopped
     fileprivate var ascent : Double?
     fileprivate var descent : Double?
     fileprivate var energyUsed : Double?
@@ -241,6 +242,7 @@ class WheelTrack: NSObject {
         version = nil
         firstDate = nil
         distOffset = 0.0
+        distCorrection = 1.0
         ascent = nil
         descent = nil
         energyUsed = nil
@@ -266,6 +268,18 @@ class WheelTrack: NSObject {
         
         NotificationCenter.default.post(not)
     }
+    
+    func computeDistanceCorrection(){
+        let dGPS = getCurrentValueForVariable(.DistanceGPS)
+        let dWheel = getCurrentValueForVariable(.Distance)
+        
+        if dWheel != 0.0 && dGPS != 0.0 {
+            distCorrection = dGPS / dWheel
+        } else {
+            distCorrection = 1.0
+        }
+     }
+    
     
     
     //MARK: Adding data
@@ -785,14 +799,17 @@ class WheelTrack: NSObject {
     
     func getCurrentValueForVariable(_ variable: WheelValue) -> Double{
         
+        
         switch variable{
        // case .Power:
        //     buildPower()
         case .Energy:
             buildEnergy()
-        default:
+            
+         default:
             break
         }
+        
         
         if let v = data[variable]{
             return v.currentValue

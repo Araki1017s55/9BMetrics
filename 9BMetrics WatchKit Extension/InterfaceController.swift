@@ -167,14 +167,14 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         
         DispatchQueue.main.async(execute: { () -> Void in
             
-            if self.distancia < 1.0 {
+            if self.distancia < 1000.0{
                 
                 let units = "m"
-                self.distLabel.setText(String(format: "%3.0f %@", self.distancia*1000.0, units))
+                self.distLabel.setText(String(format: "%3.0f %@", self.distancia, units))
             }
             else{
                 let units = "Km"
-                self.distLabel.setText(String(format: "%5.2f %@", self.distancia, units))
+                self.distLabel.setText(String(format: "%5.2f %@", self.distancia/1000.0, units))
             }
             
             let h = Int(floor(self.temps / 3600.0))

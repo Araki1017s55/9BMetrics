@@ -22,6 +22,8 @@ class KingSongAdapter : NSObject {
     var name = ""
     var serial = ""
     
+    let distanceCorrection = 1.0 //0.791627219
+    
     
     // Called when lost connection. perhaps should do something. If not forget it
     
@@ -91,7 +93,7 @@ class KingSongAdapter : NSObject {
         case 10:
             
             
-            let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6])))
+            let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6]))) * distanceCorrection
             outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
             
             buffer.removeAll()
@@ -101,14 +103,14 @@ class KingSongAdapter : NSObject {
             switch(buffer[16]){
                 
             case 169:
-                let speed = Double(Int(buffer[5]) * 256 + Int(buffer[4])) / 360.0  // Ajusta precissio i km/h a m/s
+                let speed = Double(Int(buffer[5]) * 256 + Int(buffer[4])) / 360.0  * distanceCorrection // Ajusta precissio i km/h a m/s
                 //let speed = Double(Int(block[5]) * 256 + Int(block[4]))
                 outarr.append((WheelTrack.WheelValue.Speed, date, speed))
                 
                 let temperature = Double(Int(buffer[13]) * 256 + Int(buffer[12])) / 100.0 // Very strange conversion in Kevin program
                 outarr.append((WheelTrack.WheelValue.Temperature, date, temperature))
                 
-                let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6])))
+                let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6]))) * distanceCorrection
                 outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
                 
                 let voltage = Double(Int(buffer[3]) * 256 + Int(buffer[2])) / 100.0
@@ -161,7 +163,7 @@ class KingSongAdapter : NSObject {
                 break
                 
             case 185:
-                let distance = Double( (Int(buffer[3]) * 256 + Int(buffer[2]))*65536 + (Int(buffer[5]) * 256 + Int(buffer[4])))
+                let distance = Double( (Int(buffer[3]) * 256 + Int(buffer[2]))*65536 + (Int(buffer[5]) * 256 + Int(buffer[4]))) * distanceCorrection
                 outarr.append((WheelTrack.WheelValue.Distance, date, distance))
                 
                 let time = Double(Int(buffer[7]) * 256 + Int(buffer[6]))
