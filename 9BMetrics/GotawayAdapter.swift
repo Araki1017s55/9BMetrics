@@ -20,7 +20,7 @@ class GotawayAdapter : NSObject {
     
     let NVoltageSamples = 10
     
-    var name = "Gotaway"
+    var name = "Gotway"
     var serial = "12345"
     
     
@@ -99,11 +99,18 @@ class GotawayAdapter : NSObject {
             break
             
         case 20:
-                let speed = Double(Int(buffer[4]) * 256 + Int(buffer[5]))
+                var speed = Double(Int(buffer[4]) * 256 + Int(buffer[5]))
+                
+                if speed >= 32768.0  {
+                    speed = speed - 65536.0
+                }
+
+                speed = abs(speed) / 100.0
                 //let speed = Double(Int(block[5]) * 256 + Int(block[4]))
                 outarr.append((WheelTrack.WheelValue.Speed, date, speed))
                 
-                let temperature = Double(Int(buffer[12]) * 256 + Int(buffer[13])) / 100.0 // Very strange conversion in Kevin program
+                //let temperature = Double(Int(buffer[12]) * 256 + Int(buffer[13])) / 100.0 // Very strange conversion in Kevin program
+                let temperature = Double(Int(buffer[12]) * 256 + Int(buffer[13])) / 340.0 + 35.0 // Very strange
                 outarr.append((WheelTrack.WheelValue.Temperature, date, temperature))
                 
                 let distance = Double(Int(buffer[8]) * 256 + Int(buffer[9]))
@@ -113,8 +120,17 @@ class GotawayAdapter : NSObject {
                 outarr.append((WheelTrack.WheelValue.Voltage, date, voltage))
                 
                 
-                let current = Double(Int(buffer[10]) * 256 + Int(buffer[11])) / 100.0  // Comprovar signe
+                var current = Double(Int(buffer[10]) * 256 + Int(buffer[11]))   // Comprovar signe
+                
+                if current >= 32768.0 {
+                    current = current - 65536.0
+                }
+                
+                current = current / 100.0
                 outarr.append((WheelTrack.WheelValue.Current, date, current))
+                
+                outarr.append((WheelTrack.WheelValue.Duration, date, 0.0))
+
                 
                 // filter voltage to get average voltage for battery level
                 
@@ -205,6 +221,7 @@ extension GotawayAdapter : BLEWheelAdapterProtocol{
         // OK, subscribe to characteristif FFE1
         
         connection.subscribeToChar("FFE1")
+        BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data: nil)
         
     }
     

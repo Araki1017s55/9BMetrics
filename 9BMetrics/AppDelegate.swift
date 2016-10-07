@@ -72,13 +72,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var item : UIMutableApplicationShortcutItem?
         
         if recording {
-            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Stop", localizedTitle: "Stop", localizedSubtitle: "Stop recording data", icon: UIApplicationShortcutIcon(type: .pause), userInfo: [
+            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Stop", localizedTitle: "Stop".localized(comment:"Stop Shortcut Item Title"), localizedSubtitle: "Stop recording data".localized(comment:"Stop Shortcut Item Subtitle"), icon: UIApplicationShortcutIcon(type: .pause), userInfo: [
                 AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.pause.rawValue
                 ]
             )
         }
         else{
-            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Record", localizedTitle: "Record", localizedSubtitle: "Start recording data", icon: UIApplicationShortcutIcon(type: .play), userInfo: [
+            item = UIMutableApplicationShortcutItem(type: "es.gorina.9BMetrics.Record", localizedTitle: "Record".localized(comment:"Record Shortcut Item Title"), localizedSubtitle: "Start recording data".localized(comment:"Start Shortcut Item Subtitle"), icon: UIApplicationShortcutIcon(type: .play), userInfo: [
                 AppDelegate.applicationShortcutUserInfoIconKey: UIApplicationShortcutIconType.play.rawValue
                 ]
             )

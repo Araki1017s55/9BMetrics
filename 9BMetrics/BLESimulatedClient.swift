@@ -61,6 +61,7 @@ class BLESimulatedClient: NSObject {
     var altimeter : CMAltimeter?
     var altQueue : OperationQueue?
     var queryQueue : OperationQueue?
+    var watchQueue : OperationQueue?
     
     // General State
     
@@ -95,6 +96,10 @@ class BLESimulatedClient: NSObject {
         self.connection.delegate = self
         self.queryQueue = OperationQueue()
         self.queryQueue!.maxConcurrentOperationCount = 1
+        self.watchQueue = OperationQueue()
+        self.watchQueue!.maxConcurrentOperationCount = 1
+        
+        
         self.initNotifications()
         
         locm.delegate = self
@@ -362,20 +367,27 @@ class BLESimulatedClient: NSObject {
     }
     
     func sendStateToWatch(_ timer: Timer){
-        if #available(iOS 9.3, *) {     // A veure si així es una mica mes ràpid. Potser enviar coses quan no es activa li feia mal
-            if let session = wcsession , session.activationState == .activated {        
-                if self.sendToWatch {
-                    sendDataToWatch()
-                    
+        
+        if let queue = watchQueue{
+            
+            queue.addOperation({ 
+                if #available(iOS 9.3, *) {     // A veure si així es una mica mes ràpid. Potser enviar coses quan no es activa li feia mal
+                    if let session = self.wcsession , session.activationState == .activated {
+                        if self.sendToWatch {
+                            self.sendDataToWatch()
+                            
+                        }
+                    }
+                } else {
+                    if self.sendToWatch {
+                        self.sendDataToWatch()
+                        
+                    }
                 }
-            }
-        } else {
-            if self.sendToWatch {
-                sendDataToWatch()
-                
-            }
+            })
+            
         }
-    }
+     }
     
     func sendDataToWatch(){
         let info = self.getAppState()
@@ -567,6 +579,9 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
         self.connected = true
          
         if self.sendToWatch {
+            if let tim = self.timer{
+                tim.invalidate()
+            }
             self.timer = Timer.scheduledTimer(timeInterval: watchTimerStep, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
         }
     }
@@ -645,8 +660,7 @@ extension BLESimulatedClient :  WCSessionDelegate{
     @available(iOS 9.3, *)
     public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         self.sendToWatch = true
-        
-    }
+     }
     
     
     @available(iOS 9.3, *)
