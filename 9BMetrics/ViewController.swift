@@ -407,17 +407,17 @@ import UIKit
         let testMode = store.bool(forKey: kTestMode)
         
         
-        let alert = UIAlertController(title: "Options", message: "Select an option", preferredStyle: UIAlertControllerStyle.actionSheet);
+        let alert = UIAlertController(title: "Options".localized(comment: "Options menu item"), message: "Select an option".localized(comment: "Action Sheet message"), preferredStyle: UIAlertControllerStyle.actionSheet);
         
         alert.popoverPresentationController?.sourceView = but
         
-        var action = UIAlertAction(title: "Close", style: UIAlertActionStyle.cancel) { (action: UIAlertAction) -> Void in
+        var action = UIAlertAction(title: "Close".localized(), style: UIAlertActionStyle.cancel) { (action: UIAlertAction) -> Void in
             
             
         }
         alert.addAction(action)
         
-        action = UIAlertAction(title: "Settings", style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+        action = UIAlertAction(title: "Settings".localized(comment: "Settings menu item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
             self.performSegue(withIdentifier: "settingsSegue", sender: self)
         })
         
@@ -426,14 +426,14 @@ import UIKit
         if testMode {
             
             
-            action = UIAlertAction(title: "Debug Server", style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+            action = UIAlertAction(title: "Debug Server".localized(comment: "Debug server item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
                 
                 self.performSegue(withIdentifier: "mimSegue", sender: self)
             })
             
             alert.addAction(action)
             
-            action = UIAlertAction(title: "Ninebot Server", style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+            action = UIAlertAction(title: "Ninebot Server".localized(comment: "ninebot server item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
                 
                 self.performSegue(withIdentifier: "simulatedNinebotSegue", sender: self)
             })
@@ -446,7 +446,7 @@ import UIKit
         
         
         
-        action = UIAlertAction(title: "About 9B Metrics", style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+        action = UIAlertAction(title: "About 9B Metrics".localized(comment: "About item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
             self.performSegue(withIdentifier: "docSegue", sender: self)
         })
         

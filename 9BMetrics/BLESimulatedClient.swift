@@ -375,7 +375,6 @@ class BLESimulatedClient: NSObject {
                     if let session = self.wcsession , session.activationState == .activated {
                         if self.sendToWatch {
                             self.sendDataToWatch()
-                            
                         }
                     }
                 } else {
@@ -569,6 +568,9 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
             
             self.adapter = adapter
             if let adp = self.adapter {
+                if let dat = datos {
+                    dat.setUUID(peripheral.identifier.uuidString)
+                }
                 adp.startRecording()
                 adp.deviceConnected(self.connection, peripheral: peripheral)
             }
@@ -643,8 +645,6 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                     
                     wheel.addValueWithDate(curDate, variable: .Power, value: power)
                     wheel.addValueWithDate(curDate, variable: .Energy, value: E)
-                    
-                
                 
                 }
             }

@@ -145,11 +145,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             }
             
             if ci > self.colorLevel {
-                WKInterfaceDevice.current().play(WKHapticType.directionUp)
+                //WKInterfaceDevice.current().play(WKHapticType.directionUp)
                 self.colorLevel = ci
             }
             else if ci < self.colorLevel {
-                WKInterfaceDevice.current().play(WKHapticType.directionDown)
+               // WKInterfaceDevice.current().play(WKHapticType.directionDown)
                 self.colorLevel = ci
             }
         }

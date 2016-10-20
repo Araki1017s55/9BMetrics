@@ -513,7 +513,7 @@ class  BLENinebot : NSObject{
         }
         catch{
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file as CVarArg)
+                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to get handle for %@".localized(), file as CVarArg)
             }
             
             AppDelegate.debugLog("Error al obtenir File Handle")
@@ -616,7 +616,7 @@ class  BLENinebot : NSObject{
         }
         catch{
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file as CVarArg)
+                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to get handle for %@".localized(), file as CVarArg)
             }
             
             AppDelegate.debugLog("Error al obtenir File Handle")
@@ -891,7 +891,8 @@ class  BLENinebot : NSObject{
                 try fmgr.removeItem(at: pkgUrl)
             }catch{
                 if let dele = UIApplication.shared.delegate as? AppDelegate{
-                    dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL as CVarArg)
+                    dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),
+                                                 format:"Error when trying to create zip file %@".localized(), zipURL as CVarArg)
                 }
                 AppDelegate.debugLog("Error al crear zip file")
             }
@@ -901,7 +902,7 @@ class  BLENinebot : NSObject{
         }catch {
             
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when processing files")
+                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when processing files".localized())
             }
             
             AppDelegate.debugLog("Error al crear zip file")

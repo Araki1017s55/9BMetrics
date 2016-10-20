@@ -233,7 +233,10 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         
         if let central = self.centralManager{
             if central.state == .poweredOn{
-                self.centralManager!.scanForPeripherals(withServices: nil, options:[CBCentralManagerScanOptionAllowDuplicatesKey : true ])
+                
+                let theService =  [CBUUID(string: "FFE0")];
+             
+                self.centralManager!.scanForPeripherals(withServices: theService, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
                 self.scanning = true
                 AppDelegate.debugLog("Scanning started")
             }else{
@@ -283,7 +286,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         else{
             
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"There is no Central Manager!!!")
+                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"There is no Central Manager!!!".localized())
             }
             
             AppDelegate.debugLog("No Central Manager")
@@ -530,7 +533,7 @@ extension BLEMimConnection : CBPeripheralDelegate{
                     
                 }else {
                     let dele = UIApplication.shared.delegate as! AppDelegate
-                    dele.displayMessageWithTitle("No driver available"   , format: "I don't have a driver for this device")
+                    dele.displayMessageWithTitle("No driver available".localized()   , format: "I don't have a driver for this device".localized())
                     AppDelegate.debugLog("I don't have a driver to connect to his device.")
                 }
             }

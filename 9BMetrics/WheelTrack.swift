@@ -131,7 +131,8 @@ class WheelTrack: NSObject {
     fileprivate var serialNo : String?
     fileprivate var version : String?
     fileprivate var adapter : String?
-    
+    fileprivate var uuid : String?
+   
     fileprivate var trackImg : UIImage?
     
     
@@ -360,11 +361,11 @@ class WheelTrack: NSObject {
         
         // OK, now update all acums. That is interesting
         
-        data[variable]!.currentValue = myVal
         data[variable]!.minValue = min( data[variable]!.minValue, myVal)
         data[variable]!.maxValue = max( data[variable]!.maxValue, myVal)
-        data[variable]!.intValue =  data[variable]!.intValue + (myVal * (t -  data[variable]!.timeStamp))
+        data[variable]!.intValue =  data[variable]!.intValue + ((myVal + data[variable]!.currentValue) * (t -  data[variable]!.timeStamp) / 2.0)
         data[variable]!.avgValue =  data[variable]!.intValue / t
+        data[variable]!.currentValue = myVal
         data[variable]!.timeStamp = t
         data[variable]!.loaded = true
         
@@ -423,6 +424,9 @@ class WheelTrack: NSObject {
     }
     func setAdapter(_ adapter : String){
         self.adapter = adapter
+    }
+    func setUUID(_ device : String){
+        self.uuid = device
     }
     
     
@@ -888,6 +892,14 @@ class WheelTrack: NSObject {
             return ""
         }
     }
+    func getUUID() -> String{
+        if let v = self.uuid{
+            return v
+        }else{
+            return ""
+        }
+    }
+    
 
     func getAscent() -> Double {
         if ascent == nil{
@@ -922,7 +934,7 @@ class WheelTrack: NSObject {
     func getBatteryEnergy() -> Double{
         let (b0, b1) = getFirstLast(.Battery)
         
-        return batCapacity * (b1 - b0)
+        return batCapacity * (b0 - b1) / 100.0
         
     }
     
@@ -1210,7 +1222,7 @@ class WheelTrack: NSObject {
         }
         catch{
             if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error",format:"Error when trying to get handle for %@", file.absoluteString)
+                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to get handle for %@".localized(), file.absoluteString)
             }
             
             AppDelegate.debugLog("Error al obtenir File Handle")
@@ -1226,8 +1238,8 @@ class WheelTrack: NSObject {
         
         guard let date = firstDate else {return nil}    // Timestamps have no sens without firstDate
         
-        var str = String(format: "Date,%f,Adapter,%@,Name,%@,SN,%@,Version,%@\n",
-                         date.timeIntervalSince1970, getAdapter(), getName(), getSerialNo(), getVersion())
+        var str = String(format: "Date,%f,Adapter,%@,Name,%@,SN,%@,Version,%@,UUID,%@\n",
+                         date.timeIntervalSince1970, getAdapter(), getName(), getSerialNo(), getVersion(),getUUID())
         str.append(String(format: "Energy_Used,%f\n", getEnergyUsed()))
         str.append(String(format: "Energy_Recovered,%f\n", getEnergyRecovered()))
         str.append(String(format: "Ascent,%f\n", getAscent()))
@@ -1270,6 +1282,9 @@ class WheelTrack: NSObject {
 
                 if fields.count >= 10{
                     self.setVersion(fields[9])
+                }
+                if fields.count >= 12{
+                    self.setUUID(fields[11])
                 }
 
             case "Energy_Used":
@@ -1640,6 +1655,8 @@ class WheelTrack: NSObject {
         }catch{
             
         }
+        
+        checkBattery()
     }
     
     
@@ -1677,7 +1694,7 @@ class WheelTrack: NSObject {
                 return zipURL
             }catch{
                 if let dele = UIApplication.shared.delegate as? AppDelegate{
-                    dele.displayMessageWithTitle("Error",format:"Error when trying to create zip file %@", zipURL as CVarArg)
+                    dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to create zip file %@".localized(), zipURL as CVarArg)
                 }
                 AppDelegate.debugLog("Error al crear zip file")
                 
@@ -1855,6 +1872,17 @@ class WheelTrack: NSObject {
     }
     
     //MARK: Legacy
+    
+    func checkBattery(){
+        let batt = getBatteryEnergy()
+        let used = getEnergyUsed()
+        let recovered = getEnergyRecovered()
+        
+        let power = used - recovered
+        let eficiency = power/batt
+        
+        AppDelegate.debugLog("Bateria : %f  Power %f Eficiency %f", batt, power, eficiency)
+    }
     
     func wheelValueFor9Bvalue(_ nbValue : Int) -> WheelValue?{
         if let wv = WheelTrack.conversion[nbValue] {

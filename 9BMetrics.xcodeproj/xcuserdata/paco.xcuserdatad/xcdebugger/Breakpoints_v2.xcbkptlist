@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/BLEMimConnection.swift"
-            timestampString = "496222835.073676"
+            timestampString = "498415324.530657"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "412"
-            endingLineNumber = "412"
+            startingLineNumber = "415"
+            endingLineNumber = "415"
             landmarkName = "writeValue(_:data:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/BLEMimConnection.swift"
-            timestampString = "496222835.073676"
+            timestampString = "498415324.530657"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "399"
-            endingLineNumber = "399"
+            startingLineNumber = "402"
+            endingLineNumber = "402"
             landmarkName = "unsubscribeToChar(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/BLEMimConnection.swift"
-            timestampString = "496222835.073676"
+            timestampString = "498415324.530657"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "425"
-            endingLineNumber = "425"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
             landmarkName = "readValue(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -101,13 +101,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "9BMetrics/BLEMimConnection.swift"
-            timestampString = "497125347.804975"
+            filePath = "9BMetrics/ViewController.swift"
+            timestampString = "497426381.420154"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
-            landmarkName = "scanForDevices(_:)"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "dateToSection(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -117,13 +117,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "9BMetrics/ViewController.swift"
-            timestampString = "497426381.420154"
+            filePath = "9BMetrics/WheelTrack.swift"
+            timestampString = "498585650.660365"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
-            landmarkName = "dateToSection(_:)"
+            startingLineNumber = "1884"
+            endingLineNumber = "1884"
+            landmarkName = "checkBattery()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

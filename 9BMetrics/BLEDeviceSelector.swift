@@ -30,6 +30,8 @@ class BLEDeviceSelector: UIViewController {
     var delegate : BLEDeviceSelectorDelegate?
     
     
+    
+    
     func clearDevices(){
         self.devices.removeAll()
     }
@@ -88,8 +90,8 @@ extension BLEDeviceSelector : UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "peripheralCellIdentifier", for: indexPath)
         
-        let name = self.devices[(indexPath as NSIndexPath).row].name
-        let uuid = self.devices[(indexPath as NSIndexPath).row].identifier.uuidString
+        let name = self.devices[indexPath.row].name
+        let uuid = self.devices[indexPath.row].identifier.uuidString
     
         if let nam = name {
             

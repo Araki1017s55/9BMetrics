@@ -133,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if ext == "9bz" {
                     
                     try Zip.unzipFile(url, destination: newUrl, overwrite: false, password: nil, progress: { (progress) in
-                        AppDelegate.debugLog("Unzipping %f", progress)
+                        AppDelegate.debugLog("Unzipping %f".localized(comment: "Unzipping progress"), progress)
                     })
                 }else {
                     
@@ -147,7 +147,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
             }catch {
                 
-                self.displayMessageWithTitle("Error",format:"ERROR al copiar url %@ a %@", url as CVarArg, newUrl as CVarArg)
+                self.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"ERROR al copiar url %@ a %@".localized(), url as CVarArg, newUrl as CVarArg)
                 AppDelegate.debugLog("ERROR al copiar url %@ a %@", url as CVarArg, newUrl as CVarArg)
                 return false
             }
@@ -328,7 +328,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         genericAlert = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.alert)
-        let action = UIAlertAction(title: "Close", style: UIAlertActionStyle.cancel) { (action: UIAlertAction) -> Void in
+        let action = UIAlertAction(title: "Close".localized(comment: "Tancar button title"), style: UIAlertActionStyle.cancel) { (action: UIAlertAction) -> Void in
             
             
         }

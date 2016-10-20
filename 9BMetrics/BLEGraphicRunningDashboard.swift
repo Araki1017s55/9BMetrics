@@ -342,7 +342,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 
                 if !self.searching {
                     
-                    self.devList.removeAll()    // Remove old ones
+                    //self.devList.removeAll()    // Remove old ones
                     self.devList.append(contentsOf: devs)
                     
                     self.performSegue(withIdentifier: "grDeviceSelectorSegue", sender: self)
