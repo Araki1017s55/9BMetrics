@@ -14,7 +14,7 @@ protocol BLEMimConnectionDelegate {
     
     
     func deviceAnalyzed( _ peripheral : CBPeripheral, services : [String : BLEService])
-    func deviceConnected(_ peripheral : CBPeripheral, adapter:BLEWheelAdapterProtocol )
+    func deviceConnected(_ peripheral : CBPeripheral, adapter:BLEWheelAdapterProtocol? )
     func deviceDisconnected(_ peripheral : CBPeripheral )
     func charUpdated(_ char : CBCharacteristic, data: Data)
 

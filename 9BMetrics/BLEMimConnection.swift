@@ -527,15 +527,8 @@ extension BLEMimConnection : CBPeripheralDelegate{
            
             if let dele = delegate {
                 dele.deviceAnalyzed(peripheral, services: self.wheelServices)
-                
-                if let adapter = BLEWheelSelector.sharedInstance.getAdapter(wheelServices: self.wheelServices){
-                    dele.deviceConnected(peripheral, adapter: adapter)
-                    
-                }else {
-                    let dele = UIApplication.shared.delegate as! AppDelegate
-                    dele.displayMessageWithTitle("No driver available".localized()   , format: "I don't have a driver for this device".localized())
-                    AppDelegate.debugLog("I don't have a driver to connect to his device.")
-                }
+                dele.deviceConnected(peripheral, adapter: BLEWheelSelector.sharedInstance.getAdapter(wheelServices: self.wheelServices))
+
             }
         }
     }

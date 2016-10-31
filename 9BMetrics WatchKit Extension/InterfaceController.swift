@@ -24,7 +24,7 @@ import WatchConnectivity
 
 
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
-
+    
     
     
     @IBOutlet weak  var distLabel : WKInterfaceLabel!
@@ -40,11 +40,18 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var skyColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     
     var distancia : Double = 0.0
+    var oldDistancia : Double = 0.0
     var temps : Double = 0.0
+    var oldTemps : Double = 0.0
+    var oldTempsString : String = "0:0"
     var speed : Double = 0.0
+    var oldSpeed : Double = 0.0
     var battery : Double = 0.0
+    var oldBattery : Double = 0.0
     var remaining : Double = 0.0
+    var oldRemaining : Double = 0.0
     var temperature : Double = 0.0
+    var oldTemperature : Double = 0.0
     var recording : Bool = false
     var oldRecording : Bool = false
     var color : UIColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
@@ -55,21 +62,29 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     var wcsession : WCSession? = WCSession.default()
     
-
+    
     /** Called when the session has completed activation. If session state is WCSessionActivationStateNotActivated there will be an error with more details. */
     @available(watchOS 2.2, *)
     public func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         
         // To Do when we know what to do
     }
- 
+    
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
         if let session = wcsession{
             session.delegate = self
-            session.activate()
+            
+            if #available(watchOSApplicationExtension 2.2, *) {
+                if session.activationState != .activated{
+                    session.activate()
+                }
+            } else {
+                session.activate()
+                // Fallback on earlier versions
+            }
             addMenuItem(with: WKMenuItemIcon.play, title: "Start", action: #selector(InterfaceController.start))
             
         }
@@ -112,7 +127,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         if let sp = applicationContext["speed"]  as? Double {
             self.speed = sp
         }
-
+        
         if let bat = applicationContext["battery"]  as? Double {
             self.battery = bat
         }
@@ -149,7 +164,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 self.colorLevel = ci
             }
             else if ci < self.colorLevel {
-               // WKInterfaceDevice.current().play(WKHapticType.directionDown)
+                // WKInterfaceDevice.current().play(WKHapticType.directionDown)
                 self.colorLevel = ci
             }
         }
@@ -167,38 +182,62 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         
         DispatchQueue.main.async(execute: { () -> Void in
             
-            if self.distancia < 1000.0{
+            if fabs(self.oldDistancia - self.distancia) > 1.0 {
                 
-                let units = "m"
-                self.distLabel.setText(String(format: "%3.0f %@", self.distancia, units))
-            }
-            else{
-                let units = "Km"
-                self.distLabel.setText(String(format: "%5.2f %@", self.distancia/1000.0, units))
+                if self.distancia < 1000.0  {
+                    let units = "m"
+                    self.distLabel.setText(String(format: "%3.0f %@", self.distancia, units))
+                }
+                else if fabs(self.distancia - self.oldDistancia) >= 10.0 {
+                    let units = "Km"
+                    self.distLabel.setText(String(format: "%5.2f %@", self.distancia/1000.0, units))
+                }
+                self.oldDistancia = self.distancia
+            
             }
             
-            let h = Int(floor(self.temps / 3600.0))
-            let m = Int(floor(self.temps - Double(h) * 3600.0)/60.0)
-            let s = Int(floor(self.temps - Double(h) * 3600.0 - Double(m)*60.0))
-            
-            if h > 0 {
-                self.tempsLabel.setText(String(format: "%2d:%2d:%2d", h, m, s))
-            }
-            else{
+            if self.oldTemps != self.temps {
+                let h = Int(floor(self.temps / 3600.0))
+                let m = Int(floor(self.temps - Double(h) * 3600.0)/60.0)
+                let s = Int(floor(self.temps - Double(h) * 3600.0 - Double(m)*60.0))
+                var tempsString = String(format: "%2d:%2d:%2d", h, m, s)
                 
-                self.tempsLabel.setText(String(format: "%2d:%2d", m, s))
+                if h == 0 {
+                    tempsString = String(format: "%2d:%2d", m, s)
+                }
+                
+                if tempsString != self.oldTempsString {
+                    self.tempsLabel.setText(tempsString)
+                    self.oldTempsString = tempsString
+                }
+                
+                self.oldTemps = self.temps
             }
             
-            self.speedLabel.setText(String(format: "%5.2f", self.speed))
-            self.batteryLabel.setText(String(format: "%2d %%", Int(self.battery)))
+            if fabs(self.oldSpeed - self.speed) >= 0.01 {
+                self.speedLabel.setText(String(format: "%5.2f", self.speed))
+                self.oldSpeed = self.speed
+            }
+            
+            if fabs(self.oldBattery - self.battery) >= 1.0 {
+                self.batteryLabel.setText(String(format: "%2d %%", Int(self.battery)))
+                self.oldBattery = self.battery
+            }
             
             //self.remainingLabel.setText(String(format: "%5.2f %@", self.remaining, "Km"))
-            self.remainingLabel.setText(String(format: "%3.0f%@", self.temperature, "ºC"))
             
-            if self.battery < 30.0{
-                self.batteryLabel.setTextColor(UIColor.red)
-            }else{
-                self.batteryLabel.setTextColor(UIColor.green)
+            if fabs(self.oldTemperature - self.temperature) >= 0.1 {
+                self.remainingLabel.setText(String(format: "%3.0f%@", self.temperature, "ºC"))
+                self.oldTemperature = self.temperature
+            }
+            
+            if fabs(self.oldBattery - self.battery) >= 1.0 {
+                if self.battery < 30.0{
+                    self.batteryLabel.setTextColor(UIColor.red)
+                }else{
+                    self.batteryLabel.setTextColor(UIColor.green)
+                }
+                self.oldBattery = self.battery
             }
             
             if self.oldColorLevel != self.colorLevel {
@@ -220,19 +259,20 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 self.oldRecording = self.recording
             }
             
+            
             self.stateChanged = false
         })
     }
     
     func start(){
         self.sendOp("start", value: nil)
-     }
+    }
     
     func stop(){
         self.sendOp("stop", value: nil)
     }
     
-
+    
     func sendOp(_ op : String, value : AnyObject?){
         if let session = self.wcsession{
             
@@ -251,14 +291,15 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             }
         }
     }
-
     
-/*
- func sessionWatchStateDidChange(_ session: WCSession) {
-        
-       // NSLog("WCSessionState changed. Reachable %@", session.reachable)
-    }
-*/
+    
+    
+     /*
+     func sessionWatchStateDidChange(_ session: WCSession) {
+     
+     // NSLog("WCSessionState changed. Reachable %@", session.reachable)
+     } */
+    
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]){
         
         if let v = applicationContext as? [String : Double]{
@@ -268,5 +309,13 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         }
     }
     
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]){
+        if let v = message as? [String : Double]{
+            
+            self.updateData(v as [String : AnyObject])
+            self.updateFields()
+        }
+
+    }
     
 }

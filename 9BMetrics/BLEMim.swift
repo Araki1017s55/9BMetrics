@@ -274,7 +274,7 @@ class BLEMim: UIViewController {
 
 extension BLEMim : BLEMimConnectionDelegate{
 
-    func deviceConnected(_ peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol ){
+    func deviceConnected(_ peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol? ){
         if let s = peripheral.name{
             AppDelegate.debugLog("Device %@ connected", s)
             self.ninebotButton.isEnabled = true

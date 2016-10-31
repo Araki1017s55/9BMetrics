@@ -20,7 +20,7 @@
 
 import UIKit
 
-class GraphViewController: UIViewController, TMKGraphViewDataSource {
+class GraphViewController: UIViewController {
     
     @IBOutlet weak var graphView : TMKGraphView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
@@ -108,251 +108,11 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
         
     }
     
-    
-    // MARK: TMKGraphViewDataSource
-    
-    func valueForSerie(_ serie : Int, value : Int) -> Int{
-        
-        switch serie {
-        case 1:
-            return 3
-        case 2:
-            return 5
-        default:
-            return value
-        }
-     }
-    
-    func numberOfSeries() -> Int{
-        return 1 //  Put 3 but for the moment too slow
-    }
-    func numberOfPointsForSerie(_ serie : Int, value: Int) -> Int{
-        
-        let val = valueForSerie(serie, value: value)
-         
-        if self.ninebot != nil{
-            return countLog(val)
-        }
-        else{
-            return 0
-        }
-    }
-    func styleForSerie(_ serie : Int) -> Int{
-        return 0
-    }
-    func colorForSerie(_ serie : Int) -> UIColor{
-        
-        switch  serie {
-        case 1:
-            return UIColor.green
-        case 2:
-            return UIColor.cyan
-        default:
-            return UIColor.red
-        }
-        
-    }
-    func offsetForSerie(_ serie : Int) -> CGPoint{
-        return CGPoint(x: 0, y: 0)
-    }
-    
-    func value(_ value : Int, axis: Int,  forPoint point: Int,  forSerie serie:Int) -> CGPoint{
-        
-        let val = valueForSerie(serie, value: value)
-        if self.ninebot != nil{
 
-            let v = getLogValue(val, index: point)
-            let t = getTimeValue(val, index: point)
-            return CGPoint(x: CGFloat(t), y:CGFloat(v) )
-        }
-        else{
-            return CGPoint(x: 0, y: 0)
-        }
-    
-    }
-    
-    func value(_ value : Int, axis: Int,  forX x:CGFloat,  forSerie serie:Int) -> CGPoint{
- 
-        let val = valueForSerie(serie, value: value)
-        if self.ninebot != nil{
-            
-            let v = getLogValue(val, time: TimeInterval(x))
-            return CGPoint(x: x, y:CGFloat(v))
-            
-        }else{
-            return CGPoint(x: x, y: 0.0)
-        }
-      }
-
-    func numberOfWaypointsForSerie(_ serie: Int) -> Int{
-            return 0
-     
-    }
-    func valueForWaypoint(_ point : Int,  axis:Int,  serie: Int) -> CGPoint{
-        return CGPoint(x: 0, y: 0)
-    }
-    func isSelectedWaypoint(_ point: Int, forSerie serie:Int) -> Bool{
-        return false
-    }
-    func isSelectedSerie(_ serie: Int) -> Bool{
-        return serie == 0
-     }
-    func numberOfXAxis() -> Int {
-        return 1
-    }
-    func nameOfXAxis(_ axis: Int) -> String{
-        return "t"
-    }
-    func numberOfValues() -> Int{
-        return BLENinebot.displayableVariables.count
-    }
-    func nameOfValue(_ value: Int) -> String{
-        return displayableVariables[value].rawValue
-    }
-    func numberOfPins() -> Int{
-        return 0
-    }
-    func valueForPin(_ point:Int, axis:Int) -> CGPoint{
-        return CGPoint(x: 0, y: 0)
-    }
-    func isSelectedPin(_ pin: Int) -> Bool{
-        return false
-    }
-    
-    func statsForSerie(_ value: Int, from t0: TimeInterval, to t1: TimeInterval) -> String{
-        
-        if self.ninebot != nil{
-            
-            let (min, max, avg, acum) = getLogStats(value, from: t0, to: t1)
-            let (h, m, s) = BLENinebot.HMSfromSeconds(t1 - t0)
-            
-            var answer = String(format: "%02d:%02d:%02d",  h, m, s)
-            
-            switch value {
-                
-            case 0: // Speed
-                
-                let dist = acum / 3600.0
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Dist: %4.2f Km", min, avg, max, dist))
-                
-            case 1: //T
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
-                
-            case 2:                 // Voltage
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
-                
-            case 3:                 // Current
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Q: %4.2fC", min, avg, max, acum))
-                
-            case 4:     //Battery
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
-                
-            case 5:     // Pitch
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
-                
-            case 6:     //Roll
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
-                
-            case 7:     //Distance
-                answer.append(String(format:" Dist: %4.2f Km ", max - min))
-                
-            case 8:     //Altitude
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
-                
-            case 9:     //Power
-                let wh = acum / 3600.0
-                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f W: %4.2f wh", min, avg, max, wh))
-                
-            case 10:     //Energy
-                answer.append(String(format:" Energy: %4.2f wh ", max - min))
-
-                
-                
-            default:
-                answer.append(" ")
-                
-            }
-              return answer
-            
-        }else{
-            return ""
-        }
-    }
-    
-    func minMaxForSerie(_ serie : Int, value: Int) -> (CGFloat, CGFloat){
-        
-        let val = valueForSerie(serie, value: value)
-        
-        switch(val){
-            
-        case 0:
-            return (0.0, 1.0)   // Speed
-            
-        case 1:
-            return (15.0, 20.0) // T
-            
-        case 2:                 // Voltage
-            return (50.0, 60.0)
-            
-        case 3:                 // Current
-            return  (-1.0, 1.0)
-            
-        case 4:
-            return (0.0, 100.0) // Battery
-            
-        case 5:
-            return (-1.0, 1.0)  // Pitch
-            
-        case 6:
-            return (-1.0, 1.0)  //  Roll
-            
-        case 7:
-            return (0.0, 0.5)   // Distance
-            
-        case 8:
-            return (-10.0,10.0)   // Altitude
-        
-        case 9:
-            return (-50.0, +50.0) // Power
-            
-            
-        default:
-            return (0.0, 0.0)
-            
-            
-            
-        }
-        
-        
-        
-    }
-    
-    func doGearActionFrom(_ from: Double, to: Double, src: AnyObject){
-        var url : URL?
-        
-        if let nb = self.ninebot{
-            url = nb.createCSVFileFrom(from, to: to)
-        }
-        
-        
-        if let u = url {
-            self.shareData(u, src: src, delete: true)
-        }
-          
-        // Export all selected data to a file
-    }
-    
+  
     // Create a file with actual data and share it
     
     func shareData(_ file: URL?, src:AnyObject, delete: Bool){
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         if let aFile = file {
@@ -383,6 +143,22 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
                 completion: nil)
         }
     }
+    
+    // Chapuza per poder mostrar diferents series fixes simultàneament
+    
+    func valueForSerie(_ serie : Int, value : Int) -> Int{
+        
+        switch serie {
+        case 1:
+            return 2
+        case 2:
+            return 3
+        default:
+            return value
+        }
+    }
+    
+
     
     //MARK: Log Management
     
@@ -516,3 +292,222 @@ class GraphViewController: UIViewController, TMKGraphViewDataSource {
 
     
  }
+
+// MARK: TMKGraphViewDataSource
+
+extension  GraphViewController : TMKGraphViewDataSource{
+    func numberOfSeries() -> Int{
+        return 1 //  Put 3 but for the moment too slow
+    }
+    func numberOfPointsForSerie(_ serie : Int, value: Int) -> Int{
+        
+        let val = valueForSerie(serie, value: value)
+        
+        if self.ninebot != nil{
+            return countLog(val)
+        }
+        else{
+            return 0
+        }
+    }
+    func styleForSerie(_ serie : Int) -> Int{
+        return 0
+    }
+    func colorForSerie(_ serie : Int) -> UIColor{
+        
+        switch  serie {
+        case 1:
+            return UIColor.green
+        case 2:
+            return UIColor.cyan
+        default:
+            return UIColor.red
+        }
+        
+    }
+    func offsetForSerie(_ serie : Int) -> CGPoint{
+        return CGPoint(x: 0, y: 0)
+    }
+    
+    func value(_ value : Int, axis: Int,  forPoint point: Int,  forSerie serie:Int) -> CGPoint{
+        
+        let val = valueForSerie(serie, value: value)
+        if self.ninebot != nil{
+            
+            let v = getLogValue(val, index: point)
+            let t = getTimeValue(val, index: point)
+            return CGPoint(x: CGFloat(t), y:CGFloat(v) )
+        }
+        else{
+            return CGPoint(x: 0, y: 0)
+        }
+        
+    }
+    
+    func value(_ value : Int, axis: Int,  forX x:CGFloat,  forSerie serie:Int) -> CGPoint{
+        
+        let val = valueForSerie(serie, value: value)
+        if self.ninebot != nil{
+            
+            let v = getLogValue(val, time: TimeInterval(x))
+            return CGPoint(x: x, y:CGFloat(v))
+            
+        }else{
+            return CGPoint(x: x, y: 0.0)
+        }
+    }
+    
+    func numberOfWaypointsForSerie(_ serie: Int) -> Int{
+        return 0
+        
+    }
+    func valueForWaypoint(_ point : Int,  axis:Int,  serie: Int) -> CGPoint{
+        return CGPoint(x: 0, y: 0)
+    }
+    func isSelectedWaypoint(_ point: Int, forSerie serie:Int) -> Bool{
+        return false
+    }
+    func isSelectedSerie(_ serie: Int) -> Bool{
+        return serie == 0
+    }
+    func numberOfXAxis() -> Int {
+        return 1
+    }
+    func nameOfXAxis(_ axis: Int) -> String{
+        return "t"
+    }
+    func numberOfValues() -> Int{
+        return BLENinebot.displayableVariables.count
+    }
+    func nameOfValue(_ value: Int) -> String{
+        return displayableVariables[value].rawValue
+    }
+    func numberOfPins() -> Int{
+        return 0
+    }
+    func valueForPin(_ point:Int, axis:Int) -> CGPoint{
+        return CGPoint(x: 0, y: 0)
+    }
+    func isSelectedPin(_ pin: Int) -> Bool{
+        return false
+    }
+    
+    func statsForSerie(_ value: Int, from t0: TimeInterval, to t1: TimeInterval) -> String{
+        
+        if self.ninebot != nil{
+            
+            let (min, max, avg, acum) = getLogStats(value, from: t0, to: t1)
+            let (h, m, s) = BLENinebot.HMSfromSeconds(t1 - t0)
+            
+            var answer = String(format: "%02d:%02d:%02d",  h, m, s)
+            
+            switch value {
+                
+            case 0: // Speed
+                
+                let dist = acum / 3600.0
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Dist: %4.2f Km", min, avg, max, dist))
+                
+            case 1: //T
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 2:                 // Voltage
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 3:                 // Current
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f Q: %4.2fC", min, avg, max, acum))
+                
+            case 4:     //Battery
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 5:     // Pitch
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 6:     //Roll
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 7:     //Distance
+                answer.append(String(format:" Dist: %4.2f Km ", max - min))
+                
+            case 8:     //Altitude
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f", min, avg, max))
+                
+            case 9:     //Power
+                let wh = acum / 3600.0
+                answer.append(String(format:" Min: %4.2f  Avg: %4.2f  Max: %4.2f W: %4.2f wh", min, avg, max, wh))
+                
+            case 10:     //Energy
+                answer.append(String(format:" Energy: %4.2f wh ", max - min))
+                
+                
+                
+            default:
+                answer.append(" ")
+                
+            }
+            return answer
+            
+        }else{
+            return ""
+        }
+    }
+    
+    func minMaxForSerie(_ serie : Int, value: Int) -> (CGFloat, CGFloat){
+        
+        let val = valueForSerie(serie, value: value)
+        
+        switch(val){
+            
+        case 0:
+            return (0.0, 1.0)   // Speed
+            
+        case 1:
+            return (15.0, 20.0) // T
+            
+        case 2:                 // Voltage
+            return (40.0, 60.0)
+            
+        case 3:                 // Current
+            return  (-1.0, 1.0)
+            
+        case 4:
+            return (0.0, 100.0) // Battery
+            
+        case 5:
+            return (-1.0, 1.0)  // Pitch
+            
+        case 6:
+            return (-1.0, 1.0)  //  Roll
+            
+        case 7:
+            return (0.0, 0.5)   // Distance
+            
+        case 8:
+            return (-10.0,10.0)   // Altitude
+            
+        case 9:
+            return (-50.0, +50.0) // Power
+            
+            
+        default:
+            return (0.0, 0.0)
+            
+        }
+     }
+    
+    func doGearActionFrom(_ from: Double, to: Double, src: AnyObject){
+        var url : URL?
+        
+        if let nb = self.ninebot{
+            url = nb.createCSVFileFrom(from, to: to)
+        }
+        
+        
+        if let u = url {
+            self.shareData(u, src: src, delete: true)
+        }
+        
+        // Export all selected data to a file
+    }
+    
+}

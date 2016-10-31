@@ -76,6 +76,8 @@ class BLESimulatedClient: NSObject {
     var sendToWatch = false
     var oldState : Dictionary<String, Double>?
     
+    var lastWatchUpdate = Date()
+    
     // Ninebot Connection
     
     var connection : BLEMimConnection
@@ -96,8 +98,8 @@ class BLESimulatedClient: NSObject {
         self.connection.delegate = self
         self.queryQueue = OperationQueue()
         self.queryQueue!.maxConcurrentOperationCount = 1
-        self.watchQueue = OperationQueue()
-        self.watchQueue!.maxConcurrentOperationCount = 1
+       // self.watchQueue = OperationQueue()
+       // self.watchQueue!.maxConcurrentOperationCount = 1
         
         
         self.initNotifications()
@@ -239,7 +241,9 @@ class BLESimulatedClient: NSObject {
         }
         self.adapter = nil
       
-        self.sendDataToWatch()
+        if let info = getAppState(){
+            self.sendDataToWatch(info)
+        }
     }
     
     //MARK: Auxiliary functions
@@ -368,18 +372,52 @@ class BLESimulatedClient: NSObject {
     
     func sendStateToWatch(_ timer: Timer){
         
+        self.doSendStateToWatch()
+        
+    }
+    
+    func doSendStateToWatch(){
+        DispatchQueue.global().async( execute: {
+            if #available(iOS 9.3, *) {     // A veure si així es una mica mes ràpid. Potser enviar coses quan no es activa li feia mal
+                if let session = self.wcsession , session.activationState == .activated {
+                    if self.sendToWatch {
+                        if let info = self.getAppState(){
+                            self.sendDataToWatch(info)
+                        }
+                    }
+                }
+            } else {
+                if self.sendToWatch {
+                    
+                    if let info = self.getAppState(){
+                        self.sendDataToWatch(info)
+                    }
+                    
+                }
+            }
+        });
+        
+    }
+    
+    func olddoSendStateToWatch() {
+    
         if let queue = watchQueue{
             
             queue.addOperation({ 
                 if #available(iOS 9.3, *) {     // A veure si així es una mica mes ràpid. Potser enviar coses quan no es activa li feia mal
                     if let session = self.wcsession , session.activationState == .activated {
                         if self.sendToWatch {
-                            self.sendDataToWatch()
+                            if let info = self.getAppState(){
+                                self.sendDataToWatch(info)
+                            }
                         }
                     }
                 } else {
                     if self.sendToWatch {
-                        self.sendDataToWatch()
+                        
+                        if let info = self.getAppState(){
+                            self.sendDataToWatch(info)
+                        }
                         
                     }
                 }
@@ -388,13 +426,13 @@ class BLESimulatedClient: NSObject {
         }
      }
     
-    func sendDataToWatch(){
-        let info = self.getAppState()
+    func sendDataToWatch(_ info : [String : Double]){
         
         if !self.checkState(info, state_2: self.oldState){
-            if let session = wcsession, let inf = info {
+            if let session = wcsession{
                 do {
-                    try session.updateApplicationContext(inf)
+                    self.lastWatchUpdate = Date()
+                    try session.updateApplicationContext(info)
                     self.oldState = info
                 }
                 catch _{
@@ -403,7 +441,19 @@ class BLESimulatedClient: NSObject {
             }
         }
     }
-    
+ 
+    func sendDataToWatchMessage(){
+        let info = self.getAppState()
+        
+        if !self.checkState(info, state_2: self.oldState){
+            if let session = wcsession, let inf = info {
+               
+                    session.sendMessage(inf, replyHandler: nil, errorHandler: nil)
+                     self.oldState = info
+            }
+        }
+    }
+
     //MARK: Ninebot specific test functions. Should go to the adapter if generalised
     
     // setSerialNumber is a test function specific of Ninebot. Not to use in release
@@ -559,14 +609,14 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
     }
 
     
-    func deviceConnected(_ peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol ){
+    func deviceConnected(_ peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol? ){
         
         if let adp = self.adapter {
             adp.deviceConnected(self.connection, peripheral: peripheral)
         
-        } else {
+        } else if let newAdp = adapter{
             
-            self.adapter = adapter
+            self.adapter = newAdp
             if let adp = self.adapter {
                 if let dat = datos {
                     dat.setUUID(peripheral.identifier.uuidString)
@@ -574,6 +624,12 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                 adp.startRecording()
                 adp.deviceConnected(self.connection, peripheral: peripheral)
             }
+        } else { // There is bi adapter, I can't interpret data!!!
+            let deleg = UIApplication.shared.delegate as! AppDelegate
+            deleg.displayMessageWithTitle("No driver available".localized()   , format: "I don't have a driver for this device".localized())
+            AppDelegate.debugLog("I don't have a driver to connect to his device.")
+
+            return
         }
         
         
@@ -584,7 +640,7 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
             if let tim = self.timer{
                 tim.invalidate()
             }
-            self.timer = Timer.scheduledTimer(timeInterval: watchTimerStep, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
+            //self.timer = Timer.scheduledTimer(timeInterval: watchTimerStep, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
         }
     }
     
@@ -594,11 +650,6 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
             adp.deviceDisconnected(self.connection, peripheral: peripheral)
         }
         self.connected = false
-        
-        if let tim = self.sendTimer {
-            tim.invalidate()
-            self.sendTimer = nil
-        }
         
         if let tim = self.timer {
             tim.invalidate()
@@ -647,6 +698,11 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                     wheel.addValueWithDate(curDate, variable: .Energy, value: E)
                 
                 }
+                
+                if Date().timeIntervalSince(self.lastWatchUpdate) > watchTimerStep {
+                    self.doSendStateToWatch()
+                }
+
             }
         }
     }
@@ -683,9 +739,10 @@ extension BLESimulatedClient :  WCSessionDelegate{
     
     func sessionWatchStateDidChange(_ session: WCSession) {
         
-        if session.isPaired && session.isWatchAppInstalled{
+        
+        if session.isPaired && session.isWatchAppInstalled {
             self.sendToWatch = true
-            self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
+            //self.timer = Timer.scheduledTimer(timeInterval: self.watchTimerStep, target: self, selector:#selector(BLESimulatedClient.sendStateToWatch(_:)), userInfo: nil, repeats: true)
             
         }
         else{
@@ -790,6 +847,10 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
                         nb.computeDistanceCorrection()
                     }
                 }
+            }
+            
+            if Date().timeIntervalSince(self.lastWatchUpdate) > watchTimerStep {
+                self.doSendStateToWatch()
             }
         }
         
