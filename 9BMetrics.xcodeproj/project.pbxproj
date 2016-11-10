@@ -18,6 +18,7 @@
 		004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */; };
 		004A297E1CCA36F300D6A9A1 /* TMKLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */; };
 		004F45CB1CAD9DE10071B7C4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004F45CA1CAD9DE10071B7C4 /* MapKit.framework */; };
+		00649CF51DD346FC00790DE3 /* BLEInMotionAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00649CF41DD346FC00790DE3 /* BLEInMotionAdapter.swift */; };
 		0066C8AD1D86CE0F005DE94F /* BLEMimServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */; };
 		0066C8AF1D86CE93005DE94F /* BLEMimConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */; };
 		0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */; };
@@ -143,6 +144,7 @@
 		004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKVerticalView.swift; path = 9BMetrics/TMKVerticalView.swift; sourceTree = "<group>"; };
 		004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKLevelView.swift; path = 9BMetrics/TMKLevelView.swift; sourceTree = "<group>"; };
 		004F45CA1CAD9DE10071B7C4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		00649CF41DD346FC00790DE3 /* BLEInMotionAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEInMotionAdapter.swift; path = 9BMetrics/BLEInMotionAdapter.swift; sourceTree = "<group>"; };
 		0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMimServer.swift; sourceTree = "<group>"; };
 		0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMimConnection.swift; path = 9BMetrics/BLEMimConnection.swift; sourceTree = "<group>"; };
 		0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMimConnectionDelegate.swift; sourceTree = "<group>"; };
@@ -455,6 +457,7 @@
 				0079E98A1D927A0E004A09BB /* KingSongAdapter.swift */,
 				00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */,
 				00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */,
+				00649CF41DD346FC00790DE3 /* BLEInMotionAdapter.swift */,
 			);
 			name = Communications;
 			sourceTree = "<group>";
@@ -688,6 +691,7 @@
 				0079E9891D8E8071004A09BB /* BLEWheelSelector.swift in Sources */,
 				004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */,
 				00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */,
+				00649CF51DD346FC00790DE3 /* BLEInMotionAdapter.swift in Sources */,
 				008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */,

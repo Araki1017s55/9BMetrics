@@ -250,6 +250,10 @@ extension GotawayAdapter : BLEWheelAdapterProtocol{
     func getSN() -> String{
         return self.serial
     }
+    
+    func setDefaultName(_ name : String){
+        self.name = name
+    }
 }
 
 

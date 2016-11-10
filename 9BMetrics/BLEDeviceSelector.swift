@@ -46,7 +46,12 @@ class BLEDeviceSelector: UIViewController {
         }
         
         if let table = self.tableView{
-            table.reloadData()
+            DispatchQueue.main.async(execute: { () -> Void in
+                
+                table.reloadData()
+            })
+
+
         }
     }
     

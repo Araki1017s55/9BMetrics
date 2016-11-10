@@ -46,6 +46,9 @@ class BLESimulatedClient: NSObject {
     var sendTimer : Timer?    // Timer per enviar les dades periodicament
     var timerStep = 0.1        // Get data every step
     var watchTimerStep = 0.1        // Get data every step
+    
+    var gpsRefreshDistance = 100.0
+    var gpsRefreshTime = 1.0
     var contadorOp = 0          // Normal data updated every second
     var contadorOpFast = 0      // Special data updated every 1/10th of second
     var listaOp :[(UInt8, UInt8)] = [(50,2), (58,1),  (62, 1), (182, 5)]
@@ -855,8 +858,8 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
         }
         
         if !self.deferringUpdates  {
-            let distance : CLLocationDistance =  1000.0 // Update every km
-            let time : TimeInterval = 60.0 // Or every 1'
+            let distance : CLLocationDistance =  self.gpsRefreshDistance // Update every km
+            let time : TimeInterval = self.gpsRefreshTime // Or every 1'
             
             manager.allowDeferredLocationUpdates(untilTraveled: distance,  timeout:time)
             self.deferringUpdates = true

@@ -304,6 +304,9 @@ class WheelTrack: NSObject {
         
         // First value of all sets firstDate!!!
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+        
         if firstDate == nil {
             firstDate = dat
         }
@@ -369,6 +372,8 @@ class WheelTrack: NSObject {
         data[variable]!.timeStamp = t
         data[variable]!.loaded = true
         
+
+        
         if postChange{
             postVariableChanged( data[variable]!)
         }
@@ -403,6 +408,10 @@ class WheelTrack: NSObject {
     }
     
     func addLogValue(_ time: TimeInterval, variable : WheelValue, value : Double){
+        
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if data[variable] == nil {
             return
         }
@@ -414,18 +423,33 @@ class WheelTrack: NSObject {
     // Setting general information
     
     func setName(_ name : String){
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         self.name = name
     }
     func setSerialNo(_ serialNo : String){
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         self.serialNo = serialNo
     }
     func setVersion(_ version : String){
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         self.version = version
     }
     func setAdapter(_ adapter : String){
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         self.adapter = adapter
     }
     func setUUID(_ device : String){
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         self.uuid = device
     }
     
@@ -434,16 +458,25 @@ class WheelTrack: NSObject {
     
     
     func hasDataInVariable(_ v : WheelValue) -> Bool{
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         guard let vv = data[v] , vv.log.count > 0 else {return false}
         return true
     }
     
     func hasData()->Bool{       // Returns true if we have logged at least current data
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         return hasDataInVariable(.Current)
     }
     
     func hasGPSData() -> Bool{
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         let n1 = countLogForVariable(.Latitude)
         let n2 = countLogForVariable(.Longitude)
         
@@ -451,6 +484,10 @@ class WheelTrack: NSObject {
     }
     
     func countLogForVariable(_ v : WheelValue) -> Int{
+        
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         
         if let vv = data[v] {
             if !vv.loaded{
@@ -464,7 +501,7 @@ class WheelTrack: NSObject {
     }
     
     func currentValueForVariable(_ v : WheelValue) -> Double?{
-        
+  
         if let vv = data[v] {
             return vv.currentValue
         }else {
@@ -473,6 +510,9 @@ class WheelTrack: NSObject {
     }
     
     func entryAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> LogEntry?{
+        
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
         
         if let vv = data[v] {
             if !vv.loaded {
@@ -517,6 +557,9 @@ class WheelTrack: NSObject {
     
     func value(_ variable : WheelValue,  forTime t:TimeInterval) -> LogEntry?{
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if let vv = data[variable] {
             if !vv.loaded {
                 loadVariableFromPackage(vv.codi)
@@ -580,6 +623,10 @@ class WheelTrack: NSObject {
     // Returns min, max, avg and acum (integral trapezoidal)
     
     func getFirstLast(_ variable: WheelValue) -> (Double, Double){
+        
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if let vv = data[variable] {
             if !vv.loaded {
                 loadVariableFromPackage(vv.codi)
@@ -595,6 +642,10 @@ class WheelTrack: NSObject {
     }
     
     func getCurrentStats(_ variable : WheelValue) -> (Double, Double, Double, Double){
+        
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if let vv = data[variable] {
             return (vv.minValue, vv.maxValue, vv.avgValue, vv.intValue)
         } else {
@@ -604,6 +655,9 @@ class WheelTrack: NSObject {
     
     func stats(_ variable : WheelValue,  from t:TimeInterval, to t1: TimeInterval) -> (Double, Double, Double, Double){
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if let vv = data[variable] {
             if !vv.loaded {
                 loadVariableFromPackage(vv.codi)
@@ -732,6 +786,9 @@ class WheelTrack: NSObject {
     
     func buildPower(){
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         
         if hasDataInVariable(.Power){ // Don't touch data if posible
             return
@@ -751,6 +808,9 @@ class WheelTrack: NSObject {
     }
     func buildEnergy(){
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if hasDataInVariable(.Energy){      // Don't touch
             return
         }
@@ -781,6 +841,10 @@ class WheelTrack: NSObject {
     }
     
     func getLastTimeValueForVariable(_ variable: WheelValue) -> TimeInterval{
+
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if let v = data[variable]{
             return v.timeStamp
         }else{
@@ -789,6 +853,10 @@ class WheelTrack: NSObject {
     }
     
     func getTimeIntervalForVariable(_ variable: WheelValue, toDate: Date) -> TimeInterval{
+        
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if let v = data[variable]{
             
             if let fd = firstDate{
@@ -803,6 +871,9 @@ class WheelTrack: NSObject {
     
     func getCurrentValueForVariable(_ variable: WheelValue) -> Double{
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         
         switch variable{
        // case .Power:
@@ -862,7 +933,7 @@ class WheelTrack: NSObject {
     //MARK Specific functions
     
     func getName() -> String{
-        if let v = self.name{
+         if let v = self.name{
             return v
         }else{
             return ""
@@ -870,6 +941,7 @@ class WheelTrack: NSObject {
    }
     
     func getSerialNo() -> String{
+
         if let v = self.serialNo{
             return v
         }else{
@@ -902,6 +974,7 @@ class WheelTrack: NSObject {
     
 
     func getAscent() -> Double {
+        
         if ascent == nil{
             
             let (a, d) = computeAscentDescent()
@@ -918,6 +991,8 @@ class WheelTrack: NSObject {
     }
     
     func getDescent() -> Double {
+        
+  
         if descent == nil{
             let (a, d) = computeAscentDescent()
             ascent = a
@@ -939,6 +1014,8 @@ class WheelTrack: NSObject {
     }
     
     func getEnergyUsed() -> Double{
+        
+ 
         if energyUsed == nil{
             let (eu, er) = energyDetails(from: 0.0, to: 1E80)
             energyUsed = eu
@@ -953,6 +1030,7 @@ class WheelTrack: NSObject {
     }
     
     func getEnergyRecovered() -> Double{
+        
         if energyRecovered == nil{
             let (eu, er) = energyDetails(from: 0.0, to: 1E80)
             energyUsed = eu
@@ -978,6 +1056,9 @@ class WheelTrack: NSObject {
     }
     func energyDetails(from t0: TimeInterval, to t1: TimeInterval) -> (Double, Double){
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
         if let vv = data[.Energy] {
             if !vv.loaded {
                 loadVariableFromPackage(.Energy)
@@ -1018,6 +1099,9 @@ class WheelTrack: NSObject {
     
     func computeAscentDescent() -> (ascent : Double, descent : Double){
         
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+      
         if let vv = data[.Altitude] {
             if !vv.loaded {
                 loadVariableFromPackage(.Altitude)
@@ -1058,6 +1142,10 @@ class WheelTrack: NSObject {
     // samples distanced a fixed amount.
     
     func resample(_ variable:WheelValue, from:TimeInterval, to:TimeInterval, step:Double) -> [LogEntry]?{
+ 
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+       
         
         if let vv = data[variable] {
             if !vv.loaded {
@@ -1416,7 +1504,46 @@ class WheelTrack: NSObject {
         }
     }
 
+    func packageURL(_ name: String) -> URL?{
+        
+        guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+        
+        let ext = "9bm"
+        let fm = FileManager.default
+        
+        let pkgURL = docDir.appendingPathComponent(name).appendingPathExtension(ext)
+        
+        var isDirectory: ObjCBool = ObjCBool(false)
+        
+        fm.fileExists(atPath: pkgURL.path, isDirectory: &isDirectory)
+        
+        if isDirectory.boolValue {
+            
+            
+            let summaryURL = pkgURL.appendingPathComponent("summary.csv")
+            
+            if fm.fileExists(atPath: summaryURL.path){
+                return pkgURL
+            }
+        }
+        
+        return nil
+    }
 
+    func appendToPackage(_ name: String){
+        
+        
+        guard let url = packageURL(name) else { _ = createPackage(name) ; return}
+        
+        
+        
+        
+        
+    }
+    
+    
+    
+    
    func createPackage(_ name : String) -> URL?{
     guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
     return createPackage(name, inDirectory: docDir, snapshot: false)

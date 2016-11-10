@@ -198,6 +198,10 @@ class NinebotS12Adapter : BLENinebotOneAdapter {
         
         return no
     }
+    
+    override func setDefaultName(_ name : String){
+        self.name = name
+    }
 
 }
 

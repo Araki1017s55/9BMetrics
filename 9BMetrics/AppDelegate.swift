@@ -161,7 +161,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func buildAdapterList(){
         
         let wheelSelector = BLEWheelSelector.sharedInstance
+        //wheelSelector.registerAdapter(BLENinebotOneAdapter())
         
+        wheelSelector.registerAdapter(BLEInMotionAdapter())
         wheelSelector.registerAdapter(KingSongAdapter())
         wheelSelector.registerAdapter(GotawayAdapter())
         wheelSelector.registerAdapter(NinebotS12Adapter())

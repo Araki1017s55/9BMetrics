@@ -234,8 +234,11 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         if let central = self.centralManager{
             if central.state == .poweredOn{
                 
+    //TODO : Modificar epr seleccionar els serveis amb un switch
+                
                 let theService =  [CBUUID(string: "FFE0")];
-             
+                
+              
                 self.centralManager!.scanForPeripherals(withServices: theService, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
                 self.scanning = true
                 AppDelegate.debugLog("Scanning started")
@@ -527,7 +530,12 @@ extension BLEMimConnection : CBPeripheralDelegate{
            
             if let dele = delegate {
                 dele.deviceAnalyzed(peripheral, services: self.wheelServices)
-                dele.deviceConnected(peripheral, adapter: BLEWheelSelector.sharedInstance.getAdapter(wheelServices: self.wheelServices))
+                if let adapter = BLEWheelSelector.sharedInstance.getAdapter(wheelServices: self.wheelServices){
+                    if let nam = peripheral.name {
+                        adapter.setDefaultName(nam)
+                    }
+                    dele.deviceConnected(peripheral, adapter: adapter)
+                }
 
             }
         }

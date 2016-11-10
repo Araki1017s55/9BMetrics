@@ -30,6 +30,8 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     static var signed = [Bool](repeating: false, count: 256)
     
     var values : [Int] = Array(repeating: -1, count: 256)
+    
+    var name : String = "Ninebot"
 
     
     
@@ -442,7 +444,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     
     func getName() -> String{
-        return getSN()
+        return name
     }
     
     func getVersion() -> String{
@@ -483,6 +485,10 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         }
         
         return no
+    }
+    
+    func setDefaultName(_ name : String){
+        self.name = name
     }
 }
 

@@ -203,11 +203,11 @@ class BLEMimServer: NSObject, CBPeripheralManagerDelegate {
     }
     func startTransmitingReal(){
         
-        
+         
         self.buildService()
     
         let dict : Dictionary = [CBAdvertisementDataServiceUUIDsKey : [CBUUID(string: self.serviceId)],
-                                 CBAdvertisementDataLocalNameKey : "KS-16B-0122"] as [String : Any]
+                                 CBAdvertisementDataLocalNameKey : "NOE002"] as [String : Any]
         
         self.manager.startAdvertising(dict)
         self.transmiting = true

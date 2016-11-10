@@ -72,6 +72,8 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     var timer : Timer?
     
+    var deviceName : String = ""
+    
     required init?(coder aDecoder: NSCoder) {
         
         

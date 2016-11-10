@@ -299,7 +299,6 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
         // OK, subscribe to characteristif FFE1
         
         connection.subscribeToChar("FFE1")
-        
         askName(connection, peripheral: peripheral)
         
     }
@@ -328,6 +327,10 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     
     func getSN() -> String{
         return self.serial
+    }
+    
+    func setDefaultName(_ name : String){
+        self.name = name
     }
 }
 

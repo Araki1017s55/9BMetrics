@@ -92,6 +92,8 @@ protocol BLEWheelAdapterProtocol {
     func getVersion() -> String
     func getSN() -> String
     
+    func setDefaultName(_ name : String)
+    
     
     // Returns a name for the wheel adapter (ex. Ninebot One E or Gotaway ....)
     func wheelName() -> String
