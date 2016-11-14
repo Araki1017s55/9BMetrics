@@ -406,7 +406,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     var headersOk = false
     var sendTimer : Timer?    // Timer per enviar les ex_data periodicament
-    var timerStep = 0.5        // Get data every step
+    var timerStep = 0.4        // Get data every step
     var unpacker = BLEInMotionUnpacker()    // Create as unpacker
     var connection : BLEMimConnection?
     var name : String = "InMotion"
@@ -827,7 +827,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
  
             queryQueue.addOperation {
                 let date = Date()
-                if date.timeIntervalSince(self.lastDateSent) > 0.05 {
+                if date.timeIntervalSince(self.lastDateSent) > self.timerStep {
                     self.sendData()
                     self.lastDateSent = Date()
                     self.pushRequest()
@@ -876,7 +876,6 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     func startRecording(){
         unpacker.reset()
-        
         pushRequest()
     }
     
@@ -930,7 +929,6 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                             // OK now get distance value
                             
                             var distance : Double = 0.0
-                            var date : Date
                             
                             for (vv, date, value) in outValues {
                                 

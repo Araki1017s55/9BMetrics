@@ -1,19 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="10116" systemVersion="14C109" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch42" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="10032"/>
+        <deployment identifier="watchOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="11508"/>
     </dependencies>
     <scenes>
-        <!--Interface Controller-->
+        <!--20%-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="_BMetrics_WatchKit_Extension">
+                <controller identifier="20%" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="_BMetrics_WatchKit_Extension">
                     <items>
                         <group width="1" height="32" alignment="left" id="LEV-Fo-agC">
                             <items>
                                 <label width="64.5" height="28.5" alignment="left" text="00:10" id="N6J-Qf-CDc">
-                                    <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="font" type="system" pointSize="20"/>
                                     <variation key="device=watch38mm" width="57.5">
                                         <fontDescription key="font" type="system" pointSize="18"/>
@@ -23,7 +27,7 @@
                                     </variation>
                                 </label>
                                 <label width="67.5" height="30.5" alignment="right" text="10,5 km" textAlignment="right" id="dl1-9F-z9q">
-                                    <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="font" type="system" pointSize="20"/>
                                     <variation key="device=watch38mm">
                                         <fontDescription key="font" type="system" pointSize="18"/>
@@ -38,7 +42,7 @@
                         <group width="1" height="100" alignment="center" verticalAlignment="center" layout="vertical" id="ibe-0W-tFo">
                             <items>
                                 <label width="136" height="65.5" alignment="center" text="15,20" textAlignment="center" id="PFK-mc-JdZ">
-                                    <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="font" type="system" pointSize="49"/>
                                     <variation key="device=watch38mm" height="55.5" text="15,20">
                                         <fontDescription key="font" type="system" pointSize="45"/>
@@ -48,7 +52,7 @@
                                     </variation>
                                 </label>
                                 <label width="1" alignment="center" text="Label" textAlignment="center" id="EWY-dr-3G7">
-                                    <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="0.40000000600000002" green="0.80000001190000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <variation key="device=watch38mm" text="Km/h">
                                         <fontDescription key="font" style="UICTFontTextStyleBody"/>
                                     </variation>
@@ -77,26 +81,32 @@
                         </group>
                         <group width="1" height="33" alignment="center" verticalAlignment="bottom" id="jUh-Ij-9YU">
                             <items>
-                                <label width="65.5" alignment="left" verticalAlignment="bottom" text="50%" id="9ot-ZO-46F">
-                                    <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <fontDescription key="font" type="system" pointSize="19"/>
-                                    <variation key="device=watch38mm" width="54.5">
-                                        <fontDescription key="font" type="system" pointSize="18"/>
+                                <button width="71" height="35" alignment="left" verticalAlignment="bottom" title="40%" id="B8G-v7-I7I">
+                                    <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <fontDescription key="font" type="system" pointSize="14"/>
+                                    <variation key="device=watch38mm" width="65">
+                                        <fontDescription key="font" type="system" pointSize="14"/>
                                     </variation>
-                                    <variation key="device=watch42mm" width="59.5">
-                                        <fontDescription key="font" type="system" pointSize="19"/>
+                                    <variation key="device=watch42mm">
+                                        <fontDescription key="font" type="system" pointSize="15"/>
                                     </variation>
-                                </label>
-                                <label width="64.5" alignment="right" verticalAlignment="bottom" text="20ºC" textAlignment="right" minimumScaleFactor="0.90000000000000002" id="jQx-ap-kp3">
-                                    <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <fontDescription key="font" type="system" pointSize="19"/>
-                                    <variation key="device=watch38mm">
-                                        <fontDescription key="font" type="system" pointSize="18"/>
+                                    <connections>
+                                        <action selector="batteryAction" destination="AgC-eL-Hgc" id="bt4-yc-UOR"/>
+                                    </connections>
+                                </button>
+                                <button width="73" height="33" alignment="right" verticalAlignment="bottom" title="20ºC" id="uau-Rf-2H2">
+                                    <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <fontDescription key="font" type="system" pointSize="14"/>
+                                    <variation key="device=watch38mm" width="64">
+                                        <fontDescription key="font" type="system" pointSize="14"/>
                                     </variation>
-                                    <variation key="device=watch42mm" width="77.5">
-                                        <fontDescription key="font" type="system" pointSize="19"/>
+                                    <variation key="device=watch42mm">
+                                        <fontDescription key="font" type="system" pointSize="15"/>
                                     </variation>
-                                </label>
+                                    <connections>
+                                        <action selector="temperatureAction" destination="AgC-eL-Hgc" id="Miw-aS-sYj"/>
+                                    </connections>
+                                </button>
                             </items>
                             <edgeInsets key="margins" left="3" right="3" top="0.0" bottom="4"/>
                         </group>
@@ -108,15 +118,16 @@
                         </mask>
                     </variation>
                     <connections>
-                        <outlet property="batteryLabel" destination="9ot-ZO-46F" id="zNA-nM-Q6J"/>
+                        <outlet property="batteryButton" destination="B8G-v7-I7I" id="sel-e0-ot8"/>
                         <outlet property="distLabel" destination="dl1-9F-z9q" id="UQS-BU-LU2"/>
-                        <outlet property="remainingLabel" destination="jQx-ap-kp3" id="K33-2Q-uYh"/>
                         <outlet property="speedLabel" destination="PFK-mc-JdZ" id="5uu-uM-q1w"/>
+                        <outlet property="temperatureButton" destination="uau-Rf-2H2" id="bdU-Mp-V0u"/>
                         <outlet property="tempsLabel" destination="N6J-Qf-CDc" id="hZe-UF-Ynr"/>
+                        <outlet property="unitsLabel" destination="EWY-dr-3G7" id="6dq-dg-S6c"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="406.25641025641028" y="237.56410256410257"/>
+            <point key="canvasLocation" x="404" y="235"/>
         </scene>
     </scenes>
 </document>

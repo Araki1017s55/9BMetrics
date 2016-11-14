@@ -9,3 +9,11 @@
 import Foundation
 
 let kWheelVariableChangedNotification = "wheelVariableChanged"
+
+
+
+// Settings Constants 
+
+let kTestMode = "enabled_test"
+let kDashboardMode = "dashboard_mode"
+let kBlockSleepMode = "block_sleep"

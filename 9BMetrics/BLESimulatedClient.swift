@@ -193,12 +193,14 @@ class BLESimulatedClient: NSObject {
             locm.startUpdatingLocation()
         }
         
+        UIApplication.shared.isIdleTimerDisabled = store.bool(forKey: kBlockSleepMode)
     }
     
     func stop(){
         
         // First we disconnect the device
         
+        UIApplication.shared.isIdleTimerDisabled = false     // Restore sleep mode
         if self.connection.connected{
             
             AppDelegate.debugLog("Stopping")
@@ -667,11 +669,6 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
             altm.stopRelativeAltitudeUpdates()
             self.altimeter = nil
         }
-        
-        
-
-        
-        
     }
     
     func charUpdated(_ char : CBCharacteristic, data: Data){

@@ -31,9 +31,17 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     @IBOutlet weak  var tempsLabel : WKInterfaceLabel!
     @IBOutlet weak  var speedLabel : WKInterfaceLabel!
     @IBOutlet weak  var batteryLabel : WKInterfaceLabel!
-    @IBOutlet weak  var remainingLabel : WKInterfaceLabel!
+    @IBOutlet weak  var temperatureLabel : WKInterfaceLabel!
+    @IBOutlet weak  var unitsLabel : WKInterfaceLabel!
+    @IBOutlet weak  var batteryButton : WKInterfaceButton!
+    @IBOutlet weak  var temperatureButton : WKInterfaceButton!
+   
     
-    
+    enum mobileFields {
+        case speedField
+        case batteryField
+        case temperatureField
+    }
     
     // State
     
@@ -59,6 +67,14 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var colorLevel : Int = 0
     var oldColorLevel : Int = 0
     var stateChanged = false
+    
+    var mainField = mobileFields.speedField
+    var oldMainField = mobileFields.speedField
+    
+    
+    
+    
+    
     
     var wcsession : WCSession? = WCSession.default()
     
@@ -214,38 +230,105 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 self.oldTemps = self.temps
             }
             
-            if fabs(self.oldSpeed - self.speed) >= 0.01 {
-                self.speedLabel.setText(String(format: "%5.2f", self.speed))
-                self.oldSpeed = self.speed
-            }
             
-            if fabs(self.oldBattery - self.battery) >= 1.0 {
-                self.batteryLabel.setText(String(format: "%2d %%", Int(self.battery)))
-                self.oldBattery = self.battery
-            }
             
-            //self.remainingLabel.setText(String(format: "%5.2f %@", self.remaining, "Km"))
-            
-            if fabs(self.oldTemperature - self.temperature) >= 0.1 {
-                self.remainingLabel.setText(String(format: "%3.0f%@", self.temperature, "ºC"))
-                self.oldTemperature = self.temperature
-            }
-            
-            if fabs(self.oldBattery - self.battery) >= 1.0 {
-                if self.battery < 30.0{
-                    self.batteryLabel.setTextColor(UIColor.red)
-                }else{
-                    self.batteryLabel.setTextColor(UIColor.green)
-                }
-                self.oldBattery = self.battery
-            }
-            
-            if self.oldColorLevel != self.colorLevel {
-                self.speedLabel.setTextColor(self.color)
-                self.oldColor = self.color
-                self.oldColorLevel = self.colorLevel
+            if fabs(self.oldSpeed - self.speed) >= 0.01  || self.mainField != self.oldMainField{
+                
+                switch self.mainField {
+                    
+                case .speedField:
+                    self.speedLabel.setText(String(format: "%5.2f", self.speed))
+                    self.unitsLabel.setText("Km/h")
+                    
+                case .batteryField:
+                    
+                    self.batteryButton.setTitle(String(format: "%5.0f K/h", self.speed))
+                    
+                case .temperatureField:
+                    self.temperatureButton.setTitle(String(format: "%5.0f K/h", self.speed))
+
                 
             }
+            }
+            
+            if fabs(self.oldBattery - self.battery) >= 1.0  || self.mainField != self.oldMainField{
+                
+                switch self.mainField {
+                
+                 case .batteryField:
+                    self.speedLabel.setText(String(format: "%2d", Int(self.battery)))
+                    self.unitsLabel.setText("%")
+ 
+                default:
+                    self.batteryButton.setTitle(String(format: "%2d %%", Int(self.battery)))
+
+                }
+                
+            }
+            
+            //self.temperatureLabel.setText(String(format: "%5.2f %@", self.remaining, "Km"))
+            
+            if fabs(self.oldTemperature - self.temperature) >= 0.1  || self.mainField != self.oldMainField{
+                
+                
+                switch self.mainField {
+                    
+                case .temperatureField:
+                    self.speedLabel.setText(String(format: "%3.0f", self.temperature))
+                    self.unitsLabel.setText("ºC")
+                    
+                    
+                default:
+                    self.temperatureButton.setTitle(String(format: "%3.0f%@", self.temperature, "ºC"))
+                    
+                }
+               
+                
+             }
+            
+            
+            // Colors only affect mainField
+            
+             
+            
+            switch self.mainField {
+                
+            case .speedField:
+                if self.colorLevel != self.oldColorLevel || self.mainField != self.oldMainField{
+                
+                    self.speedLabel.setTextColor(self.color)
+                    self.unitsLabel.setTextColor(self.color)
+                }
+                
+            case .batteryField:
+                if fabs(self.oldBattery - self.battery) >= 1.0  || self.mainField != self.oldMainField{
+                    if self.battery < 30.0{
+                        self.speedLabel.setTextColor(UIColor.red)
+                        self.unitsLabel.setTextColor(UIColor.red)
+                    }else{
+                        self.speedLabel.setTextColor(UIColor.green)
+                        self.unitsLabel.setTextColor(UIColor.red)
+                    }
+                }
+                
+            default:
+                
+                if self.mainField != self.oldMainField {
+                    self.speedLabel.setTextColor(self.skyColor)
+                    self.unitsLabel.setTextColor(self.skyColor)
+
+                }
+                
+            }
+            
+            self.oldSpeed = self.speed
+            self.oldTemperature = self.temperature
+            self.oldBattery = self.battery
+            self.oldColorLevel = self.colorLevel
+            self.oldMainField = self.mainField
+            
+            
+            
             
             if self.recording != self.oldRecording{
                 if self.recording {
@@ -294,6 +377,17 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     
     
+    @IBAction func temperatureAction(){
+        
+        self.mainField = self.mainField == .temperatureField ? .speedField : .temperatureField
+        self.updateFields()
+     }
+    
+    
+    @IBAction func batteryAction(){
+        self.mainField = self.mainField == .batteryField ? .speedField : .batteryField
+        self.updateFields()
+    }
      /*
      func sessionWatchStateDidChange(_ session: WCSession) {
      

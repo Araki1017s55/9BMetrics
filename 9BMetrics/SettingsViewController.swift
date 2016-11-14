@@ -27,6 +27,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var refreshField: UISlider!
     @IBOutlet weak var uuidLabel: UILabel!
     
+    @IBOutlet weak var fBlockSleepTimer: UISwitch!
     @IBOutlet weak var fGraphicDashboard: UISwitch!
     weak var delegate : ViewController?
     
@@ -44,9 +45,14 @@ class SettingsViewController: UIViewController {
 
             if let uuid = store.object(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey) as? String{
                 uuidLabel.text = uuid 
+            }else {
+                uuidLabel.text = ""
             }
             
+            fBlockSleepTimer.isOn = store.bool(forKey: kBlockSleepMode)
         }
+        
+        
         // Do any additional setup after loading the view.
     }
     
@@ -124,9 +130,6 @@ class SettingsViewController: UIViewController {
     @IBAction func setGraphicDashboard(_ src : UISwitch){
         
         let store = UserDefaults.standard
-        if let uuid = store.object(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey) as? String{
-            uuidLabel.text = uuid
-        }
         if let dele = delegate {
 
             store.set(src.isOn, forKey: dele.kDashboardMode)
@@ -141,5 +144,24 @@ class SettingsViewController: UIViewController {
         AppDelegate.debugLog("Switch Value %@", state)
         
     }
+    
+    @IBAction func setBlockSleep(_ src : UISwitch){
+        
+        let store = UserDefaults.standard
+         if let dele = delegate {
+            
+            store.set(src.isOn, forKey: dele.kBlockSleepMode)
+        }
+        
+        var state = "Off"
+        
+        if src.isOn{
+            state = "On"
+        }
+        
+        AppDelegate.debugLog("Switch Value %@", state)
+        
+    }
+
  
 }

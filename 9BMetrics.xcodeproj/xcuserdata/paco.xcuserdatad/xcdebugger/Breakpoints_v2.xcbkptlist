@@ -54,11 +54,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/BLESimulatedClient.swift"
-            timestampString = "500812196.322714"
+            timestampString = "500818422.483872"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "387"
-            endingLineNumber = "387"
+            startingLineNumber = "389"
+            endingLineNumber = "389"
             landmarkName = "doSendStateToWatch()"
             landmarkType = "7">
             <Locations>

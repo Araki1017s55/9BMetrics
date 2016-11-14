@@ -79,6 +79,11 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
     var firmwareVer : String?
     var softwareVer : String?
     
+    // Lasr Adapter returned
+    
+    var lastAdapter : BLEWheelAdapterProtocol?
+    
+    
     
     var delegate : BLEMimConnectionDelegate?
     
@@ -341,8 +346,6 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         if self.connected && self.subscribed    {   // Try to reconnect
             
             BLESimulatedClient.sendNotification(BLESimulatedClient.kStartConnection, data:["status":"Connecting"] )
-            
-            
             self.connectionRetries = connectionRetries + 1
             
             if connectionRetries < maxConnectionRetries{
@@ -530,10 +533,19 @@ extension BLEMimConnection : CBPeripheralDelegate{
            
             if let dele = delegate {
                 dele.deviceAnalyzed(peripheral, services: self.wheelServices)
+                
+                if let adp = lastAdapter, let nam = peripheral.name{
+                    if adp.isComptatible(services: self.wheelServices) && adp.getName() == nam{
+                        dele.deviceConnected(peripheral, adapter: adp)
+                        return
+                    }
+                }
+                
                 if let adapter = BLEWheelSelector.sharedInstance.getAdapter(wheelServices: self.wheelServices){
                     if let nam = peripheral.name {
                         adapter.setDefaultName(nam)
                     }
+                    lastAdapter = adapter
                     dele.deviceConnected(peripheral, adapter: adapter)
                 }
 
