@@ -289,6 +289,10 @@ class BLESimulatedClient: NSObject {
                                                             
                                                             if let alt = alts, let nb = self.datos {
                                                                 nb.addValue(.Altitude, value: alt.relativeAltitude.doubleValue)
+                                                                if let adp = self.adapter {
+                                                                    adp.giveTime(self.connection)
+                                                                }
+
                                                             }
                 } )
             }
@@ -852,6 +856,9 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
                 }
             }
             
+            if let adp = self.adapter {
+                adp.giveTime(self.connection)
+            }
             if Date().timeIntervalSince(self.lastWatchUpdate) > watchTimerStep {
                 self.doSendStateToWatch()
             }
