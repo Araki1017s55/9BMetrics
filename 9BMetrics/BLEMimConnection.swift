@@ -239,7 +239,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
                 let theService =  [CBUUID(string: "FFE0")];
                 
               
-                self.centralManager!.scanForPeripherals(withServices: theService, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
+                self.centralManager!.scanForPeripherals(withServices: nil, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])
                 self.scanning = true
                 AppDelegate.debugLog("Scanning started")
             }else{

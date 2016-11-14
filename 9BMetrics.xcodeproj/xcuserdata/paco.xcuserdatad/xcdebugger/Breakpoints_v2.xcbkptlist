@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/GotawayAdapter.swift"
-            timestampString = "500494889.082602"
+            timestampString = "500811416.493398"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "407"
-            endingLineNumber = "407">
+            startingLineNumber = "412"
+            endingLineNumber = "412">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -24,11 +24,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/GotawayAdapter.swift"
-            timestampString = "500494889.082602"
+            timestampString = "500811416.493398"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "472"
-            endingLineNumber = "472">
+            startingLineNumber = "477"
+            endingLineNumber = "477">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

@@ -442,6 +442,15 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         return self.procesaBuffer(connection)
     }
     
+    func giveTime(_ connection: BLEMimConnection) {
+        
+        if let q = self.queryQueue{
+            if q.operationCount < 4{
+                self.sendNewRequest(connection)
+            }
+        }
+    }
+    
     
     func getName() -> String{
         return name

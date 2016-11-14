@@ -217,7 +217,7 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             self.fStartStopButton.setImage(img, for: UIControlState())
             if let cli = self.client{
                 if let nb = cli.datos{
-                    self.fSeriaNumber.text = nb.getSerialNo()
+                    self.fSeriaNumber.text = nb.getName()
                 }
             }
         })

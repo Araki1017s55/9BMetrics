@@ -308,6 +308,10 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
         
         
     }
+    func giveTime(_ connection: BLEMimConnection) {
+        
+    }
+
     
     func charUpdated(_ connection: BLEMimConnection,  char : CBCharacteristic, data: Data) -> [(WheelTrack.WheelValue, Date, Double)]?{
         

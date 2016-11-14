@@ -86,6 +86,10 @@ protocol BLEWheelAdapterProtocol {
     
     func charUpdated(_ connection: BLEMimConnection,  char : CBCharacteristic, data: Data) -> [(WheelTrack.WheelValue, Date, Double)]?
     
+    // Give Time. Uset to perform periodic tasks when GPS or Altimeter data is received
+    
+    func giveTime(_ connection: BLEMimConnection) 
+  
     // name, version, sn may return empty
     
     func getName() -> String
