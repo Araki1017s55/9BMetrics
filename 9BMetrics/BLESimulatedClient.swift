@@ -152,6 +152,8 @@ class BLESimulatedClient: NSObject {
     func initNotifications()
     {
         NotificationCenter.default.addObserver(self, selector: #selector(BLESimulatedClient.updateTitle(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kHeaderDataReadyNotification), object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(BLESimulatedClient.honkHonk(_:)), name: NSNotification.Name(kHonkHonkNotification), object: nil)
     }
     
     // Connect is the start connection
@@ -258,6 +260,16 @@ class BLESimulatedClient: NSObject {
         
         let notification = Notification(name:Notification.Name(rawValue: notification), object:self, userInfo: data)
         NotificationCenter.default.post(notification)
+        
+    }
+    
+    func honkHonk(_ not : Notification){
+        
+        if let adp = self.adapter as? KingSongAdapter{
+            
+            adp.playHorn(self.connection)
+            
+        }
         
     }
     
@@ -503,40 +515,14 @@ class BLESimulatedClient: NSObject {
         
     }
     // Sets limit speed in km/h
-    // setLimitSpeed is a test function specific of Ninebot. Not to use in release
+    // setLimitSpeed if adapter supports it
    
     func setLimitSpeed(_ speed : Double){
-        // Check that level is between 0..9
-        if speed < 0  {
-            return
+        
+        if let adp = self.adapter {
+            adp.setLimitSpeed(speed)
         }
         
-        let speedm = Int(round(speed * 1000.0)) // speedm es la velocitat en m
-        
-        let b1 = UInt8(speedm / 256)
-        let b0 = UInt8(speedm % 256)
-        
-        
-        // That write riding level
-        
-        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kSpeedLimit), dat:[b0, b1] )
-        
-        if let st = message?.toString(){
-            AppDelegate.debugLog("Command : %@", st)
-        }
-        
-        if let dat = message?.toNSData(){
-            
-            self.connection.writeValue("FFE1", data:dat)
-        }
-        
-        // Get value to see if it is OK
-        
-        message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat:[UInt8(2)] )
-        
-        if let dat = message?.toNSData(){
-            self.connection.writeValue("FFE1", data:dat)
-        }
     }
     
     // setMaxSpeed is a test function specific of Ninebot. Not to use in release
@@ -577,34 +563,9 @@ class BLESimulatedClient: NSObject {
     // setRidingLevel is a test function specific of Ninebot. Not to use in release
     func setRidingLevel(_ level : Int){
         
-        // Check that level is between 0..9
-        
-        if level < 1 || level > 9 {
-            return
+        if let adp = self.adapter {
+            adp.setDrivingLevel(level)
         }
-        
-        
-        // That write riding level
-        
-        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kvRideMode), dat:[UInt8(level), UInt8(0)] )
-        
-        if let st = message?.toString(){
-            AppDelegate.debugLog("Command : %@", st)
-        }
-        
-        if let dat = message?.toNSData(){
-            
-            self.connection.writeValue("FFE1", data:dat)
-        }
-        
-        // Get value to see if it is OK
-        
-        message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat:[UInt8(2)] )
-        
-        if let dat = message?.toNSData(){
-            self.connection.writeValue("FFE1", data:dat)
-        }
-        
     }
     
 
@@ -812,7 +773,7 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
     func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation])
     {
-        AppDelegate.debugLog("LocationManager received locations")
+        //AppDelegate.debugLog("LocationManager received locations")
         
         if let nb = self.datos {
             

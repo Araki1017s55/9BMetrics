@@ -60,7 +60,6 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     
     var graphToShow : Int = 0
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -86,7 +85,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 fTitle.text = "Unknown"
             }
             
-            fVersion.text = nb.getSerialNo() + "(" + nb.getVersion() + ")"
+            fVersion.text = nb.getName() + "(" + nb.getVersion() + ")"
             ascent = nb.getAscent()
             descent = nb.getDescent()
             dist = nb.getCurrentValueForVariable(.Distance) / 1000.0    // Convert to KM

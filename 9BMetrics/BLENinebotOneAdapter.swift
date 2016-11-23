@@ -5,6 +5,18 @@
 //  Created by Francisco Gorina Vanrell on 4/5/16.
 //  Copyright © 2016 Paco Gorina. All rights reserved.
 //
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//( at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import Foundation
 import CoreBluetooth
@@ -25,6 +37,8 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     var queryQueue : OperationQueue?
     
+    var lastConnection : BLEMimConnection?
+    
     static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
     static var scales = Array<Double>(repeating: 1.0, count: 256)
     static var signed = [Bool](repeating: false, count: 256)
@@ -32,7 +46,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     var values : [Int] = Array(repeating: -1, count: 256)
     
     var name : String = "Ninebot"
-
+    
     
     
     // Called when lost connection. perhaps should do something. If not forget it
@@ -103,9 +117,9 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         signed[BLENinebot.kRollAngleVelocity] = true
         signed[BLENinebot.kCurrent] = true
         signed[BLENinebot.kvPitchAngle] = true
-
+        
     }
-   
+    
     //MARK: Receiving Data. Append data to buffer
     
     func appendToBuffer(_ data : Data){
@@ -122,7 +136,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     // as each block is received. Logical Data may span more than one block and not be aligned.
     //
     //
-    //  So we call procesaBuffer to extract any posible data. It is returned as an array of 
+    //  So we call procesaBuffer to extract any posible data. It is returned as an array of
     //  3 values, the variable, the date and the value all aready converted to ggeneric values
     // and SI units
     
@@ -204,14 +218,14 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                         
                         var sv = v
                         
-                        // Treat signed values 
+                        // Treat signed values
                         
                         if BLENinebotOneAdapter.signed[k]{
                             if v >= 32768 {
                                 sv = v - 65536
                             }
                         }
-
+                        
                         
                         //TODO: Verify that conversion is OK. First treat two Ninebot variables
                         // For the moment not found any value
@@ -223,10 +237,16 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                         }
                         // Convert to SI by an scale and assign to generic variable
                         
+                        
+                        //Checl SpeedLimit
                         let dv = Double(sv) * BLENinebotOneAdapter.scales[k]
+                        
+                        if k == BLENinebot.kSpeedLimit {
+                            AppDelegate.debugLog("Speed Limit %f", dv)
+                        }
                         if let wv = BLENinebotOneAdapter.conversion[k]{
                             outarr!.append((wv, Date(), dv))
-                                                        
+                            
                         }
                     }
                 }
@@ -273,7 +293,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         
         
         headersOk = filled
-
+        
         if headersOk {  // Notify the world we have all the data :)
             BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
         }
@@ -282,7 +302,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         
         return filled
     }
-   
+    
     
     
     //MARK: Sending Requests
@@ -292,7 +312,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         
         if self.headersOk {  // Get normal data
             
-              
+            
             for (op, l) in listaOpFast{
                 let message = BLENinebotMessage(com: op, dat:[ l * 2] )
                 if let dat = message?.toNSData(){
@@ -322,17 +342,25 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             
             // Get riding Level and max speeds
             
+            message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat: [UInt8(4)])
+            
+            if let dat = message?.toNSData(){
+                connection.writeValue("FFE1", data:dat)
+            }
+            
             message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat: [UInt8(4)])
             
             if let dat = message?.toNSData(){
                 connection.writeValue("FFE1", data:dat)
             }
             
+           
             message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat: [UInt8(2)])
             
             if let dat = message?.toNSData(){
                 connection.writeValue("FFE1", data:dat)
             }
+
             
         }
     }
@@ -356,11 +384,11 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     }
     
     
-//}
-
-//MARK: BLEWheelAdapterProtocol Extension
-
-//extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
+    //}
+    
+    //MARK: BLEWheelAdapterProtocol Extension
+    
+    //extension BLENinebotOneAdapter : BLEWheelAdapterProtocol{
     
     
     func wheelName() -> String {
@@ -379,7 +407,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         
         return false
     }
-
+    
     
     func startRecording(){
         headersOk = false
@@ -417,6 +445,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         
         self.sendNewRequest(connection)
         
+        self.lastConnection = connection
         
         
         // Just to be sure we start another timer to correct cases where we loose all requests
@@ -433,6 +462,9 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             tim.invalidate()
             self.sendTimer = nil
         }
+        
+        self.lastConnection = nil
+        
         
     }
     
@@ -479,7 +511,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         
         for i in 16 ..< 23{
             
-        
+            
             let v = values[i]
             
             
@@ -496,9 +528,96 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         return no
     }
     
+    func getRidingLevel() -> Int{
+        return 0
+     }
+    
+    func getMaxSpeed() -> Double {
+        return 20.0
+    }
+    
     func setDefaultName(_ name : String){
         self.name = name
     }
+    
+    func setDrivingLevel(_ level: Int){
+        
+        
+        // Check that level is between 0..9
+        
+        if level < 1 || level > 9 {
+            return
+        }
+        
+        
+        if let connection = self.lastConnection {
+            
+            // That write riding level
+            
+            var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kvRideMode), dat:[UInt8(level), UInt8(0)] )
+            
+            if let st = message?.toString(){
+                AppDelegate.debugLog("Command : %@", st)
+            }
+            
+            if let dat = message?.toNSData(){
+                
+                connection.writeValue("FFE1", data:dat)
+            }
+            
+            // Get value to see if it is OK
+            
+            message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat:[UInt8(2)] )
+            
+            if let dat = message?.toNSData(){
+                connection.writeValue("FFE1", data:dat)
+            }
+        }
+        
+        
+    }
+    func setLights(_ level: Int) {   // 0->Off 1->On....
+        
+        // Sorry, no ligths in Ninebot :(
+    }
+    
+    func setLimitSpeed(_ speed : Double){
+        // Check that level is between 0..9
+        if speed < 0  {
+            return
+        }
+        
+        if let connection = self.lastConnection {
+            
+            let speedm = Int(round(speed * 1000.0)) // speedm es la velocitat en m
+            
+            let b1 = UInt8(speedm / 256)
+            let b0 = UInt8(speedm % 256)
+            
+            
+            // That write riding level
+            
+            var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kSpeedLimit), dat:[b0, b1] )
+            
+            if let st = message?.toString(){
+                AppDelegate.debugLog("Command : %@", st)
+            }
+            
+            if let dat = message?.toNSData(){
+                connection.writeValue("FFE1", data:dat)
+            }
+            
+            // Get value to see if it is OK
+            
+            message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat:[UInt8(2)] )
+            
+            if let dat = message?.toNSData(){
+                connection.writeValue("FFE1", data:dat)
+            }
+            
+        }
+    }
+    
 }
 
 

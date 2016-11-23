@@ -95,8 +95,13 @@ protocol BLEWheelAdapterProtocol {
     func getName() -> String
     func getVersion() -> String
     func getSN() -> String
+    func getRidingLevel() -> Int
+    func getMaxSpeed() -> Double
     
     func setDefaultName(_ name : String)
+    func setDrivingLevel(_ level: Int)
+    func setLights(_ level: Int)    // 0->Off 1->On....
+    func setLimitSpeed(_ speed : Double)   // Speed in km/h
     
     
     // Returns a name for the wheel adapter (ex. Ninebot One E or Gotaway ....)

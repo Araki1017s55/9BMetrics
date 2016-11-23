@@ -307,7 +307,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                         self.unitsLabel.setTextColor(UIColor.red)
                     }else{
                         self.speedLabel.setTextColor(UIColor.green)
-                        self.unitsLabel.setTextColor(UIColor.red)
+                        self.unitsLabel.setTextColor(UIColor.green)
                     }
                 }
                 

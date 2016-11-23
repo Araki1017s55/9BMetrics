@@ -9,6 +9,7 @@
 import Foundation
 
 let kWheelVariableChangedNotification = "wheelVariableChanged"
+let kHonkHonkNotification = "kHonkHonk"
 
 
 

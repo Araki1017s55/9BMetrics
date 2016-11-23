@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/GotawayAdapter.swift"
-            timestampString = "500811416.493398"
+            timestampString = "501159552.99789"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "412"
-            endingLineNumber = "412">
+            startingLineNumber = "433"
+            endingLineNumber = "433">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -24,11 +24,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/GotawayAdapter.swift"
-            timestampString = "500811416.493398"
+            timestampString = "501159552.99789"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "477"
-            endingLineNumber = "477">
+            startingLineNumber = "498"
+            endingLineNumber = "498">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -54,11 +54,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/BLESimulatedClient.swift"
-            timestampString = "500818422.483872"
+            timestampString = "501596483.68799"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "389"
-            endingLineNumber = "389"
+            startingLineNumber = "401"
+            endingLineNumber = "401"
             landmarkName = "doSendStateToWatch()"
             landmarkType = "7">
             <Locations>

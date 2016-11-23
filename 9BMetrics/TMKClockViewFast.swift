@@ -48,6 +48,9 @@ class TMKClockViewFast: UIView {
     var cursor  : CAShapeLayer?
     
     var layersDone = false
+    
+    var touching = false
+    var oldTintColor = UIColor.white
   
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -321,5 +324,27 @@ class TMKClockViewFast: UIView {
         super.layoutSubviews()
         
     }
- 
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touching = true
+        oldTintColor = self.tintColor
+        self.tintColor = UIColor.blue
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touching = false
+        self.tintColor = oldTintColor
+        
+        // Here we should call honk nonk. really perhaps send a notification
+        
+        NotificationCenter.default.post(name: Notification.Name(kHonkHonkNotification), object: self)
+        
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touching = false
+        self.tintColor = oldTintColor
+    }
+    
+   
 }

@@ -5,6 +5,18 @@
 //  Created by Francisco Gorina Vanrell on 4/5/16.
 //  Copyright © 2016 Paco Gorina. All rights reserved.
 //
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//( at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import Foundation
 import CoreBluetooth
@@ -324,7 +336,7 @@ class CANMessage{
     
     // Return SerialNumber, Model, Version
     
-    func parseSlowInfoMessage() -> (String, BLEInMotionAdapter.Model, String){
+    func parseSlowInfoMessage() -> (String, BLEInMotionAdapter.Model, String, Double){
         if let bytes = ex_data{
     
             let serialNumber = String(String(bytes:bytes[0..<8], encoding : .utf8 )!.characters.reversed()) // Seems it is reversed!!!
@@ -335,12 +347,12 @@ class CANMessage{
             let v1 = (v - v0 * 0xFFFFFF) / 0xFFFF
             let v2 = v - v0 * 0xFFFFFF - v1 * 0xFFFF
             let version = String(format:"%d.%d.%d", v0, v1, v2)
+            let vmax = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 60 )) + Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 16 ))) / (3812.0 * 2.0) )
             
             
-            
-            return (serialNumber, model, version)
+            return (serialNumber, model, version, vmax)
          }
-        return ("", BLEInMotionAdapter.Model.UNKNOWN, "")
+        return ("", BLEInMotionAdapter.Model.UNKNOWN, "", 0.0)
     
     }
 }
@@ -949,11 +961,14 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                             }
                             
                         case .GetSlowInfo:
-                            
-                            (serialNumber, model, version) = data.parseSlowInfoMessage()
+                            var vmax = 0.0
+                            (serialNumber, model, version, vmax) = data.parseSlowInfoMessage()
                              AppDelegate.debugLog("SN %@ Model %@ version %@", serialNumber, model.rawValue, version)
                             headersOk = true
                             BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
+                             
+                            outValues.append((WheelTrack.WheelValue.MaxSpeed, date, vmax))
+                           
                             
                         default:
                             break;
@@ -990,9 +1005,26 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         return serialNumber
     }
     
+    func getRidingLevel() -> Int{
+        return 0
+    }
+    
+    func getMaxSpeed() -> Double {
+        return 20.0
+    }
+
     func setDefaultName(_ name : String){
         self.name = name
     }
+    
+     func setDrivingLevel(_ level: Int){
+        
+    }
+    func setLights(_ level: Int) {   // 0->Off 1->On....
+    }
+    func setLimitSpeed(_ speed : Double){
+    }
+
 }
 
 

@@ -5,6 +5,18 @@
 //  Created by Francisco Gorina Vanrell on 4/5/16.
 //  Copyright © 2016 Paco Gorina. All rights reserved.
 //
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//( at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import Foundation
 import CoreBluetooth
@@ -19,10 +31,13 @@ class KingSongAdapter : NSObject {
     
     let NVoltageSamples = 10
     
-    var name = ""
+    var name = "Kingsong"
     var serial = ""
     
     let distanceCorrection = 1.0 //0.791627219
+    
+    let writeChar = "FFE1"
+    let readChar = "FFE1"
     
     
     // Called when lost connection. perhaps should do something. If not forget it
@@ -215,10 +230,6 @@ class KingSongAdapter : NSObject {
         }
         return outarr
     }
-    
-    
-    
-    
 }
 
 //MARK: BLEWheelAdapterProtocol Extension
@@ -227,7 +238,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     
     
     func wheelName() -> String {
-        return "Kingsong"
+        return name
     }
     
     
@@ -236,7 +247,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     func isComptatible(services : [String : BLEService]) -> Bool{
         
         if let srv = services["FFE0"], let _ = services["FFF0"] , let _ = services["180A"]{
-            if let chr = srv.characteristics["FFE1"]  {
+            if let chr = srv.characteristics[writeChar]  {
                 if chr.flags == "rxn"{
                     return true
                 }
@@ -272,7 +283,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
         
         let data = Data(bytes: UnsafePointer<UInt8>(command), count: command.count)
         
-        connection.writeValue("FFE1", data : data)
+        connection.writeValue(writeChar, data : data)
         
     }
     
@@ -290,15 +301,29 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
         
         let data = Data(bytes: UnsafePointer<UInt8>(command), count: command.count)
         
-        connection.writeValue("FFE1", data : data)
+        connection.writeValue(writeChar, data : data)
         
+    }
+    func playHorn(_ connection: BLEMimConnection){
+        var command : [UInt8] = Array(repeating: 0, count: 20)
+        
+        command[0] = 170
+        command[1] = 85
+        command[16] = 136
+        command[17] = 20
+        command[18] = 90
+        command[19] = 90
+        
+        let data = Data(bytes: UnsafePointer<UInt8>(command), count: command.count)
+        
+        connection.writeValue(writeChar, data : data)
     }
     
     func deviceConnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
         
-        // OK, subscribe to characteristif FFE1
+        // OK, subscribe to characteristif writeChar
         
-        connection.subscribeToChar("FFE1")
+        connection.subscribeToChar(readChar)
         askName(connection, peripheral: peripheral)
         
     }
@@ -326,16 +351,34 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     
     func getVersion() -> String{
         
-        return "1.0!"
+        return "1.0"
     }
     
     func getSN() -> String{
         return self.serial
     }
     
+    func getRidingLevel() -> Int{
+        return 0
+    }
+    
+    func getMaxSpeed() -> Double {
+        return 20.0
+    }
+
+    
     func setDefaultName(_ name : String){
         self.name = name
     }
+    
+    func setDrivingLevel(_ level: Int){
+        
+    }
+    func setLights(_ level: Int) {   // 0->Off 1->On....
+    }
+    func setLimitSpeed(_ speed : Double){
+    }
+
 }
 
 

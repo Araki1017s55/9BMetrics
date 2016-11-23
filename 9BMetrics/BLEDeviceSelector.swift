@@ -75,7 +75,29 @@ class BLEDeviceSelector: UIViewController {
         
         return nil
     }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(BLEDeviceSelector.foundDevices(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kdevicesDiscoveredNotification), object: nil)
+        super.viewWillAppear(animated)
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
+        super.viewWillDisappear(animated)
+    }
+    
+    func foundDevices(_ notification : Notification){
+        
+        if let devices = notification.userInfo?["peripherals"] as? [CBPeripheral]{
+            addDevices(devices)
+        }
+    }
+    
 }
+
+
 
 extension BLEDeviceSelector : UITableViewDataSource{
     
