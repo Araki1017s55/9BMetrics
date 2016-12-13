@@ -264,14 +264,31 @@ class BLESimulatedClient: NSObject {
     }
     
     func honkHonk(_ not : Notification){
-        
-        if let adp = self.adapter as? KingSongAdapter{
-            
-            adp.playHorn(self.connection)
-            
-        }
+        self.doHonk()
         
     }
+    
+    func doHonk(){
+        
+        AppDelegate.debugLog("Honk Honk")
+        if let adp = self.adapter as? KingSongAdapter{
+            adp.playHorn(self.connection)
+        }
+    }
+    
+    func doStop(){
+   
+        
+        if connection.subscribed{
+            stop()
+        }
+        else if connection.connecting {
+            stop()
+        }
+
+    
+    }
+
     
     func updateTitle(_ not: Notification){
         
@@ -335,6 +352,7 @@ class BLESimulatedClient: NSObject {
             dict["battery"]  =  nb.getCurrentValueForVariable(.Battery)
             dict["remaining"]  =  0.0
             dict["temperature"]  =  nb.getCurrentValueForVariable(.Temperature)
+            dict["lock"]  =  nb.getCurrentValueForVariable(.lockEnabled)
             
             let v =  nb.getCurrentValueForVariable(.Speed) * 3.6
             
@@ -568,6 +586,32 @@ class BLESimulatedClient: NSObject {
         }
     }
     
+    // enableLimitSpeed enables speedLimit
+    func enableLimitSpeed(_ enable : Bool){
+        
+        if let adp = self.adapter {
+            adp.enableLimitSpeed(enable)
+        }
+    }
+
+    // setRidingLevel is a test function specific of Ninebot. Not to use in release
+    func lockWheel(_ lock : Bool){
+        
+        if let adp = self.adapter {
+            adp.lockWheel(lock)
+        }
+    }
+
+    func toggleLock(){
+        // Check if we are locked or not
+        
+        if let dat = self.datos{
+            let locked = dat.getCurrentValueForVariable(.lockEnabled) != 0.0 ? true : false
+            
+            lockWheel(!locked)
+        }
+        
+    }
 
     
 }
@@ -743,6 +787,12 @@ extension BLESimulatedClient :  WCSessionDelegate{
                 
             case "waypoint" :
                 break
+                
+            case "honk" :
+                self.doHonk()
+                
+            case "lock" :
+                self.toggleLock()
                 
             default:
                 AppDelegate.debugLog("Op de Watch desconeguda", op)

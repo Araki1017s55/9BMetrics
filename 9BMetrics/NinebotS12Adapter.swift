@@ -26,7 +26,7 @@ class NinebotS12Adapter : BLENinebotOneAdapter {
     
     //MARK: Sending Requests
     
-    override func sendData(_ connection : BLEMimConnection){
+    override func sendData(_ connection : BLEMimConnection, message : BLENinebotMessage?){
         
         
         if self.headersOk {  // Get normal data

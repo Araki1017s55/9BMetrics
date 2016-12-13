@@ -61,6 +61,13 @@
                                     </variation>
                                 </label>
                             </items>
+                            <gestureRecognizers>
+                                <tapGestureRecognizer numberOfTapsRequired="2" id="k5D-uQ-f6j">
+                                    <connections>
+                                        <action selector="handleSpeedGesture" destination="AgC-eL-Hgc" id="k3O-LY-faz"/>
+                                    </connections>
+                                </tapGestureRecognizer>
+                            </gestureRecognizers>
                             <variation key="default">
                                 <mask key="items">
                                     <exclude reference="EWY-dr-3G7"/>

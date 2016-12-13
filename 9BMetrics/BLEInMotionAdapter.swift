@@ -119,7 +119,7 @@ class CANMessage{
         format = bArr[14] == 0 ? .StandardFormat : .ExtendedFormat
         type = bArr[15] == 0 ? .DataFrame : .RemoteFrame
         
-        if len == 0xFE {
+        if len == 0xFE {    // COMMENT: Aqui podria haver-hi un error
             let ldata = Int(BLEInMotionAdapter.IntFromBytes(data, starting: 0))  //(((Int(data[3]) * 256) + Int(data[2])) * 256 + Int(data[1])) * 256 + Int(data[0])
             
             if ldata == bArr.count - 16 {
@@ -212,7 +212,7 @@ class CANMessage{
         return msg
         
     }
-
+    
     static func getSlowData() -> CANMessage{
         let msg = CANMessage()
         
@@ -225,7 +225,21 @@ class CANMessage{
         return msg
         
     }
-
+    
+//    static func setMode(_ mode : UInt8) -> CANMessage{
+//        
+//        let msg = CANMessage()
+//        
+//        msg.len = 8
+//        msg.id = .GetSlowInfo   // Get Fast Infi
+//        msg.ch = 5
+//        msg.type = .DataFrame
+//        msg.data = [0xB2, 0, 0, 0, mode, 0, 0, 0]
+//        
+//        return msg
+//        
+//    }
+    
     
     
     static func getBatteryLevelsdata() -> CANMessage {
@@ -254,7 +268,7 @@ class CANMessage{
         
         return msg
     }
-
+    
     
     static func getSerialNumberdata() -> CANMessage {
         let msg = CANMessage()
@@ -275,10 +289,9 @@ class CANMessage{
         let msg = CANMessage()
         
         msg.len = 8
-        msg.id = .RemoteControl
         msg.ch = 5
+        msg.id = .NoOp
         msg.type = .DataFrame
-        
         msg.data = [0xB2, 0, 0, 0, mode, 0, 0, 0]
         
         return msg
@@ -299,9 +312,9 @@ class CANMessage{
             let voltage = Double(BLEInMotionAdapter.IntFromBytes(bytes, starting: 24)) / 100.0
             let current = Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 20)) / 100.0
             let power = voltage * current
- 
+            
             var distance = Double(BLEInMotionAdapter.IntFromBytes(bytes, starting: 44))
-
+            
             if BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "1") ||
                 BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "5"){
                 distance = Double(BLEInMotionAdapter.LongFromBytes(bytes, starting: 44))
@@ -315,6 +328,17 @@ class CANMessage{
                 distance = Double(BLEInMotionAdapter.LongFromBytes(bytes, starting: 44)) / 5.711016379455429E4
             }
             
+            let workMode = BLEInMotionAdapter.IntToWorkMode(Int(BLEInMotionAdapter.IntFromBytes(bytes, starting: 60)))
+            var lock = 0.0
+            switch workMode {
+                
+            case .lock:
+                lock = 1.0
+                
+            default:
+                break
+            }
+            
             let batt = BLEInMotionAdapter.batteryFromVoltage(voltage, model: model)
             return [(WheelTrack.WheelValue.Pitch, d, angle),
                     (WheelTrack.WheelValue.Speed, d, speed),
@@ -322,11 +346,12 @@ class CANMessage{
                     (WheelTrack.WheelValue.Battery, d, batt),
                     (WheelTrack.WheelValue.Current, d, current),
                     (WheelTrack.WheelValue.Power, d, power),
-                    (WheelTrack.WheelValue.AcumDistance, d, distance)
+                    (WheelTrack.WheelValue.AcumDistance, d, distance),
+                    (WheelTrack.WheelValue.lockEnabled, d, lock)
                 
                 
             ]
-
+            
         } else {
             return []
         }
@@ -338,7 +363,10 @@ class CANMessage{
     
     func parseSlowInfoMessage() -> (String, BLEInMotionAdapter.Model, String, Double){
         if let bytes = ex_data{
-    
+            
+            return ("", BLEInMotionAdapter.Model.V5, "", 0.0)
+            
+            
             let serialNumber = String(String(bytes:bytes[0..<8], encoding : .utf8 )!.characters.reversed()) // Seems it is reversed!!!
             let model = BLEInMotionAdapter.byteToModel(bytes)  // CarType is just model.rawValue
             _ = model == .R1S ? "2" : "1"
@@ -351,9 +379,9 @@ class CANMessage{
             
             
             return (serialNumber, model, version, vmax)
-         }
+        }
         return ("", BLEInMotionAdapter.Model.UNKNOWN, "", 0.0)
-    
+        
     }
 }
 
@@ -418,7 +446,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     var headersOk = false
     var sendTimer : Timer?    // Timer per enviar les ex_data periodicament
-    var timerStep = 0.4        // Get data every step
+    var timerStep = 0.2        // Get data every step
     var unpacker = BLEInMotionUnpacker()    // Create as unpacker
     var connection : BLEMimConnection?
     var name : String = "InMotion"
@@ -608,7 +636,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
             return .UNKNOWN
             
         }
-     }
+    }
     
     static func toHexString(_ buffer :[UInt8]) -> String{
         
@@ -697,7 +725,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
             return 0
         }
     }
-
+    
     
     static func SignedIntFromBytes(_ bytes : [UInt8], starting: Int) -> Int{
         
@@ -725,7 +753,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     }
     static func IsCarTypeBelongToInputType(carType : String, type : String) -> Bool{
         
-
+        
         let range = carType.startIndex..<carType.index(after: carType.startIndex)
         if type == "0"{
             
@@ -739,7 +767,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
             return false
         }
         
-       
+        
     }
     
     static func batteryFromVoltage(_ volts : Double, model : Model) -> Double{
@@ -786,7 +814,23 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
             }else {
                 batt = 0.0
             }
-        } else {
+        } else if model == .UNKNOWN{
+            if volts >= 83.50 {
+                batt = 1.0
+            }else if volts > 80.0{
+                batt = ((volts - 80.0) / 3.5) * 0.2 + 0.8
+            }else if volts > 77.0{
+                batt = ((volts - 77.0) / 3.0) * 0.2 + 0.6
+            }else if volts > 74.0{
+                batt = ((volts - 74.0) / 3.0) * 0.2 + 0.4
+            }else if volts > 71.0{
+                batt = ((volts - 71.0) / 3.0) * 0.2 + 0.2
+            }else if volts > 55.0{
+                batt = ((volts - 55.0) / 16.0) * 0.2
+            }else {
+                batt = 0.0
+            }
+        }else {
             
             if volts >= 82.00 {
                 batt = 1.0
@@ -807,7 +851,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         }
         
         return batt * 100.0
-         
+        
     }
     
     static func verify(_ buffer : [UInt8]) -> (Bool, CANMessage?, UInt8){
@@ -836,7 +880,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     func pushRequest(){
         
         while queryQueue.operationCount < 4{
- 
+            
             queryQueue.addOperation {
                 let date = Date()
                 if date.timeIntervalSince(self.lastDateSent) > self.timerStep {
@@ -848,6 +892,8 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         }
         
     }
+    
+    
     
     func sendData(){
         
@@ -861,10 +907,17 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
             data = CANMessage.getSlowData()
         }
         
-        if let data = data.toNSData(), let conn = self.connection{
-            conn.writeValue("FFE9", data: data)
+        if let dat = data.toNSData(), let conn = self.connection{
+            conn.writeValue("FFE9", data: dat)
         }
         
+    }
+    
+    func sendMessage(_ data : CANMessage){
+        
+        if let dat = data.toNSData(), let conn = self.connection{
+            conn.writeValue("FFE9", data: dat)
+        }
     }
     
     
@@ -893,7 +946,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     func stopRecording(){
         
-     }
+    }
     
     func deviceConnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
         
@@ -963,12 +1016,12 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                         case .GetSlowInfo:
                             var vmax = 0.0
                             (serialNumber, model, version, vmax) = data.parseSlowInfoMessage()
-                             AppDelegate.debugLog("SN %@ Model %@ version %@", serialNumber, model.rawValue, version)
+                            AppDelegate.debugLog("SN %@ Model %@ version %@", serialNumber, model.rawValue, version)
                             headersOk = true
                             BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
-                             
+                            
                             outValues.append((WheelTrack.WheelValue.MaxSpeed, date, vmax))
-                           
+                            
                             
                         default:
                             break;
@@ -976,14 +1029,14 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                         }
                         
                         outValues.append((WheelTrack.WheelValue.Duration, date, 0.0))
-
+                        
                         
                     }
                 }
             }
         }
         
-
+        
         
         pushRequest()
         return outValues   // Will process when we get everything ok
@@ -1012,19 +1065,29 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     func getMaxSpeed() -> Double {
         return 20.0
     }
-
+    
     func setDefaultName(_ name : String){
         self.name = name
     }
     
-     func setDrivingLevel(_ level: Int){
+    func setDrivingLevel(_ level: Int){
         
     }
     func setLights(_ level: Int) {   // 0->Off 1->On....
     }
     func setLimitSpeed(_ speed : Double){
     }
-
+    func enableLimitSpeed(_ enable : Bool)   {   // Enable or disable speedLimit
+    }
+    func lockWheel(_ lock : Bool){ // Lock or Unlock wheel
+         queryQueue.addOperation {
+            
+            let b : UInt8 = lock ? 3 : 4
+            
+            let msg = CANMessage.setMode(b)
+            self.sendMessage(msg)
+        }
+    }
 }
 
 

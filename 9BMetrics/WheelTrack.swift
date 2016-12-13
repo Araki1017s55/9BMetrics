@@ -62,6 +62,9 @@ class WheelTrack: NSObject {
         case Temperature
         case DistanceGPS
         
+        case limitSpeedEnabled
+        case lockEnabled
+        
     }
     
     enum Unit : String{

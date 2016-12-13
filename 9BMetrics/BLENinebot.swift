@@ -94,6 +94,8 @@ class  BLENinebot : NSObject{
     static let kRollAngle = 98
     static let kPitchAngleVelocity = 99
     static let kRollAngleVelocity = 100
+    static let kLockWheel = 112
+    static let kEnableSpeedLimit = 114
     static let kAbsoluteSpeedLimit = 115
     static let kSpeedLimit = 116
     

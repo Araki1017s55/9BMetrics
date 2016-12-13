@@ -66,6 +66,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var oldColor : UIColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     var colorLevel : Int = 0
     var oldColorLevel : Int = 0
+    var lockState = false
+    var oldLockState = false
     var stateChanged = false
     
     var mainField = mobileFields.speedField
@@ -102,7 +104,9 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 // Fallback on earlier versions
             }
             addMenuItem(with: WKMenuItemIcon.play, title: "Start", action: #selector(InterfaceController.start))
-            
+            let lockTitle = lockState ? "Unlock" : "Lock"
+            addMenuItem(with: WKMenuItemIcon.block, title: lockTitle, action: #selector(InterfaceController.lock))
+           
         }
     }
     
@@ -117,6 +121,13 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         super.didDeactivate()
     }
     
+
+    @IBAction func handleSpeedGesture(){
+        
+        self.honk()
+    
+    }
+    
     func updateData(_ applicationContext: [String : AnyObject]){
         
         if applicationContext.count == 0 {
@@ -125,11 +136,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         
         if let r = applicationContext["recording"] as? Double {
             
-            if r == 1.0 {
-                self.recording = true
-            }else{
-                self.recording = false
-            }
+            self.recording = r == 1.0
         }
         
         if let  dist = applicationContext["distancia"] as? Double{
@@ -156,6 +163,9 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             self.temperature = temp
         }
         
+        if let lock = applicationContext["lock"]  as? Double {
+            self.lockState = lock == 1.0
+        }
         
         
         let cx = applicationContext["color"]  as? Double
@@ -330,16 +340,24 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             
             
             
-            if self.recording != self.oldRecording{
+            if self.recording != self.oldRecording || self.lockState != self.oldLockState{
                 if self.recording {
                     self.clearAllMenuItems()
                     self.addMenuItem(with: WKMenuItemIcon.play, title: "Stop", action: #selector(InterfaceController.stop))
+                    let lockTitle = self.lockState ? "Unlock" : "Lock"
+
+                    self.addMenuItem(with: WKMenuItemIcon.block, title: lockTitle, action: #selector(InterfaceController.lock))
+
                 }
                 else {
                     self.clearAllMenuItems()
                     self.addMenuItem(with: WKMenuItemIcon.play, title: "Start", action: #selector(InterfaceController.start))
+                    let lockTitle = self.lockState ? "Unlock" : "Lock"
+
+                    self.addMenuItem(with: WKMenuItemIcon.block, title: lockTitle, action: #selector(InterfaceController.lock))
                 }
                 self.oldRecording = self.recording
+                self.oldLockState = self.lockState
             }
             
             
@@ -355,6 +373,13 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         self.sendOp("stop", value: nil)
     }
     
+    func honk(){
+        self.sendOp("honk", value: nil)
+    }
+    
+    func lock(){
+        self.sendOp("lock", value: nil)
+    }
     
     func sendOp(_ op : String, value : AnyObject?){
         if let session = self.wcsession{

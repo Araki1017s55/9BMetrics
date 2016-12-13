@@ -36,6 +36,10 @@ class BLENinebotSettingsViewController: UIViewController {
     
     @IBOutlet weak var fSerialNumber: UITextField!
     
+    @IBOutlet weak var vEnableSpeedLimitSwitch: UISwitch!
+    @IBOutlet weak var vLockWheelSwitch: UISwitch!
+    
+    
     var oldRidingLevel = 0
     var oldSpeedLimit = 0.0
     var oldMaxSpeed = 0.0
@@ -53,15 +57,22 @@ class BLENinebotSettingsViewController: UIViewController {
                 let limitSpeed = dat.getCurrentValueForVariable(.LimitSpeed)
                 let ridingLevel = Int(dat.getCurrentValueForVariable(.RidingLevel))
                 
+                let locked = dat.getCurrentValueForVariable(.lockEnabled) != 0.0 ? true : false
+                let limited = dat.getCurrentValueForVariable(.limitSpeedEnabled) != 0.0 ? true : false
+                
                 speedLimitSlider.maximumValue = Float(maxSpeed)
                 
                 speedLimitSlider.value = Float(limitSpeed)
                 vSpeedLimitSetings.text = String(format: "%1.0f km/h",limitSpeed * 3.6)
                 
+                vEnableSpeedLimitSwitch.isOn = limited
+                vLockWheelSwitch.isOn = locked
+                
                 ridingSettingsSlider.value = Float(ridingLevel)
                 vRidingSettings.text = String(format: "%1d", ridingLevel)
                 oldRidingLevel = ridingLevel
                 oldSpeedLimit = limitSpeed
+                
             }
         }
         // Do any additional setup after loading the view.
@@ -141,6 +152,24 @@ class BLENinebotSettingsViewController: UIViewController {
         
     }
     
+    @IBAction func enableSpeedLimitChanged(_ src : AnyObject){
+        
+        let enable = vEnableSpeedLimitSwitch.isOn
+        
+        if let nb = self.ninebotClient{
+            nb.enableLimitSpeed(enable)
+        }
+    
+    }
+
+    @IBAction func wheelLockedChanged(_ src : AnyObject){
+        let lock = vLockWheelSwitch.isOn
+        
+        if let nb = self.ninebotClient{
+            nb.lockWheel(lock)
+        }
+    }
+    
     func someValueChanged(_ not : Notification){
         
         if let nb = self.ninebotClient{
@@ -160,6 +189,8 @@ class BLENinebotSettingsViewController: UIViewController {
                         case WheelTrack.WheelValue.LimitSpeed.rawValue:
                             vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.LimitSpeed)*3.6)
                             vSpeedLimitSetings.textColor = UIColor.black
+                            
+                        
                             
                         default:
                             break

@@ -288,6 +288,10 @@ extension GotawayAdapter : BLEWheelAdapterProtocol{
     }
     func setLimitSpeed(_ speed : Double){
     }
+    func enableLimitSpeed(_ enable : Bool)   {   // Enable or disable speedLimit
+    }
+    func lockWheel(_ lock : Bool){ // Lock or Unlock wheel
+    }
 
 }
 

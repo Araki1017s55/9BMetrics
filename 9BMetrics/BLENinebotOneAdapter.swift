@@ -47,6 +47,8 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     var name : String = "Ninebot"
     
+    var sending : Bool = true
+    
     
     
     // Called when lost connection. perhaps should do something. If not forget it
@@ -93,7 +95,9 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         conversion[BLENinebot.kvPitchAngle] = WheelTrack.WheelValue.Pitch
         conversion[BLENinebot.kvMaxSpeed] = WheelTrack.WheelValue.MaxSpeed
         conversion[BLENinebot.kvRideMode] = WheelTrack.WheelValue.RidingLevel
-        
+        conversion[BLENinebot.kEnableSpeedLimit] = WheelTrack.WheelValue.limitSpeedEnabled
+        conversion[BLENinebot.kLockWheel] = WheelTrack.WheelValue.lockEnabled
+       
         
         scales[BLENinebot.kvSpeed] = 1.0 / 3600.0
         scales[BLENinebot.kTemperature] = 0.1
@@ -308,9 +312,21 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     //MARK: Sending Requests
     
     func sendData(_ connection : BLEMimConnection){
+        sendData(connection, message: nil)
+    }
+    
+    func sendData(_ connection : BLEMimConnection, message :BLENinebotMessage?){
         
         
-        if self.headersOk {  // Get normal data
+        
+        if let msg = message {
+            
+            if let dat = msg.toNSData(){
+                connection.writeValue("FFE1", data:dat)
+                AppDelegate.debugLog("Sending a non standard messagen%@", msg.description)
+                
+            }
+        }else if self.headersOk {  // Get normal data
             
             
             for (op, l) in listaOpFast{
@@ -354,8 +370,20 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                 connection.writeValue("FFE1", data:dat)
             }
             
-           
+            
             message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat: [UInt8(2)])
+            
+            if let dat = message?.toNSData(){
+                connection.writeValue("FFE1", data:dat)
+            }
+
+            message = BLENinebotMessage(com: UInt8(BLENinebot.kEnableSpeedLimit), dat: [UInt8(2)])
+            
+            if let dat = message?.toNSData(){
+                connection.writeValue("FFE1", data:dat)
+            }
+
+            message = BLENinebotMessage(com: UInt8(BLENinebot.kLockWheel), dat: [UInt8(2)])
             
             if let dat = message?.toNSData(){
                 connection.writeValue("FFE1", data:dat)
@@ -376,10 +404,12 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     func sendNewRequest(_ connection : BLEMimConnection){
         
-        let request = BLERequestOperation(adapter: self, connection: connection)
-        
-        if let q = self.queryQueue{
-            q.addOperation(request)
+        if sending {
+            let request = BLERequestOperation(adapter: self, connection: connection)
+            
+            if let q = self.queryQueue{
+                q.addOperation(request)
+            }
         }
     }
     
@@ -416,6 +446,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         buffer.removeAll()
         if let qu = queryQueue {
             qu.cancelAllOperations()
+            sending = true
         }
         
     }
@@ -427,6 +458,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         buffer.removeAll()
         if let qu = queryQueue {
             qu.cancelAllOperations()
+            sending = false
         }
         if let tim  = sendTimer {
             tim.invalidate()
@@ -530,7 +562,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     func getRidingLevel() -> Int{
         return 0
-     }
+    }
     
     func getMaxSpeed() -> Double {
         return 20.0
@@ -597,26 +629,121 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             
             // That write riding level
             
-            var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kSpeedLimit), dat:[b0, b1] )
-            
-            if let st = message?.toString(){
+            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kSpeedLimit), dat:[b0, b1] ){
+                
+                let st = message.toString()
                 AppDelegate.debugLog("Command : %@", st)
-            }
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue("FFE1", data:dat)
+                
+                let request = BLERequestOperation(adapter: self, connection: connection, message: message)
+                if let q = self.queryQueue{
+                    sending = false
+                    q.cancelAllOperations()
+                    q.addOperation(request)
+                    sending = true
+                }
+                
             }
             
             // Get value to see if it is OK
             
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat:[UInt8(2)] )
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue("FFE1", data:dat)
+            if let message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat:[UInt8(2)] ){
+                let request = BLERequestOperation(adapter: self, connection: connection, message: message)
+                
+                if let q = self.queryQueue{
+                    q.addOperation(request)
+                }
             }
             
         }
     }
+    
+    func enableLimitSpeed(_ enable : Bool){
+        
+        if let connection = self.lastConnection {
+            
+            var b : UInt8 = 0
+            
+            if enable {
+                b = 1
+            }
+            
+            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kEnableSpeedLimit), dat:[b] ){
+                if let q = self.queryQueue{
+                    sending = false
+                    q.isSuspended = true
+                    q.cancelAllOperations()
+                    usleep(250000)
+                    
+                    for _ in 0..<1{
+                        let request = BLERequestOperation(adapter: self, connection: connection, message: message)
+                        q.addOperation(request)
+                    }
+                    q.isSuspended = false
+                    usleep(250000)
+                    sending = true
+                }
+            }
+            
+            // Get value to see if it is OK
+            
+            if let message = BLENinebotMessage(com: UInt8(BLENinebot.kEnableSpeedLimit), dat:[UInt8(2)] ){
+                if let q = self.queryQueue{
+                    
+                    for i in 0..<1{
+                        let request = BLERequestOperation(adapter: self, connection: connection, message: message)
+                        q.addOperation(request)
+                    }
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    func lockWheel(_ lock : Bool){
+        
+        if let connection = self.lastConnection {
+            
+            var b : UInt8 = 0
+            
+            if lock {
+                b = 1
+            }
+            
+            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kLockWheel), dat:[b] ) {
+                if let q = self.queryQueue{
+                    
+                    sending = false
+                    q.isSuspended = true
+                    q.cancelAllOperations()
+                    usleep(250000)
+ 
+                    for _ in 0..<1{
+                        let request = BLERequestOperation(adapter: self, connection: connection, message: message)
+                        q.addOperation(request)
+                    }
+                    q.isSuspended = false
+                    usleep(250000)
+                    sending = true
+                }
+                
+            }
+            if let message = BLENinebotMessage(com: UInt8(BLENinebot.kLockWheel), dat:[UInt8(2)] ){
+                if let q = self.queryQueue{
+                    
+                    for i in 0..<1{
+                        let request = BLERequestOperation(adapter: self, connection: connection, message: message)
+                        q.addOperation(request)
+                    }
+                }
+                
+            }
+            
+        }
+        
+    }
+    
     
 }
 

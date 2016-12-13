@@ -24,18 +24,32 @@ class BLERequestOperation: Operation {
     
     let adapter : BLENinebotOneAdapter
     let connection : BLEMimConnection
+    let message : BLENinebotMessage?
+
     
     init(adapter : BLENinebotOneAdapter, connection : BLEMimConnection) {
         self.adapter = adapter
         self.connection = connection
+        self.message = nil
     }
     
+    init(adapter : BLENinebotOneAdapter, connection : BLEMimConnection, message : BLENinebotMessage) {
+        self.adapter = adapter
+        self.connection = connection
+        self.message = message
+    }
+
     override func main() {
    
         if self.isCancelled {
             return
         }
-        adapter.sendData(connection)
+        
+        adapter.sendData(connection, message: message)
+        
+        if message != nil {
+            AppDelegate.debugLog("Sending non standard message , %@", connection)
+        }
 
      }
 }

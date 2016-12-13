@@ -103,7 +103,11 @@ protocol BLEWheelAdapterProtocol {
     func setLights(_ level: Int)    // 0->Off 1->On....
     func setLimitSpeed(_ speed : Double)   // Speed in km/h
     
+    // Some commodities. For the moment only in Ninebot
     
+    func enableLimitSpeed(_ enable : Bool)      // Enable or disable speedLimit
+    func lockWheel(_ lock : Bool) // Lock or Unlock wheel
+
     // Returns a name for the wheel adapter (ex. Ninebot One E or Gotaway ....)
     func wheelName() -> String
     func isComptatible(services : [String : BLEService]) -> Bool
