@@ -928,27 +928,28 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     func sendData(){
         
-        let data : CANMessage
-        
-        if headersOk &&  nTimes != maxNTimes{
-            AppDelegate.debugLog("Sending fast query")
-            data = CANMessage.getFastData()
-            nTimes += 1
-        }else {
-            AppDelegate.debugLog("Sending slow query")
-            data = CANMessage.getSlowData()
-            nTimes = 0
+        if let conn = self.connection, conn.state == .connected{
+            let data : CANMessage
+            
+            if headersOk &&  nTimes != maxNTimes{
+                AppDelegate.debugLog("Sending fast query")
+                data = CANMessage.getFastData()
+                nTimes += 1
+            }else {
+                AppDelegate.debugLog("Sending slow query")
+                data = CANMessage.getSlowData()
+                nTimes = 0
+            }
+            
+            if let dat = data.toNSData(){
+                conn.writeValue("FFE9", data: dat)
+            }
         }
-        
-        if let dat = data.toNSData(), let conn = self.connection{
-            conn.writeValue("FFE9", data: dat)
-        }
-        
     }
     
     func sendMessage(_ data : CANMessage){
         
-        if let dat = data.toNSData(), let conn = self.connection{
+        if let dat = data.toNSData(), let conn = self.connection, conn.state == .connected{
             conn.writeValue("FFE9", data: dat)
         }
     }
@@ -973,8 +974,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     
     func startRecording(){
-        unpacker.reset()
-        pushRequest()
+        headersOk = false
     }
     
     func stopRecording(){
@@ -990,21 +990,26 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         // OK, subscribe to characteristif FFE1
         
         connection.subscribeToChar("FFE4")
-        
-        startRecording()
+ 
         if headersOk {
             BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
         }
 
-        
+        unpacker.reset()
+        pushRequest()
         
     }
     func deviceDisconnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
-        stopRecording()
+        
+        queryQueue.cancelAllOperations()
+        headersOk = false
     }
     
     func giveTime(_ connection: BLEMimConnection) {
-        pushRequest()
+        
+        if connection.state == .connected {
+            pushRequest()
+        }
     }
     
     func charUpdated(_ connection: BLEMimConnection,  char : CBCharacteristic, data: Data) -> [(WheelTrack.WheelValue, Date, Double)]?{
@@ -1075,8 +1080,6 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                 }
             }
         }
-        
-        
         
         pushRequest()
         return outValues   // Will process when we get everything ok
