@@ -664,6 +664,21 @@ import UIKit
                 
                 if let dele = UIApplication.shared.delegate as? AppDelegate{
                     dash.client = dele.client
+                    
+                    let store = UserDefaults.standard           // Get speedAlarm
+            
+                    let sa = store.double(forKey: kSpeedAlarm) * 3.6    // Speed in km/h
+                    
+                    if sa > 0.0 {
+                        
+                        dash.speedOK = sa
+                    }
+                    
+                    if dash.speedTop <= dash.speedOK {
+                        dash.speedTop = dash.speedOK * 1.5
+                    }
+                    
+                    
                     if let cli = dele.client{
                         
                        if !cli.isRecording() {

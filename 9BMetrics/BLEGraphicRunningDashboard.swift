@@ -42,13 +42,13 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     let tempTop = 90.0
     let tempOK = 60.0
     
-    let speedTop = 30.0
-    let speedOK = 23.0
+    var speedTop = 30.0
+    var speedOK = 23.0
     
     
-    let tempAreas : [TMKClockView.arc]
-    let battAreas : [TMKClockView.arc]
-    let speedAreas  : [TMKClockView.arc]
+    var tempAreas : [TMKClockView.arc] = []
+    var battAreas : [TMKClockView.arc] = []
+    var speedAreas  : [TMKClockView.arc] = []
 
     
     let kTextMode = "enabled_test"
@@ -76,17 +76,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     required init?(coder aDecoder: NSCoder) {
         
-        
-        battAreas = [TMKClockView.arc(start: 0.0, end: 0.2, color: UIColor.red),
-                     TMKClockView.arc(start: 0.2, end: 1.0, color: UIColor.green)]
-        
-        
-        tempAreas = [TMKClockView.arc(start: 0.0, end: tempOK / tempTop, color: UIColor.green),
-                     TMKClockView.arc(start: tempOK / tempTop, end: 1.0, color: UIColor.red)]
-        
-        
-        speedAreas = [TMKClockView.arc(start: 0.0, end: speedOK/speedTop, color: UIColor.green),
-                      TMKClockView.arc(start: speedOK/speedTop, end: 1.0, color: UIColor.red)]
+  
         
 
         super.init(coder: aDecoder)
@@ -106,6 +96,21 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                     self.connectionStarted(Notification(name: Notification.Name(rawValue: BLESimulatedClient.kStartConnection), object: ["state" : "connecting"]))
                 }
             }
+ 
+            
+            
+            battAreas = [TMKClockView.arc(start: 0.0, end: 0.2, color: UIColor.red),
+                         TMKClockView.arc(start: 0.2, end: 1.0, color: UIColor.green)]
+            
+            
+            tempAreas = [TMKClockView.arc(start: 0.0, end: tempOK / tempTop, color: UIColor.green),
+                         TMKClockView.arc(start: tempOK / tempTop, end: 1.0, color: UIColor.red)]
+            
+            
+
+            speedAreas = [TMKClockView.arc(start: 0.0, end: speedOK/speedTop, color: UIColor.green),
+                          TMKClockView.arc(start: speedOK/speedTop, end: 1.0, color: UIColor.red)]
+            
             
             self.fSpeed.sphereColor = sphereColor
             self.fSpeed.labelsColor = labelColor
