@@ -101,7 +101,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             // Just check if we are already connecting
             
             if let cli = self.client {
-                if cli.connection.connecting {
+                if cli.connection.state == .connecting {
                     
                     self.connectionStarted(Notification(name: Notification.Name(rawValue: BLESimulatedClient.kStartConnection), object: ["state" : "connecting"]))
                 }
@@ -181,15 +181,11 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             
             if let cl = self.client {
                 
-                if cl.connection.subscribed{
+                if cl.isRecording(){
                     cl.stop()
                 }
-                else if cl.connection.connecting {
-                    cl.stop()
-                    self.hasStopped(Notification(name: Notification.Name(rawValue: BLESimulatedClient.kStoppedRecording), object: nil))
-                }
-                else{
-                    cl.connect()
+                 else{
+                    cl.start()
                 }
             }
             

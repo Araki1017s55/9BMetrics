@@ -220,6 +220,7 @@ class CANMessage{
         msg.id = .GetSlowInfo   // Get Fast Infi
         msg.ch = 5
         msg.type = .RemoteFrame
+        //msg.data = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
         msg.data = [33, 0, 0, 2, 0, 0, 0, 0]
         
         return msg
@@ -298,6 +299,21 @@ class CANMessage{
         
     }
     
+    static func setLights(_ on : Bool) -> CANMessage{
+        
+        
+        let msg = CANMessage()
+        
+        msg.len = 8
+        msg.ch = 5
+        msg.id = .NoOp
+        msg.type = .DataFrame
+        msg.data = [ on ? 1 : 0, on ? 1 : 0, on ? 1 : 0, on ? 1 : 0,   0, 0, 0, 0]
+        
+        return msg
+        
+    }
+    
     
     func parseFastInfoMessage(_ model : BLEInMotionAdapter.Model) -> [(WheelTrack.WheelValue, Date, Double)] {
         
@@ -360,24 +376,30 @@ class CANMessage{
     }
     
     // Return SerialNumber, Model, Version
+    // data [0] = 131
+    // ex_data = 134, 1, 82, 134, 84, 130, 160, 16, 0...0 [24] 241, 3, 1, 1, 0..0 [32]133, 3, 0, 1 0..0 [40] 38, 3, 1, 1..0
     
     func parseSlowInfoMessage() -> (String, BLEInMotionAdapter.Model, String, Double){
         if let bytes = ex_data{
+
+            var serialNumber = ""
             
-            return ("", BLEInMotionAdapter.Model.V5, "", 0.0)
-            
-            
-            let serialNumber = String(String(bytes:bytes[0..<8], encoding : .utf8 )!.characters.reversed()) // Seems it is reversed!!!
-            let model = BLEInMotionAdapter.byteToModel(bytes)  // CarType is just model.rawValue
-            _ = model == .R1S ? "2" : "1"
-            let v = BLEInMotionAdapter.IntFromBytes(bytes, starting: 24)
+            for j in 0...7 {
+                let c = bytes[7 - j]
+                serialNumber += String(format:"%02X", c)
+            }
+            let model = BLEInMotionAdapter.byteToModel(bytes)
+            let v = BLEInMotionAdapter.IntFromBytes(bytes, starting: 24) // V8 = 241, 3, 1, 1
             let v0 = v / 0xFFFFFF
             let v1 = (v - v0 * 0xFFFFFF) / 0xFFFF
             let v2 = v - v0 * 0xFFFFFF - v1 * 0xFFFF
             let version = String(format:"%d.%d.%d", v0, v1, v2)
-            let vmax = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 60 )) + Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 16 ))) / (3812.0 * 2.0) )
             
+            //let vmax = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 60 )) + Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 16 ))) / (3812.0 * 2.0) )
             
+            // El V8 lo da en km/h directamente
+            let vmax = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 60 ))) ) / 3600
+
             return (serialNumber, model, version, vmax)
         }
         return ("", BLEInMotionAdapter.Model.UNKNOWN, "", 0.0)
@@ -423,6 +445,8 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         case R0 = "30"
         case V5 = "50"
         case V5PLUS = "51"
+        case V5F = "52"
+        case V8 = "80"
         case UNKNOWN = "x"
         
     }
@@ -457,7 +481,8 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     var model = Model.UNKNOWN
     var lastDateSent = Date()
     var firstDistance : Double? // gets first distance. It is used to conunt differences and actual distance
-    
+    var nTimes = 0
+    let maxNTimes = 10
     
     override init(){
         super.init()
@@ -624,12 +649,18 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
             case 1:
                 return .V5PLUS
                 
+            case 2:
+                return .V5F
+                
             default:
                 return .V5
             }
             
         case 6:
             return .L6
+            
+        case 8:     // Model V5
+            return .V8
             
             
         default:
@@ -899,12 +930,14 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         
         let data : CANMessage
         
-        if headersOk {
+        if headersOk &&  nTimes != maxNTimes{
             AppDelegate.debugLog("Sending fast query")
             data = CANMessage.getFastData()
+            nTimes += 1
         }else {
             AppDelegate.debugLog("Sending slow query")
             data = CANMessage.getSlowData()
+            nTimes = 0
         }
         
         if let dat = data.toNSData(), let conn = self.connection{
@@ -946,6 +979,8 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     func stopRecording(){
         
+        headersOk = false
+        
     }
     
     func deviceConnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
@@ -955,7 +990,12 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         // OK, subscribe to characteristif FFE1
         
         connection.subscribeToChar("FFE4")
+        
         startRecording()
+        if headersOk {
+            BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
+        }
+
         
         
     }
@@ -1074,6 +1114,9 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         
     }
     func setLights(_ level: Int) {   // 0->Off 1->On....
+        
+        
+        
     }
     func setLimitSpeed(_ speed : Double){
     }
@@ -1082,9 +1125,13 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     func lockWheel(_ lock : Bool){ // Lock or Unlock wheel
          queryQueue.addOperation {
             
-            let b : UInt8 = lock ? 3 : 4
+            //let b : UInt8 = lock ? 3 : 4
+
             
-            let msg = CANMessage.setMode(b)
+           // let msg = CANMessage.setMode(b)
+            
+            
+            let msg = CANMessage.setLights(lock)
             self.sendMessage(msg)
         }
     }

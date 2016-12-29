@@ -66,6 +66,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var oldColor : UIColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     var colorLevel : Int = 0
     var oldColorLevel : Int = 0
+    var current : Double = 0.0
+    var oldCurrent : Double = 0.0
     var lockState = false
     var oldLockState = false
     var stateChanged = false
@@ -146,7 +148,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         if let t = applicationContext["temps"]  as? Double{
             self.temps = t
         }
-        
+ 
+        if let c = applicationContext["current"]  as? Double{
+            self.current = c
+        }
+
         if let sp = applicationContext["speed"]  as? Double {
             self.speed = sp
         }
@@ -186,11 +192,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             }
             
             if ci > self.colorLevel {
-                //WKInterfaceDevice.current().play(WKHapticType.directionUp)
+                WKInterfaceDevice.current().play(WKHapticType.directionUp)
                 self.colorLevel = ci
             }
             else if ci < self.colorLevel {
-                // WKInterfaceDevice.current().play(WKHapticType.directionDown)
+                WKInterfaceDevice.current().play(WKHapticType.directionDown)
                 self.colorLevel = ci
             }
         }
@@ -222,7 +228,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             
             }
             
-            if self.oldTemps != self.temps {
+            if self.oldTemps != self.temps && false {
                 let h = Int(floor(self.temps / 3600.0))
                 let m = Int(floor(self.temps - Double(h) * 3600.0)/60.0)
                 let s = Int(floor(self.temps - Double(h) * 3600.0 - Double(m)*60.0))
@@ -240,6 +246,23 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 self.oldTemps = self.temps
             }
             
+            
+            if self.oldCurrent != self.current {
+                
+                let txt = String(format: "%5.2f A", self.current)
+                
+                self.tempsLabel.setText(txt)
+                if self.current >= 0 && self.oldCurrent < 0{
+                    
+                    self.tempsLabel.setTextColor(self.skyColor)
+                    
+                } else if self.current < 0 && self.oldCurrent >= 0 {
+                    
+                    self.tempsLabel.setTextColor(UIColor.red)
+                }
+                
+                self.oldCurrent = self.current
+            }
             
             
             if fabs(self.oldSpeed - self.speed) >= 0.01  || self.mainField != self.oldMainField{
@@ -419,7 +442,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
      // NSLog("WCSessionState changed. Reachable %@", session.reachable)
      } */
     
-    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]){
+    func  session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+   
         
         if let v = applicationContext as? [String : Double]{
             

@@ -51,7 +51,6 @@
 		007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */; };
 		007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */; };
 		007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */; };
-		007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */; };
 		007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A576F1C85CF39003A2030 /* BLEDeviceSelector.swift */; };
 		007A57821C85CF39003A2030 /* BLEMim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57701C85CF39003A2030 /* BLEMim.swift */; };
 		007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007A57711C85CF39003A2030 /* SettingsViewController.swift */; };
@@ -182,7 +181,6 @@
 		007A576A1C85CF39003A2030 /* BLENinebotServerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotServerDelegate.swift; path = 9BMetrics/BLENinebotServerDelegate.swift; sourceTree = "<group>"; };
 		007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESimulatedClient.swift; sourceTree = "<group>"; };
 		007A576D1C85CF39003A2030 /* BLESimulatedServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLESimulatedServer.swift; path = 9BMetrics/BLESimulatedServer.swift; sourceTree = "<group>"; };
-		007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotDashboard.swift; path = 9BMetrics/BLENinebotDashboard.swift; sourceTree = "<group>"; };
 		007A576F1C85CF39003A2030 /* BLEDeviceSelector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEDeviceSelector.swift; path = 9BMetrics/BLEDeviceSelector.swift; sourceTree = "<group>"; };
 		007A57701C85CF39003A2030 /* BLEMim.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMim.swift; path = 9BMetrics/BLEMim.swift; sourceTree = "<group>"; };
 		007A57711C85CF39003A2030 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -425,7 +423,6 @@
 				00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */,
 				0002C47D1CAABF0E0060CFA5 /* BLERunningDashboard.swift */,
 				003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */,
-				007A576E1C85CF39003A2030 /* BLENinebotDashboard.swift */,
 			);
 			name = Dashboards;
 			sourceTree = "<group>";
@@ -654,7 +651,6 @@
 				007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */,
 				00FFEF001D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift in Sources */,
 				00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */,
-				007A57801C85CF39003A2030 /* BLENinebotDashboard.swift in Sources */,
 				00C2667D1DA27D86004D3B02 /* GotawayAdapter.swift in Sources */,
 				00AB59551CAEE64000277859 /* aeskey.c in Sources */,
 				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,

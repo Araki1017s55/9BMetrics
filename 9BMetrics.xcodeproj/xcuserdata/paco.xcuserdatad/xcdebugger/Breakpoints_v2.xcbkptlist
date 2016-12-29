@@ -38,11 +38,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/ViewController.swift"
-            timestampString = "497426381.420154"
+            timestampString = "504707245.603199"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
             landmarkName = "dateToSection(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -53,13 +53,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "9BMetrics/BLEInMotionAdapter.swift"
-            timestampString = "502751592.672467"
+            filePath = "9BMetrics/BLESimulatedClient.swift"
+            timestampString = "504708234.573175"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "803"
-            endingLineNumber = "803"
-            landmarkName = "batteryFromVoltage(_:model:)"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "stop()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -69,13 +69,109 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "9BMetrics/BLESimulatedClient.swift"
-            timestampString = "502747463.834824"
+            filePath = "9BMetrics/BLERunningDashboard.swift"
+            timestampString = "504708078.167146"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "600"
-            endingLineNumber = "600"
-            landmarkName = "lockWheel(_:)"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "startStop(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLERunningDashboard.startStop (Swift.AnyObject) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLERunningDashboard.swift"
+                  timestampString = "504709480.039572"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "102"
+                  endingLineNumber = "102"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLERunningDashboard.startStop (Swift.AnyObject) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLERunningDashboard.swift"
+                  timestampString = "504709480.042005"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "102"
+                  endingLineNumber = "102"
+                  offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLEGraphicRunningDashboard.swift"
+            timestampString = "504708094.187679"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
+            landmarkName = "startStop(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLEGraphicRunningDashboard.startStop (Swift.AnyObject) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLEGraphicRunningDashboard.swift"
+                  timestampString = "504709480.046817"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLEGraphicRunningDashboard.startStop (Swift.AnyObject) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLEGraphicRunningDashboard.swift"
+                  timestampString = "504709480.04945"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "182"
+                  endingLineNumber = "182"
+                  offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLEMimConnection.swift"
+            timestampString = "504708501.912316"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
+            landmarkName = "writeValue(_:data:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -85,14 +181,62 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "9BMetrics/BLESimulatedClient.swift"
-            timestampString = "502747430.119556"
+            filePath = "9BMetrics/BLENinebotOneAdapter.swift"
+            timestampString = "504709266.645742"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "282"
-            endingLineNumber = "282"
-            landmarkName = "doStop()"
+            startingLineNumber = "475"
+            endingLineNumber = "475"
+            landmarkName = "deviceConnected(_:peripheral:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLENinebotOneAdapter.swift"
+            timestampString = "504709268.772025"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "495"
+            endingLineNumber = "495"
+            landmarkName = "deviceDisconnected(_:peripheral:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLENinebotOneAdapter.deviceDisconnected (_BMetrics.BLEMimConnection, peripheral : __ObjC.CBPeripheral) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLENinebotOneAdapter.swift"
+                  timestampString = "504709480.064533"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "495"
+                  endingLineNumber = "495"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLENinebotOneAdapter.deviceDisconnected (_BMetrics.BLEMimConnection, peripheral : __ObjC.CBPeripheral) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLENinebotOneAdapter.swift"
+                  timestampString = "504709480.066786"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "495"
+                  endingLineNumber = "495"
+                  offsetFromSymbolStart = "88">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

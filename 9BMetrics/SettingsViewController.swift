@@ -30,7 +30,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var fBlockSleepTimer: UISwitch!
     @IBOutlet weak var fGraphicDashboard: UISwitch!
     weak var delegate : ViewController?
-    
+    @IBOutlet weak var fSpeedAlarm: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +50,12 @@ class SettingsViewController: UIViewController {
             }
             
             fBlockSleepTimer.isOn = store.bool(forKey: kBlockSleepMode)
+            
+            let sa = store.double(forKey: kSpeedAlarm)
+            
+            let ssa = String(format: "%0.2f", sa * 3.6)       // Presentem dades en km/h
+            fSpeedAlarm.text = ssa
+            
         }
         
         
@@ -62,6 +68,18 @@ class SettingsViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        
+             let store = UserDefaults.standard
+            
+            if let stspeed = fSpeedAlarm.text {
+                
+                if let dspeed = Double(stspeed.replacingOccurrences(of: ",", with: ".")){     // Dades en m/s
+                    store.set(dspeed / 3.6, forKey: kSpeedAlarm)
+                }
+                
+            }
+
+        
      //   removeNotifications()
         super.viewWillDisappear(animated)
     }

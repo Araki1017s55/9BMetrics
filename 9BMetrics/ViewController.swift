@@ -57,7 +57,6 @@ import UIKit
     var nFields = 10         // Numero de camps a llegir
     var timerStep = 0.01   // Segons per repetir el enviar
     
-    var dashboard : BLENinebotDashboard?
     
     var files = [URL]()
     var sections = [fileSection]()
@@ -626,7 +625,6 @@ import UIKit
                 }
             }
         }
-        //self.performSegueWithIdentifier("openFileSegue", sender: self)
         
         self.performSegue(withIdentifier: "openDataSegue", sender: self)
     }
@@ -654,8 +652,8 @@ import UIKit
                     dash.client = dele.client
                     if let cli = dele.client{
                         
-                        if !cli.connection.subscribed && !cli.connection.connecting {
-                            cli.connect()
+                        if !cli.isRecording(){
+                            cli.start()
                         }
                     }
                 }
@@ -668,24 +666,11 @@ import UIKit
                     dash.client = dele.client
                     if let cli = dele.client{
                         
-                        if !cli.connection.subscribed && !cli.connection.connecting {
-                            cli.connect()
+                       if !cli.isRecording() {
+                            cli.start()
                         }
                     }
                 }
-                
-            }
-        }else if segue.identifier == "openFileSegue"{
-            if let dash = segue.destination as? BLENinebotDashboard{
-                if let dele = UIApplication.shared.delegate as? AppDelegate{
-                    
-                    dash.delegate = self
-                    dash.ninebot = dele.datos
-                    self.dashboard = dash
-                    dash.file = self.currentFile
-                }
-                
-                //self.startClient() // Tan sols en algun cas potser depenent del sender?
                 
             }
         }else if segue.identifier == "openDataSegue"{
@@ -911,7 +896,7 @@ import UIKit
                 
                 if let cli = dele.client {
                     
-                    if cli.connection.subscribed {  // We are connected!! Load running
+                    if cli.isRecording() {  // We are connected!! Load running
                         
                         //self.performSegueWithIdentifier("runningDashboardSegue", sender: self)
                     }
@@ -920,7 +905,6 @@ import UIKit
             }
             
         }
-        self.dashboard = nil // Released dashboard
         super.viewWillAppear(animated)
     }
     

@@ -118,14 +118,14 @@ class BLEMim: UIViewController {
         let device = store.string(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey)
         
         if let dev = device {
-            self.client.connectToDeviceWithUUID(dev)
+            self.client.connectToUUID(dev)
         }
     }
 
     func stop(){
         
-        if self.client.connected{
-            self.client.stopConnection()
+        if self.client.state == .connected{
+            self.client.disconnect()
         }
         if self.server.transmiting {
             self.server.stopTransmiting()
@@ -135,8 +135,8 @@ class BLEMim: UIViewController {
     
     func start(){
         
-        if !self.client.connected {
-            self.connectToClient()
+        if self.client.state != .connected{
+            self.client.startScanning()
         }
         if !self.server.transmiting{
             self.server.startTransmiting()
@@ -263,7 +263,7 @@ class BLEMim: UIViewController {
             if let dv = segue.destination as? BLEDeviceSelector {
                 deviceSelector = dv
                 dv.delegate = self
-                client.doRealScan()
+                client.startScanning()
 
             }
             

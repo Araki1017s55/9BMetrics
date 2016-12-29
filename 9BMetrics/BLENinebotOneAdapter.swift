@@ -47,7 +47,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     var name : String = "Ninebot"
     
-    var sending : Bool = true
+    var sending : Bool = false
     
     
     
@@ -242,12 +242,14 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                         // Convert to SI by an scale and assign to generic variable
                         
                         
-                        //Checl SpeedLimit
+                        //Check SpeedLimit
                         let dv = Double(sv) * BLENinebotOneAdapter.scales[k]
                         
+                        /*
                         if k == BLENinebot.kSpeedLimit {
                             AppDelegate.debugLog("Speed Limit %f", dv)
                         }
+ */
                         if let wv = BLENinebotOneAdapter.conversion[k]{
                             outarr!.append((wv, Date(), dv))
                             
@@ -407,7 +409,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         if sending {
             let request = BLERequestOperation(adapter: self, connection: connection)
             
-            if let q = self.queryQueue{
+            if let q = self.queryQueue {
                 q.addOperation(request)
             }
         }
@@ -446,7 +448,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         buffer.removeAll()
         if let qu = queryQueue {
             qu.cancelAllOperations()
-            sending = true
+
         }
         
     }
@@ -474,6 +476,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         
         self.contadorOp = 0
         self.headersOk = false
+        self.sending = true
         
         self.sendNewRequest(connection)
         
@@ -489,7 +492,12 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     }
     func deviceDisconnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
         
-        
+        if let qu = queryQueue {
+            sending = false
+            qu.cancelAllOperations()
+            
+        }
+
         if let tim = self.sendTimer {
             tim.invalidate()
             self.sendTimer = nil
@@ -689,7 +697,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             if let message = BLENinebotMessage(com: UInt8(BLENinebot.kEnableSpeedLimit), dat:[UInt8(2)] ){
                 if let q = self.queryQueue{
                     
-                    for i in 0..<1{
+                    for _ in 0..<1{
                         let request = BLERequestOperation(adapter: self, connection: connection, message: message)
                         q.addOperation(request)
                     }
@@ -732,7 +740,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             if let message = BLENinebotMessage(com: UInt8(BLENinebot.kLockWheel), dat:[UInt8(2)] ){
                 if let q = self.queryQueue{
                     
-                    for i in 0..<1{
+                    for _ in 0..<1{
                         let request = BLERequestOperation(adapter: self, connection: connection, message: message)
                         q.addOperation(request)
                     }

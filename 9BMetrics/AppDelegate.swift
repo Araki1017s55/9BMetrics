@@ -268,7 +268,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 cli.timerStep = 0.01
             }
             
-            cli.connect()
+            cli.start()
         }
     }
     
@@ -320,7 +320,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //MARK: Message
     //MARK: - Utilities
     
-    
+    static func alert(_ title: String, format: String, _ args: CVarArg...){
+        
+        let app = UIApplication.shared
+        if let dele = app.delegate as? AppDelegate {
+            
+            dele.displayMessageWithTitle(title, format: format, args)
+            
+        }
+        
+    }
+
     func displayMessageWithTitle(_ title: String, format: String, _ args: CVarArg...)
     {
         var  msg  = ""

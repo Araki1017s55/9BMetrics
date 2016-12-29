@@ -1548,7 +1548,9 @@ class WheelTrack: NSObject {
     
     
    func createPackage(_ name : String) -> URL?{
+    
     guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+    
     return createPackage(name, inDirectory: docDir, snapshot: false)
     }
 
@@ -1640,7 +1642,7 @@ class WheelTrack: NSObject {
             try contents.write(to: pkgURL, options: .withNameUpdating, originalContentsURL: pkgURL)
         }catch let err as NSError{
             
-            
+            AppDelegate.alert("Error when saving data", format: "Error %@ when writing data", err.description)
             AppDelegate.debugLog("Error al gravar arxius %@", err.description)
             return nil
         }
