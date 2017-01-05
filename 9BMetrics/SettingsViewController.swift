@@ -31,6 +31,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var fGraphicDashboard: UISwitch!
     weak var delegate : ViewController?
     @IBOutlet weak var fSpeedAlarm: UITextField!
+    @IBOutlet weak var fPassword: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +57,13 @@ class SettingsViewController: UIViewController {
             let ssa = String(format: "%0.2f", sa * 3.6)       // Presentem dades en km/h
             fSpeedAlarm.text = ssa
             
+            if let pwd = store.string(forKey: kPassword){
+                fPassword.text = pwd
+            } else {
+                fPassword.text = "000000"
+            }
+            
+            
         }
         
         
@@ -78,6 +86,14 @@ class SettingsViewController: UIViewController {
                 }
                 
             }
+        
+        
+        if let stpassword = fPassword.text {
+
+            store.set(stpassword, forKey: kPassword)
+            
+        }
+        
 
         
      //   removeNotifications()

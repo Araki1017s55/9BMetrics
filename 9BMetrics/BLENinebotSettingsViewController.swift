@@ -167,6 +167,7 @@ class BLENinebotSettingsViewController: UIViewController {
         
         if let nb = self.ninebotClient{
             nb.lockWheel(lock)
+            
         }
     }
     

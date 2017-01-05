@@ -39,6 +39,8 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     var lastConnection : BLEMimConnection?
     
+    var wheel : Wheel?
+    
     static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
     static var scales = Array<Double>(repeating: 1.0, count: 256)
     static var signed = [Bool](repeating: false, count: 256)
@@ -301,6 +303,21 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         headersOk = filled
         
         if headersOk {  // Notify the world we have all the data :)
+            
+            if let wh = self.wheel {    // Update wheel data
+                
+                let db = WheelDatabase.sharedInstance
+                
+                wh.model = getModel()
+                wh.serialNo = getSN()
+                wh.version = getVersion()
+                wh.maxSpeed = getMaxSpeed()
+                
+                db.setWheel(wheel: wh)
+                
+            }
+
+            
             BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
         }
         
@@ -478,6 +495,32 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         self.headersOk = false
         self.sending = true
         
+        
+        let database = WheelDatabase.sharedInstance
+        let uuid = peripheral.identifier.uuidString
+        
+        // Get password
+        
+        var pwd = "000000"
+        let store = UserDefaults.standard
+        if let pw = store.string(forKey: kPassword){
+            pwd = pw
+        }
+        
+        if let wh = database.getWheelFromUUID(uuid: uuid){
+            self.wheel = wh
+            
+        } else {
+            self.wheel = Wheel(uuid: uuid, name: self.name)
+            wheel!.brand = "Ninebot"
+            wheel!.password = pwd
+            database.setWheel(wheel: wheel!)
+        }
+       
+        
+        
+        
+        
         self.sendNewRequest(connection)
         
         self.lastConnection = connection
@@ -537,6 +580,34 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         let v2 = clean % 16
         
         return String(format: "%d.%d.%d",v0, v1, v2)
+    }
+    
+    func getModel() -> String{
+        if !self.checkHeaders(){
+            return ""
+        }
+        
+        var no = ""
+        
+        
+        
+        for i in 16 ..< 20{
+            
+            
+            let v = values[i]
+            
+            
+            let v1 = v % 256
+            let v2 = v / 256
+            
+            let ch1 = Character(UnicodeScalar(v1)!)
+            let ch2 = Character(UnicodeScalar( v2)!)
+            
+            no.append(ch1)
+            no.append(ch2)
+        }
+        
+        return no
     }
     
     func getSN() -> String{

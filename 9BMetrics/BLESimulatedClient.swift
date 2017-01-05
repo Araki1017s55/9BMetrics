@@ -148,7 +148,7 @@ class BLESimulatedClient: NSObject {
     
     
     func sendToWatch() -> Bool{
-        
+        return false    // Just to see what happens with new AppleWatch method
         if let session = wcsession {
             if session.isPaired && session.isWatchAppInstalled && session.isReachable{
                 return true
@@ -360,7 +360,7 @@ class BLESimulatedClient: NSObject {
     
     //MARK: AppleWatch Support
     
-    private func getAppState() -> [String : Double]?{
+    fileprivate func getAppState() -> [String : Double]?{
         
         
         if let nb = self.datos{
@@ -816,6 +816,21 @@ extension BLESimulatedClient :  WCSessionDelegate{
     
     //TODO: Move Watch Support to AppDelegate or ViewController.
     
+
+    
+    func session(_ asession: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        
+        if let op = message["op"] as? String, op == "data"{
+        
+            if let info = self.getAppState() {
+                replyHandler(info)
+            }
+        
+        } else {
+            self.session(asession, didReceiveMessage:message)
+        }
+        
+    }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         if let op = message["op"] as? String{

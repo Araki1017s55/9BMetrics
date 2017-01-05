@@ -29,13 +29,9 @@ class BLEInMotionUnpacker {
         case done
     }
     
-    
-    
     var buffer : [UInt8] = []
     var oldc : UInt8 = 0
     var state : UnpackerState = .unknown
-    
-    
     
     init(){
         
@@ -92,6 +88,10 @@ class CANMessage{
         case GetFastInfo = 0x0F550113
         case GetSlowInfo = 0x0F550114
         case RemoteControl = 0x0F550116
+        case CheckPassword = 0x0F550307
+        case Password = 0x0F550306
+        case LEDControl = 0x0F55010D
+        case DontKnow = 0x0F780101
     }
     
     static let canMsgLen = 16
@@ -112,7 +112,15 @@ class CANMessage{
     
     init(_ bArr : [UInt8]){
         
-        id = IDValue(rawValue: (((UInt(bArr[3]) * 256) + UInt(bArr[2])) * 256 + UInt(bArr[1])) * 256 + UInt(bArr[0]))!
+        let rw = (((UInt(bArr[3]) * 256) + UInt(bArr[2])) * 256 + UInt(bArr[1])) * 256 + UInt(bArr[0])
+        
+        id = .NoOp
+        if let mid = IDValue(rawValue: rw) {
+            id = mid
+        } else {
+            AppDelegate.debugLog("Missatge No compres <%ld", rw)
+        }
+        
         data = Array(bArr[4..<12])
         len = bArr[12]
         ch = bArr[13]
@@ -227,20 +235,49 @@ class CANMessage{
         
     }
     
-//    static func setMode(_ mode : UInt8) -> CANMessage{
-//        
-//        let msg = CANMessage()
-//        
-//        msg.len = 8
-//        msg.id = .GetSlowInfo   // Get Fast Infi
-//        msg.ch = 5
-//        msg.type = .DataFrame
-//        msg.data = [0xB2, 0, 0, 0, mode, 0, 0, 0]
-//        
-//        return msg
-//        
-//    }
+    //    static func setMode(_ mode : UInt8) -> CANMessage{
+    //
+    //        let msg = CANMessage()
+    //
+    //        msg.len = 8
+    //        msg.id = .GetSlowInfo   // Get Fast Infi
+    //        msg.ch = 5
+    //        msg.type = .DataFrame
+    //        msg.data = [0xB2, 0, 0, 0, mode, 0, 0, 0]
+    //
+    //        return msg
+    //
+    //    }
     
+    
+    
+    static func getCheckPassword(_ pwd : [UInt8]) -> CANMessage {
+        let msg = CANMessage()
+        
+        msg.len = 8
+        msg.id = .CheckPassword
+        msg.ch = 5
+        msg.type = .DataFrame
+        
+        msg.data = [pwd[0], pwd[1], pwd[2], pwd[3], pwd[4], pwd[5], 0, 0]
+        
+        return msg
+        
+    }
+    
+    static func getResetPassword() -> CANMessage {
+        let msg = CANMessage()
+        
+        msg.len = 8
+        msg.id = .Password
+        msg.ch = 5
+        msg.type = .DataFrame
+        
+        msg.data = [48, 48, 48, 48, 48, 48, 0, 0]
+        
+        return msg
+        
+    }
     
     
     static func getBatteryLevelsdata() -> CANMessage {
@@ -306,9 +343,9 @@ class CANMessage{
         
         msg.len = 8
         msg.ch = 5
-        msg.id = .NoOp
+        msg.id = .LEDControl
         msg.type = .DataFrame
-        msg.data = [ on ? 1 : 0, on ? 1 : 0, on ? 1 : 0, on ? 1 : 0,   0, 0, 0, 0]
+        msg.data = [ 0, 0, 0, on ? 1 : 0,   0, 0, 0, 0]
         
         return msg
         
@@ -321,9 +358,18 @@ class CANMessage{
         
         let d = Date()
         if let bytes = ex_data{
-            let angle = Double(BLEInMotionAdapter.IntFromBytes(bytes, starting: 0)) / 65536.0
+            var angle = Double(BLEInMotionAdapter.IntFromBytes(bytes, starting: 0)) / 65536.0
             
-            let speed = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 12 )) + Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 16 ))) / (3812.0 * 2.0) )       // 3812.0 depen del tipus de vehicle
+            if angle >= 32768.0 {           // Correct Sign
+                angle = angle - 65536.0
+            }
+            
+            var scale = 3600.0
+            if let scl = BLEInMotionAdapter.lengthScale[model]{
+                scale = scl
+            }
+            
+            let speed = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 12 )) + Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 16 ))) / (scale * 2.0) )       // 3812.0 depen del tipus de vehicle
             
             let voltage = Double(BLEInMotionAdapter.IntFromBytes(bytes, starting: 24)) / 100.0
             let current = Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 20)) / 100.0
@@ -332,10 +378,13 @@ class CANMessage{
             var distance = Double(BLEInMotionAdapter.IntFromBytes(bytes, starting: 44))
             
             if BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "1") ||
-                BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "5"){
+                BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "5") ||
+                BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "8"){
                 distance = Double(BLEInMotionAdapter.LongFromBytes(bytes, starting: 44))
+                    
             }else if model == .R0 {
                 distance = Double(BLEInMotionAdapter.LongFromBytes(bytes, starting: 44))
+                    
                 
             }else if model == .L6 {
                 distance = Double(BLEInMotionAdapter.LongFromBytes(bytes, starting: 44)) * 100.0
@@ -381,7 +430,7 @@ class CANMessage{
     
     func parseSlowInfoMessage() -> (String, BLEInMotionAdapter.Model, String, Double){
         if let bytes = ex_data{
-
+            
             var serialNumber = ""
             
             for j in 0...7 {
@@ -398,8 +447,14 @@ class CANMessage{
             //let vmax = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 60 )) + Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 16 ))) / (3812.0 * 2.0) )
             
             // El V8 lo da en km/h directamente
-            let vmax = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 60 ))) ) / 3600
-
+            
+            var scale = 3600.0
+            
+            if let scl = BLEInMotionAdapter.lengthScale[model]{
+                scale = scl
+            }
+            let vmax = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 60 ))) ) / scale
+            
             return (serialNumber, model, version, vmax)
         }
         return ("", BLEInMotionAdapter.Model.UNKNOWN, "", 0.0)
@@ -468,14 +523,50 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         case unlock
     }
     
-    var headersOk = false
-    var sendTimer : Timer?    // Timer per enviar les ex_data periodicament
-    var timerStep = 0.2        // Get data every step
+    enum ConnectionState {
+        case disconnected
+        case identified
+        case connected
+    }
+    
+    static let lengthScale : [Model:Double] = [
+        
+        .R1N : 3812.0,
+        .R1S : 1000.0,
+        .R1AP : 3812.0,
+        .R1CF : 3812.0,
+        .R1EX : 3812.0,
+        .R1Sample : 1000.0,
+        .R1T : 3812.0,
+        .R10 : 3812.0,
+        .V3 : 3812.0,
+        .R2N : 3812.0,
+        .R2S : 3812.0,
+        .R2Sample : 3812.0,
+        .R2 : 3812.0,
+        .R2EX  : 3812.0,
+        .L6 : 3812.0,
+        .V3C  : 3812.0,
+        .V3S : 3812.0,
+        .V3PRO : 3812.0,
+        .R0  : 1000.0,
+        .V5 : 3812.0,
+        .V5PLUS : 3812.0,
+        .V5F : 3812.0,
+        .V8  : 1000.0,
+        .UNKNOWN  : 3812.0
+        
+    ]
+    
+    var state = ConnectionState.disconnected
+    var sendTimer : Timer?    // Timer per enviar les ex_data periodicament. De moment te un altre sistema
+    var timerStep = 0.3       // Get data every step
     var unpacker = BLEInMotionUnpacker()    // Create as unpacker
     var connection : BLEMimConnection?
     var name : String = "InMotion"
     var version : String = "0.0.0"
     var serialNumber : String = "SN1"
+    var wheel : Wheel?
     var headerData  = false
     var queryQueue = OperationQueue()
     var model = Model.UNKNOWN
@@ -779,9 +870,8 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         }else{
             return 0
         }
-        
-        
     }
+    
     static func IsCarTypeBelongToInputType(carType : String, type : String) -> Bool{
         
         
@@ -815,6 +905,23 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                 batt = (volts - 68.5) / 15.0
             }
         } else if IsCarTypeBelongToInputType(carType: model.rawValue, type: "5"){
+            
+            if volts >= 83.50 {
+                batt = 1.0
+            }else if volts > 80.0{
+                batt = ((volts - 80.0) / 3.5) * 0.2 + 0.8
+            }else if volts > 77.0{
+                batt = ((volts - 77.0) / 3.0) * 0.2 + 0.6
+            }else if volts > 74.0{
+                batt = ((volts - 74.0) / 3.0) * 0.2 + 0.4
+            }else if volts > 71.0{
+                batt = ((volts - 71.0) / 3.0) * 0.2 + 0.2
+            }else if volts > 55.0{
+                batt = ((volts - 55.0) / 16.0) * 0.2
+            }else {
+                batt = 0.0
+            }
+        } else if IsCarTypeBelongToInputType(carType: model.rawValue, type: "8"){
             
             if volts >= 83.50 {
                 batt = 1.0
@@ -910,7 +1017,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     func pushRequest(){
         
-        while queryQueue.operationCount < 4{
+        while queryQueue.operationCount < 1{
             
             queryQueue.addOperation {
                 let date = Date()
@@ -921,24 +1028,46 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                 }
             }
         }
-        
     }
-    
-    
     
     func sendData(){
         
         if let conn = self.connection, conn.state == .connected{
             let data : CANMessage
             
-            if headersOk &&  nTimes != maxNTimes{
-                AppDelegate.debugLog("Sending fast query")
-                data = CANMessage.getFastData()
-                nTimes += 1
-            }else {
-                AppDelegate.debugLog("Sending slow query")
+            switch state {
+                
+            case .disconnected:
+                
+                // AppDelegate.debugLog("Sending identification query")
+                
+                
+                var pwd : [UInt8] = [48, 48, 48, 48, 48, 48]
+                let store = UserDefaults.standard
+                if let pw = store.string(forKey: kPassword){
+                    
+                    if pw == ""{
+                        if let wh = wheel {
+                            pwd = Array<UInt8>(wh.password.utf8)
+                        }
+                    } else {
+                        pwd = Array<UInt8>(pw.utf8)
+                    }
+                    
+                }
+                
+                
+                data = CANMessage.getCheckPassword(pwd)
+                
+            case .identified:
+                // AppDelegate.debugLog("Sending slow query")
                 data = CANMessage.getSlowData()
                 nTimes = 0
+                
+            case .connected:
+                // AppDelegate.debugLog("Sending fast query")
+                data = CANMessage.getFastData()
+                nTimes += 1
             }
             
             if let dat = data.toNSData(){
@@ -974,12 +1103,14 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     
     func startRecording(){
-        headersOk = false
+        state = .disconnected
+        
+        
     }
     
     func stopRecording(){
         
-        headersOk = false
+        state = .disconnected
         
     }
     
@@ -987,14 +1118,31 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         
         self.connection = connection
         
-        // OK, subscribe to characteristif FFE1
+        // try to recover info from the database
+        
+        let database = WheelDatabase.sharedInstance
+        let uuid = peripheral.identifier.uuidString
+        
+        // Get password
+        
+        var pwd = "000000"
+        let store = UserDefaults.standard
+        if let pw = store.string(forKey: kPassword){
+            pwd = pw
+        }
+        
+        if let wh = database.getWheelFromUUID(uuid: uuid){
+            self.wheel = wh
+            
+        } else {
+            self.wheel = Wheel(uuid: uuid, name: self.name)
+            wheel!.brand = "Inmotion"
+            wheel!.password = pwd
+            database.setWheel(wheel: wheel!)
+        }
         
         connection.subscribeToChar("FFE4")
- 
-        if headersOk {
-            BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
-        }
-
+        
         unpacker.reset()
         pushRequest()
         
@@ -1002,7 +1150,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     func deviceDisconnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
         
         queryQueue.cancelAllOperations()
-        headersOk = false
+        state = .disconnected
     }
     
     func giveTime(_ connection: BLEMimConnection) {
@@ -1019,8 +1167,9 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         let count = data.count
         var buf = [UInt8](repeating: 0, count: count)
         (data as NSData).getBytes(&buf, length:count * MemoryLayout<UInt8>.size)
+        let buf1 = buf
         let date = Date()
-        for c in buf {
+        for c in buf1 {
             if unpacker.addChar(c){
                 
                 let (result, adata, _) = BLEInMotionAdapter.verify(unpacker.buffer)
@@ -1030,6 +1179,12 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                         
                         
                         switch (data.id){
+                            
+                        case .CheckPassword:
+                            
+                            if data.data[0] == 1 {
+                                state = .identified
+                            }
                             
                         case .GetFastInfo:
                             
@@ -1062,10 +1217,22 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                             var vmax = 0.0
                             (serialNumber, model, version, vmax) = data.parseSlowInfoMessage()
                             AppDelegate.debugLog("SN %@ Model %@ version %@", serialNumber, model.rawValue, version)
-                            headersOk = true
+                            
+                            if let wh = self.wheel {    // Update wheel data
+                                
+                                let db = WheelDatabase.sharedInstance
+                                wh.model = model.rawValue
+                                wh.serialNo = serialNumber
+                                wh.version = version
+                                db.setWheel(wheel: wh)
+                                
+                            }
+                            
                             BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
                             
                             outValues.append((WheelTrack.WheelValue.MaxSpeed, date, vmax))
+                            
+                            state = .connected
                             
                             
                         default:
@@ -1074,6 +1241,8 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                         }
                         
                         outValues.append((WheelTrack.WheelValue.Duration, date, 0.0))
+                        
+                        //AppDelegate.debugLog("%f", Date().timeIntervalSince1970)
                         
                         
                     }
@@ -1116,25 +1285,29 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     func setDrivingLevel(_ level: Int){
         
     }
+    
     func setLights(_ level: Int) {   // 0->Off 1->On....
         
-        
-        
+        let msg = CANMessage.setLights(level == 1)
+        self.sendMessage(msg)
     }
+    
     func setLimitSpeed(_ speed : Double){
     }
+    
     func enableLimitSpeed(_ enable : Bool)   {   // Enable or disable speedLimit
     }
+    
     func lockWheel(_ lock : Bool){ // Lock or Unlock wheel
-         queryQueue.addOperation {
+        
+        let msg = CANMessage.setLights(lock)
+        self.sendMessage(msg)
+        
+        
+        queryQueue.addOperation {
             
-            //let b : UInt8 = lock ? 3 : 4
-
-            
-           // let msg = CANMessage.setMode(b)
-            
-            
-            let msg = CANMessage.setLights(lock)
+            let b : UInt8 = lock ? 3 : 4
+            let msg = CANMessage.setMode(b)
             self.sendMessage(msg)
         }
     }

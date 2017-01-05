@@ -131,8 +131,10 @@ class GotawayAdapter : NSObject {
                 let voltage = Double(Int(buffer[2]) * 256 + Int(buffer[3])) / 100.0
                 outarr.append((WheelTrack.WheelValue.Voltage, date, voltage))
                 
+                //TODO: Aclarir el significat del signe. Sembla que no a totes les Gotway es igual. Mirar de provar
+                // amb varies rodes
                 
-                var current = Double(Int(buffer[10]) * 256 + Int(buffer[11]))   // Comprovar signe
+                var current = Double(Int(buffer[10]) * 256 + Int(buffer[11]))   // Comprovar signe Ojo. Sembla
                 
                 if current >= 32768.0 {
                     current = current - 65536.0

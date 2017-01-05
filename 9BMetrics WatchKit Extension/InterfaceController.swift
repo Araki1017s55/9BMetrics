@@ -48,18 +48,18 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var skyColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
     
     var distancia : Double = 0.0
-    var oldDistancia : Double = 0.0
+    var oldDistancia : Double = -1.0
     var temps : Double = 0.0
-    var oldTemps : Double = 0.0
+    var oldTemps : Double = -1.0
     var oldTempsString : String = "0:0"
     var speed : Double = 0.0
-    var oldSpeed : Double = 0.0
+    var oldSpeed : Double = -1.0
     var battery : Double = 0.0
-    var oldBattery : Double = 0.0
+    var oldBattery : Double = -1.0
     var remaining : Double = 0.0
     var oldRemaining : Double = 0.0
     var temperature : Double = 0.0
-    var oldTemperature : Double = 0.0
+    var oldTemperature : Double = -1.0
     var recording : Bool = false
     var oldRecording : Bool = false
     var color : UIColor = UIColor(red: 102.0/255.0, green: 204.0/255.0, blue: 255.0/255.0, alpha: 1.0)
@@ -67,7 +67,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var colorLevel : Int = 0
     var oldColorLevel : Int = 0
     var current : Double = 0.0
-    var oldCurrent : Double = 0.0
+    var oldCurrent : Double = -1000.0
     var lockState = false
     var oldLockState = false
     var stateChanged = false
@@ -76,7 +76,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     var oldMainField = mobileFields.speedField
     
     
-    
+    var requestTimer : Timer?
     
     
     
@@ -112,17 +112,53 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         }
     }
     
+    
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        self.updateFields()
+        
+        requestData()
+        
+        requestTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (tim : Timer) in
+            self.requestData()
+        })
     }
     
+
     override func didDeactivate() {
+        
+        if let tim = requestTimer {
+            tim.invalidate()
+            requestTimer = nil
+        }
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
     }
     
+    
+    func requestData(){
+        if let session = self.wcsession{
+            
+            if session.isReachable {
+                
+                let dict : [String : Any] = ["op" : "data" as Any]
+                let now = Date()
+                session.sendMessage(dict, replyHandler: { (_ info: [String : Any]) in
+                    
+                    self.updateData(info as [String : AnyObject])
+                    self.updateFields()
+                    
+                    NSLog("Delta %f", Date().timeIntervalSince(now))
+                    
+                    
+                }, errorHandler: { (error : Error) in
+                    let nerr  = error as NSError
+                    NSLog("Error al demanar dades %@", nerr.localizedDescription)
+                })
+                
+            }
+        }
+    }
 
     @IBAction func handleSpeedGesture(){
         

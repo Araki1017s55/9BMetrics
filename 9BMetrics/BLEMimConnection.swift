@@ -17,51 +17,18 @@
 //
 //    You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-/*
- 
- CONNECTIONS :
- 
- - Main connection is to delegate.
- 
- deviceAnalyzed when analyzing a device
-    it is called when all service and chars data have been read
- 
- deviceConnected when getting the connection
-    it is called when there is an adapter for the wheel
- 
- deviceDisconnected when receiving a disconnection
-    it is called when received a BLE device disconnect
- 
- charUpdated when receiving data
-    it is called when received an updated value for a characteristic
- 
- 
- - Notifications
- 
-    kBluetoothManagerPoweredOnNotification : When CM is Powered On && Connecting (veure estats). No feta servir de moment
- 
-    kDevicesDiscoveredNotification : Sends an array of devices either when already connected or new ones
-        It is received in BLEDeviceSelector and adds the devices to the list
-        It is received in Dashboards and prompts them to open the selector with the devices as initial list
-            Now they also add to the selector but probably may be removed as they are removed as listeners
-            when the selector opens over them
-        It is received by BLEMim. Same as Dashboards
- 
-    kConnectionLostNotification : Sent when not able to connect or lost connection for peripheral. No feta servir de moment
- 
-    kStartConnecting : When trying to reconnect
-        It is sent also by BLESimulatedCLient when starting a new recording (connect)
-        It is received by Dashboards to Start Animation
-        It is received in ViewController but is legacy that must be removed
- 
- 
- 
- */
-
-
 import UIKit
 import CoreBluetooth
 
+/**
+ - author: Francisco Gorina
+ - copyright: ©2016 by Francisco Gorina
+ - date: 12/02/16
+ - version: 2.6
+
+ Represents a BLEService with easy to use data. 
+ done is a flag uses to mark that characteristics have been read from the device
+ */
 struct BLEService {
     var id : String = ""
     var characteristics : [String : BLECharacteristic] = [:]
@@ -70,6 +37,16 @@ struct BLEService {
     
 }
 
+/**
+ - author: Francisco Gorina
+ - copyright: ©2016 by Francisco Gorina
+ - date: 12/02/16
+ - version: 2.6
+ 
+ Represents a BLECharacteristic with easy to use data.
+
+ *flags* are a read/write/subscribing/indicate flags in string format
+ */
 struct BLECharacteristic {
     var service : String
     var id : String
@@ -78,11 +55,79 @@ struct BLECharacteristic {
     
     
 }
-
-
+/**
+ 
+    - author: Francisco Gorina
+    - copyright: ©2016 by Francisco Gorina
+    - date: 12/02/16
+    - version: 2.6
+ 
+ BLEMimConnection is the main Bluetooth Intetface hiding all Bluetooth complexity from the application.
+ 
+ It supports :
+    
+    - Scanning for getting nearby devices
+    - Connecting to a device and getting all services and characteristics
+    - Selecting the apropiate Wheel Adapter from this information
+    - Reading, Writing and Subscribing
+    - Handling disconnections anbd automatic reconnects
+    - Disconnecting the connection
+ 
+ BLEMimConnection talks with the rest of the program through two methods:
+ 
+    - Using the delegate (BLEMimConnectionDelegate protocol)
+    - Through Notifications
+ 
+## Delegate
+ 
+ Must support the BLEMimConnectionDelegate methods which are called when :
+ 
+ - *deviceAnalyzed* is called when a device has been fully analyzed (all services and characteristics read)
+ - *deviceConnected* is called when the connection is done and an adapter is selected
+ - *deviceDisconnected* is called when the Bluetooth connection is lost. Will try to reconnect automatically
+ - *charUpdated* when data is received with an update from the subscribed or read characteristics
+ 
+ 
+## Notifications
+ 
+ BLEMimConnection sends some notifications to comunicate with other modules. The idea is that the User Interface classes may subscribe and present state in a simple way.
+ 
+- *kBluetoothManagerPoweredOnNotification* is sent when Central manager is Powered On i estem conectant. De moment ningú ho fa servir.
+- *kDevicesDiscoveredNotification* is called when new devices are discovered, either the connected ones or new ones.
+ 
+    Is used by BLEDeviceSelector to update the list when new devices appear.
+ 
+    Is used by Dashboards to add devices to the initial device list and open the Device Selector.
+ 
+    Now they also add to the selector but probably may be removed as they are removed as listeners when the selector opens over them.
+ 
+    It is received by BLEMim which uses it the same way as Dashboards.
+ 
+ - *kConnectionLostNotification* is sent when connection is lost. Usually a terminal lost that is not recovered.
+ 
+ - *kStartConnecting*  is sent when trying to reconnect.
+ 
+    It is sent also by BLESimulatedCLient when starting a new recording (start).
+ 
+    It is received by Dashboards to Start Animation.
+ 
+    It is received in ViewController but is legacy that must be removed.
+ 
+ 
+ 
+ */
 class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
     
     
+    /**
+        ConnectionState represents the state of the connection. values are
+ 
+     - *disconnected* just sits idling
+     - *scanning* scanning is started and the connection waits for discovered devices
+     - *connecting* conection to a device has been started and waiting for it to respond and read all services and characteristics to analyze the device
+     - *connected* the device has been identified and an adapter has been instantiated
+ 
+ */
     enum ConnectionState {
         case disconnected
         case scanning
@@ -154,7 +199,13 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
     
     //MARK: Public Interface
     
+    /**
      
+     Starts connection to a device represented as an UUID String
+     
+    - parameters:
+        - device: String with the uuid of the device to connect to
+    */
     func connectToUUID(_ device : String){
         
         if state == .scanning{
@@ -167,6 +218,11 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         
     }
     
+    /**
+     
+     Disconnects from the current device
+     */
+    
     func disconnect(){
         
         self.stopConnection()
@@ -174,6 +230,11 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
     }
     
     
+    /**
+     
+     Starts scanning for devices
+     
+     */
     func startScanning(){
         
         if state != .disconnected{
@@ -198,6 +259,11 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         self.doRealScan()
     }
     
+    /**
+     
+     Stops scanning for devices
+     
+     */
     func stopScanning(){
         
         if state == .scanning {
@@ -213,6 +279,15 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
     
     //MARK: Exchanging data
     
+    
+    /**
+     
+     Subscribes to a characteristic identified by a String UUID. First lookups in its database all the details
+     
+     - parameters:
+        - char: String with the UUID of the characteristic to connect
+     
+     */
     func subscribeToChar(_ char: String){
         
         if state != .connected {
@@ -226,6 +301,14 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         }
     }
     
+    /**
+     
+     Removes the subscription to a characteristic identified by a String UUID. First lookups in its database all the details
+     
+     - parameters:
+        - char: String with the UUID of the characteristic to disconnect
+     
+     */
     func unsubscribeToChar(_ char: String){
         if state != .connected {
             AppDelegate.debugLog("Trying to unsubscribeToChar without being connected")
@@ -238,6 +321,16 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
         }
     }
     
+    /**
+     
+     Writed the Data to the characteristic identified by a UUID String
+     
+     - parameters:
+        - char: String with the UUID of the characteristic to write to
+     
+        - data: Value to write
+     
+     */
     func writeValue(_ char : String, data : Data){
         if state != .connected {
             AppDelegate.debugLog("Trying to writeValue without being connected")

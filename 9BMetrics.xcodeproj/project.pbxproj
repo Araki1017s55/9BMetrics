@@ -86,6 +86,9 @@
 		00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */; };
 		00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB821CD1E5F200EB66FB /* Notifications.swift */; };
 		00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */; };
+		00F822321E19814D0080C644 /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822311E19814D0080C644 /* Wheel.swift */; };
+		00F822341E19856A0080C644 /* WheelDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822331E19856A0080C644 /* WheelDatabase.swift */; };
+		00F822371E1AB9700080C644 /* WheelSelectorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */; };
 		00FFEF001D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FFEEFF1D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -232,8 +235,11 @@
 		00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEGraphicRunningDashboard.swift; path = 9BMetrics/BLEGraphicRunningDashboard.swift; sourceTree = "<group>"; };
 		00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockViewFast.swift; path = 9BMetrics/TMKClockViewFast.swift; sourceTree = "<group>"; };
 		00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WheelTrack.swift; path = 9BMetrics/WheelTrack.swift; sourceTree = "<group>"; };
-		00DCEB821CD1E5F200EB66FB /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		00DCEB821CD1E5F200EB66FB /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Notifications.swift; path = 9BMetrics/Notifications.swift; sourceTree = "<group>"; };
 		00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockView.swift; path = 9BMetrics/TMKClockView.swift; sourceTree = "<group>"; };
+		00F822311E19814D0080C644 /* Wheel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wheel.swift; path = 9BMetrics/Wheel.swift; sourceTree = "<group>"; };
+		00F822331E19856A0080C644 /* WheelDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelDatabase.swift; sourceTree = "<group>"; };
+		00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorTableViewController.swift; sourceTree = "<group>"; };
 		00FFEEFF1D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEDeviceSelectorDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -260,7 +266,6 @@
 		007A570B1C85CE49003A2030 = {
 			isa = PBXGroup;
 			children = (
-				008BB5A21DA6A6340073B5A0 /* String+Localized.swift */,
 				00CF643A1CE4C88800C5E029 /* Auxiliar */,
 				00CF64391CE4C85F00C5E029 /* Model */,
 				00CF64381CE4C81E00C5E029 /* Communications */,
@@ -269,6 +274,7 @@
 				00CF64351CE4C74E00C5E029 /* Graphics */,
 				00AB592A1CAEE5CA00277859 /* Zip */,
 				007A574E1C85CE5D003A2030 /* Resources */,
+				00F822351E1AB92E0080C644 /* Settings */,
 				007A57161C85CE49003A2030 /* 9BMetrics */,
 				007A572A1C85CE49003A2030 /* 9BMetrics WatchKit App */,
 				007A57391C85CE49003A2030 /* 9BMetrics WatchKit Extension */,
@@ -292,9 +298,6 @@
 				0016670F1C9967290048344F /* Settings.bundle */,
 				007A575B1C85CE7B003A2030 /* 9BMetrics.entitlements */,
 				00AB59331CAEE61600277859 /* 9BMetrics-Bridging-Header.h */,
-				00DCEB821CD1E5F200EB66FB /* Notifications.swift */,
-				007A57721C85CF39003A2030 /* BLENinebotSettingsViewController.swift */,
-				007A57711C85CF39003A2030 /* SettingsViewController.swift */,
 				007A576C1C85CF39003A2030 /* BLESimulatedClient.swift */,
 				007A57191C85CE49003A2030 /* ViewController.swift */,
 				007A57171C85CE49003A2030 /* AppDelegate.swift */,
@@ -464,6 +467,8 @@
 			children = (
 				007A57671C85CF39003A2030 /* BLENinebot.swift */,
 				00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */,
+				00F822311E19814D0080C644 /* Wheel.swift */,
+				00F822331E19856A0080C644 /* WheelDatabase.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -471,11 +476,24 @@
 		00CF643A1CE4C88800C5E029 /* Auxiliar */ = {
 			isa = PBXGroup;
 			children = (
+				00DCEB821CD1E5F200EB66FB /* Notifications.swift */,
+				008BB5A21DA6A6340073B5A0 /* String+Localized.swift */,
 				00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */,
 				007A57661C85CF39003A2030 /* PickerActivity.swift */,
 				007A57731C85CF39003A2030 /* DocController.swift */,
 			);
 			name = Auxiliar;
+			sourceTree = "<group>";
+		};
+		00F822351E1AB92E0080C644 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				007A57721C85CF39003A2030 /* BLENinebotSettingsViewController.swift */,
+				007A57711C85CF39003A2030 /* SettingsViewController.swift */,
+				00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */,
+			);
+			name = Settings;
+			path = 9BMetrics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -660,6 +678,7 @@
 				00AB595B1CAEE64000277859 /* pwd2key.c in Sources */,
 				00AB595C1CAEE64000277859 /* sha1.c in Sources */,
 				0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */,
+				00F822341E19856A0080C644 /* WheelDatabase.swift in Sources */,
 				007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */,
 				007A57851C85CF39003A2030 /* DocController.swift in Sources */,
 				00AB593C1CAEE61700277859 /* minizip.c in Sources */,
@@ -688,6 +707,8 @@
 				004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */,
 				00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */,
 				00649CF51DD346FC00790DE3 /* BLEInMotionAdapter.swift in Sources */,
+				00F822321E19814D0080C644 /* Wheel.swift in Sources */,
+				00F822371E1AB9700080C644 /* WheelSelectorTableViewController.swift in Sources */,
 				008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */,

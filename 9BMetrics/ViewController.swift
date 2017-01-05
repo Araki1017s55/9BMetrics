@@ -920,6 +920,7 @@ import UIKit
             }
             
         }
+        reloadFiles()
         super.viewWillAppear(animated)
     }
     
