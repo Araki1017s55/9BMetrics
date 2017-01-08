@@ -20,3 +20,15 @@ let kDashboardMode = "dashboard_mode"
 let kBlockSleepMode = "block_sleep"
 let kSpeedAlarm = "speedAlarm"
 let kPassword = "password"
+let kBatteryAlarm = "battery"
+let kNotifySpeed = "notifySpeed"
+let kNotifyBattery = "notifyBattery"
+
+
+// UserNotifications
+
+enum UserNotificationCategory : String{
+    case batteryLevel = "es.gorina.9BMetrics.batteryLevel"
+    case speed = "es.gorina.9BMetrics.speed"
+}
+

@@ -25,6 +25,7 @@ import CoreMotion
 import MapKit
 import WatchConnectivity
 import AudioToolbox
+import UserNotifications
 
 class BLESimulatedClient: NSObject {
     
@@ -47,8 +48,10 @@ class BLESimulatedClient: NSObject {
     var sendTimer : Timer?    // Timer per enviar les dades periodicament
     var timerStep = 0.1        // Get data every step
     var watchTimerStep = 0.1        // Get data every step
-    var speedAlarmTimerStep = 0.5   // Temps per repetir la alarma de velocitat
+    var speedAlarmTimerStep = 10.0  // Temps per repetir la alarma de velocitat
     var lastSpeedAlarm = Date()     // Ultima alarma de velocitat enviada
+    var speedNotificationSent = false
+    
     
     var gpsRefreshDistance = 100.0
     var gpsRefreshTime = 1.0
@@ -61,6 +64,14 @@ class BLESimulatedClient: NSObject {
     
     
     var buffer = [UInt8]()
+    
+    // Notification enable
+    
+    var notifySpeed = false
+    var notifyBattery = false
+    
+    var alarmSpeed : Double = 0.0 // No alarm
+    var alarmBattery : Double = 0.0 // No Alarm
     
     // Altimeter data
     
@@ -122,7 +133,6 @@ class BLESimulatedClient: NSObject {
             
         }
         
-        
         if WCSession.isSupported(){
             
             let session = WCSession.default()
@@ -182,6 +192,8 @@ class BLESimulatedClient: NSObject {
             return
         }
         
+        
+        
         // First we recover the last device and try to connect directly
         
         self.adapter = nil
@@ -190,9 +202,17 @@ class BLESimulatedClient: NSObject {
             nb.clearAll()
         }
         
-        recording = true
+        // Get battery and speed notification options
         
         let store = UserDefaults.standard
+        
+        alarmSpeed = store.double(forKey: kSpeedAlarm)
+        notifySpeed = store.bool(forKey: kNotifySpeed)
+        alarmBattery = store.double(forKey: kBatteryAlarm)
+        notifyBattery = store.bool(forKey: kNotifyBattery)
+        
+        recording = true
+        
         let device = store.string(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey)
         
         if let dev = device {
@@ -202,6 +222,8 @@ class BLESimulatedClient: NSObject {
             self.connection.startScanning()
             BLESimulatedClient.sendNotification(BLESimulatedClient.kStartConnection, data:["status":"Scanning"])
         }
+        
+        
         
         // Start altimeter data
         
@@ -277,7 +299,7 @@ class BLESimulatedClient: NSObject {
         }
         self.adapter = nil
         
-        if let info = getAppState(){
+        if let info = getAppState(false){
             self.sendDataToWatch(info)
         }
     }
@@ -357,10 +379,91 @@ class BLESimulatedClient: NSObject {
         }
     }
     
+    // MARK: User Notifications support.
+    // 1.- Battery crosses battery alarm  mark
+    // 2.- Speed crosses speed alarm mark
+    
+    /// Sends a battery level notification
+    /// Must be called only when cahanging level
+    
+    
+    func sendBatteryLevelNotification(level : Double) {
+        
+        if #available(iOS 10.0, *) {
+            
+            //            let notifyBefore = UNNotificationAction(identifier:"Battery low", title: "Notification", options: [])
+            let category = UNNotificationCategory(identifier: UserNotificationCategory.batteryLevel.rawValue, actions: [], intentIdentifiers: [], options: [])
+            
+            
+            UNUserNotificationCenter.current().setNotificationCategories([category])
+            let content = UNMutableNotificationContent()
+            
+            content.title = level <= alarmBattery ?"Battery level low" : "Battery level is OK"
+            content.body = "Battery level is \(level)%"
+            content.sound = UNNotificationSound.default()
+            content.categoryIdentifier = UserNotificationCategory.batteryLevel.rawValue
+            
+            //interval in seconds from current point in time to notification
+            let interval : TimeInterval = 0.25 // Modify for the future
+            
+            let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: interval, repeats: false)
+            
+            let request = UNNotificationRequest.init(identifier: UUID().uuidString, content: content, trigger: trigger)
+            
+            //only schedule in the future
+            if(interval > 0){
+                UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
+                    // handle the error if needed
+                    if let err = error as? NSError {
+                        AppDelegate.debugLog(err.localizedDescription)
+                    }
+                    
+                })
+            }
+        }
+    }
+    
+    
+    func sendSpeedAlertNotification(speed : Double) {
+        
+        if #available(iOS 10.0, *) {
+            
+            //            let notifyBefore = UNNotificationAction(identifier:"Battery low", title: "Notification", options: [])
+            let category = UNNotificationCategory(identifier: UserNotificationCategory.speed.rawValue, actions: [], intentIdentifiers: [], options: [])
+            
+            
+            UNUserNotificationCenter.current().setNotificationCategories([category])
+            let content = UNMutableNotificationContent()
+            let sp = speed * 3.6
+            
+            content.title = "Speed too high - Be careful"
+            content.body = "Your speed is  \(sp) km/h"
+            content.sound = UNNotificationSound.default()
+            content.categoryIdentifier = UserNotificationCategory.batteryLevel.rawValue
+            
+            //interval in seconds from current point in time to notification
+            let interval : TimeInterval = 0.25 // Modify for the future
+            
+            let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: interval, repeats: false)
+            
+            let request = UNNotificationRequest.init(identifier: UUID().uuidString, content: content, trigger: trigger)
+            
+            //only schedule in the future
+            if(interval > 0){
+                UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
+                    // handle the error if needed
+                    if let err = error as? NSError {
+                        AppDelegate.debugLog(err.localizedDescription)
+                    }
+                    
+                })
+            }
+        }
+    }
     
     //MARK: AppleWatch Support
     
-    fileprivate func getAppState() -> [String : Double]?{
+    fileprivate func getAppState(_ speedAlarm : Bool) -> [String : Double]?{
         
         
         if let nb = self.datos{
@@ -379,11 +482,7 @@ class BLESimulatedClient: NSObject {
             dict["lock"]  =  nb.getCurrentValueForVariable(.lockEnabled)
             dict["current"]  =  nb.getCurrentValueForVariable(.Current)
             
-            let v =  nb.getCurrentValueForVariable(.Speed) * 3.6
-            
-            if v >= 18.0 && v < 20.0{
-                dict["color"] = 1.0
-            }else if v >= 20.0 {
+            if speedAlarm {
                 dict["color"] = 2.0
             }
             else{
@@ -436,16 +535,16 @@ class BLESimulatedClient: NSObject {
     
     private func sendStateToWatch(_ timer: Timer){
         
-        self.doSendStateToWatch()
+        self.doSendStateToWatch(self.checkSpeed())
         
     }
     
-    fileprivate func doSendStateToWatch(){
+    fileprivate func doSendStateToWatch(_ alarm : Bool){
         DispatchQueue.global().async( execute: {
             if #available(iOS 9.3, *) {     // A veure si així es una mica mes ràpid. Potser enviar coses quan no es activa li feia mal
                 if let session = self.wcsession , session.activationState == .activated {
                     if self.sendToWatch() {
-                        if let info = self.getAppState(){
+                        if let info = self.getAppState(alarm){
                             self.sendDataToWatch(info)
                         }
                     }
@@ -453,7 +552,7 @@ class BLESimulatedClient: NSObject {
             } else {
                 if self.sendToWatch() {
                     
-                    if let info = self.getAppState(){
+                    if let info = self.getAppState(alarm){
                         self.sendDataToWatch(info)
                     }
                     
@@ -471,7 +570,7 @@ class BLESimulatedClient: NSObject {
                 if #available(iOS 9.3, *) {     // A veure si així es una mica mes ràpid. Potser enviar coses quan no es activa li feia mal
                     if let session = self.wcsession , session.activationState == .activated {
                         if self.sendToWatch() {
-                            if let info = self.getAppState(){
+                            if let info = self.getAppState(self.checkSpeed()){
                                 self.sendDataToWatch(info)
                             }
                         }
@@ -479,7 +578,7 @@ class BLESimulatedClient: NSObject {
                 } else {
                     if self.sendToWatch() {
                         
-                        if let info = self.getAppState(){
+                        if let info = self.getAppState(self.checkSpeed()){
                             self.sendDataToWatch(info)
                         }
                         
@@ -510,7 +609,7 @@ class BLESimulatedClient: NSObject {
     }
     
     private func sendDataToWatchMessage(){
-        let info = self.getAppState()
+        let info = self.getAppState(checkSpeed())
         
         if !self.checkState(info, state_2: self.oldState){
             if let session = wcsession, let inf = info {
@@ -700,9 +799,8 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
         }
     }
     
-    func checkSpeed(){
-        let store = UserDefaults.standard
-        let sa = store.double(forKey: kSpeedAlarm)
+    func checkSpeed() -> Bool{
+        let sa = alarmSpeed
         
         if let wheel = self.datos {
             if sa != 0 && sa <= wheel.getCurrentValueForVariable(.Speed) {
@@ -711,12 +809,23 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                     
                     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
                     lastSpeedAlarm = now
+                    
+                    if !speedNotificationSent && notifySpeed{
+                        self.sendSpeedAlertNotification(speed: wheel.getCurrentValueForVariable(.Speed))
+                        speedNotificationSent = true
+                    }
                 }
+                return true
+            } else {
+                speedNotificationSent = false   // Reset when we recover
             }
         }
-        
-        
+        return false
     }
+    
+    
+    
+    
     func charUpdated(_ char : CBCharacteristic, data: Data){
         if let adp = self.adapter {
             if let newData = adp.charUpdated(self.connection, char: char, data: data), let wheel = self.datos{
@@ -725,8 +834,27 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                 var curDate = Date()
                 
                 for (vari, date, val) in newData {
-                    //AppDelegate.debugLog("%@ = %@", vari.rawValue , val)
+                    if vari == .Battery {
+                        
+                        let bold = wheel.getCurrentValueForVariable(.Battery)
+                        
+                        let bal = alarmBattery
+                        
+                        if notifyBattery {
+                            if bold != 0.0 {
+                                if bold <= bal && val > bal || bold > bal && val <= bal {
+                                    sendBatteryLevelNotification(level: val)
+                                }
+                            } else {
+                                if val <= bal {
+                                    sendBatteryLevelNotification(level: val)
+                                }
+                            }
+                        }
+                    }
+                    
                     wheel.addValueWithDate(date, variable: vari, value: val)
+                    
                     if vari == .Current {
                         addPower = true
                         curDate = date
@@ -748,15 +876,12 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                     wheel.addValueWithDate(curDate, variable: .Energy, value: E)
                     
                 }
+                let alarm = checkSpeed()
                 
                 if Date().timeIntervalSince(self.lastWatchUpdate) > watchTimerStep {
-                    self.doSendStateToWatch()
+                    self.doSendStateToWatch(alarm)
                 }
-                
-                
-                
             }
-            checkSpeed()
         }
     }
 }
@@ -816,16 +941,16 @@ extension BLESimulatedClient :  WCSessionDelegate{
     
     //TODO: Move Watch Support to AppDelegate or ViewController.
     
-
+    
     
     func session(_ asession: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         
         if let op = message["op"] as? String, op == "data"{
-        
-            if let info = self.getAppState() {
+            
+            if let info = self.getAppState(checkSpeed()) {
                 replyHandler(info)
             }
-        
+            
         } else {
             self.session(asession, didReceiveMessage:message)
         }
@@ -927,7 +1052,7 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
                 adp.giveTime(self.connection)
             }
             if Date().timeIntervalSince(self.lastWatchUpdate) > watchTimerStep {
-                self.doSendStateToWatch()
+                self.doSendStateToWatch(checkSpeed())
             }
         }
         

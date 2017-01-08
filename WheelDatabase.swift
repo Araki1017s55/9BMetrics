@@ -28,16 +28,21 @@ public class WheelDatabase {
         let fm = FileManager.default
         if let url = WheelDatabase.buildUrl(filename) {
             if fm.fileExists(atPath: url.path){
-                if let dat = NSDictionary.init(contentsOf: url) as? [String : Wheel]{
+                if let dat = NSKeyedUnarchiver.unarchiveObject(withFile:url.path) as? [String : Wheel]{
                     database = dat
                 }
             }
         }
     }
     func save(){
-        let dat = database as NSDictionary
-        if let url = WheelDatabase.buildUrl(filename) {
-            dat.write(to: url, atomically: true)
+         if let url = WheelDatabase.buildUrl(filename) {
+            
+            let path = url.path
+            let success = NSKeyedArchiver.archiveRootObject(database, toFile: path)
+            
+            if !success {
+               AppDelegate.debugLog("Error al gravar diccionari")
+            }
         }
     }
     
@@ -58,6 +63,12 @@ public class WheelDatabase {
     
     func setWheel(wheel : Wheel){
         database[wheel.uuid] = wheel
+        save()
+    }
+    
+    func removeWheel(wheel : Wheel){
+        
+        database.removeValue(forKey: wheel.uuid)
         save()
     }
     

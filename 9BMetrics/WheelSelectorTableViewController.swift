@@ -46,29 +46,58 @@ class WheelSelectorTableViewController: UITableViewController {
             let wheel = database.getWheelFromUUID(uuid: uuid)!
         
             cell.textLabel!.text = wheel.name
-            cell.detailTextLabel!.text = uuid
+            cell.detailTextLabel!.text = wheel.brand + " " + wheel.model
          return cell
     }
+    
+    //MARK : - Delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        let dataArray = Array(database.database.keys)
+        let uuid = dataArray[indexPath.row]
+        let wheel = database.getWheelFromUUID(uuid: uuid)!
+        
+        let store = UserDefaults.standard
+        
+        // Now set data from the wheel
+        
+        store.set(uuid, forKey:  BLESimulatedClient.kLast9BDeviceAccessedKey)
+        store.set(wheel.password, forKey : kPassword)
+        store.set(wheel.alarmSpeed, forKey : kSpeedAlarm)
+        store.set(wheel.batteryAlarm, forKey : kBatteryAlarm)
+        
+    }
 
-    /*
+    
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
+    
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            
+            // Get the wheel
+            let dataArray = Array(database.database.keys)
+            let uuid = dataArray[indexPath.row]
+            let wheel = database.getWheelFromUUID(uuid: uuid)!
+
+            database.removeWheel(wheel: wheel)
+            
+            
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
 
     /*
     // Override to support rearranging the table view.

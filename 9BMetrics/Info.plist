@@ -110,6 +110,7 @@
 	<string>Enable to allow 9BMetrics to store position data in log files</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>bluetooth-central</string>
 		<string>bluetooth-peripheral</string>
 		<string>location</string>

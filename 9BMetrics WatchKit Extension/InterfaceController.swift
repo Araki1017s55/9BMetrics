@@ -142,13 +142,13 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             if session.isReachable {
                 
                 let dict : [String : Any] = ["op" : "data" as Any]
-                let now = Date()
+                //let now = Date()
                 session.sendMessage(dict, replyHandler: { (_ info: [String : Any]) in
                     
                     self.updateData(info as [String : AnyObject])
                     self.updateFields()
                     
-                    NSLog("Delta %f", Date().timeIntervalSince(now))
+                    //NSLog("Delta %f", Date().timeIntervalSince(now))
                     
                     
                 }, errorHandler: { (error : Error) in

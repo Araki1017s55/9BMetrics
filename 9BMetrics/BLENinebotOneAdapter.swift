@@ -591,7 +591,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         
         
         
-        for i in 16 ..< 20{
+        for i in 16 ..< 18{
             
             
             let v = values[i]

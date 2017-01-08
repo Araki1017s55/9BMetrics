@@ -45,6 +45,38 @@
             endingLineNumber = "102"
             landmarkName = "startStop(_:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLERunningDashboard.startStop (Swift.AnyObject) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLERunningDashboard.swift"
+                  timestampString = "505593544.98995"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "102"
+                  endingLineNumber = "102"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLERunningDashboard.startStop (Swift.AnyObject) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLERunningDashboard.swift"
+                  timestampString = "505593544.992959"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "102"
+                  endingLineNumber = "102"
+                  offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -76,6 +108,22 @@
             startingLineNumber = "381"
             endingLineNumber = "381"
             landmarkName = "parseFastInfoMessage(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLESimulatedClient.swift"
+            timestampString = "505593625.299125"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "392"
+            endingLineNumber = "392"
+            landmarkName = "sendBatteryLevelNotification(level:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

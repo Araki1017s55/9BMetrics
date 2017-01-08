@@ -486,7 +486,7 @@ class BLEMimConnection: NSObject, CBCentralManagerDelegate  {
                 
     //TODO : Modificar epr seleccionar els serveis amb un switch
                 
-                let theService =  [CBUUID(string: "FFE0")];
+               // let theService =  [CBUUID(string: "FFE0")];
                 
               
                 self.centralManager!.scanForPeripherals(withServices: nil, options:[CBCentralManagerScanOptionAllowDuplicatesKey : false ])

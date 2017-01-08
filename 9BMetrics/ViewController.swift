@@ -20,6 +20,7 @@
 
 
 import UIKit
+import UserNotifications
 
 /**
  Main Class shows a list of runs ordered by date.
@@ -69,6 +70,17 @@ import UIKit
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if #available(iOS 10.0, *) {  // Send User notifications for speed, and battery
+                            
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+                // Enable or disable features based on authorization
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+        
         
         registerForPreviewing(with: self, sourceView: tableView)
         
@@ -311,7 +323,7 @@ import UIKit
             for item in arch  {
                 
                 if let url = item as? URL , !self.isDirectory(url)  || url.pathExtension == "9bm"{
-                    if url.pathExtension  != "gpx"{
+                    if url.pathExtension  != "gpx" && url.lastPathComponent != "wheels"{
                         files.append(url)
                     }
                 }
@@ -374,6 +386,32 @@ import UIKit
     func stopClient(){
         
     }
+    
+    func sendTestNotification(){
+        
+        if let dele = UIApplication.shared.delegate as? AppDelegate{
+            if let client = dele.client{
+                client.sendBatteryLevelNotification(level: 10.0)
+                client.sendBatteryLevelNotification(level: 30.0)
+                client.sendSpeedAlertNotification(speed: 30.0 / 3.6)
+            }
+        }
+        
+    }
+    
+    func printScheduledNotifications() {
+        if #available(iOS 10.0, *) {
+            print("printing scheduled notifications >=iOS10")
+            UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: { (notifications) in
+                print("count", notifications.count)
+                for notification in notifications{
+                    
+                    print(notification.description)
+                }
+            })
+        }
+    }
+
     
     /**
         opens the running dashboard according preferences
@@ -439,6 +477,13 @@ import UIKit
             
             alert.addAction(action)
             
+            
+            action = UIAlertAction(title: "Send Notification".localized(comment: "send notification item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+                
+                self.sendTestNotification()
+            })
+            
+            alert.addAction(action)
             
             
         }
