@@ -31,7 +31,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     var listaOp :[(UInt8, UInt8)] = [(50,2), (58,1),  (62, 1), (182, 5)]
     // var listaOpFast :[(UInt8, UInt8)] = [(38,1), (80,1), (97,4), (34,4), (71,6)]
     
-    var listaOpFast :[(UInt8, UInt8)] = [(97,2), (188,2), (180,2)]
+    var listaOpFast :[(UInt8, UInt8)] = [(97,2), (188,2), (180,5)]
     
     var buffer = [UInt8]()
     
@@ -246,17 +246,21 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                         
                         //Check SpeedLimit
                         let dv = Double(sv) * BLENinebotOneAdapter.scales[k]
-                        
-                        /*
-                        if k == BLENinebot.kSpeedLimit {
-                            AppDelegate.debugLog("Speed Limit %f", dv)
-                        }
- */
+
                         if let wv = BLENinebotOneAdapter.conversion[k]{
                             outarr!.append((wv, Date(), dv))
                             
                         }
+                        
                     }
+                    
+                   }
+                // Check special case for total distance
+                
+                if let v0 = d[BLENinebot.kTotalMileage0], let v1 = d[BLENinebot.kTotalMileage1]{
+                    
+                    let total = Double(v1) * 65536.0 + Double(v0)
+                    outarr!.append(WheelTrack.WheelValue.AcumDistance, Date(), total)
                 }
                 
                 

@@ -292,6 +292,16 @@ class BLESimulatedClient: NSObject {
                 
                 
                 _ = nb.createPackage(name)
+                
+                // Now we update current wheel
+                
+                if let  wheel = WheelDatabase.sharedInstance.getWheelFromUUID(uuid: nb.getUUID()) {
+                    
+                    wheel.totalDistance = nb.getCurrentValueForVariable(WheelTrack.WheelValue.AcumDistance)
+                    WheelDatabase.sharedInstance.setWheel(wheel: wheel)
+                    
+                }
+                
             }
             
             BLESimulatedClient.sendNotification(BLESimulatedClient.kStoppedRecording, data: [:])
@@ -534,6 +544,8 @@ class BLESimulatedClient: NSObject {
     }
     
     private func sendStateToWatch(_ timer: Timer){
+        
+        return
         
         self.doSendStateToWatch(self.checkSpeed())
         
@@ -947,9 +959,20 @@ extension BLESimulatedClient :  WCSessionDelegate{
         
         if let op = message["op"] as? String, op == "data"{
             
-            if let info = self.getAppState(checkSpeed()) {
-                replyHandler(info)
+            let bgtask = UIApplication.shared.beginBackgroundTask(withName: "WatchDataTask", expirationHandler: { 
+                
+                
+            })
+            
+            DispatchQueue.global().async {
+                if let info = self.getAppState(self.checkSpeed()) {
+                    replyHandler(info)
+                }
+                
+                UIApplication.shared.endBackgroundTask(bgtask)
+
             }
+            
             
         } else {
             self.session(asession, didReceiveMessage:message)

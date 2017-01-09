@@ -713,6 +713,7 @@ import UserNotifications
                     let store = UserDefaults.standard           // Get speedAlarm
             
                     let sa = store.double(forKey: kSpeedAlarm) * 3.6    // Speed in km/h
+                    let ba = store.double(forKey: kBatteryAlarm) / 100.0    // Battery from 0 to 1
                     
                     if sa > 0.0 {
                         
@@ -723,6 +724,9 @@ import UserNotifications
                         dash.speedTop = dash.speedOK * 1.5
                     }
                     
+                    if ba > 0.0 {
+                        dash.batOk = ba
+                    }
                     
                     if let cli = dele.client{
                         

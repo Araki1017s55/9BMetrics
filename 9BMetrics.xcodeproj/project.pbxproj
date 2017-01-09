@@ -59,6 +59,7 @@
 		007A57871C85CF80003A2030 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007A57861C85CF80003A2030 /* Interface.storyboard */; };
 		007A57891C85CF8D003A2030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 007A57881C85CF8D003A2030 /* Assets.xcassets */; };
 		007CE2F81CCBD5260005828F /* KTCenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */; };
+		007D4A171E239A0D008624E6 /* WheelInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007D4A161E239A0D008624E6 /* WheelInfoCell.swift */; };
 		008BB5A31DA6A6340073B5A0 /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BB5A21DA6A6340073B5A0 /* String+Localized.swift */; };
 		008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */; };
 		008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */; };
@@ -192,6 +193,7 @@
 		007A57861C85CF80003A2030 /* Interface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Interface.storyboard; sourceTree = "<group>"; };
 		007A57881C85CF8D003A2030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KTCenterFlowLayout.swift; path = 9BMetrics/KTCenterFlowLayout.swift; sourceTree = "<group>"; };
+		007D4A161E239A0D008624E6 /* WheelInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelInfoCell.swift; sourceTree = "<group>"; };
 		008BB5A21DA6A6340073B5A0 /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Localized.swift"; path = "9BMetrics/String+Localized.swift"; sourceTree = "<group>"; };
 		008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEWheelAdapterProtocol.swift; path = 9BMetrics/BLEWheelAdapterProtocol.swift; sourceTree = "<group>"; };
 		008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotOneAdapter.swift; path = 9BMetrics/BLENinebotOneAdapter.swift; sourceTree = "<group>"; };
@@ -491,6 +493,7 @@
 				007A57721C85CF39003A2030 /* BLENinebotSettingsViewController.swift */,
 				007A57711C85CF39003A2030 /* SettingsViewController.swift */,
 				00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */,
+				007D4A161E239A0D008624E6 /* WheelInfoCell.swift */,
 			);
 			name = Settings;
 			path = 9BMetrics;
@@ -703,6 +706,7 @@
 				00AB593B1CAEE61700277859 /* unzip.c in Sources */,
 				00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */,
 				003CC9161CCA79C50020F83B /* BLEHistoDashboard.swift in Sources */,
+				007D4A171E239A0D008624E6 /* WheelInfoCell.swift in Sources */,
 				0079E9891D8E8071004A09BB /* BLEWheelSelector.swift in Sources */,
 				004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */,
 				00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */,

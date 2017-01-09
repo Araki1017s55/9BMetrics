@@ -119,7 +119,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         
         requestData()
         
-        requestTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { (tim : Timer) in
+        requestTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true, block: { (tim : Timer) in
             self.requestData()
         })
     }

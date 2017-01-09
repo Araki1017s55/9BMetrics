@@ -37,7 +37,8 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     let sphereColor = UIColor.black
     let labelColor = UIColor.black
     
-    let batTop = 1.0
+    var batTop = 1.0
+    var batOk = 0.2
 
     let tempTop = 90.0
     let tempOK = 60.0
@@ -99,8 +100,8 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
  
             
             
-            battAreas = [TMKClockView.arc(start: 0.0, end: 0.2, color: UIColor.red),
-                         TMKClockView.arc(start: 0.2, end: 1.0, color: UIColor.green)]
+            battAreas = [TMKClockView.arc(start: 0.0, end: batOk/batTop, color: UIColor.red),
+                         TMKClockView.arc(start: batOk/batTop, end: 1.0, color: UIColor.green)]
             
             
             tempAreas = [TMKClockView.arc(start: 0.0, end: tempOK / tempTop, color: UIColor.green),

@@ -23,6 +23,7 @@ public class Wheel : NSObject {
     var notifySpeed : Bool = false
     var batteryAlarm : Double = 20 // Battery alarm. 20%
     var notifyBattery : Bool = true
+    var totalDistance : Double = 0.0    // Just to get the total distance. Updated with every run
     
     
     init(uuid : String, name : String){
@@ -46,6 +47,7 @@ public class Wheel : NSObject {
         self.notifySpeed = decoder.decodeBool(forKey: "notifySpeed")
         self.batteryAlarm = decoder.decodeDouble(forKey: "batteryAlarm")
         self.notifyBattery = decoder.decodeBool(forKey: "notifyBattery")
+        self.totalDistance = decoder.decodeDouble(forKey: "totalDistance")
         
         
         
@@ -67,6 +69,7 @@ public class Wheel : NSObject {
         encoder.encode(notifySpeed, forKey:"notifySpeed")
         encoder.encode(batteryAlarm, forKey:"batteryAlarm")
         encoder.encode(notifyBattery, forKey:"notifyBattery")
+        encoder.encode(totalDistance, forKey:"totalDistance")
        
     }
     

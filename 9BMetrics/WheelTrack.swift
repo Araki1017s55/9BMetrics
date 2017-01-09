@@ -1722,11 +1722,13 @@ class WheelTrack: NSObject {
                             
                             let distanceGPX = getGPXDistance()
                             let wheelDistance = getCurrentValueForVariable(.Distance)
+                            let (_, _, _, anotherDistance) = getCurrentStats(.Speed)
                             
-                            AppDelegate.debugLog("Wheel Distance %f GPX Distance %f", wheelDistance, distanceGPX)
+                            AppDelegate.debugLog("Wheel Distance %f GPX Distance %f Another Distance %f", wheelDistance, distanceGPX, anotherDistance)
                             
                             if distanceGPX > 0.0 {
                                 AppDelegate.debugLog("Correction %f", wheelDistance / distanceGPX)
+                                AppDelegate.debugLog("Speed Correction %f", anotherDistance / distanceGPX)
                             }
                         }
                         

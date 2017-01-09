@@ -119,17 +119,6 @@ class  BLENinebot : NSObject{
     static var  labels = Array<String>(repeating: "?", count: 256)
     static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     static var displayableVariables : [Int] = [BLENinebot.kCurrentSpeed, BLENinebot.kTemperature,
                                                BLENinebot.kVoltage, BLENinebot.kCurrent, BLENinebot.kBattery, BLENinebot.kPitchAngle, BLENinebot.kRollAngle,
                                                BLENinebot.kvSingleMileage, BLENinebot.kAltitude, BLENinebot.kPower, BLENinebot.kEnergy]
