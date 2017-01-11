@@ -35,6 +35,8 @@ class GotawayAdapter : NSObject {
     var name = "Gotway"
     var serial = "12345"
     
+    var wheel : Wheel?
+    
     
     // Called when lost connection. perhaps should do something. If not forget it
     
@@ -107,6 +109,12 @@ class GotawayAdapter : NSObject {
             let totalDistance = Double( (Int(buffer[6]) * 256 + Int(buffer[7]))*65536 + (Int(buffer[8]) * 256 + Int(buffer[9])))
             outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
             
+            if let wh = self.wheel {
+                wh.totalDistance = totalDistance
+                WheelDatabase.sharedInstance.setWheel(wheel: wh)
+            }
+
+            
             buffer.removeAll()
             break
             
@@ -171,7 +179,6 @@ class GotawayAdapter : NSObject {
                     battery = (avgVoltage - 52.9) / 13.0 * 100.0;
                 }
                 
-                
                 outarr.append((WheelTrack.WheelValue.Battery, date, battery))
                 buffer.removeAll()
                 
@@ -235,6 +242,20 @@ extension GotawayAdapter : BLEWheelAdapterProtocol{
         // OK, subscribe to characteristif FFE1
         
         connection.subscribeToChar("FFE1")
+        
+        let database = WheelDatabase.sharedInstance
+        let uuid = peripheral.identifier.uuidString
+        
+        if let wh = database.getWheelFromUUID(uuid: uuid){
+            self.wheel = wh
+            
+        } else {
+            self.wheel = Wheel(uuid: uuid, name: self.name)
+            wheel!.brand = "Gotway"
+            wheel!.password = "000000"
+            database.setWheel(wheel: wheel!)
+        }
+
         BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data: nil)
         
     }

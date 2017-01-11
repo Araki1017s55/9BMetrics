@@ -34,6 +34,7 @@ class KingSongAdapter : NSObject {
     var name = "Kingsong"
     var serial = ""
     
+    var wheel : Wheel?
     let distanceCorrection = 1.0 //0.791627219
     
     let writeChar = "FFE1"
@@ -111,6 +112,11 @@ class KingSongAdapter : NSObject {
             let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6]))) * distanceCorrection
             outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
             
+            if let wh = self.wheel {
+                wh.totalDistance = totalDistance
+                WheelDatabase.sharedInstance.setWheel(wheel: wh)
+            }
+            
             buffer.removeAll()
             break
             
@@ -171,6 +177,12 @@ class KingSongAdapter : NSObject {
                 }
  */
                 
+                if let wh = self.wheel {
+                    wh.totalDistance = totalDistance
+                    WheelDatabase.sharedInstance.setWheel(wheel: wh)
+                }
+
+                
                 outarr.append((WheelTrack.WheelValue.Battery, date, battery))
                 buffer.removeAll()
                 
@@ -196,6 +208,12 @@ class KingSongAdapter : NSObject {
                 }
                 
                 self.name = lname
+                
+                if let wh = self.wheel {
+                    wh.name = self.name
+                    WheelDatabase.sharedInstance.setWheel(wheel: wh)
+                }
+
  
                 askSerial(connection)
 
@@ -215,6 +233,13 @@ class KingSongAdapter : NSObject {
                     i += 1
                 }
                 self.serial = lserial
+                
+                
+                if let wh = self.wheel {
+                    wh.serialNo = self.serial
+                    WheelDatabase.sharedInstance.setWheel(wheel: wh)
+                }
+
                 BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
 
             default:
@@ -325,6 +350,20 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
         
         connection.subscribeToChar(readChar)
         askName(connection, peripheral: peripheral)
+        
+        let database = WheelDatabase.sharedInstance
+        let uuid = peripheral.identifier.uuidString
+        
+        if let wh = database.getWheelFromUUID(uuid: uuid){
+            self.wheel = wh
+            
+        } else {
+            self.wheel = Wheel(uuid: uuid, name: self.name)
+            wheel!.brand = "KingSong"
+            wheel!.password = "000000"
+            database.setWheel(wheel: wheel!)
+        }
+
         
     }
     

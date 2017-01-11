@@ -45,6 +45,9 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
     let defaultTopSpeed = 30.0
     let secureSpeed = 23.0
     
+    var distanceCorrection = 1.0
+    var speedCorrection = 1.0
+    
     @IBOutlet  weak var collectionView : UICollectionView!
     @IBOutlet weak var fTitle : UILabel!
     @IBOutlet weak var fVersion : UILabel!
@@ -79,6 +82,12 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         
         if let nb = self.ninebot {
             
+            
+            if let wh = WheelDatabase.sharedInstance.getWheelFromUUID(uuid: nb.getUUID()){
+                speedCorrection = wh.getSpeedCorrection()
+                distanceCorrection = wh.getDistanceCorrection()
+            }
+            
             if let myUrl = nb.url{
                 fTitle.text = myUrl.deletingPathExtension().lastPathComponent
             }else{
@@ -88,12 +97,12 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
             fVersion.text = nb.getName() + "(" + nb.getVersion() + ")"
             ascent = nb.getAscent()
             descent = nb.getDescent()
-            dist = nb.getCurrentValueForVariable(.Distance) / 1000.0    // Convert to KM
+            dist = nb.getCurrentValueForVariable(.Distance) / 1000.0 * distanceCorrection   // Convert to KM
             time = nb.getCurrentValueForVariable(.Duration)
             (_, maxSpeed, avgSpeed, _) = nb.getCurrentStats(.Speed)
             
-            maxSpeed = maxSpeed * 3.6 // Convert to km/h
-            avgSpeed = avgSpeed * 3.6 // Convert to km/h
+            maxSpeed = maxSpeed * 3.6 * speedCorrection // Convert to km/h
+            avgSpeed = avgSpeed * 3.6 * speedCorrection // Convert to km/h
             
             (bat0, bat1) = nb.getFirstLast(.Battery)
             (batMin, batMax, _, _) = nb.getCurrentStats(.Battery)

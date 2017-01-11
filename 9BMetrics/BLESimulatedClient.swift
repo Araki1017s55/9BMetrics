@@ -105,6 +105,7 @@ class BLESimulatedClient: NSObject {
     var distanceGPS = 0.0
     
     var adapter : BLEWheelAdapterProtocol?
+    var wheel : Wheel?
     
     override init() {
         
@@ -293,12 +294,13 @@ class BLESimulatedClient: NSObject {
                 
                 _ = nb.createPackage(name)
                 
-                // Now we update current wheel
+                // Now we update current wheel correction independent of the enabled or not
                 
-                if let  wheel = WheelDatabase.sharedInstance.getWheelFromUUID(uuid: nb.getUUID()) {
+                if let  wh = self.wheel {
                     
-                    wheel.totalDistance = nb.getCurrentValueForVariable(WheelTrack.WheelValue.AcumDistance)
-                    WheelDatabase.sharedInstance.setWheel(wheel: wheel)
+                    wh.totalDistance = nb.getCurrentValueForVariable(WheelTrack.WheelValue.AcumDistance)
+                    wh.updateRun(nb)
+                    WheelDatabase.sharedInstance.setWheel(wheel: wh)
                     
                 }
                 
@@ -312,6 +314,10 @@ class BLESimulatedClient: NSObject {
         if let info = getAppState(false){
             self.sendDataToWatch(info)
         }
+        
+        self.wheel = nil
+
+        
     }
     
     //MARK: Auxiliary functions
@@ -441,10 +447,11 @@ class BLESimulatedClient: NSObject {
             //            let notifyBefore = UNNotificationAction(identifier:"Battery low", title: "Notification", options: [])
             let category = UNNotificationCategory(identifier: UserNotificationCategory.speed.rawValue, actions: [], intentIdentifiers: [], options: [])
             
+            let scorrection = wheel?.getSpeedCorrection() ?? 1.0
             
             UNUserNotificationCenter.current().setNotificationCategories([category])
             let content = UNMutableNotificationContent()
-            let sp = speed * 3.6
+            let sp = speed * 3.6 * scorrection
             
             content.title = "Speed too high - Be careful"
             content.body = "Your speed is  \(sp) km/h"
@@ -478,14 +485,17 @@ class BLESimulatedClient: NSObject {
         
         if let nb = self.datos{
             
+            let dcorrection = wheel?.getDistanceCorrection() ?? 1.0
+            let scorrection = wheel?.getSpeedCorrection() ?? 1.0
+            
             var dict  = [String : Double]()
             
             dict["recording"] = recording ? 1.0 : 0.0
             
             
             dict["temps"] = nb.getCurrentValueForVariable(.Duration)
-            dict["distancia"]  = nb.getCurrentValueForVariable(.Distance)
-            dict["speed"]  = nb.getCurrentValueForVariable(.Speed) * 3.6
+            dict["distancia"]  = nb.getCurrentValueForVariable(.Distance) * dcorrection
+            dict["speed"]  = nb.getCurrentValueForVariable(.Speed) * 3.6 * scorrection
             dict["battery"]  =  nb.getCurrentValueForVariable(.Battery)
             dict["remaining"]  =  0.0
             dict["temperature"]  =  nb.getCurrentValueForVariable(.Temperature)
@@ -764,6 +774,8 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
     
     func deviceConnected(_ peripheral : CBPeripheral, adapter: BLEWheelAdapterProtocol? ){
         
+        self.wheel = WheelDatabase.sharedInstance.getWheelFromUUID(uuid: peripheral.identifier.uuidString)
+        
         if let adp = self.adapter {
             adp.deviceConnected(self.connection, peripheral: peripheral)
             
@@ -796,6 +808,7 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
     
     func deviceDisconnected(_ peripheral : CBPeripheral ){
         
+         
         if let adp = self.adapter {
             adp.deviceDisconnected(self.connection, peripheral: peripheral)
         }
@@ -814,8 +827,11 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
     func checkSpeed() -> Bool{
         let sa = alarmSpeed
         
-        if let wheel = self.datos {
-            if sa != 0 && sa <= wheel.getCurrentValueForVariable(.Speed) {
+        if let wheelTrack = self.datos {
+            let correction = wheel?.getSpeedCorrection() ?? 1.0
+            
+            if sa != 0 && sa <= wheelTrack.getCurrentValueForVariable(.Speed) * correction {
+                
                 let now = Date()
                 if now.timeIntervalSince(self.lastSpeedAlarm) as Double >= speedAlarmTimerStep {
                     
@@ -823,7 +839,7 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                     lastSpeedAlarm = now
                     
                     if !speedNotificationSent && notifySpeed{
-                        self.sendSpeedAlertNotification(speed: wheel.getCurrentValueForVariable(.Speed))
+                        self.sendSpeedAlertNotification(speed: wheelTrack.getCurrentValueForVariable(.Speed))
                         speedNotificationSent = true
                     }
                 }

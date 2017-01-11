@@ -74,6 +74,11 @@ class WheelSelectorTableViewController: UITableViewController {
         store.set(wheel.alarmSpeed, forKey : kSpeedAlarm)
         store.set(wheel.batteryAlarm, forKey : kBatteryAlarm)
         
+        // Just as a test compute data
+        
+        //wheel.recomputeAdjust()
+        //database.setWheel(wheel: wheel)
+        
     }
 
     

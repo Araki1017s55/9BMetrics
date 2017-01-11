@@ -1699,6 +1699,77 @@ class WheelTrack: NSObject {
         }
     }
     
+    func locationForPoint(_ p : Int) -> CLLocation {
+        return CLLocation(latitude: getValueForVariable(.Latitude, atPoint: p), longitude: getValueForVariable(.Longitude, atPoint: p))
+    }
+    
+    func location2DForPoint(_ p : Int) -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: getValueForVariable(.Latitude, atPoint: p), longitude: getValueForVariable(.Longitude, atPoint: p))
+    }
+
+    func angle(p0 : MKMapPoint, p1 : MKMapPoint, p2 : MKMapPoint) -> Double{
+        
+        let dx0 = p1.x - p0.x
+        let dy0 = p1.y - p0.y
+        let dx1 = p2.x - p1.x
+        let dy1 = p2.y - p1.y
+        
+        let cos = (dx0 * dx1 + dy0 * dy1) / (sqrt(dx0*dx0+dy0*dy0)*sqrt(dx1*dx1+dy1*dy1))
+        return acos(cos)
+        
+        
+    }
+    
+    func getStraightEnoughSegments() -> [(from : Int, to : Int, length: Double)] {
+        
+        if !hasGPSData() {
+            return []
+        }
+        
+        var segments : [(from : Int, to : Int, length : Double)] = []
+        
+        let n = min(countLogForVariable(.Latitude) , countLogForVariable(.Longitude))
+        
+        var segmentStart = 0
+        var segmentEnd = 1
+        var segmentLength = locationForPoint(1).distance(from: locationForPoint(0))
+        
+        var c0 = locationForPoint(0)
+        var c1 = locationForPoint(1)
+        var p0 = MKMapPointForCoordinate(c0.coordinate)
+        var p1 = MKMapPointForCoordinate(c1.coordinate)
+        
+       
+        
+        for i in 1..<n-1 {  // Loop throug points.
+            
+            let c2 = locationForPoint(i+1)
+            let p2 = MKMapPointForCoordinate(c2.coordinate)
+            
+            let ang = angle(p0: p0, p1: p1, p2: p2)
+            
+            if fabs(ang) > 0.20 {   // That should be aprox 20º - Stop segment
+                if segmentEnd > segmentStart && segmentLength > 100.0{  // Segments at leat 100m
+                    segments.append((from:segmentStart, to:segmentEnd, length: segmentLength))
+                }
+                segmentStart = i
+                segmentEnd = i+1
+                segmentLength = c2.distance(from: c1)
+            } else {
+                
+                segmentEnd = i+1
+                segmentLength += c2.distance(from: c1)
+                
+            }
+            
+            c0 = c1
+            c1 = c2
+            p0 = p1
+            p1 = p2
+        }
+        return segments
+    }
+    
     func loadPackage(_ url : URL) {
         
         clearAll()
@@ -1724,7 +1795,7 @@ class WheelTrack: NSObject {
                             let wheelDistance = getCurrentValueForVariable(.Distance)
                             let (_, _, _, anotherDistance) = getCurrentStats(.Speed)
                             
-                            AppDelegate.debugLog("Wheel Distance %f GPX Distance %f Another Distance %f", wheelDistance, distanceGPX, anotherDistance)
+                            AppDelegate.debugLog("GPS Distance %f Wheel Distance %f Another Distance %f", distanceGPX, wheelDistance, anotherDistance)
                             
                             if distanceGPX > 0.0 {
                                 AppDelegate.debugLog("Correction %f", wheelDistance / distanceGPX)
@@ -1788,6 +1859,32 @@ class WheelTrack: NSObject {
         }catch{
             
         }
+        /*
+        let segments = getStraightEnoughSegments()
+        
+        var lenWheel = 0.0
+        var lenGPS = 0.0
+        
+        for s in segments {
+            
+            let l = s.length    // That is GPS Length
+            
+            let t0 = timeAtPointForVariable(.Latitude, atPoint: s.from)
+            let t1 = timeAtPointForVariable(.Latitude, atPoint: s.to)
+            
+            let d = getValueForVariable(.Distance, time: t1!) - getValueForVariable(.Distance, time: t0!)
+            
+            lenWheel += d
+            lenGPS += l
+            
+            AppDelegate.debugLog("GPS %f - Wheel %f - Correccio : %f", l, d, d  / l)
+            
+            
+            
+        }
+        
+        AppDelegate.debugLog("TOTAL GPS %f - Wheel %f - Correccio : %f", lenGPS, lenWheel, lenWheel / lenGPS)
+ */
         
         checkBattery()
     }

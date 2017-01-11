@@ -38,6 +38,13 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var fNotifySpeed: UISwitch!
     @IBOutlet weak var fNotifyBattery: UISwitch!
     
+    @IBOutlet weak var fDistanceCoef: UILabel!
+    
+    @IBOutlet weak var fSpeedCoef: UILabel!
+    
+    @IBOutlet weak var fEnableCorrectionsSwitch: UISwitch!
+    
+     
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -122,6 +129,7 @@ class SettingsViewController: UIViewController {
                 
                 wheel.notifySpeed = fNotifySpeed.isOn
                 wheel.notifyBattery = fNotifyBattery.isOn
+                wheel.enableCorrections = fEnableCorrectionsSwitch.isOn
                 
                 WheelDatabase.sharedInstance.setWheel(wheel: wheel)
             }
@@ -161,6 +169,11 @@ class SettingsViewController: UIViewController {
                     fWheelSN.text = wheel.serialNo
                     fNotifySpeed.isOn = wheel.notifySpeed
                     fNotifyBattery.isOn = wheel.notifyBattery
+                    
+                    fSpeedCoef.text = String(format: "Speed %0.2f", wheel.speed_coef)
+                    fDistanceCoef.text = String(format: "Dist %0.2f", wheel.distance_coef)
+                    
+                    fEnableCorrectionsSwitch.isOn = wheel.enableCorrections
                     
                     
                 } else {    // No Wheel
@@ -318,6 +331,20 @@ class SettingsViewController: UIViewController {
         
         AppDelegate.debugLog("Switch Value %@", state)
         
+    }
+    
+    @IBAction func recalculateCalibration(){
+        
+        if let uuid = uuidLabel.text , uuid.characters.count > 10{
+        
+        if let wheel = WheelDatabase.sharedInstance.getWheelFromUUID(uuid: uuid){
+            
+                wheel.recomputeAdjust()
+                WheelDatabase.sharedInstance.setWheel(wheel: wheel)
+                loadData()
+            }
+        }
+    
     }
     
     

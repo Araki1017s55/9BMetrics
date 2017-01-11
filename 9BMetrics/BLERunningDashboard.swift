@@ -36,6 +36,10 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     var headersReceived = false
     
+    var distanceCorrection = 1.0
+    var speedCorrection = 1.0
+
+    
     enum connectionState {
         case stopped
         case connecting
@@ -141,7 +145,7 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                     
                     self.fCurrent.text = String(format:"%0.2fA", nb.getCurrentValueForVariable(.Current))
                     self.fPower.text = String(format:"%0.0fW", nb.getCurrentValueForVariable(.Power))
-                    self.fDistance.text = String(format:"%6.2fkm", nb.getCurrentValueForVariable(.Distance) / 1000.0) // In Km
+                    self.fDistance.text = String(format:"%6.2fkm", nb.getCurrentValueForVariable(.Distance) / 1000.0 * self.distanceCorrection) // In Km
                     let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.Duration))
                     self.fTime.text = String(format:"%02d:%02d:%02d", h, m, s)
                     self.fBattery.text = String(format:"%4.0f%%", nb.getCurrentValueForVariable(.Battery))
@@ -149,7 +153,7 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                     
                     
                     
-                    let v = nb.getCurrentValueForVariable(.Speed) * 3.6 // In Km/h
+                    let v = nb.getCurrentValueForVariable(.Speed) * 3.6 * self.speedCorrection // In Km/h
                     
                     self.fSpeed.text = String(format:"%0.2f", v)
                     

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public class Wheel : NSObject {
     
@@ -25,6 +26,22 @@ public class Wheel : NSObject {
     var notifyBattery : Bool = true
     var totalDistance : Double = 0.0    // Just to get the total distance. Updated with every run
     
+    
+    // Distance adjustment
+    
+    var nruns : Int = 0     // Number of runs
+    
+     // Distance and speed adjustment
+    
+    var distance_sum_xy : Double = 0.0    // sum (distanceGPS * distance)
+    var distance_sum_x2  : Double = 0.0   // sum (distanceGPS ^2)
+    var distance_coef : Double = 1.0      // distance = distanceGPS/coef  o distance real = distance *  coef
+    
+    
+    var speed_sum_xy : Double = 0.0    // sum (distanceGPS * speed integral)
+    var speed_coef : Double = 1.0      // speed_real = speed * coef
+    
+    var enableCorrections : Bool = false // If corrections are enabled or not
     
     init(uuid : String, name : String){
         //super.init()
@@ -49,6 +66,14 @@ public class Wheel : NSObject {
         self.notifyBattery = decoder.decodeBool(forKey: "notifyBattery")
         self.totalDistance = decoder.decodeDouble(forKey: "totalDistance")
         
+        self.nruns = decoder.decodeInteger(forKey: "nruns")
+        self.distance_sum_xy = decoder.decodeDouble(forKey: "distance_sum_xy")
+        self.distance_sum_x2 = decoder.decodeDouble(forKey: "distance_sum_x2")
+        self.distance_coef = decoder.decodeDouble(forKey: "distance_coef")
+        self.speed_sum_xy = decoder.decodeDouble(forKey: "speed_sum_xy")
+        self.speed_coef = decoder.decodeDouble(forKey: "speed_coef")
+        self.enableCorrections = decoder.decodeBool(forKey: "enableCorrections")
+        
         
         
         
@@ -70,10 +95,131 @@ public class Wheel : NSObject {
         encoder.encode(batteryAlarm, forKey:"batteryAlarm")
         encoder.encode(notifyBattery, forKey:"notifyBattery")
         encoder.encode(totalDistance, forKey:"totalDistance")
-       
+ 
+        encoder.encode(nruns, forKey:"nruns")
+        encoder.encode(distance_sum_xy, forKey:"distance_sum_xy")
+        encoder.encode(distance_sum_x2, forKey:"distance_sum_x2")
+        encoder.encode(speed_sum_xy, forKey:"speed_sum_xy")
+        encoder.encode(distance_coef, forKey:"distance_coef")
+        encoder.encode(speed_coef, forKey:"speed_coef")
+        encoder.encode(enableCorrections, forKey:"enableCorrections")
+
     }
     
+    func getSpeedCorrection() -> Double{
+        
+        return enableCorrections ? speed_coef : 1.0
+    }
     
+    func getDistanceCorrection() -> Double{
+        
+        return enableCorrections ? distance_coef : 1.0
+    }
     
+    func getAllRuns() -> [URL]{
+        
+        var runs : [URL] = []
+        
+            if let dele = UIApplication.shared.delegate as? AppDelegate{
+                if let docs = dele.applicationDocumentsDirectory(){
+
+                
+                    let mgr = FileManager()
+            
+                    let enumerator = mgr.enumerator(at: docs, includingPropertiesForKeys: nil, options: [FileManager.DirectoryEnumerationOptions.skipsHiddenFiles, FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants]) { (URL, Error) -> Bool in
+                
+                        let err = Error as NSError
+                        AppDelegate.debugLog("Error enumerating files %@", err.localizedDescription)
+                        return false
+                    }
+                    
+                    if let arch = enumerator{
+                        
+                        for item in arch  {
+                            
+                            if let url = item as? URL{
+                                
+                                if url.pathExtension  == "9bm"{
+                                    runs.append( url)
+                                }
+                            }
+                            
+                        }
+                    }
+                   
+                }
+        }
+        
+        return runs
+        
+    }
+    
+    /**
+        Computes distance adjust with GPS data
+        sets nruns, sum_xy, sum_x2 and coef values in wheel
+ 
+    */
+    
+    func recomputeAdjust(){
+        
+        nruns = 0
+        distance_sum_xy = 0.0
+        distance_sum_x2 = 0.0
+        speed_sum_xy = 0.0
+        
+        
+        // Get all packages in the directory
+        
+        var track  = WheelTrack()
+        
+        let runs = getAllRuns()
+        
+        for url in runs{
+            
+            track.loadPackage(url)
+            
+            // Now we have summary data loaded :
+            
+            if track.getUUID() == uuid {
+                let dGPS = track.getCurrentValueForVariable(.DistanceGPS)
+                let dWheel = track.getCurrentValueForVariable(.Distance)
+                let (_, _, _, dSpeed) = track.getCurrentStats(.Speed)
+                
+                if dWheel > 0.0 && fabs(dGPS - dWheel)/dWheel  < 0.3 && fabs(dSpeed - dWheel)/dWheel < 0.3{
+                    nruns += 1
+                    distance_sum_xy +=  dGPS * dWheel
+                    distance_sum_x2 += pow(dGPS, 2.0)
+                    speed_sum_xy += dGPS * dSpeed
+                }
+            }
+         }
+        
+        distance_coef = (distance_sum_x2 / distance_sum_xy)
+        speed_coef = (distance_sum_x2 / speed_sum_xy)
+        
+        AppDelegate.debugLog("Ajust distancia %f, Ajust velocitat %f", distance_coef, speed_coef)
+    }
+    
+    func updateRun(_ track : WheelTrack){
+        
+        if track.getUUID() == uuid {
+            let dGPS = track.getCurrentValueForVariable(.DistanceGPS)
+            let dWheel = track.getCurrentValueForVariable(.Distance)
+            let (_, _, _, dSpeed) = track.getCurrentStats(.Speed)
+            
+            if dWheel > 0.0 && fabs(dGPS - dWheel)/dWheel  < 0.3 && fabs(dSpeed - dWheel)/dWheel < 0.3{
+                nruns += 1
+                distance_sum_xy +=  dGPS * dWheel
+                distance_sum_x2 += pow(dGPS, 2.0)
+                speed_sum_xy += dGPS * dSpeed
+            }
+            
+            distance_coef = (distance_sum_x2 / distance_sum_xy)
+            speed_coef = (distance_sum_x2 / speed_sum_xy)
+            
+        }
+    }
     
 }
+
+
