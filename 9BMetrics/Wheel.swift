@@ -14,9 +14,9 @@ public class Wheel : NSObject {
     var uuid : String = ""
     var name : String = ""
     var password : String  = "000000"
-    var brand : String = "Ninebot"
-    var serialNo : String = "NOE2"
-    var model : String = "Ninebot One E+"
+    var brand : String = ""
+    var serialNo : String = ""
+    var model : String = ""
     var version : String = "1.1.1"
     var maxSpeed : Double = 8.33    // Max speed m/s
     var limitSpeed : Double = 8.33  // Limited speed (from the wheel)
@@ -197,17 +197,71 @@ public class Wheel : NSObject {
         distance_coef = (distance_sum_x2 / distance_sum_xy)
         speed_coef = (distance_sum_x2 / speed_sum_xy)
         
-        AppDelegate.debugLog("Ajust distancia %f, Ajust velocitat %f", distance_coef, speed_coef)
+        AppDelegate.debugLog("Runs %d dCoef %f sCoef %f", nruns, distance_coef, speed_coef)
+        
+        nruns = 0
+        distance_sum_xy = 0.0
+        distance_sum_x2 = 0.0
+        speed_sum_xy = 0.0
+
+        
+        // That is first run now we redoit but just with tracks within 10% of theoretical value
+        
+        for url in runs{
+            
+            track.loadPackage(url)
+            
+            // Now we have summary data loaded :
+            
+            if track.getUUID() == uuid {
+                let dGPS = track.getCurrentValueForVariable(.DistanceGPS)
+                let dWheel = track.getCurrentValueForVariable(.Distance)
+                let (_, _, _, dSpeed) = track.getCurrentStats(.Speed)
+                
+                let predWheel = dGPS / distance_coef
+                let predSpeed = dGPS / speed_coef
+                
+                
+                if dWheel > 0.0 && fabs(predWheel - dWheel)/dWheel  < 0.1 && fabs(predSpeed - dSpeed)/dSpeed < 0.1{
+                    nruns += 1
+                    distance_sum_xy +=  dGPS * dWheel
+                    distance_sum_x2 += pow(dGPS, 2.0)
+                    speed_sum_xy += dGPS * dSpeed
+                }
+            }
+        }
+
+        
+        distance_coef = (distance_sum_x2 / distance_sum_xy)
+        speed_coef = (distance_sum_x2 / speed_sum_xy)
+        
+        AppDelegate.debugLog("Runs %d dCoef %f sCoef %f", nruns, distance_coef, speed_coef)
+      
     }
+    
+    // Check to update only if data are in the 10% range of predicted. So exceptional data will get forgotten.
+    // Of course it may be better done.
+    // Also we supose that :
+    //
+    //  GPS data is only available when GPS is functioning
+    //  Wheel data is always available
+    //
     
     func updateRun(_ track : WheelTrack){
         
-        if track.getUUID() == uuid {
+        
+        if track.getUUID() == uuid && enableCorrections {
             let dGPS = track.getCurrentValueForVariable(.DistanceGPS)
             let dWheel = track.getCurrentValueForVariable(.Distance)
             let (_, _, _, dSpeed) = track.getCurrentStats(.Speed)
             
-            if dWheel > 0.0 && fabs(dGPS - dWheel)/dWheel  < 0.3 && fabs(dSpeed - dWheel)/dWheel < 0.3{
+            // Just a test so data are between a 10% of the already predicted value. We want the system to adjust, not reverse all data
+            
+            let predWheel = dGPS / distance_coef
+            let predSpeed = dGPS / speed_coef
+            
+            
+            if dWheel > 0.0 && fabs(predWheel - dWheel)/dWheel  < 0.1 && fabs(predSpeed - dSpeed)/dWheel < 0.1{
                 nruns += 1
                 distance_sum_xy +=  dGPS * dWheel
                 distance_sum_x2 += pow(dGPS, 2.0)
