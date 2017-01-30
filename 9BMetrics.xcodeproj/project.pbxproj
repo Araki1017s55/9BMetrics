@@ -81,7 +81,7 @@
 		00AB595C1CAEE64000277859 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59521CAEE64000277859 /* sha1.c */; };
 		00AB595E1CAEE65E00277859 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB595D1CAEE65E00277859 /* libz.tbd */; };
 		00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */; };
-		00B9E0FA1E3B7658004391EE /* WheelSelectorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0F91E3B7658004391EE /* WheelSelectorDelegate.swift */; };
+		00B9E0FC1E3F5492004391EE /* WheelSelectorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */; };
 		00C2667D1DA27D86004D3B02 /* GotawayAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */; };
 		00C4EE601CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */; };
 		00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */; };
@@ -234,7 +234,7 @@
 		00AB59531CAEE64000277859 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
 		00AB595D1CAEE65E00277859 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKImage.swift; path = 9BMetrics/TMKImage.swift; sourceTree = "<group>"; };
-		00B9E0F91E3B7658004391EE /* WheelSelectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorDelegate.swift; sourceTree = "<group>"; };
+		00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorDelegate.swift; sourceTree = "<group>"; };
 		00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GotawayAdapter.swift; path = 9BMetrics/GotawayAdapter.swift; sourceTree = "<group>"; };
 		00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEGraphicRunningDashboard.swift; path = 9BMetrics/BLEGraphicRunningDashboard.swift; sourceTree = "<group>"; };
 		00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockViewFast.swift; path = 9BMetrics/TMKClockViewFast.swift; sourceTree = "<group>"; };
@@ -492,9 +492,9 @@
 		00F822351E1AB92E0080C644 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */,
 				007A57721C85CF39003A2030 /* BLENinebotSettingsViewController.swift */,
 				007A57711C85CF39003A2030 /* SettingsViewController.swift */,
-				00B9E0F91E3B7658004391EE /* WheelSelectorDelegate.swift */,
 				00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */,
 				007D4A161E239A0D008624E6 /* WheelInfoCell.swift */,
 			);
@@ -717,7 +717,7 @@
 				00F822321E19814D0080C644 /* Wheel.swift in Sources */,
 				00F822371E1AB9700080C644 /* WheelSelectorTableViewController.swift in Sources */,
 				008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */,
-				00B9E0FA1E3B7658004391EE /* WheelSelectorDelegate.swift in Sources */,
+				00B9E0FC1E3F5492004391EE /* WheelSelectorDelegate.swift in Sources */,
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */,
 				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
