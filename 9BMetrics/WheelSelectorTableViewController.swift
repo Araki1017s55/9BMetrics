@@ -11,6 +11,7 @@ import UIKit
 class WheelSelectorTableViewController: UITableViewController {
     
     let database = WheelDatabase.sharedInstance
+    var delegate : WheelSelectorDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,10 +75,19 @@ class WheelSelectorTableViewController: UITableViewController {
         store.set(wheel.alarmSpeed, forKey : kSpeedAlarm)
         store.set(wheel.batteryAlarm, forKey : kBatteryAlarm)
         
+        if let dele = delegate {
+            dele.selectedWheel(wheel)
+        }else if let nav = self.navigationController{
+            nav.popViewController(animated: true)
+            
+        }
+        
         // Just as a test compute data
         
         //wheel.recomputeAdjust()
         //database.setWheel(wheel: wheel)
+        
+        
         
     }
 

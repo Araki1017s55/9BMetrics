@@ -131,7 +131,7 @@ class KingSongAdapter : NSObject {
                 let temperature = Double(Int(buffer[13]) * 256 + Int(buffer[12])) / 100.0 // Very strange conversion in Kevin program
                 outarr.append((WheelTrack.WheelValue.Temperature, date, temperature))
                 
-                let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6]))) * distanceCorrection
+                let totalDistance = Double( ((Int(buffer[7]) * 256 + Int(buffer[6])) * 256 + Int(buffer[9]) ) * 256 + Int(buffer[8])) * distanceCorrection
                 outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
                 
                 let voltage = Double(Int(buffer[3]) * 256 + Int(buffer[2])) / 100.0

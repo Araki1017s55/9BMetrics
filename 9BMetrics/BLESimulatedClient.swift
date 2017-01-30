@@ -48,7 +48,7 @@ class BLESimulatedClient: NSObject {
     var sendTimer : Timer?    // Timer per enviar les dades periodicament
     var timerStep = 0.1        // Get data every step
     var watchTimerStep = 0.1        // Get data every step
-    var speedAlarmTimerStep = 10.0  // Temps per repetir la alarma de velocitat
+    var speedAlarmTimerStep = 1.0  // Temps per repetir la alarma de velocitat
     var lastSpeedAlarm = Date()     // Ultima alarma de velocitat enviada
     var speedNotificationSent = false
     

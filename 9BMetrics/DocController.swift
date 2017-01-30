@@ -24,12 +24,18 @@ import UIKit
 class DocController: UIViewController {
     
     @IBOutlet weak var webView : UIWebView!
+    
+    var url : URL?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let bundle = Bundle.main
-        let url = bundle.url(forResource: "about", withExtension: "html")
+            
+        if url == nil {
+            url = bundle.url(forResource: "about", withExtension: "html")
+        }
+        
         
         if let u = url {
             let request = URLRequest(url: u)

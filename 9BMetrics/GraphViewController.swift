@@ -33,6 +33,10 @@ class GraphViewController: UIViewController {
     
     weak var ninebot : WheelTrack?
     var shownVariable = 0
+    var from = 0.0
+    var to = 0.0
+    var enabledMagnitudeSwitch = true
+
     let displayableVariables : [WheelTrack.WheelValue] = [.Speed, .Temperature,
                                                       .Voltage, .Current, .Battery, .Pitch, .Roll,
                                                       .Distance, .Altitude, .Power, .Energy]
@@ -46,6 +50,7 @@ class GraphViewController: UIViewController {
     var step = 0.1
 
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -170,15 +175,22 @@ class GraphViewController: UIViewController {
         
         let v = displayableVariables[variable]
         
+        
     
         if let nb = self.ninebot{
-            let t = nb.getLastTimeValueForVariable(v)
-            step = t / 2000.0
+           
+            let t = to == 0 ? nb.getLastTimeValueForVariable(v) : to
+
+            let t0 = fmax(from, 0.0)
+            
+
+            
+            step = (t - t0) / 2000.0
             
             if step == 0.0 {
                 resampledLog = nil
             }else{
-                resampledLog = nb.resample(v, from: 0.0, to: t, step: step)    // Will update with othe data
+                resampledLog = nb.resample(v, from: t0, to: t, step: step)    // Will update with othe data
             }
             shownVariable = variable
         }

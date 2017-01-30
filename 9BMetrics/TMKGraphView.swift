@@ -1416,12 +1416,17 @@ class TMKGraphView: UIView {
     @IBAction func switchyValue(_ src : AnyObject?)
     {
         if let ds = self.dataSource{
+            if ds.enabledMagnitudeSwitch{
+                var axe = self.yValue
             
-            var axe = self.yValue
+                axe = (axe + 1) % ds.numberOfValues()
             
-            axe = (axe + 1) % ds.numberOfValues()
-            
-            self.setanYValue(axe)
+                self.setanYValue(axe)
+            }else {
+                if let nav = ds.navigationController{
+                    nav.popViewController(animated: true)
+                }
+            }
             
         }
         
@@ -1429,7 +1434,7 @@ class TMKGraphView: UIView {
     
     
     func swipeLeft(_ gesture: UIGestureRecognizer){
-        if let ds = self.dataSource{
+        if let ds = self.dataSource, ds.enabledMagnitudeSwitch{
             
             var axe = self.yValue
             

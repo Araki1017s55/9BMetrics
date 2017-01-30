@@ -21,6 +21,8 @@
 
 import UIKit
 import UserNotifications
+import CoreMotion
+import MapKit
 
 /**
  Main Class shows a list of runs ordered by date.
@@ -418,8 +420,19 @@ import UserNotifications
         - Parameter src : Source of command
     */
     @IBAction func startRun(_ src : AnyObject){
-        openRunningDashboard(self)
+        
+        let db = WheelDatabase.sharedInstance
+        
+        if db.database.count > 1 {
+            
+            performSegue(withIdentifier: "selectWheelIdentifier", sender: self)
+            
+        } else {
+        
+            openRunningDashboard(self)
+        }
     }
+    
     func openRunningDashboard(_ src : AnyObject?){
         let store = UserDefaults.standard
         let graphMode = store.bool(forKey: kDashboardMode)
@@ -430,6 +443,8 @@ import UserNotifications
             performSegue(withIdentifier: "runningDashboardSegue", sender: self)
         }
     }
+    
+    
 
     /**
         Builds and opens the general settings dialog
@@ -462,6 +477,13 @@ import UserNotifications
         
         if testMode {
             
+            action = UIAlertAction(title: "Show local uses".localized(comment: "Show local normative and uses"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+                
+                self.performSegue(withIdentifier: "localUsesSegue", sender: self)
+            })
+            
+            alert.addAction(action)
+
             
             action = UIAlertAction(title: "Debug Server".localized(comment: "Debug server item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
                 
@@ -766,6 +788,20 @@ import UserNotifications
                     }
                 }
             }
+        }else if segue.identifier == "selectWheelIdentifier"{
+            
+            if let selector = segue.destination as? WheelSelectorTableViewController{
+                selector.delegate = self
+            }
+        }else if segue.identifier == "localUsesSegue" {
+            
+            // Check here where we are. That means starting CLLocationManager and then reverse geocoding rh
+            
+            let url = URL(string: "http://www.gorina.es/9BMetrics/locations/barcelona.html")
+            
+            if let dc = segue.destination as? DocController {
+                dc.url = url
+            }
         }
     }
     
@@ -1019,4 +1055,18 @@ extension ViewController : UIViewControllerPreviewingDelegate{
         
     }
     
+}
+
+extension ViewController : WheelSelectorDelegate {
+    
+    func selectedWheel(_ wheel: Wheel) {
+        
+        // Just call run
+        if let nav = self.navigationController{
+            nav.popViewController(animated: false)
+        }
+        
+        self.openRunningDashboard(self)
+        
+    }
 }

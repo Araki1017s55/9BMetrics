@@ -50,6 +50,9 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     var speedCorrection = 1.0
     
     
+    let delta = 5.0 // minuts que mostra el gràfic de velocitat en el moment que el treiem desde el dashboard
+    
+     
     var tempAreas : [TMKClockView.arc] = []
     var battAreas : [TMKClockView.arc] = []
     var speedAreas  : [TMKClockView.arc] = []
@@ -378,12 +381,14 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 }
             }
                 
-            else if segue.identifier == "graphSegueIdentifier" {
+            else if segue.identifier == "fastGraphSegue" {
                 if let vc = segue.destination as? GraphViewController  {
                     if let nb = self.client?.datos {
-                        nb.buildEnergy()
-                        
+                        vc.shownVariable = 0
                         vc.ninebot = nb
+                        vc.from = fmax(nb.getLastTimeValueForVariable(.Speed) - delta * 60.0, 0.0)
+                        vc.enabledMagnitudeSwitch = false
+
                     }
                 }
                 

@@ -453,6 +453,9 @@ class CANMessage{
             if let scl = BLEInMotionAdapter.lengthScale[model]{
                 scale = scl
             }
+            
+            // Suposo que aqui tenim un problema. Ja veurem però crec que el V8 la dona en km/h
+            
             let vmax = fabs((Double(BLEInMotionAdapter.SignedIntFromBytes(bytes, starting: 60 ))) ) / scale
             
             return (serialNumber, model, version, vmax)
@@ -553,7 +556,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
         .V5 : 3812.0,
         .V5PLUS : 3812.0,
         .V5F : 3812.0,
-        .V8  : 1000.0,
+        .V8  : 3600.0,
         .UNKNOWN  : 3812.0
         
     ]

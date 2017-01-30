@@ -135,7 +135,7 @@ class WheelTrack: NSObject {
     fileprivate var version : String?
     fileprivate var adapter : String?
     fileprivate var uuid : String?
-   
+    
     fileprivate var trackImg : UIImage?
     
     
@@ -236,6 +236,15 @@ class WheelTrack: NSObject {
         otherFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'.000Z'"
     }
     
+    func clearVariable(_ vr : WheelValue){
+        objc_sync_enter(self);
+        defer { objc_sync_exit(self) }
+
+        
+        if data[vr] != nil{
+            data[vr]!.log.removeAll()
+        }
+    }
     
     func clearAll(){
         
@@ -282,7 +291,7 @@ class WheelTrack: NSObject {
         } else {
             distCorrection = 1.0
         }
-     }
+    }
     
     
     
@@ -295,7 +304,7 @@ class WheelTrack: NSObject {
     // sends a Notification so everybody may update its user interface
     // forced forgets optimization if many values
     // silent doesn't posts notification if values change (for loading files, etc.)
-    //  
+    //
     // As of version 2.3 we change the concept od duration being not what is reported from the wheel but time since beginning of recording
     //
     // Also when distance falls down to 0 (in case we stop the wheel) distnace NOT goes to 0 but continues to add
@@ -375,7 +384,7 @@ class WheelTrack: NSObject {
         data[variable]!.timeStamp = t
         data[variable]!.loaded = true
         
-
+        
         
         if postChange{
             postVariableChanged( data[variable]!)
@@ -414,7 +423,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if data[variable] == nil {
             return
         }
@@ -428,31 +437,31 @@ class WheelTrack: NSObject {
     func setName(_ name : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         self.name = name
     }
     func setSerialNo(_ serialNo : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         self.serialNo = serialNo
     }
     func setVersion(_ version : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         self.version = version
     }
     func setAdapter(_ adapter : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         self.adapter = adapter
     }
     func setUUID(_ device : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         self.uuid = device
     }
     
@@ -463,7 +472,7 @@ class WheelTrack: NSObject {
     func hasDataInVariable(_ v : WheelValue) -> Bool{
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         guard let vv = data[v] , vv.log.count > 0 else {return false}
         return true
     }
@@ -471,7 +480,7 @@ class WheelTrack: NSObject {
     func hasData()->Bool{       // Returns true if we have logged at least current data
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         return hasDataInVariable(.Current)
     }
     
@@ -479,7 +488,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         let n1 = countLogForVariable(.Latitude)
         let n2 = countLogForVariable(.Longitude)
         
@@ -490,7 +499,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         
         if let vv = data[v] {
             if !vv.loaded{
@@ -504,7 +513,7 @@ class WheelTrack: NSObject {
     }
     
     func currentValueForVariable(_ v : WheelValue) -> Double?{
-  
+        
         if let vv = data[v] {
             return vv.currentValue
         }else {
@@ -562,7 +571,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if let vv = data[variable] {
             if !vv.loaded {
                 loadVariableFromPackage(vv.codi)
@@ -629,7 +638,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if let vv = data[variable] {
             if !vv.loaded {
                 loadVariableFromPackage(vv.codi)
@@ -648,7 +657,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if let vv = data[variable] {
             return (vv.minValue, vv.maxValue, vv.avgValue, vv.intValue)
         } else {
@@ -660,7 +669,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if let vv = data[variable] {
             if !vv.loaded {
                 loadVariableFromPackage(vv.codi)
@@ -791,7 +800,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         
         if hasDataInVariable(.Power){ // Don't touch data if posible
             return
@@ -813,7 +822,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if hasDataInVariable(.Energy){      // Don't touch
             return
         }
@@ -844,10 +853,10 @@ class WheelTrack: NSObject {
     }
     
     func getLastTimeValueForVariable(_ variable: WheelValue) -> TimeInterval{
-
+        
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if let v = data[variable]{
             return v.timeStamp
         }else{
@@ -859,7 +868,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if let v = data[variable]{
             
             if let fd = firstDate{
@@ -876,15 +885,15 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         
         switch variable{
-       // case .Power:
-       //     buildPower()
+            // case .Power:
+        //     buildPower()
         case .Energy:
             buildEnergy()
             
-         default:
+        default:
             break
         }
         
@@ -899,8 +908,8 @@ class WheelTrack: NSObject {
     func getValueForVariable(_ variable:WheelValue, atPoint: Int) -> Double{
         
         switch variable{
-        //case .Power:
-           // buildPower()
+            //case .Power:
+        // buildPower()
         case .Energy:
             buildEnergy()
         default:
@@ -936,15 +945,15 @@ class WheelTrack: NSObject {
     //MARK Specific functions
     
     func getName() -> String{
-         if let v = self.name{
+        if let v = self.name{
             return v
         }else{
             return ""
         }
-   }
+    }
     
     func getSerialNo() -> String{
-
+        
         if let v = self.serialNo{
             return v
         }else{
@@ -959,7 +968,7 @@ class WheelTrack: NSObject {
             return ""
         }
     }
-
+    
     func getAdapter() -> String{
         if let v = self.adapter{
             return v
@@ -975,7 +984,7 @@ class WheelTrack: NSObject {
         }
     }
     
-
+    
     func getAscent() -> Double {
         
         if ascent == nil{
@@ -995,7 +1004,7 @@ class WheelTrack: NSObject {
     
     func getDescent() -> Double {
         
-  
+        
         if descent == nil{
             let (a, d) = computeAscentDescent()
             ascent = a
@@ -1018,7 +1027,7 @@ class WheelTrack: NSObject {
     
     func getEnergyUsed() -> Double{
         
- 
+        
         if energyUsed == nil{
             let (eu, er) = energyDetails(from: 0.0, to: 1E80)
             energyUsed = eu
@@ -1061,7 +1070,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-
+        
         if let vv = data[.Energy] {
             if !vv.loaded {
                 loadVariableFromPackage(.Energy)
@@ -1104,7 +1113,7 @@ class WheelTrack: NSObject {
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-      
+        
         if let vv = data[.Altitude] {
             if !vv.loaded {
                 loadVariableFromPackage(.Altitude)
@@ -1141,14 +1150,14 @@ class WheelTrack: NSObject {
         return (ascent, descent)
     }
     
-    // resample resamples a subset of the variable generating a new log with 
+    // resample resamples a subset of the variable generating a new log with
     // samples distanced a fixed amount.
     
     func resample(_ variable:WheelValue, from:TimeInterval, to:TimeInterval, step:Double) -> [LogEntry]?{
- 
+        
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
-       
+        
         
         if let vv = data[variable] {
             if !vv.loaded {
@@ -1196,8 +1205,8 @@ class WheelTrack: NSObject {
         }
         
         return sampledLog
-     }
-    //MARK: Access to some files 
+    }
+    //MARK: Access to some files
     
     func getGPXURL() -> URL?{
         
@@ -1364,20 +1373,20 @@ class WheelTrack: NSObject {
                 }
                 
                 if fields.count >= 6{
-                   self.setName(fields[5])
+                    self.setName(fields[5])
                 }
-
+                
                 if fields.count >= 8{
                     self.setSerialNo(fields[7])
                 }
-
+                
                 if fields.count >= 10{
                     self.setVersion(fields[9])
                 }
                 if fields.count >= 12{
                     self.setUUID(fields[11])
                 }
-
+                
             case "Energy_Used":
                 guard let val = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {continue }
                 energyUsed = val
@@ -1445,7 +1454,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func addValuesFromString(_ s : String) {
+    func addValuesFromString(_ s : String, clear : Bool) {
         
         
         let lines = s.components(separatedBy: CharacterSet.newlines)
@@ -1473,6 +1482,10 @@ class WheelTrack: NSObject {
                             date0 = Date(timeIntervalSince1970: dt)
                             let varstr = fields[5].replacingOccurrences(of: " ", with: "")
                             variable = WheelValue(rawValue: varstr)
+                            if let vari = variable , clear {
+                                clearVariable(vari)
+                            }
+
                             self.firstDate = date0
                             
                         } else {
@@ -1506,7 +1519,7 @@ class WheelTrack: NSObject {
             
         }
     }
-
+    
     func packageURL(_ name: String) -> URL?{
         
         guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
@@ -1532,7 +1545,7 @@ class WheelTrack: NSObject {
         
         return nil
     }
-
+    
     func appendToPackage(_ name: String){
         
         
@@ -1547,16 +1560,16 @@ class WheelTrack: NSObject {
     
     
     
-   func createPackage(_ name : String) -> URL?{
-    
-    guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
-    
-    return createPackage(name, inDirectory: docDir, snapshot: false)
+    func createPackage(_ name : String) -> URL?{
+        
+        guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+        
+        return createPackage(name, inDirectory: docDir, snapshot: false)
     }
-
+    
     
     func createPackage(_ name : String, inDirectory: URL, snapshot : Bool) -> URL?{
-    
+        
         let ext : String
         
         if snapshot {
@@ -1574,7 +1587,7 @@ class WheelTrack: NSObject {
         if !snapshot {
             for(_, v) in self.data {
                 AppDelegate.debugLog("Data %@, %.2f", v.codi.rawValue, v.currentValue)
-            
+                
             }
             
             if let s = createSummaryFile(){
@@ -1610,7 +1623,7 @@ class WheelTrack: NSObject {
             
         }
         
-
+        
         for (_, v) in self.data {
             if v.log.count > 0{
                 
@@ -1656,45 +1669,50 @@ class WheelTrack: NSObject {
     
     func loadVariableFromPackage(_ variable: WheelValue){
         
+        if let vari = data[variable], vari.loaded{
+            return
+        }
+        
         if let pkgURL = self.url{
             
             let fileURL = pkgURL.appendingPathComponent(variable.rawValue).appendingPathExtension("csv")
-            
-            
             let binURL = pkgURL.appendingPathComponent(variable.rawValue).appendingPathExtension("bin")
             
             
             // Try to load the binary values
             
-                if let logData = try? Data(contentsOf: binURL){
+            do {
+                let logData = try Data(contentsOf: binURL)
+                
+                let n = logData.count / MemoryLayout<LogEntry>.size
+                
+                var newLog : [LogEntry] = Array<LogEntry>(repeating: LogEntry(timestamp: 0.0, value: 0.0), count: n)
+                
+                (logData as NSData).getBytes(&newLog, length: logData.count)
+                
+                if self.data[variable] != nil {
+                    self.data[variable]!.log = newLog
+                    self.data[variable]!.loaded = true
                     
-                    let n = logData.count / MemoryLayout<LogEntry>.size
-                    
-                    var newLog : [LogEntry] = Array<LogEntry>(repeating: LogEntry(timestamp: 0.0, value: 0.0), count: n)
-                    
-                    (logData as NSData).getBytes(&newLog, length: logData.count)
-                    
-                    if self.data[variable] != nil {
-                        self.data[variable]!.log = newLog
-                        self.data[variable]!.loaded = true
-                        
-                        return
-                        
-                    }
+                    return
                     
                 }
                 
-            
-            do {
-                let str = try String(contentsOf: fileURL, encoding: String.Encoding.utf8)
-                addValuesFromString(str)
                 
-                if self.data[variable] != nil{
-                    self.data[variable]!.loaded = true
-                 }
+            }catch {
                 
-            }catch{
-                
+                do {
+                    let str = try String(contentsOf: fileURL, encoding: String.Encoding.utf8)
+                    
+                    addValuesFromString(str,clear: true)
+                    
+                    if self.data[variable] != nil{
+                        self.data[variable]!.loaded = true
+                    }
+                    
+                }catch{
+                    
+                }
             }
         }
     }
@@ -1706,7 +1724,7 @@ class WheelTrack: NSObject {
     func location2DForPoint(_ p : Int) -> CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: getValueForVariable(.Latitude, atPoint: p), longitude: getValueForVariable(.Longitude, atPoint: p))
     }
-
+    
     func angle(p0 : MKMapPoint, p1 : MKMapPoint, p2 : MKMapPoint) -> Double{
         
         let dx0 = p1.x - p0.x
@@ -1739,7 +1757,7 @@ class WheelTrack: NSObject {
         var p0 = MKMapPointForCoordinate(c0.coordinate)
         var p1 = MKMapPointForCoordinate(c1.coordinate)
         
-       
+        
         
         for i in 1..<n-1 {  // Loop throug points.
             
@@ -1812,7 +1830,7 @@ class WheelTrack: NSObject {
                         
                         
                     }else if fw.isRegularFile {
- 
+                        
                         if let fnam = fw.filename , fnam.hasSuffix(".bin"){
                             binaryEnabled = true
                         }
@@ -1830,28 +1848,38 @@ class WheelTrack: NSObject {
                         loadVariableFromPackage(e.codi)
                     }
                     
+                    
+                    if let v = self.data[.Latitude]{
+                        AppDelegate.debugLog("Latitut %d", v.log.count)
+                    }
+
+                    if let v = self.data[.Longitude]{
+                        AppDelegate.debugLog("Longitut %d", v.log.count)
+                    }
+
+                    
                     // OK now update the package
                     
                     let name = url.deletingPathExtension().lastPathComponent
                     let fm = FileManager.default
                     let newUrl = url.deletingPathExtension().appendingPathExtension("bu")
-                            do{
+                    do{
                         
-                                try fm.moveItem(at: url, to: newUrl)
-                                let okurl = createPackage(name)
-                                if okurl != nil {
-                                    try fm.removeItem(at: newUrl)
-                                } else {
-                                    do {
-                                        try fm.removeItem(at: url)
-                                    }catch{
-                                        
-                                    }
-                                    try fm.moveItem(at: newUrl, to: url)
-                                }
+                        try fm.moveItem(at: url, to: newUrl)
+                        let okurl = createPackage(name)
+                        if okurl != nil {
+                            try fm.removeItem(at: newUrl)
+                        } else {
+                            do {
+                                try fm.removeItem(at: url)
                             }catch{
                                 
                             }
+                            try fm.moveItem(at: newUrl, to: url)
+                        }
+                    }catch{
+                        
+                    }
                     
                     
                 }
@@ -1860,31 +1888,31 @@ class WheelTrack: NSObject {
             
         }
         /*
-        let segments = getStraightEnoughSegments()
-        
-        var lenWheel = 0.0
-        var lenGPS = 0.0
-        
-        for s in segments {
-            
-            let l = s.length    // That is GPS Length
-            
-            let t0 = timeAtPointForVariable(.Latitude, atPoint: s.from)
-            let t1 = timeAtPointForVariable(.Latitude, atPoint: s.to)
-            
-            let d = getValueForVariable(.Distance, time: t1!) - getValueForVariable(.Distance, time: t0!)
-            
-            lenWheel += d
-            lenGPS += l
-            
-            AppDelegate.debugLog("GPS %f - Wheel %f - Correccio : %f", l, d, d  / l)
-            
-            
-            
-        }
-        
-        AppDelegate.debugLog("TOTAL GPS %f - Wheel %f - Correccio : %f", lenGPS, lenWheel, lenWheel / lenGPS)
- */
+         let segments = getStraightEnoughSegments()
+         
+         var lenWheel = 0.0
+         var lenGPS = 0.0
+         
+         for s in segments {
+         
+         let l = s.length    // That is GPS Length
+         
+         let t0 = timeAtPointForVariable(.Latitude, atPoint: s.from)
+         let t1 = timeAtPointForVariable(.Latitude, atPoint: s.to)
+         
+         let d = getValueForVariable(.Distance, time: t1!) - getValueForVariable(.Distance, time: t0!)
+         
+         lenWheel += d
+         lenGPS += l
+         
+         AppDelegate.debugLog("GPS %f - Wheel %f - Correccio : %f", l, d, d  / l)
+         
+         
+         
+         }
+         
+         AppDelegate.debugLog("TOTAL GPS %f - Wheel %f - Correccio : %f", lenGPS, lenWheel, lenWheel / lenGPS)
+         */
         
         checkBattery()
     }
@@ -1895,42 +1923,42 @@ class WheelTrack: NSObject {
         
         
         let name = pkgUrl.deletingPathExtension().lastPathComponent
+        
+        
+        let tmpDirURL = URL(fileURLWithPath: NSTemporaryDirectory(),isDirectory: true)
+        let zipURL = tmpDirURL.appendingPathComponent(name).appendingPathExtension("9bz")
+        
+        do {
+            var files : [URL] = [URL]()
             
             
-            let tmpDirURL = URL(fileURLWithPath: NSTemporaryDirectory(),isDirectory: true)
-            let zipURL = tmpDirURL.appendingPathComponent(name).appendingPathExtension("9bz")
+            let pack = try FileWrapper(url: pkgUrl, options: [])
             
-            do {
-                var files : [URL] = [URL]()
-                
-                
-                let pack = try FileWrapper(url: pkgUrl, options: [])
-                
-                if pack.isDirectory{
-                    for (_, fw) in pack.fileWrappers!{
-                        if let fname = fw.filename{
-                            
-                            if !fname.hasSuffix(".bin"){    // bin files are just for caching
-                                files.append(pkgUrl.appendingPathComponent(fname))
-                            }
+            if pack.isDirectory{
+                for (_, fw) in pack.fileWrappers!{
+                    if let fname = fw.filename{
+                        
+                        if !fname.hasSuffix(".bin"){    // bin files are just for caching
+                            files.append(pkgUrl.appendingPathComponent(fname))
                         }
                     }
                 }
-                
-                try Zip.zipFiles(files, zipFilePath: zipURL, password: nil, progress: { (progress) -> () in
-                    AppDelegate.debugLog("Zip %f", progress)
-                })
-                
-                return zipURL
-            }catch{
-                if let dele = UIApplication.shared.delegate as? AppDelegate{
-                    dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to create zip file %@".localized(), zipURL as CVarArg)
-                }
-                AppDelegate.debugLog("Error al crear zip file")
-                
-                return nil
             }
-     }
+            
+            try Zip.zipFiles(files, zipFilePath: zipURL, password: nil, progress: { (progress) -> () in
+                AppDelegate.debugLog("Zip %f", progress)
+            })
+            
+            return zipURL
+        }catch{
+            if let dele = UIApplication.shared.delegate as? AppDelegate{
+                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to create zip file %@".localized(), zipURL as CVarArg)
+            }
+            AppDelegate.debugLog("Error al crear zip file")
+            
+            return nil
+        }
+    }
     
     
     internal func createGPXString() -> String{
@@ -2232,12 +2260,12 @@ class WheelTrack: NSObject {
         // OK now build package.
         
         let name = url.deletingPathExtension().lastPathComponent
-            let newName = name.replacingOccurrences(of: "9B_", with: "")
-            if let url = createPackage(newName){
-                AppDelegate.debugLog("Package %@ created", url as CVarArg)
-            }else{
-                AppDelegate.debugLog("Error al crear Package")
-            }
+        let newName = name.replacingOccurrences(of: "9B_", with: "")
+        if let url = createPackage(newName){
+            AppDelegate.debugLog("Package %@ created", url as CVarArg)
+        }else{
+            AppDelegate.debugLog("Error al crear Package")
+        }
         
         
     }
@@ -2293,7 +2321,7 @@ class WheelTrack: NSObject {
         
         do {
             try (url as NSURL).setResourceValue( dict,
-                                      forKey:URLResourceKey.thumbnailDictionaryKey)
+                                                 forKey:URLResourceKey.thumbnailDictionaryKey)
         }
         catch _{
             AppDelegate.debugLog("No puc gravar la imatge :)")
