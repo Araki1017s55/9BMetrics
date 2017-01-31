@@ -62,6 +62,8 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             }
         }
         
+        fSpeedUnits.text = UnitManager.sharedInstance.longDistanceUnit+"/h"
+        
         // Do any additional setup after loading the view.
     }
     
@@ -145,7 +147,7 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                     
                     self.fCurrent.text = String(format:"%0.2fA", nb.getCurrentValueForVariable(.Current))
                     self.fPower.text = String(format:"%0.0fW", nb.getCurrentValueForVariable(.Power))
-                    self.fDistance.text = String(format:"%6.2fkm", nb.getCurrentValueForVariable(.Distance) / 1000.0 * self.distanceCorrection) // In Km
+                    self.fDistance.text = String(format:"%@", UnitManager.sharedInstance.formatDistance(nb.getCurrentValueForVariable(.Distance) * self.distanceCorrection)) // In m, yd, or km, mi
                     let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.Duration))
                     self.fTime.text = String(format:"%02d:%02d:%02d", h, m, s)
                     self.fBattery.text = String(format:"%4.0f%%", nb.getCurrentValueForVariable(.Battery))
@@ -153,9 +155,10 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                     
                     
                     
-                    let v = nb.getCurrentValueForVariable(.Speed) * 3.6 * self.speedCorrection // In Km/h
+                    let v =  nb.getCurrentValueForVariable(.Speed) * 3.6  * self.speedCorrection // In Km/h
+                    let vc = UnitManager.sharedInstance.convertSpeed(nb.getCurrentValueForVariable(.Speed) * self.speedCorrection)
                     
-                    self.fSpeed.text = String(format:"%0.2f", v)
+                    self.fSpeed.text = String(format:"%0.2f", vc)
                     
                     if v >= 15.0 && v < 20.0{
                         self.fSpeed.textColor = UIColor.orange

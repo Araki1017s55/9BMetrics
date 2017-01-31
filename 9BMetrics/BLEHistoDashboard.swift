@@ -388,7 +388,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                     sv.backImage = self.trackImg
                     
                     
-                    sv.updateData(String(format:"%0.2f", dist) , units: "Km", radis: speeds, arcs: limits, minValue: 0.0, maxValue: topSpeed)
+                    sv.updateData(String(format:"%0.2f", UnitManager.sharedInstance.convertLongDistance(dist)) , units: UnitManager.sharedInstance.longDistanceUnit, radis: speeds, arcs: limits, minValue: 0.0, maxValue: UnitManager.sharedInstance.convertSpeed(topSpeed))
                 }
                 return cell
                 

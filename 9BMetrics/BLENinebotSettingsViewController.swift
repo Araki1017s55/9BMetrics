@@ -39,6 +39,7 @@ class BLENinebotSettingsViewController: UIViewController {
     @IBOutlet weak var vEnableSpeedLimitSwitch: UISwitch!
     @IBOutlet weak var vLockWheelSwitch: UISwitch!
     
+
     
     var oldRidingLevel = 0
     var oldSpeedLimit = 0.0
@@ -63,7 +64,7 @@ class BLENinebotSettingsViewController: UIViewController {
                 speedLimitSlider.maximumValue = Float(maxSpeed)
                 
                 speedLimitSlider.value = Float(limitSpeed)
-                vSpeedLimitSetings.text = String(format: "%1.0f km/h",limitSpeed * 3.6)
+                vSpeedLimitSetings.text = UnitManager.sharedInstance.formatSpeed(limitSpeed)
                 
                 vEnableSpeedLimitSwitch.isOn = limited
                 vLockWheelSwitch.isOn = locked
@@ -75,6 +76,8 @@ class BLENinebotSettingsViewController: UIViewController {
                 
             }
         }
+        
+        
         // Do any additional setup after loading the view.
     }
     
@@ -119,7 +122,7 @@ class BLENinebotSettingsViewController: UIViewController {
         let v = Double(round(speedLimitSlider.value))
         
         if v != oldSpeedLimit{
-            vSpeedLimitSetings.text = String(format: "%1.0f km/h", v*3.6)
+            vSpeedLimitSetings.text = UnitManager.sharedInstance.formatSpeed(v)
             oldSpeedLimit = v
         }
         
@@ -188,7 +191,7 @@ class BLENinebotSettingsViewController: UIViewController {
                             vRidingSettings.textColor = UIColor.black
                             
                         case WheelTrack.WheelValue.LimitSpeed.rawValue:
-                            vSpeedLimitSetings.text = String(format: "%1.0f km/h", dat.getCurrentValueForVariable(.LimitSpeed)*3.6)
+                            vSpeedLimitSetings.text = UnitManager.sharedInstance.formatSpeed(dat.getCurrentValueForVariable(.LimitSpeed))
                             vSpeedLimitSetings.textColor = UIColor.black
                             
                         

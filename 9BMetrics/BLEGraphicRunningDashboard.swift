@@ -232,11 +232,11 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                         
                         self.fCurrent.text = String(format:"%0.2fA", nb.getCurrentValueForVariable(.Current))
                         self.fPower.text = String(format:"%0.0fW", nb.getCurrentValueForVariable(.Power))
-                        self.fDistance.text = String(format:"%6.2fkm", nb.getCurrentValueForVariable(.Distance) / 1000.0 * self.distanceCorrection) // In Km
+                        self.fDistance.text = String(format:"%@", UnitManager.sharedInstance.formatDistance(nb.getCurrentValueForVariable(.Distance) * self.distanceCorrection))
                         let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.Duration))
                         self.fTime.text = String(format:"%02d:%02d:%02d", h, m, s)
                         
-                        let v = nb.getCurrentValueForVariable(.Speed) * 3.6 * self.speedCorrection// In Km/h
+                        let v = UnitManager.sharedInstance.convertSpeed(nb.getCurrentValueForVariable(.Speed) * self.speedCorrection) // In Km/h or mi/h
                         let b = nb.getCurrentValueForVariable(.Battery)
                         let t = nb.getCurrentValueForVariable(.Temperature)
                         let volt = nb.getCurrentValueForVariable(.Voltage)
@@ -245,7 +245,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                         let tempLevels = [TMKClockView.arc(start: t / self.tempTop, end: 0.5, color: UIColor.red)]
                         
                         
-                        self.fSpeed.updateData(String(format:"%0.2f", v) , units: "Km/h", value: v, minValue: 0, maxValue: self.speedTop)
+                        self.fSpeed.updateData(String(format:"%0.2f", v) , units: UnitManager.sharedInstance.longDistanceUnit + "/h", value: v, minValue: 0, maxValue: self.speedTop)
  
                         self.fBattery.updateData(String(format:"%0.1f", volt) , units: "V", radis: battLevels, arcs: self.battAreas, minValue: 0, maxValue: 100.0)
 

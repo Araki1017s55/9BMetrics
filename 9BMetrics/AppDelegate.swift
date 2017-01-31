@@ -38,12 +38,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var datos : WheelTrack = WheelTrack()
     var client : BLESimulatedClient?
     
+    
+    
     weak var mainController : ViewController?
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
+        
         
         buildAdapterList()
         if self.client == nil {

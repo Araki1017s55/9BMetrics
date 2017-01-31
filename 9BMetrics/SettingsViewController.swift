@@ -44,10 +44,12 @@ class SettingsViewController: UIViewController {
     
     @IBOutlet weak var fEnableCorrectionsSwitch: UISwitch!
     
+    @IBOutlet weak var fSpeedUnitsLabel: UILabel!
      
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fSpeedUnitsLabel.text = UnitManager.sharedInstance.longDistanceUnit+"/h"
         // Do any additional setup after loading the view.
     }
     
@@ -65,7 +67,7 @@ class SettingsViewController: UIViewController {
         if let stspeed = fSpeedAlarm.text {
             
             if let dspeed = Double(stspeed.replacingOccurrences(of: ",", with: ".")){     // Dades en m/s
-                store.set(dspeed / 3.6, forKey: kSpeedAlarm)
+                store.set(dspeed / UnitManager.sharedInstance.convertSpeed(1.0), forKey: kSpeedAlarm)
             }
             
         }
@@ -108,7 +110,7 @@ class SettingsViewController: UIViewController {
                 if let stspeed = fSpeedAlarm.text {
                     
                     if let dspeed = Double(stspeed.replacingOccurrences(of: ",", with: ".")){     // Dades en m/s
-                        wheel.alarmSpeed = dspeed / 3.6
+                        wheel.alarmSpeed = dspeed / UnitManager.sharedInstance.convertSpeed(1.0)
                     }
                     
                 }
@@ -155,7 +157,7 @@ class SettingsViewController: UIViewController {
                     
                     let sa = wheel.alarmSpeed
                     
-                    let ssa = String(format: "%0.2f", sa * 3.6)       // Presentem dades en km/h
+                    let ssa = String(format: "%0.2f", UnitManager.sharedInstance.convertSpeed(sa))       // Presentem dades en km/h
                     fSpeedAlarm.text = ssa
                     
                     let ba = wheel.batteryAlarm
@@ -179,7 +181,7 @@ class SettingsViewController: UIViewController {
                 } else {    // No Wheel
                     let sa = store.double(forKey: kSpeedAlarm)
                     
-                    let ssa = String(format: "%0.2f", sa * 3.6)       // Presentem dades en km/h
+                    let ssa = String(format: "%0.2f", UnitManager.sharedInstance.convertSpeed(sa))       // Presentem dades en km/h
                     fSpeedAlarm.text = ssa
                     
                     let ba = store.double(forKey: kBatteryAlarm)

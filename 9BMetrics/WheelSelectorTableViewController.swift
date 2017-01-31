@@ -49,7 +49,7 @@ class WheelSelectorTableViewController: UITableViewController {
         if let cel1 = cell as? WheelInfoCell{
             cel1.fTitle!.text = wheel.name
             cel1.fSubtitle!.text = wheel.brand + " " + wheel.model
-            cel1.fDistance!.text = String(format: "%0.2f km", wheel.totalDistance/1000)
+            cel1.fDistance!.text = String(format: "%@", UnitManager.sharedInstance.formatDistance(wheel.totalDistance))
         }else {
             cell.textLabel!.text = wheel.name
             cell.detailTextLabel!.text = wheel.brand + " " + wheel.model

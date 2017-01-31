@@ -41,9 +41,9 @@ class GraphViewController: UIViewController {
                                                       .Voltage, .Current, .Battery, .Pitch, .Roll,
                                                       .Distance, .Altitude, .Power, .Energy]
   
-    let scales : [Double] = [3.6, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.001, 1.0, 1.0, 1.0 / 3600.0]
+    let scales : [Double] = [UnitManager.sharedInstance.longDistanceConverter * 3.6, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, UnitManager.sharedInstance.longDistanceConverter * 0.001, UnitManager.sharedInstance.heightConverter, 1.0, 1.0 / 3600.0]
         
-    let units : [String] = ["km/h", "ºC", "V", "A", "%", "º", "º", "km", "m", "v"  , "wh"]
+    let units : [String] = [UnitManager.sharedInstance.longDistanceUnit+"/h", "ºC", "V", "A", "%", "º", "º", UnitManager.sharedInstance.longDistanceUnit, UnitManager.sharedInstance.heightUnit, "w"  , "wh"]
     
 
     var resampledLog : [WheelTrack.LogEntry]?
@@ -79,7 +79,7 @@ class GraphViewController: UIViewController {
     func updateStats(){
         if self.ninebot != nil{
             
-            fVariableName.text = nameOfValue(shownVariable)
+            fVariableName.text = nameOfValue(shownVariable) + " (" + units[shownVariable] + ")"
             let (minv, maxv, avgv, _) = getLogStats(shownVariable, from: 0.0, to: 86400.0)
             
             fAverageValue.text = String(format:"Average Value : %0.2f", avgv)

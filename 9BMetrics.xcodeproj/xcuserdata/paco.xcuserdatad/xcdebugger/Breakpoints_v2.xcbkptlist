@@ -38,11 +38,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/BLERunningDashboard.swift"
-            timestampString = "505853239.359339"
+            timestampString = "507555650.426092"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "startStop(_:)"
             landmarkType = "7">
             <Locations>
@@ -54,11 +54,11 @@
                   moduleName = "9BMetrics"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLERunningDashboard.swift"
-                  timestampString = "507215809.086121"
+                  timestampString = "507556525.913089"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "106"
-                  endingLineNumber = "106"
+                  startingLineNumber = "108"
+                  endingLineNumber = "108"
                   offsetFromSymbolStart = "28">
                </Location>
                <Location
@@ -69,11 +69,11 @@
                   moduleName = "9BMetrics"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLERunningDashboard.swift"
-                  timestampString = "507215809.088862"
+                  timestampString = "507556525.917351"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "106"
-                  endingLineNumber = "106"
+                  startingLineNumber = "108"
+                  endingLineNumber = "108"
                   offsetFromSymbolStart = "76">
                </Location>
             </Locations>
@@ -118,28 +118,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "9BMetrics/AppDelegate.swift"
-            timestampString = "506177461.901269"
+            timestampString = "507551407.725833"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "application(_:open:options:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "9BMetrics/KingSongAdapter.swift"
-            timestampString = "507145181.173025"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "procesaBuffer(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
