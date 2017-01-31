@@ -1,0 +1,42 @@
+/* 
+  Localizable.strings
+  9BMetrics
+
+  Created by Francisco Gorina Vanrell on 31/1/17.
+  Copyright © 2017 Paco Gorina. All rights reserved.
+*/
+
+"Edit" = "Edition";
+"Done" = "Fait";
+"New Run" = "Nouveau";
+
+"Speed" = "Vitesse";
+"Battery" = "Batterie";
+"Power" = "Puissance";
+"Energy" = "Energie";
+"T" = "T";
+"Temperature" = "Température";
+"Roll" = "Roll";
+"Pitch" = "Pitch";
+"Voltage" = "Tension";
+"Current" = "Courant";
+"Distance" = "Distance";
+"Altitude" = "Altitude";
+
+"Average Value : %0.2f" = "Valeur Moyenne : %0.2f";
+"Minimum : %0.2f Maximum : %0.2f" = "Minimum : %0.2f Maximum : %0.2f";
+"Samples %d." = "Echantillons %d";
+
+"Options" = "Options";
+"Close" = "Fermer";
+"Select an option" = "Sélectionner an option";
+"Settings" = "Paramètres";
+"Show Local Normative" = "Montrer la normative locale";
+"Debug Server" = "Serveur Debug";
+"Ninebot Server" = "Serveur Ninebot";
+"Send Notification" = "Envoyer Notifications";
+"About Gyrometrics" = "À propos de Gyrometrics";
+
+"Share Track" = "Partager Trace";
+"Open GPX In" = "Ouvrir GPX avec";
+"Share GPX" = "Partager GPX";

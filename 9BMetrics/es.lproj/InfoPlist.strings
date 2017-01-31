@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  9BMetrics
+
+  Created by Francisco Gorina Vanrell on 31/1/17.
+  Copyright © 2017 Paco Gorina. All rights reserved.
+*/
+"NSBluetoothPeripheralUsageDescription" ="Permite conectarse a la rueda mediante Bluetooth";
+"NSLocationAlwaysUsageDescription" = "Permite obtener la posición y crear las trazas";

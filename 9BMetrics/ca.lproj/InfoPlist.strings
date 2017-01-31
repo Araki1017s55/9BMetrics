@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  9BMetrics
+
+  Created by Francisco Gorina Vanrell on 31/1/17.
+  Copyright © 2017 Paco Gorina. All rights reserved.
+*/
+"NSBluetoothPeripheralUsageDescription" = "Permet a Gyrometrics connectar-se a la roda";
+"NSLocationAlwaysUsageDescription" = "Permet a Gyrometrics obtenir la posició i crear les traces";
