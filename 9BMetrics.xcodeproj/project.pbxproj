@@ -87,6 +87,8 @@
 		00C2667D1DA27D86004D3B02 /* GotawayAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */; };
 		00C4EE601CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */; };
 		00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */; };
+		00DAD9B41E40FE1F007E1762 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00DAD9B61E40FE1F007E1762 /* Info.plist */; };
+		00DAD9BB1E40FF89007E1762 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00DAD9BA1E40FF89007E1762 /* Info.plist */; };
 		00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */; };
 		00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB821CD1E5F200EB66FB /* Notifications.swift */; };
 		00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */; };
@@ -197,7 +199,6 @@
 		007BEE741E40BB4D00A811FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		007BEE761E40BB9C00A811FA /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Main.strings; sourceTree = "<group>"; };
 		007BEE771E40BB9C00A811FA /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
-		007BEE781E40D3BA00A811FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KTCenterFlowLayout.swift; path = 9BMetrics/KTCenterFlowLayout.swift; sourceTree = "<group>"; };
 		007D4A161E239A0D008624E6 /* WheelInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelInfoCell.swift; sourceTree = "<group>"; };
 		008BB5A21DA6A6340073B5A0 /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Localized.swift"; path = "9BMetrics/String+Localized.swift"; sourceTree = "<group>"; };
@@ -246,6 +247,11 @@
 		00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockViewFast.swift; path = 9BMetrics/TMKClockViewFast.swift; sourceTree = "<group>"; };
 		00DAD9AE1E40D815007E1762 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		00DAD9AF1E40D815007E1762 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		00DAD9B51E40FE1F007E1762 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
+		00DAD9B71E40FE26007E1762 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
+		00DAD9B81E40FE29007E1762 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ca; path = ca.lproj/Info.plist; sourceTree = "<group>"; };
+		00DAD9B91E40FE2A007E1762 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = es; path = es.lproj/Info.plist; sourceTree = "<group>"; };
+		00DAD9BA1E40FF89007E1762 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WheelTrack.swift; path = 9BMetrics/WheelTrack.swift; sourceTree = "<group>"; };
 		00DCEB821CD1E5F200EB66FB /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Notifications.swift; path = 9BMetrics/Notifications.swift; sourceTree = "<group>"; };
 		00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockView.swift; path = 9BMetrics/TMKClockView.swift; sourceTree = "<group>"; };
@@ -307,6 +313,8 @@
 		007A57161C85CE49003A2030 /* 9BMetrics */ = {
 			isa = PBXGroup;
 			children = (
+				00DAD9BA1E40FF89007E1762 /* Info.plist */,
+				00DAD9B61E40FE1F007E1762 /* Info.plist */,
 				0016670F1C9967290048344F /* Settings.bundle */,
 				007A575B1C85CE7B003A2030 /* 9BMetrics.entitlements */,
 				00AB59331CAEE61600277859 /* 9BMetrics-Bridging-Header.h */,
@@ -316,7 +324,6 @@
 				007BEE721E40BB3B00A811FA /* Main.storyboard */,
 				007A575E1C85CEFC003A2030 /* LaunchScreen.storyboard */,
 				007A57601C85CF0A003A2030 /* Assets.xcassets */,
-				007BEE791E40D3BA00A811FA /* Info.plist */,
 				007BEE751E40BB4D00A811FA /* Localizable.strings */,
 			);
 			path = 9BMetrics;
@@ -636,6 +643,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00DAD9BB1E40FF89007E1762 /* Info.plist in Resources */,
 				0029253F1CBA3B3400AEA843 /* Notes.rtf in Resources */,
 				007A575F1C85CEFC003A2030 /* LaunchScreen.storyboard in Resources */,
 				007A575A1C85CE69003A2030 /* License_GPL30.html in Resources */,
@@ -644,6 +652,7 @@
 				007BEE701E40BB3B00A811FA /* Main.storyboard in Resources */,
 				007A57591C85CE69003A2030 /* nb_512.png in Resources */,
 				007A57581C85CE69003A2030 /* about.html in Resources */,
+				00DAD9B41E40FE1F007E1762 /* Info.plist in Resources */,
 				00389AFF1C9986A4007BADDC /* Default-568h@2x.png in Resources */,
 				007A57551C85CE69003A2030 /* icon_ipad@2x.png in Resources */,
 				007A57611C85CF0A003A2030 /* Assets.xcassets in Resources */,
@@ -789,10 +798,13 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		007BEE791E40D3BA00A811FA /* Info.plist */ = {
+		00DAD9B61E40FE1F007E1762 /* Info.plist */ = {
 			isa = PBXVariantGroup;
 			children = (
-				007BEE781E40D3BA00A811FA /* Base */,
+				00DAD9B51E40FE1F007E1762 /* Base */,
+				00DAD9B71E40FE26007E1762 /* en */,
+				00DAD9B81E40FE29007E1762 /* ca */,
+				00DAD9B91E40FE2A007E1762 /* es */,
 			);
 			name = Info.plist;
 			sourceTree = "<group>";

@@ -105,9 +105,9 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Enable Gyrometrics to connect to the wheels using Bluetooth</string>
+	<string>Permet a Gyrometrics connectarse amb Bluetooth a les rodes</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Enable to allow Gyrometrics to store position data and create tracks</string>
+	<string>Permet a Gyrometrics accedir a les dades de posició i crear els tracks</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

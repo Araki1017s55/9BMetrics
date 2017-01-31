@@ -6,37 +6,37 @@
   Copyright © 2017 Paco Gorina. All rights reserved.
 */
 
-"Edit" = "Edit";
-"Done" = "Done";
-"New Run" = "New Run";
+"Edit" = "Editar";
+"Done" = "Hecho";
+"New Run" = "Nuevo";
 
-"Speed" = "Speed";
-"Battery" = "Battery";
-"Power" = "Power";
-"Energy" = "Energy";
+"Speed" = "Velocidad";
+"Battery" = "Bateria";
+"Power" = "Poténcia";
+"Energy" = "Energia";
 "T" = "T";
-"Temperature" = "Temperature";
+"Temperature" = "Temperatura";
 "Roll" = "Roll";
 "Pitch" = "Pitch";
-"Voltage" = "Voltage";
-"Current" = "Current";
-"Distance" = "Distance";
-"Altitude" = "Altitude";
+"Voltage" = "Tensión";
+"Current" = "Corriente";
+"Distance" = "Distancia";
+"Altitude" = "Altura";
 
-"Average Value : %0.2f" = "Average Value : %0.2f";
-"Minimum : %0.2f Maximum : %0.2f" = "Minimum : %0.2f Maximum : %0.2f";
-"Samples %d.localized()" = "Samples %d.localized()";
+"Average Value : %0.2f" = "Valor medio : %0.2f";
+"Minimum : %0.2f Maximum : %0.2f" = "Mínimo : %0.2f Máximo : %0.2f";
+"Samples %d" = "%d Muestras";
 
-"Options" = "Options";
-"Close" = "Close";
-"Select an option" = "Select an option";
-"Settings" = "Settings";
-"Show Local Normative" = "Show Local Normative";
+"Options" = "Opciones";
+"Close" = "Cerrar";
+"Select an option" = "Seleccionar una opción";
+"Settings" = "Ajustes";
+"Show Local Normative" = "Mostrar normativa local";
 "Debug Server" = "Debug Server";
 "Ninebot Server" = "Ninebot Server";
-"Send Notification" = "Send Notification";
-"About Gyrometrics" = "About Gyrometrics";
+"Send Notification" = "Enviar Notificación";
+"About Gyrometrics" = "Acerca de Gyrometrics";
 
-"Share Track" = "Share Track";
-"Open GPX In" = "Open GPX In";
-"Share GPX" = "Share GPX";
+"Share Track" = "Compartir Traza";
+"Open GPX In" = "Abrir GPX en";
+"Share GPX" = "Compartir GPX";
