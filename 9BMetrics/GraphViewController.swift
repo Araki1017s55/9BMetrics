@@ -79,12 +79,12 @@ class GraphViewController: UIViewController {
     func updateStats(){
         if self.ninebot != nil{
             
-            fVariableName.text = nameOfValue(shownVariable) + " (" + units[shownVariable] + ")"
+            fVariableName.text = nameOfValue(shownVariable).localized() + " (" + units[shownVariable] + ")"
             let (minv, maxv, avgv, _) = getLogStats(shownVariable, from: 0.0, to: 86400.0)
             
-            fAverageValue.text = String(format:"Average Value : %0.2f", avgv)
-            fExtremeValues.text = String(format:"Minimum : %0.2f Maximum : %0.2f", minv, maxv)
-            fNumberOfValues.text = String(format:"Samples %d", originalCountLog(shownVariable))
+            fAverageValue.text = String(format:"Average Value : %0.2f".localized(), avgv)
+            fExtremeValues.text = String(format:"Minimum : %0.2f Maximum : %0.2f".localized(), minv, maxv)
+            fNumberOfValues.text = String(format:"Samples %d".localized(), originalCountLog(shownVariable))
             
         }
         

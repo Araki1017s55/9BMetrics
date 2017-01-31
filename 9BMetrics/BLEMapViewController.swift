@@ -134,7 +134,7 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
     }
 
     override var previewActionItems : [UIPreviewActionItem] {
-        let shareGPX = UIPreviewAction(title: "Share GPX", style: .default)
+        let shareGPX = UIPreviewAction(title: "Share GPX".localized(), style: .default)
             {(action, viewController) in
                 
                 if let wheel = self.dades {
@@ -152,7 +152,7 @@ class BLEMapViewController: UIViewController, MKMapViewDelegate{
                 }
             }
         
-        let openInTraces = UIPreviewAction(title: "Open GPX In", style: .default)
+        let openInTraces = UIPreviewAction(title: "Open GPX In".localized(), style: .default)
         {(action, viewController) in
             if let wheel = self.dades {
                 if let gpxurl = wheel.getGPXURL(){

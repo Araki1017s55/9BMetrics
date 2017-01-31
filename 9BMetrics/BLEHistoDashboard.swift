@@ -209,7 +209,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         //MARK: Preview Action Items
         
         override var previewActionItems : [UIPreviewActionItem] {
-            let shareTrack = UIPreviewAction(title: "Share Track", style: .default)
+            let shareTrack = UIPreviewAction(title: "Share Track".localized(), style: .default)
             {(action, viewController) in
                 
                 if let wheel = self.ninebot {
@@ -227,7 +227,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 }
             }
             
-            let openTrackIn = UIPreviewAction(title: "Open GPX In", style: .default)
+            let openTrackIn = UIPreviewAction(title: "Open GPX In".localized(), style: .default)
             {(action, viewController) in
                 if let wheel = self.ninebot {
                     if let trackUrl : URL = wheel.url as URL?{
@@ -365,7 +365,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                     }
                 }
                 if let tit = title {
-                    tit.text = "Speed"
+                    tit.text = "Speed".localized(comment: "Speed Title")
                 }
                 
                 
@@ -408,7 +408,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 }
                 
                 if let tit = title {
-                    tit.text = "Battery"
+                    tit.text = "Battery".localized(comment: "Battery Title")
                 }
                 
                 if let bv = batteryView{
@@ -451,7 +451,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 }
                 
                 if let tit = title {
-                    tit.text = "Power"
+                    tit.text = "Power".localized(comment: "Power Title")
                 }
                 if let pw = powerView{
                     
@@ -497,7 +497,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 }
                 
                 if let tit = title {
-                    tit.text = "Energy"
+                    tit.text = "Energy".localized(comment: "Energy Title")
                 }
                 if let ew = energyView{
                     
@@ -539,7 +539,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 }
                 
                 if let tit = title {
-                    tit.text = "T ºC"
+                    tit.text = "T".localized(comment: "Temperature Title") + "ºC"
                 }
                 
                 // Temperature
@@ -589,7 +589,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 }
                 
                 if let tit = title {
-                    tit.text = "Roll"
+                    tit.text = "Roll".localized(comment: "Roll Title")
                 }
                 if let rw = rollView{
                     
@@ -614,7 +614,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 }
                 
                 if let tit = title {
-                    tit.text = "Pitch"
+                    tit.text = "Pitch".localized(comment: "Pitch Title")
                 }
                 if let pw = pitchView{
                     pw.updateData(pavg, minValue: pmin, maxValue: pmax, scale: 1.0)

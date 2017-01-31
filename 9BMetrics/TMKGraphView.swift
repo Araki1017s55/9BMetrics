@@ -687,7 +687,7 @@ class TMKGraphView: UIView {
     func addyValueButton(){
         if let ds = self.dataSource {
             let iax = self.yValue
-            let lab = ds.nameOfValue(iax)
+            let lab = ds.nameOfValue(iax).localized()
             
             
             let but = UIButton(type:UIButtonType.roundedRect)
@@ -1453,7 +1453,7 @@ class TMKGraphView: UIView {
     
     func setanYValue(_ axe:Int){
         if let ds = self.dataSource{
-            let label = ds.nameOfValue(axe)
+            let label = ds.nameOfValue(axe).localized()
             self.yValue = axe
             self.yValueButton.setTitle(label, for:UIControlState())
             

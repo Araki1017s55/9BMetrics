@@ -477,7 +477,7 @@ import MapKit
         
         if testMode {
             
-            action = UIAlertAction(title: "Show local uses".localized(comment: "Show local normative and uses"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+            action = UIAlertAction(title: "Show Local Normative".localized(comment: "Show local normative and uses"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
                 
                 self.performSegue(withIdentifier: "localUsesSegue", sender: self)
             })
@@ -512,7 +512,7 @@ import MapKit
         
         
         
-        action = UIAlertAction(title: "About 9B Metrics".localized(comment: "About item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+        action = UIAlertAction(title: "About Gyrometrics".localized(comment: "About item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
             self.performSegue(withIdentifier: "docSegue", sender: self)
         })
         
@@ -827,12 +827,12 @@ import MapKit
     @IBAction func  editFiles(_ src: AnyObject){
         if self.tableView.isEditing{
             self.tableView.isEditing = false
-            self.navigationItem.leftBarButtonItem!.title  = "Edit"
+            self.navigationItem.leftBarButtonItem!.title  = "Edit".localized()
             self.navigationItem.leftBarButtonItem!.style = UIBarButtonItemStyle.plain
         }
         else{
             self.tableView.isEditing = true
-            self.navigationItem.leftBarButtonItem!.title = "Done"
+            self.navigationItem.leftBarButtonItem!.title = "Done".localized()
             self.navigationItem.leftBarButtonItem!.style = UIBarButtonItemStyle.done
         }
         
