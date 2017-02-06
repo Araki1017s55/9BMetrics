@@ -238,18 +238,23 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                         
                         let v = UnitManager.sharedInstance.convertSpeed(nb.getCurrentValueForVariable(.Speed) * self.speedCorrection) // In Km/h or mi/h
                         let b = nb.getCurrentValueForVariable(.Battery)
-                        let t = nb.getCurrentValueForVariable(.Temperature)
+                        let t = UnitManager.sharedInstance.convertTemperature(nb.getCurrentValueForVariable(.Temperature))
                         let volt = nb.getCurrentValueForVariable(.Voltage)
                         
                         let battLevels = [TMKClockView.arc(start: b / 100.0, end: 0.5, color: UIColor.red)]
-                        let tempLevels = [TMKClockView.arc(start: t / self.tempTop, end: 0.5, color: UIColor.red)]
+                        let tempLevels = [TMKClockView.arc(start: nb.getCurrentValueForVariable(.Temperature) / self.tempTop, end: 0.5, color: UIColor.red)]
                         
                         
                         self.fSpeed.updateData(String(format:"%0.2f", v) , units: UnitManager.sharedInstance.longDistanceUnit + "/h", value: v, minValue: 0, maxValue: self.speedTop)
  
                         self.fBattery.updateData(String(format:"%0.1f", volt) , units: "V", radis: battLevels, arcs: self.battAreas, minValue: 0, maxValue: 100.0)
 
-                        self.fTemperature.updateData(String(format:"%0.1f", t) , units: "ºC", radis: tempLevels, arcs: self.tempAreas, minValue: 0.0, maxValue: self.tempTop)
+                        self.fTemperature.updateData(String(format:"%0.1f", t) ,
+                                                     units: UnitManager.sharedInstance.temperatureUnit,
+                                                     radis: tempLevels,
+                                                     arcs: self.tempAreas,
+                                                     minValue: UnitManager.sharedInstance.convertTemperature(0.0),
+                                                     maxValue: UnitManager.sharedInstance.convertTemperature(self.tempTop))
 
                         
                     }

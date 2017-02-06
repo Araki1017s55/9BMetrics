@@ -10,5 +10,5 @@ import Foundation
 
 protocol WheelSelectorDelegate {
     
-    func selectedWheel(_ wheel : Wheel)
+    func selectedWheel(_ wheel : Wheel?)
 }

@@ -170,7 +170,7 @@ public class Wheel : NSObject {
         
         // Get all packages in the directory
         
-        var track  = WheelTrack()
+        let track  = WheelTrack()
         
         let runs = getAllRuns()
         

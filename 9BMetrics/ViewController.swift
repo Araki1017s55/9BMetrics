@@ -211,16 +211,16 @@ import MapKit
         
         switch section {
             
-        case 0 : return "Today"
+        case 0 : return "Today".localized()
             
         case 1:
-            return "Yesterday"
+            return "Yesterday".localized()
             
         case 2:
-            return "This Week"
+            return "This Week".localized()
             
         case 3:
-            return "This Month"
+            return "This Month".localized()
             
         case 4..<(3 + month) :
             
@@ -563,6 +563,23 @@ import MapKit
             let name = FileManager.default.displayName(atPath: url.path)
             let date = self.creationDate(url)
             
+            
+            let (dt, dis, wname) = WheelTrack.loadSummaryDistanceFromURL(url)
+            
+            let dh = floor(dt / 3600.0)
+            var dm = ((dt - dh * 3600) / 60.0)
+            dm.round()
+            
+            //let ds = Int(dt) % 60
+            
+            let sd = String(format: "%02.0f:%02.0f %@ %@",  dh, dm, UnitManager.sharedInstance.formatDistance(dis), wname)
+            
+            
+ 
+            //let sd = ""
+            
+            // Try to get summary data
+            
             cell.textLabel!.text = name
             
             if let dat = date {
@@ -573,7 +590,7 @@ import MapKit
                 
                 let s = fmt.string(from: dat)
                 
-                cell.detailTextLabel!.text = s
+                cell.detailTextLabel!.text = s + "  " + sd
             }
             
             
@@ -1059,7 +1076,7 @@ extension ViewController : UIViewControllerPreviewingDelegate{
 
 extension ViewController : WheelSelectorDelegate {
     
-    func selectedWheel(_ wheel: Wheel) {
+    func selectedWheel(_ wheel: Wheel?) {
         
         // Just call run
         if let nav = self.navigationController{

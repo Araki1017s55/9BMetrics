@@ -1355,6 +1355,36 @@ class WheelTrack: NSObject {
         
     }
     
+    static func loadSummaryDistance(_ str : String) -> (Double, Double, String) {
+        
+        let lines = str.components(separatedBy: CharacterSet.newlines)
+        var name = ""
+        for line in lines {
+            let fields = line.components(separatedBy: ",")
+            let codeStr = fields[0]
+            
+            switch codeStr {
+                
+            case "Date":
+                if fields.count >= 6{
+                    name = fields[5]
+                }
+                
+                
+            case "Distance":
+                guard let dt = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {return (0.0, 0.0 , name) }
+                guard let curv = Double(fields[2].replacingOccurrences(of: " ", with: "")) else {return (0.0, 0.0, name) }
+                return (dt, curv, name)
+                
+            default:
+                break
+                
+             }
+        }
+        return (0.0, 0.0, name)
+    }
+
+    
     func loadSummary(_ str : String) {
         
         let lines = str.components(separatedBy: CharacterSet.newlines)
@@ -1432,6 +1462,9 @@ class WheelTrack: NSObject {
             }
         }
     }
+    
+    
+    
     
     func variableLogtoString(_ variable : WheelValue) -> String?{
         
@@ -1549,7 +1582,7 @@ class WheelTrack: NSObject {
     func appendToPackage(_ name: String){
         
         
-        guard let url = packageURL(name) else { _ = createPackage(name) ; return}
+        //guard let url = packageURL(name) else { _ = createPackage(name) ; return}
         
         
         
@@ -1788,6 +1821,27 @@ class WheelTrack: NSObject {
         return segments
     }
     
+    static func loadSummaryDistanceFromURL(_ url : URL) -> (Double, Double, String){
+
+        do{
+            let pack = try FileWrapper(url: url, options: [])
+            
+            if pack.isDirectory{
+                
+                if let fw = pack.fileWrappers!["summary.csv"]{
+                    if let str = String(data: fw.regularFileContents!, encoding: String.Encoding.utf8){
+                        return WheelTrack.loadSummaryDistance(str)
+                    }
+                }
+                
+            }
+        }catch{
+    
+        }
+
+        return (0.0, 0.0, "")
+    }
+
     func loadPackage(_ url : URL) {
         
         clearAll()
@@ -1808,8 +1862,8 @@ class WheelTrack: NSObject {
                             loadSummary(str)
                             
                             // OK now load gpx data
-                            
-                            let distanceGPX = getGPXDistance()
+                           
+                            let distanceGPX = getCurrentValueForVariable(.DistanceGPS)  // Abans ho calculaba
                             let wheelDistance = getCurrentValueForVariable(.Distance)
                             let (_, _, _, anotherDistance) = getCurrentStats(.Speed)
                             

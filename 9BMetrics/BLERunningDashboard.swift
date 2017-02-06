@@ -151,7 +151,8 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                     let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.Duration))
                     self.fTime.text = String(format:"%02d:%02d:%02d", h, m, s)
                     self.fBattery.text = String(format:"%4.0f%%", nb.getCurrentValueForVariable(.Battery))
-                    self.fTemperature.text = String(format:"%0.1fºC", nb.getCurrentValueForVariable(.Temperature))
+                    self.fTemperature.text = UnitManager.sharedInstance.formatTemperature(nb.getCurrentValueForVariable(.Temperature))
+                       
                     
                     
                     

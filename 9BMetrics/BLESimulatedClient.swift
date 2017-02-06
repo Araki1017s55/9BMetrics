@@ -160,12 +160,15 @@ class BLESimulatedClient: NSObject {
     
     func sendToWatch() -> Bool{
         return false    // Just to see what happens with new AppleWatch method
+        
+        /**
         if let session = wcsession {
             if session.isPaired && session.isWatchAppInstalled && session.isReachable{
                 return true
             }
         }
         return false
+    */
     }
     
     private func initNotifications()
@@ -557,7 +560,7 @@ class BLESimulatedClient: NSObject {
         
         return
         
-        self.doSendStateToWatch(self.checkSpeed())
+        //self.doSendStateToWatch(self.checkSpeed())
         
     }
     

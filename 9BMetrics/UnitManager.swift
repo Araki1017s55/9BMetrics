@@ -20,10 +20,12 @@ public class UnitManager {
     var heightConverter = 1.0           // m = 1.0, ft = 3.281
     var shortDistanceConverter = 1.0    // m = 1.0 yd = 1.094
     var longDistanceConverter = 1.0     // km = 1.0 mi = 0.6214
+
     
     var heightUnit = "m"
     var shortDistanceUnit = "m"
     var longDistanceUnit = "km"
+    var temperatureUnit = "ºC"
     
     
     init(){
@@ -43,6 +45,7 @@ public class UnitManager {
             heightUnit = "m"
             shortDistanceUnit = "m"
             longDistanceUnit = "km"
+            temperatureUnit = "ºC"
         }else{
             heightConverter = 3.281
             shortDistanceConverter = 1.094
@@ -50,6 +53,7 @@ public class UnitManager {
             heightUnit = "ft"
             shortDistanceUnit = "yd"
             longDistanceUnit = "mi"
+            temperatureUnit = "ºF"
         }
     }
 
@@ -80,6 +84,17 @@ public class UnitManager {
         return String(format: "%0.2f %@/h", d * 3.6 * longDistanceConverter, longDistanceUnit)
     }
     
+    func formatTemperature(_ d : Double) -> String{
+        
+        var cd = d
+        
+        if !locale.usesMetricSystem {
+            cd = d * 1.8 + 32.0   // Convert to Farenheit
+        }
+        
+        return String(format: "%0.1f %@", cd, temperatureUnit)
+    }
+    
     func convertShortDistance(_ d : Double) -> Double {
         return d * shortDistanceConverter
     }
@@ -96,7 +111,18 @@ public class UnitManager {
     func convertSpeed(_ d : Double ) -> Double {
         return d * 3.6 * longDistanceConverter
     }
-    
+
+    func convertTemperature(_ d : Double) -> Double{
+        
+        var cd = d
+        
+        if !locale.usesMetricSystem {
+            cd = d * 1.80 + 32.0   // Convert to Farenheit
+        }
+        
+        return cd
+    }
+
 }
 
     

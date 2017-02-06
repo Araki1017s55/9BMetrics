@@ -213,7 +213,7 @@ extension GotawayAdapter : BLEWheelAdapterProtocol{
     
     func isComptatible(services : [String : BLEService]) -> Bool{
         
-        if let srv = services["FFE0"], let _ = services["180A"]{
+        if let srv = services["FFE0"], let _ = services["180A"], services["1805"] == nil{
             if let chr = srv.characteristics["FFE1"]  {
                 if chr.flags == "rxn"{
                     return true

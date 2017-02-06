@@ -37,11 +37,13 @@ class WheelSelectorTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return database.database.count 
+        return database.database.count + 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "wheelSelectorCellIdentifier", for: indexPath)
+        
+        if indexPath.row < database.database.count {
         
             let uuid = Array(database.database.keys)[indexPath.row]
             let wheel = database.getWheelFromUUID(uuid: uuid)!
@@ -54,6 +56,15 @@ class WheelSelectorTableViewController: UITableViewController {
             cell.textLabel!.text = wheel.name
             cell.detailTextLabel!.text = wheel.brand + " " + wheel.model
         }
+        }
+        else {
+            if let cel1 = cell as? WheelInfoCell{
+                cel1.fTitle!.text = "New Wheel".localized()
+                cel1.fSubtitle!.text = ""
+                cel1.fDistance!.text = ""
+            }
+            
+        }
          return cell
     }
     
@@ -62,18 +73,35 @@ class WheelSelectorTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
-        let dataArray = Array(database.database.keys)
-        let uuid = dataArray[indexPath.row]
-        let wheel = database.getWheelFromUUID(uuid: uuid)!
         
         let store = UserDefaults.standard
         
+        var wheel : Wheel?
+        
+        if indexPath.row < database.database.count {
+        
+        let dataArray = Array(database.database.keys)
+        let uuid = dataArray[indexPath.row]
+        wheel = database.getWheelFromUUID(uuid: uuid)!
+        
+        
         // Now set data from the wheel
+            
+            if let wh = wheel {
         
         store.set(uuid, forKey:  BLESimulatedClient.kLast9BDeviceAccessedKey)
-        store.set(wheel.password, forKey : kPassword)
-        store.set(wheel.alarmSpeed, forKey : kSpeedAlarm)
-        store.set(wheel.batteryAlarm, forKey : kBatteryAlarm)
+        store.set(wh.password, forKey : kPassword)
+        store.set(wh.alarmSpeed, forKey : kSpeedAlarm)
+        store.set(wh.batteryAlarm, forKey : kBatteryAlarm)
+            }
+        
+        }
+        else {
+            store.removeObject(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey)
+            store.removeObject(forKey : kPassword)
+            store.removeObject(forKey : kSpeedAlarm)
+            store.removeObject(forKey : kBatteryAlarm)
+        }
         
         if let dele = delegate {
             dele.selectedWheel(wheel)
@@ -81,6 +109,7 @@ class WheelSelectorTableViewController: UITableViewController {
             nav.popViewController(animated: true)
             
         }
+
         
         // Just as a test compute data
         

@@ -29,7 +29,7 @@
 
 "Options" = "Options";
 "Close" = "Fermer";
-"Select an option" = "Sélectionner an option";
+"Select an option" = "Choisir an option";
 "Settings" = "Paramètres";
 "Show Local Normative" = "Montrer la normative locale";
 "Debug Server" = "Serveur Debug";
@@ -40,3 +40,10 @@
 "Share Track" = "Partager Trace";
 "Open GPX In" = "Ouvrir GPX avec";
 "Share GPX" = "Partager GPX";
+
+"New Wheel" = "Nouveau Roue";
+
+"Today" = "Aujourd'hui";
+"Yesterday" = "Hier";
+"This Week" = "Cette semaine";
+"This Month" = "Ce mois-ci";
