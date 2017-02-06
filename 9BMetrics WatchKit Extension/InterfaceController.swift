@@ -105,8 +105,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 session.activate()
                 // Fallback on earlier versions
             }
-            addMenuItem(with: WKMenuItemIcon.play, title: "Start", action: #selector(InterfaceController.start))
-            let lockTitle = lockState ? "Unlock" : "Lock"
+            addMenuItem(with: WKMenuItemIcon.play, title: "Start".localized(), action: #selector(InterfaceController.start))
+            let lockTitle = lockState ? "Unlock".localized() : "Lock".localized()
             addMenuItem(with: WKMenuItemIcon.block, title: lockTitle, action: #selector(InterfaceController.lock))
            
         }
@@ -252,14 +252,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             
             if fabs(self.oldDistancia - self.distancia) > 1.0 {
                 
-                if self.distancia < 1000.0  {
-                    let units = "m"
-                    self.distLabel.setText(String(format: "%3.0f %@", self.distancia, units))
-                }
-                else if fabs(self.distancia - self.oldDistancia) >= 10.0 {
-                    let units = "Km"
-                    self.distLabel.setText(String(format: "%5.2f %@", self.distancia/1000.0, units))
-                }
+                self.distLabel.setText(UnitManager.sharedInstance.formatDistance(self.distancia))
                 self.oldDistancia = self.distancia
             
             }
@@ -306,15 +299,16 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 switch self.mainField {
                     
                 case .speedField:
-                    self.speedLabel.setText(String(format: "%5.2f", self.speed))
-                    self.unitsLabel.setText("Km/h")
+                    
+                    
+                    self.speedLabel.setText(String(format: "%5.2f", UnitManager.sharedInstance.convertSpeed(self.speed)))
+                    self.unitsLabel.setText(UnitManager.sharedInstance.longDistanceUnit+"/h")
                     
                 case .batteryField:
-                    
-                    self.batteryButton.setTitle(String(format: "%5.0f K/h", self.speed))
+                    self.batteryButton.setTitle(UnitManager.sharedInstance.formatSpeed(self.speed))
                     
                 case .temperatureField:
-                    self.temperatureButton.setTitle(String(format: "%5.0f K/h", self.speed))
+                    self.temperatureButton.setTitle(UnitManager.sharedInstance.formatSpeed(self.speed))
 
                 
             }
@@ -343,12 +337,12 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 switch self.mainField {
                     
                 case .temperatureField:
-                    self.speedLabel.setText(String(format: "%3.0f", self.temperature))
-                    self.unitsLabel.setText("ºC")
+                    self.speedLabel.setText(String(format: "%3.0f", UnitManager.sharedInstance.convertTemperature(self.temperature)))
+                    self.unitsLabel.setText(UnitManager.sharedInstance.temperatureUnit)
                     
                     
                 default:
-                    self.temperatureButton.setTitle(String(format: "%3.0f%@", self.temperature, "ºC"))
+                    self.temperatureButton.setTitle(UnitManager.sharedInstance.formatTemperature(self.temperature))
                     
                 }
                
@@ -402,16 +396,16 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             if self.recording != self.oldRecording || self.lockState != self.oldLockState{
                 if self.recording {
                     self.clearAllMenuItems()
-                    self.addMenuItem(with: WKMenuItemIcon.play, title: "Stop", action: #selector(InterfaceController.stop))
-                    let lockTitle = self.lockState ? "Unlock" : "Lock"
+                    self.addMenuItem(with: WKMenuItemIcon.play, title: "Stop".localized(), action: #selector(InterfaceController.stop))
+                    let lockTitle = self.lockState ? "Unlock".localized() : "Lock".localized()
 
                     self.addMenuItem(with: WKMenuItemIcon.block, title: lockTitle, action: #selector(InterfaceController.lock))
 
                 }
                 else {
                     self.clearAllMenuItems()
-                    self.addMenuItem(with: WKMenuItemIcon.play, title: "Start", action: #selector(InterfaceController.start))
-                    let lockTitle = self.lockState ? "Unlock" : "Lock"
+                    self.addMenuItem(with: WKMenuItemIcon.play, title: "Start".localized(), action: #selector(InterfaceController.start))
+                    let lockTitle = self.lockState ? "Unlock".localized() : "Lock".localized()
 
                     self.addMenuItem(with: WKMenuItemIcon.block, title: lockTitle, action: #selector(InterfaceController.lock))
                 }

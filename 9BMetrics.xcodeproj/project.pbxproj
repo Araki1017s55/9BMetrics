@@ -92,6 +92,9 @@
 		00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */; };
 		00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB821CD1E5F200EB66FB /* Notifications.swift */; };
 		00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */; };
+		00F28D4E1E48DB4800346A24 /* UnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FD1E40956F004391EE /* UnitManager.swift */; };
+		00F28D4F1E48DCF800346A24 /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BB5A21DA6A6340073B5A0 /* String+Localized.swift */; };
+		00F28D521E48DD3C00346A24 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00F28D541E48DD3C00346A24 /* Localizable.strings */; };
 		00F822321E19814D0080C644 /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822311E19814D0080C644 /* Wheel.swift */; };
 		00F822341E19856A0080C644 /* WheelDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822331E19856A0080C644 /* WheelDatabase.swift */; };
 		00F822371E1AB9700080C644 /* WheelSelectorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */; };
@@ -259,6 +262,10 @@
 		00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WheelTrack.swift; path = 9BMetrics/WheelTrack.swift; sourceTree = "<group>"; };
 		00DCEB821CD1E5F200EB66FB /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Notifications.swift; path = 9BMetrics/Notifications.swift; sourceTree = "<group>"; };
 		00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockView.swift; path = 9BMetrics/TMKClockView.swift; sourceTree = "<group>"; };
+		00F28D531E48DD3C00346A24 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		00F28D551E48DD4200346A24 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
+		00F28D561E48DFAF00346A24 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		00F28D571E48DFCB00346A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		00F822311E19814D0080C644 /* Wheel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wheel.swift; path = 9BMetrics/Wheel.swift; sourceTree = "<group>"; };
 		00F822331E19856A0080C644 /* WheelDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelDatabase.swift; sourceTree = "<group>"; };
 		00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorTableViewController.swift; sourceTree = "<group>"; };
@@ -350,6 +357,7 @@
 				007A573C1C85CE49003A2030 /* ExtensionDelegate.swift */,
 				007A573E1C85CE49003A2030 /* Assets.xcassets */,
 				007A57401C85CE49003A2030 /* Info.plist */,
+				00F28D541E48DD3C00346A24 /* Localizable.strings */,
 			);
 			path = "9BMetrics WatchKit Extension";
 			sourceTree = "<group>";
@@ -681,6 +689,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				007A573F1C85CE49003A2030 /* Assets.xcassets in Resources */,
+				00F28D521E48DD3C00346A24 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -763,6 +772,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00F28D4F1E48DCF800346A24 /* String+Localized.swift in Sources */,
+				00F28D4E1E48DB4800346A24 /* UnitManager.swift in Sources */,
 				007A573D1C85CE49003A2030 /* ExtensionDelegate.swift in Sources */,
 				007A573B1C85CE49003A2030 /* InterfaceController.swift in Sources */,
 			);
@@ -816,6 +827,17 @@
 				00DAD9C71E4120F9007E1762 /* fr */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		00F28D541E48DD3C00346A24 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				00F28D531E48DD3C00346A24 /* Base */,
+				00F28D551E48DD4200346A24 /* ca */,
+				00F28D561E48DFAF00346A24 /* es */,
+				00F28D571E48DFCB00346A24 /* fr */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
