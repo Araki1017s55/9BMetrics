@@ -96,6 +96,8 @@ import MapKit
         appDelegate?.mainController = self
         self.reloadFiles()
         
+        let _ = WheelTrackDatabase.sharedInstance
+        
         
     }
     
@@ -325,7 +327,7 @@ import MapKit
             for item in arch  {
                 
                 if let url = item as? URL , !self.isDirectory(url)  || url.pathExtension == "9bm"{
-                    if url.pathExtension  != "gpx" && url.lastPathComponent != "wheels"{
+                    if url.pathExtension  != "gpx" && url.lastPathComponent != "wheels" && url.lastPathComponent != "tracks"{
                         files.append(url)
                     }
                 }
@@ -561,10 +563,10 @@ import MapKit
         if let url = urls {
             
             let name = FileManager.default.displayName(atPath: url.path)
-            let date = self.creationDate(url)
+            //let date = self.creationDate(url)
             
             
-            let (dt, dis, wname) = WheelTrack.loadSummaryDistanceFromURL(url)
+            let (dt, dis, wname, date, _) = WheelTrack.loadSummaryDistanceFromURL(url)
             
             let dh = floor(dt / 3600.0)
             var dm = ((dt - dh * 3600) / 60.0)
@@ -582,16 +584,16 @@ import MapKit
             
             cell.textLabel!.text = name
             
-            if let dat = date {
+
                 
                 let fmt = DateFormatter()
                 fmt.dateStyle = DateFormatter.Style.short
                 fmt.timeStyle = DateFormatter.Style.short
                 
-                let s = fmt.string(from: dat)
+                let s = fmt.string(from: date)
                 
                 cell.detailTextLabel!.text = s + "  " + sd
-            }
+            
             
             
             var obj : AnyObject?

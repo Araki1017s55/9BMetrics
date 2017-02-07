@@ -498,7 +498,7 @@ class BLESimulatedClient: NSObject {
             
             dict["temps"] = nb.getCurrentValueForVariable(.Duration)
             dict["distancia"]  = nb.getCurrentValueForVariable(.Distance) * dcorrection
-            dict["speed"]  = nb.getCurrentValueForVariable(.Speed) * 3.6 * scorrection
+            dict["speed"]  = nb.getCurrentValueForVariable(.Speed)  * scorrection
             dict["battery"]  =  nb.getCurrentValueForVariable(.Battery)
             dict["remaining"]  =  0.0
             dict["temperature"]  =  nb.getCurrentValueForVariable(.Temperature)

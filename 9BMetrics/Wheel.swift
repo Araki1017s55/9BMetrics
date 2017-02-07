@@ -33,12 +33,12 @@ public class Wheel : NSObject {
     
      // Distance and speed adjustment
     
-    var distance_sum_xy : Double = 0.0    // sum (distanceGPS * distance)
-    var distance_sum_x2  : Double = 0.0   // sum (distanceGPS ^2)
+    var distance_sum_xy : Double = 1.0    // sum (distanceGPS * distance)
+    var distance_sum_x2  : Double = 1.0   // sum (distanceGPS ^2)
     var distance_coef : Double = 1.0      // distance = distanceGPS/coef  o distance real = distance *  coef
     
     
-    var speed_sum_xy : Double = 0.0    // sum (distanceGPS * speed integral)
+    var speed_sum_xy : Double = 1.0    // sum (distanceGPS * speed integral)
     var speed_coef : Double = 1.0      // speed_real = speed * coef
     
     var enableCorrections : Bool = false // If corrections are enabled or not
@@ -160,6 +160,17 @@ public class Wheel : NSObject {
  
     */
     
+    func resetCalibration(){
+        
+        nruns = 0
+        distance_sum_xy = 1.0
+        distance_sum_x2 = 1.0
+        speed_sum_xy = 1.0
+        speed_coef = 1.0
+        distance_coef = 1.0
+        
+    }
+    
     func recomputeAdjust(){
         
         nruns = 0
@@ -194,8 +205,17 @@ public class Wheel : NSObject {
             }
          }
         
-        distance_coef = (distance_sum_x2 / distance_sum_xy)
-        speed_coef = (distance_sum_x2 / speed_sum_xy)
+        if distance_sum_xy != 0.0 {
+            distance_coef = (distance_sum_x2 / distance_sum_xy)
+        } else {
+            distance_coef = 1.0
+        }
+        
+        if speed_sum_xy != 0.0 {
+            speed_coef = (distance_sum_x2 / speed_sum_xy)
+        } else {
+            speed_coef = 1.0
+        }
         
         AppDelegate.debugLog("Runs %d dCoef %f sCoef %f", nruns, distance_coef, speed_coef)
         
@@ -231,9 +251,22 @@ public class Wheel : NSObject {
             }
         }
 
+        if distance_sum_xy != 0.0 && distance_sum_x2 != 0.0{
+            distance_coef = (distance_sum_x2 / distance_sum_xy)
+        } else {
+            distance_sum_xy = 1.0
+            distance_sum_x2 = 1.0
+            distance_coef = 1.0
+        }
         
-        distance_coef = (distance_sum_x2 / distance_sum_xy)
-        speed_coef = (distance_sum_x2 / speed_sum_xy)
+        if speed_sum_xy == 0.0 && distance_sum_x2 != 0.0{
+            speed_coef = (distance_sum_x2 / speed_sum_xy)
+        } else {
+            distance_sum_x2  = 1.0
+            speed_sum_xy = 1.0
+            speed_coef = (distance_sum_x2 / speed_sum_xy)
+
+        }
         
         AppDelegate.debugLog("Runs %d dCoef %f sCoef %f", nruns, distance_coef, speed_coef)
       
@@ -261,15 +294,30 @@ public class Wheel : NSObject {
             let predSpeed = dGPS / speed_coef
             
             
-            if dWheel > 0.0 && fabs(predWheel - dWheel)/dWheel  < 0.1 && fabs(predSpeed - dSpeed)/dWheel < 0.1{
+            if (dWheel > 0.0 && fabs(predWheel - dWheel)/dWheel  < 0.1 && fabs(predSpeed - dSpeed)/dWheel < 0.1) || nruns == 0{
                 nruns += 1
                 distance_sum_xy +=  dGPS * dWheel
                 distance_sum_x2 += pow(dGPS, 2.0)
                 speed_sum_xy += dGPS * dSpeed
             }
             
-            distance_coef = (distance_sum_x2 / distance_sum_xy)
-            speed_coef = (distance_sum_x2 / speed_sum_xy)
+            
+            if distance_sum_xy != 0.0 && distance_sum_x2 != 0.0{
+                distance_coef = (distance_sum_x2 / distance_sum_xy)
+            } else {
+                distance_sum_xy = 1.0
+                distance_sum_x2 = 1.0
+                distance_coef = 1.0
+            }
+            
+            if speed_sum_xy == 0.0 && distance_sum_x2 != 0.0{
+                speed_coef = (distance_sum_x2 / speed_sum_xy)
+            } else {
+                distance_sum_x2  = 1.0
+                speed_sum_xy = 1.0
+                speed_coef = (distance_sum_x2 / speed_sum_xy)
+                
+            }
             
         }
     }

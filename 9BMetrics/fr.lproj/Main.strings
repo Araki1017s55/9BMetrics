@@ -86,6 +86,10 @@
 /* Class = "UILabel"; text = "T  15 ºC"; ObjectID = "FGU-rf-wXW"; */
 "FGU-rf-wXW.text" = "T  15 ºC";
 
+/* Class = "UIButton"; normalTitle = "Reset"; ObjectID = "FRO-on-t3W"; */
+"FRO-on-t3W.normalTitle" = "Reinit.";
+
+
 /* Class = "UILabel"; text = "Temperature"; ObjectID = "FSc-1g-EuR"; */
 "FSc-1g-EuR.text" = "Temperature";
 

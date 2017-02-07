@@ -1355,10 +1355,13 @@ class WheelTrack: NSObject {
         
     }
     
-    static func loadSummaryDistance(_ str : String) -> (Double, Double, String) {
+    static func loadSummaryDistance(_ str : String) -> (Double, Double, String, Date, String) {
         
         let lines = str.components(separatedBy: CharacterSet.newlines)
         var name = ""
+        var adapter = ""
+        var date : Date = Date(timeIntervalSince1970: 0.0)
+        
         for line in lines {
             let fields = line.components(separatedBy: ",")
             let codeStr = fields[0]
@@ -1366,22 +1369,32 @@ class WheelTrack: NSObject {
             switch codeStr {
                 
             case "Date":
+                
+                if let ti = Double(fields[1].replacingOccurrences(of: " ", with: "")) {
+                     date = Date(timeIntervalSince1970: ti)
+                }
+                
                 if fields.count >= 6{
                     name = fields[5]
                 }
                 
                 
+                if fields.count >= 4{
+                    adapter = fields[3]
+                }
+
+                
             case "Distance":
-                guard let dt = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {return (0.0, 0.0 , name) }
-                guard let curv = Double(fields[2].replacingOccurrences(of: " ", with: "")) else {return (0.0, 0.0, name) }
-                return (dt, curv, name)
+                guard let dt = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {return (0.0, 0.0 , name, date, adapter) }
+                guard let distance = Double(fields[2].replacingOccurrences(of: " ", with: "")) else {return (0.0, 0.0, name, date, adapter) }
+                return (dt, distance, name, date, adapter)
                 
             default:
                 break
                 
              }
         }
-        return (0.0, 0.0, name)
+        return (0.0, 0.0, name, date, adapter)
     }
 
     
@@ -1821,7 +1834,7 @@ class WheelTrack: NSObject {
         return segments
     }
     
-    static func loadSummaryDistanceFromURL(_ url : URL) -> (Double, Double, String){
+    static func loadSummaryDistanceFromURL(_ url : URL) -> (Double, Double, String, Date, String){
 
         do{
             let pack = try FileWrapper(url: url, options: [])
@@ -1839,7 +1852,7 @@ class WheelTrack: NSObject {
     
         }
 
-        return (0.0, 0.0, "")
+        return (0.0, 0.0, "", Date(timeIntervalSince1970: 0.0), "")
     }
 
     func loadPackage(_ url : URL) {

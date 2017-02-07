@@ -95,6 +95,9 @@
 		00F28D4E1E48DB4800346A24 /* UnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FD1E40956F004391EE /* UnitManager.swift */; };
 		00F28D4F1E48DCF800346A24 /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BB5A21DA6A6340073B5A0 /* String+Localized.swift */; };
 		00F28D521E48DD3C00346A24 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00F28D541E48DD3C00346A24 /* Localizable.strings */; };
+		00F28D5F1E49C8F000346A24 /* WheelTrackSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D5E1E49C8F000346A24 /* WheelTrackSummary.swift */; };
+		00F28D601E49CAAE00346A24 /* DatabaseObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D581E48E41300346A24 /* DatabaseObjectProtocol.swift */; };
+		00F28D611E49CAAE00346A24 /* SimpleObjectDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D5A1E48E5F400346A24 /* SimpleObjectDatabase.swift */; };
 		00F822321E19814D0080C644 /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822311E19814D0080C644 /* Wheel.swift */; };
 		00F822341E19856A0080C644 /* WheelDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822331E19856A0080C644 /* WheelDatabase.swift */; };
 		00F822371E1AB9700080C644 /* WheelSelectorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */; };
@@ -266,6 +269,9 @@
 		00F28D551E48DD4200346A24 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
 		00F28D561E48DFAF00346A24 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		00F28D571E48DFCB00346A24 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		00F28D581E48E41300346A24 /* DatabaseObjectProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseObjectProtocol.swift; path = 9BMetrics/DatabaseObjectProtocol.swift; sourceTree = "<group>"; };
+		00F28D5A1E48E5F400346A24 /* SimpleObjectDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleObjectDatabase.swift; path = 9BMetrics/SimpleObjectDatabase.swift; sourceTree = "<group>"; };
+		00F28D5E1E49C8F000346A24 /* WheelTrackSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WheelTrackSummary.swift; path = 9BMetrics/WheelTrackSummary.swift; sourceTree = "<group>"; };
 		00F822311E19814D0080C644 /* Wheel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wheel.swift; path = 9BMetrics/Wheel.swift; sourceTree = "<group>"; };
 		00F822331E19856A0080C644 /* WheelDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelDatabase.swift; sourceTree = "<group>"; };
 		00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorTableViewController.swift; sourceTree = "<group>"; };
@@ -501,7 +507,10 @@
 				00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */,
 				00F822311E19814D0080C644 /* Wheel.swift */,
 				00F822331E19856A0080C644 /* WheelDatabase.swift */,
+				00F28D581E48E41300346A24 /* DatabaseObjectProtocol.swift */,
+				00F28D5A1E48E5F400346A24 /* SimpleObjectDatabase.swift */,
 				00DAD9CB1E4368C4007E1762 /* WheelTrackDatabase.swift */,
+				00F28D5E1E49C8F000346A24 /* WheelTrackSummary.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -700,6 +709,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00F28D601E49CAAE00346A24 /* DatabaseObjectProtocol.swift in Sources */,
+				00F28D611E49CAAE00346A24 /* SimpleObjectDatabase.swift in Sources */,
 				00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */,
 				00AB59581CAEE64000277859 /* fileenc.c in Sources */,
 				007A577A1C85CF39003A2030 /* BLENinebotMessage.swift in Sources */,
@@ -728,6 +739,7 @@
 				008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */,
 				00AB593D1CAEE61700277859 /* ioapi.c in Sources */,
 				00AB59591CAEE64000277859 /* hmac.c in Sources */,
+				00F28D5F1E49C8F000346A24 /* WheelTrackSummary.swift in Sources */,
 				0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */,
 				007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */,
 				0079E98B1D927A0E004A09BB /* KingSongAdapter.swift in Sources */,

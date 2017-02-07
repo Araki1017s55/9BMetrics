@@ -349,5 +349,18 @@ class SettingsViewController: UIViewController {
     
     }
     
+    @IBAction func resetCalibration(){
+        
+        if let uuid = uuidLabel.text , uuid.characters.count > 10{
+            
+            if let wheel = WheelDatabase.sharedInstance.getWheelFromUUID(uuid: uuid){
+                
+                wheel.resetCalibration()
+                WheelDatabase.sharedInstance.setWheel(wheel: wheel)
+                loadData()
+            }
+        }
+        
+    }
     
 }

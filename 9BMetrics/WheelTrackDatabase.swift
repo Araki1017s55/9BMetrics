@@ -10,70 +10,131 @@ import Foundation
 import Foundation
 import UIKit
 
-public class WheelTrackDatabase {
+class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
     
     static let sharedInstance = WheelTrackDatabase()
 
-    var database : [String : Wheel] = [:]
-    
-    var filename = "trackDatabase"
-    var databaseUrl : URL?
 
     
-    init(){
+    override init(){
         
         // Load archive
-        
-        
-    }
-    
-    func read(){
-        let fm = FileManager.default
-        if let url = buildUrl(filename) {
-            if fm.fileExists(atPath: url.path){
-                if let dat = NSKeyedUnarchiver.unarchiveObject(withFile:url.path) as? [String : Wheel]{
-                    database = dat
-                }
-            }
-        }
-    }
-    func save(){
-        if let url = WheelDatabase.buildUrl(filename) {
-            
-            let path = url.path
-            let success = NSKeyedArchiver.archiveRootObject(database, toFile: path)
-            
-            if !success {
-                AppDelegate.debugLog("Error al gravar diccionari")
-            }
-        }
-    }
-    
-    func buildUrl(_ filename : String) -> URL?{
-        
         if let dele =  UIApplication.shared.delegate as? AppDelegate{
             if let docs = dele.localApplicationDocumentsDirectory(){
-                let url = docs.appendingPathComponent(filename)
-                return url
+                let url = docs.appendingPathComponent("tracks")
+                super.init(url: url)
+                
+                // Now it has been read. If count == 0 -> Rebuild
+                
+                if count() == 0{
+                    rebuild(docs)
+                }
+            } else {
+                super.init()
+            }
+        } else {
+            super.init()
+        }
+        
+    }
+    
+    func rebuild(){
+        if let dele =  UIApplication.shared.delegate as? AppDelegate{
+            if let docs = dele.localApplicationDocumentsDirectory(){
+                    rebuild(docs)
+
             }
         }
-        return nil
         
     }
    
-    func buildArchive(){
+    func rebuild(_ dir : URL){
         
+        removeAll()
+        
+        var files = [URL]()
+        
+        
+            
+        let mgr = FileManager()
+            
+        let enumerator = mgr.enumerator(at: dir, includingPropertiesForKeys: nil, options: [FileManager.DirectoryEnumerationOptions.skipsHiddenFiles, FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants]) { (URL, Error) -> Bool in
+                
+            let err = Error as NSError
+                AppDelegate.debugLog("Error enumerating files %@", err.localizedDescription)
+                return true
+        }
+            
+        if let arch = enumerator{
+                
+            for item in arch  {
+                    
+                if let url = item as? URL , !self.isDirectory(url)  || url.pathExtension == "9bm"{
+                    if url.pathExtension  != "gpx" && url.lastPathComponent != "wheels" && url.lastPathComponent != "tracks"{
+                        files.append(url)
+                    }
+                }
+                    
+            }
+        }
+            
+            // OK ara Obtenim les dades de cada document  
+        
+        for url in files {
+            
+            let (dt, dist, nom, dat, adp) = WheelTrack.loadSummaryDistanceFromURL(url)
+            
+            let ts = WheelTrackSummary()
+            ts.name = nom
+            ts.duration = dt
+            ts.distance = dist
+            ts.date = dat
+            ts.url = url
+            ts.adapter = adp
+            
+            addObjectWithoutSaving(ts)
+        }
+        
+        save()
         
     }
     
-    
-    func addToArchive(_ track : WheelTrack){
+    /// Checks if a file is a directory
+    ///
+    /// - Parameter url : The url of the file
+    /// - Returns : true or false depending if the url corresponds ot not to a directory
+    func isDirectory(_ url : URL) -> Bool{
+        
+        var isDirectory: ObjCBool = ObjCBool(false)
+        let path = url.path
         
         
-        
-        
+        if FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) {
+            return isDirectory.boolValue
+            
+        }
+        return false
     }
     
+    /// Returns creation date of a file
+    ///
+    /// - parameter url:  url of the file
+    /// - returns: The creation date of the file
+    func creationDate(_ url : URL) -> Date?{
+        var rsrc : AnyObject? = nil
+        
+        do{
+            try (url as NSURL).getResourceValue(&rsrc, forKey: URLResourceKey.creationDateKey)
+        }
+        catch{
+            AppDelegate.debugLog("Error reading creation date of file %", url as CVarArg)
+        }
+        
+        let date = rsrc as? Date
+        
+        return date
+        
+    }
     
 
 }
