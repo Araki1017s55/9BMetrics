@@ -46,6 +46,9 @@ class SettingsViewController: UIViewController {
     
     @IBOutlet weak var fSpeedUnitsLabel: UILabel!
      
+    @IBOutlet weak var fProgressCalibration: UIProgressView!
+    
+    @IBOutlet weak var fRecalculateButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -337,15 +340,37 @@ class SettingsViewController: UIViewController {
     
     @IBAction func recalculateCalibration(){
         
-        if let uuid = uuidLabel.text , uuid.characters.count > 10{
+        fRecalculateButton.isHidden = true
         
-        if let wheel = WheelDatabase.sharedInstance.getWheelFromUUID(uuid: uuid){
+        fProgressCalibration.setProgress(0.0, animated: false)
+        fProgressCalibration.isHidden = false
+        
+        DispatchQueue.global().async( execute: {
             
-                wheel.recomputeAdjust()
-                WheelDatabase.sharedInstance.setWheel(wheel: wheel)
-                loadData()
+            if let uuid = self.uuidLabel.text , uuid.characters.count > 10{
+                
+                if let wheel = WheelDatabase.sharedInstance.getWheelFromUUID(uuid: uuid){
+                    
+                    wheel.recomputeAdjust(progressItem: self.fProgressCalibration)
+                    WheelDatabase.sharedInstance.setWheel(wheel: wheel)
+                }
             }
-        }
+            
+            DispatchQueue.main.sync(execute: {
+                self.fProgressCalibration.isHidden = true
+                self.fRecalculateButton.isHidden = false
+                self.loadData()
+
+            })
+            
+        })
+   
+        
+        
+        
+        
+        
+        
     
     }
     

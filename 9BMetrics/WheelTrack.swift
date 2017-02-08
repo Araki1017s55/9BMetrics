@@ -1610,7 +1610,24 @@ class WheelTrack: NSObject {
         
         guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
         
-        return createPackage(name, inDirectory: docDir, snapshot: false)
+        if let url = createPackage(name, inDirectory: docDir, snapshot: false){
+        
+        
+            let wts = WheelTrackSummary()
+        
+            wts.adapter = getAdapter()
+            wts.name = getName()
+            wts.date    = firstDate!
+            wts.distance = self.getCurrentValueForVariable(.Distance)
+            wts.duration = self.getCurrentValueForVariable(.Duration)
+            wts.pathname = url.lastPathComponent
+        
+            WheelTrackDatabase.sharedInstance.addObject(wts)
+        
+            return url
+        }
+        return nil
+        
     }
     
     

@@ -13,15 +13,14 @@ import UIKit
 class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
     
     static let sharedInstance = WheelTrackDatabase()
-
-
     
     override init(){
         
         // Load archive
         if let dele =  UIApplication.shared.delegate as? AppDelegate{
-            if let docs = dele.localApplicationDocumentsDirectory(){
+            if let docs = dele.applicationDocumentsDirectory(){
                 let url = docs.appendingPathComponent("tracks")
+
                 super.init(url: url)
                 
                 // Now it has been read. If count == 0 -> Rebuild
@@ -40,7 +39,7 @@ class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
     
     func rebuild(){
         if let dele =  UIApplication.shared.delegate as? AppDelegate{
-            if let docs = dele.localApplicationDocumentsDirectory(){
+            if let docs = dele.applicationDocumentsDirectory(){
                     rebuild(docs)
 
             }
@@ -89,7 +88,7 @@ class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
             ts.duration = dt
             ts.distance = dist
             ts.date = dat
-            ts.url = url
+            ts.pathname = url.lastPathComponent
             ts.adapter = adp
             
             addObjectWithoutSaving(ts)

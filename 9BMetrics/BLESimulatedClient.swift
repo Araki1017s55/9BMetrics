@@ -583,7 +583,7 @@ class BLESimulatedClient: NSObject {
                     
                 }
             }
-        });
+        })
         
     }
     

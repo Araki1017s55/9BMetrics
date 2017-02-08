@@ -239,7 +239,7 @@
                                 <rect key="frame" x="16" y="72" width="343" height="534"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" accessoryType="detailButton" hidesAccessoryWhenEditing="NO" indentationWidth="10" reuseIdentifier="fileCellIdentifier" textLabel="XkV-Sf-b2C" detailTextLabel="tx7-vG-vVM" imageView="Yco-tr-0lD" style="IBUITableViewCellStyleSubtitle" id="tSG-To-uvX">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailButton" hidesAccessoryWhenEditing="NO" indentationWidth="10" reuseIdentifier="fileCellIdentifier" textLabel="XkV-Sf-b2C" detailTextLabel="tx7-vG-vVM" imageView="Yco-tr-0lD" style="IBUITableViewCellStyleSubtitle" id="tSG-To-uvX">
                                         <rect key="frame" x="0.0" y="56" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tSG-To-uvX" id="YRC-e8-ADN">
@@ -549,6 +549,9 @@
                                     <action selector="resetCalibration" destination="Etv-RF-9vT" eventType="primaryActionTriggered" id="uSv-tc-8OZ"/>
                                 </connections>
                             </button>
+                            <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="YyQ-G3-LZk">
+                                <rect key="frame" x="90" y="502" width="220" height="2"/>
+                            </progressView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -587,12 +590,14 @@
                             <constraint firstItem="7kR-P2-Gga" firstAttribute="leading" secondItem="c0Q-YZ-z5i" secondAttribute="trailing" id="Ufa-uS-VjB"/>
                             <constraint firstItem="x14-hg-EdD" firstAttribute="leading" secondItem="c0Q-YZ-z5i" secondAttribute="leading" id="VSK-mL-qx2"/>
                             <constraint firstItem="iir-Tf-dIV" firstAttribute="leading" secondItem="nq0-1w-0BR" secondAttribute="leadingMargin" id="W3u-JL-jCB"/>
+                            <constraint firstItem="YyQ-G3-LZk" firstAttribute="leading" secondItem="nq0-1w-0BR" secondAttribute="leadingMargin" constant="70" id="WD6-5O-k2C"/>
                             <constraint firstItem="jaF-NA-fk6" firstAttribute="centerY" secondItem="8QC-7N-hVX" secondAttribute="centerY" id="Wb3-nn-433"/>
                             <constraint firstItem="iir-Tf-dIV" firstAttribute="top" secondItem="7kR-P2-Gga" secondAttribute="bottom" constant="8" id="XAg-tG-Muc"/>
                             <constraint firstItem="xMi-a0-Ii5" firstAttribute="top" secondItem="FSj-mD-1UC" secondAttribute="bottom" constant="8" id="XaE-kx-IBA"/>
                             <constraint firstItem="khY-dq-Z5J" firstAttribute="top" secondItem="VyZ-fh-kb7" secondAttribute="bottom" constant="8" id="YAs-3N-OmV"/>
                             <constraint firstItem="xMi-a0-Ii5" firstAttribute="trailing" secondItem="qoX-yv-nLs" secondAttribute="trailing" id="YH3-jI-7Iw"/>
                             <constraint firstItem="x14-hg-EdD" firstAttribute="top" secondItem="iir-Tf-dIV" secondAttribute="bottom" constant="8" id="aQu-I0-APh"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="YyQ-G3-LZk" secondAttribute="trailing" constant="70" id="b7U-yv-DyL"/>
                             <constraint firstItem="d5f-nV-ZnB" firstAttribute="top" secondItem="maw-iH-mCx" secondAttribute="bottom" constant="20" id="bV6-JY-67p"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Sub-OS-QnG" secondAttribute="trailing" id="c9M-mS-G8Y"/>
                             <constraint firstItem="maw-iH-mCx" firstAttribute="leading" secondItem="c0Q-YZ-z5i" secondAttribute="leading" id="dTD-pf-F5w"/>
@@ -609,6 +614,7 @@
                             <constraint firstItem="8QC-7N-hVX" firstAttribute="top" secondItem="Do6-zB-1Nk" secondAttribute="bottom" constant="22" id="pmI-0k-7wB"/>
                             <constraint firstItem="oqj-tX-e98" firstAttribute="centerY" secondItem="c0Q-YZ-z5i" secondAttribute="centerY" id="qCw-Ux-yzn"/>
                             <constraint firstItem="QJy-kz-XOf" firstAttribute="trailing" secondItem="jaF-NA-fk6" secondAttribute="trailing" constant="30" id="qDX-nG-3Uo"/>
+                            <constraint firstItem="YyQ-G3-LZk" firstAttribute="centerY" secondItem="FSj-mD-1UC" secondAttribute="centerY" id="rix-qN-96a"/>
                             <constraint firstItem="dhC-zg-a4o" firstAttribute="leading" secondItem="5M3-AC-a60" secondAttribute="leading" id="tyq-Aa-2Ul"/>
                             <constraint firstItem="FRO-on-t3W" firstAttribute="centerX" secondItem="nq0-1w-0BR" secondAttribute="centerX" id="u1p-79-pMN"/>
                             <constraint firstItem="qoX-yv-nLs" firstAttribute="trailing" secondItem="nq0-1w-0BR" secondAttribute="trailingMargin" id="uYg-LS-Eqg"/>
@@ -637,6 +643,8 @@
                         <outlet property="fNotifyBattery" destination="Sub-OS-QnG" id="V0i-9W-w4s"/>
                         <outlet property="fNotifySpeed" destination="wLc-pg-0JN" id="htc-7A-2U9"/>
                         <outlet property="fPassword" destination="QJy-kz-XOf" id="5ky-rV-crH"/>
+                        <outlet property="fProgressCalibration" destination="YyQ-G3-LZk" id="qZg-Uf-nXd"/>
+                        <outlet property="fRecalculateButton" destination="FSj-mD-1UC" id="erv-lE-uIS"/>
                         <outlet property="fSpeedAlarm" destination="jaF-NA-fk6" id="Xsj-9D-ElP"/>
                         <outlet property="fSpeedCoef" destination="xIp-No-ULF" id="mcn-1U-vQe"/>
                         <outlet property="fSpeedUnitsLabel" destination="5M3-AC-a60" id="aRP-Iv-vte"/>
@@ -648,7 +656,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w63-z2-b43" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="606" y="695"/>
+            <point key="canvasLocation" x="604.79999999999995" y="694.45277361319347"/>
         </scene>
         <!--My Wheels-->
         <scene sceneID="wyV-4h-8tk">
@@ -663,7 +671,7 @@
                                 <rect key="frame" x="0.0" y="28" width="400" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4MC-og-7uY" id="PA7-ud-ATU">
-                                    <rect key="frame" x="0.0" y="0.0" width="400" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="400" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bzy-Gr-LIs">
@@ -807,7 +815,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="383" height="516"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="logEntryCellIdentifier" textLabel="dTg-a9-KQA" detailTextLabel="F6X-W5-tVa" imageView="6RL-jU-L7p" style="IBUITableViewCellStyleSubtitle" id="CmX-Qt-MyP">
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="logEntryCellIdentifier" textLabel="dTg-a9-KQA" detailTextLabel="F6X-W5-tVa" imageView="6RL-jU-L7p" style="IBUITableViewCellStyleSubtitle" id="CmX-Qt-MyP">
                                                         <rect key="frame" x="0.0" y="28" width="383" height="44"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CmX-Qt-MyP" id="flC-2b-eTW">
@@ -1602,18 +1610,18 @@
                                         <rect key="frame" x="0.0" y="28" width="268" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qu5-om-Vjh" id="xki-Rb-w8T">
-                                            <rect key="frame" x="0.0" y="0.0" width="268" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="268" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8s9-GI-B46">
-                                                    <rect key="frame" x="15" y="5" width="32" height="20"/>
+                                                    <rect key="frame" x="15" y="6" width="31.5" height="19.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PBJ-aK-z75">
-                                                    <rect key="frame" x="15" y="25" width="41" height="14"/>
+                                                    <rect key="frame" x="15" y="25.5" width="40.5" height="13.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>

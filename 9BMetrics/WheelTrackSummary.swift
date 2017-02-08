@@ -19,18 +19,20 @@ class WheelTrackSummary : NSObject, DatabaseObjectProtocol {
     var date : Date = Date()
     var distance : Double = 0.0
     var duration : Double = 0.0
-    var url : URL?
+    var pathname : String = ""
     
     
     func initWithCoder(_ decoder : NSCoder){
         
+        
         self.name = decoder.decodeObject(forKey: "name") as? String ?? ""
         self.adapter = decoder.decodeObject(forKey: "adapter") as? String ?? ""
-        self.url = decoder.decodeObject(forKey: "url") as? URL ?? nil
         self.date = Date(timeIntervalSince1970: decoder.decodeDouble(forKey: "date"))
         self.distance = decoder.decodeDouble(forKey: "distance")
         self.duration = decoder.decodeDouble(forKey: "duration")
-
+        self.pathname = decoder.decodeObject(forKey: "pathname") as? String ?? ""
+        
+  
     }
     
     func encodeWithCoder(_ encoder: NSCoder){
@@ -40,18 +42,22 @@ class WheelTrackSummary : NSObject, DatabaseObjectProtocol {
         encoder.encode(date.timeIntervalSince1970, forKey:"date")
         encoder.encode(distance, forKey:"distance")
         encoder.encode(duration, forKey:"duration")
-        encoder.encode(url, forKey:"url")
+        encoder.encode(pathname, forKey:"pathname")
         
         
     }
     
     func getKey() -> KeyType {
+        return pathname
+    }
+    
+    func getURL() -> URL?{
+    
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate else {return nil}
         
-        if let ur = url {
-            return ur.absoluteString
-        } else {
-            return "*"
-        }
+        guard let docsURL = delegate.applicationDocumentsDirectory() else {return nil}
+        
+        return docsURL.appendingPathComponent(pathname)
     }
    
     

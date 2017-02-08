@@ -28,7 +28,7 @@ import MapKit
  Main Class shows a list of runs ordered by date.
  Allows to share/export tracks, visualize data and access general settinfs
  */
- class ViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
+class ViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
     
     enum stateValues {
         case waiting
@@ -42,13 +42,13 @@ import MapKit
         
         var section : Int
         var description : String
-        var files : [URL]
+        var files : [String]        // Era URL. Ara modificat per que tingui unucament el pathname
     }
     
     let kTestMode = "enabled_test"
     let kDashboardMode = "dashboard_mode"
     let kBlockSleepMode = "block_sleep"
-   
+    
     
     // weak var ninebot : BLENinebot?
     var server : BLESimulatedServer?
@@ -66,6 +66,8 @@ import MapKit
     var actualDir : URL?
     var currentFile : URL?
     
+    var db = WheelTrackDatabase.sharedInstance
+    
     @IBOutlet weak var tableView : UITableView!
     
     var docc : UIDocumentInteractionController?
@@ -74,7 +76,7 @@ import MapKit
         super.viewDidLoad()
         
         if #available(iOS 10.0, *) {  // Send User notifications for speed, and battery
-                            
+            
             let center = UNUserNotificationCenter.current()
             center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
                 // Enable or disable features based on authorization
@@ -94,9 +96,10 @@ import MapKit
         // Lookup files
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         appDelegate?.mainController = self
-        self.reloadFiles()
         
-        let _ = WheelTrackDatabase.sharedInstance
+        //db.rebuild()
+        
+        self.reloadFiles()
         
         
     }
@@ -238,34 +241,51 @@ import MapKit
         
     }
     
+    /// Rebuilds the index of tracks and stores it into the tracks file
+    ///     Després actualitza la taula
+    func rebuildIndex(){
+        
+        DispatchQueue.global().async( execute: {
+            
+            WheelTrackDatabase.sharedInstance.rebuild()
+            self.sortFilesIntoSections()
+            
+            DispatchQueue.main.sync(execute: {
+                self.tableView.reloadData()
+            })
+            
+        })
+        
+    }
+    
     /// Processes an array of files and sort them into sections in self.sections
     /// according its *creation date*
     ///
     /// - Parameter files: The array of files
     ///
-    func sortFilesIntoSections(_ files:[URL]){
+    func sortFilesIntoSections(){
         
         
         self.sections.removeAll()   // Clear all section
         
-        for f in files {
+        for (_, t) in WheelTrackDatabase.sharedInstance.database{
             
-            let date = self.creationDate(f)
+            let date = t.date
             
-            if let d = date{
+            
+            
+            let s = self.dateToSection(date)
+            
+            
+            while self.sections.count - 1 < s{
                 
-                let s = self.dateToSection(d)
+                let newSection = self.sections.count
+                self.sections.append(fileSection(section: newSection, description: self.sectionLabel(newSection), files: [String]()))
                 
-                
-                while self.sections.count - 1 < s{
-                    
-                    let newSection = self.sections.count
-                    self.sections.append(fileSection(section: newSection, description: self.sectionLabel(newSection), files: [URL]()))
-                    
-                }
-                
-                self.sections[s].files.append(f)
             }
+            
+            self.sections[s].files.append(t.pathname)
+            
         }
         
         var i = 0
@@ -278,10 +298,70 @@ import MapKit
                 i += 1
             }
         }
+        
+        for i in 0..<self.sections.count {
+            
+            self.sections[i].files.sort(by: {
+                
+                if let t0 = WheelTrackDatabase.sharedInstance.getObject(forKey: $0), let t1 = WheelTrackDatabase.sharedInstance.getObject(forKey: $1) {
+                    
+                    return t0.date > t1.date
+                } else {
+                    return false
+                }
+                
+            })
+        }
+        
+        
+        
     }
     
+    /// Processes an array of files and sort them into sections in self.sections
+    /// according its *creation date*
+    ///
+    /// - Parameter files: The array of files
+    ///
+    //    func sortFilesIntoSectionsOld(_ files:[URL]){
+    //
+    //
+    //        self.sections.removeAll()   // Clear all section
+    //
+    //        for f in files {
+    //
+    //            let date = self.creationDate(f)
+    //
+    //            if let d = date{
+    //
+    //                let s = self.dateToSection(d)
+    //
+    //
+    //                while self.sections.count - 1 < s{
+    //
+    //                    let newSection = self.sections.count
+    //                    self.sections.append(fileSection(section: newSection, description: self.sectionLabel(newSection), files: [URL]()))
+    //
+    //                }
+    //
+    //                self.sections[s].files.append(f)
+    //            }
+    //        }
+    //
+    //        var i = 0
+    //
+    //        while i < self.sections.count {
+    //
+    //            if self.sections[i].files.count == 0{
+    //                self.sections.remove(at: i)
+    //            }else{
+    //                i += 1
+    //            }
+    //        }
+    //    }
+    
+    
     /// Checks if a file is a directory
-    /// 
+    ///
     /// - Parameter url : The url of the file
     /// - Returns : true or false depending if the url corresponds ot not to a directory
     func isDirectory(_ url : URL) -> Bool{
@@ -289,7 +369,7 @@ import MapKit
         var isDirectory: ObjCBool = ObjCBool(false)
         let path = url.path
         
-  
+        
         if FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) {
             return isDirectory.boolValue
             
@@ -307,51 +387,7 @@ import MapKit
         
         self.actualDir = dir
         
-        files.removeAll()
-        
-        let mgr = FileManager()
-        
-        let enumerator = mgr.enumerator(at: dir, includingPropertiesForKeys: nil, options: [FileManager.DirectoryEnumerationOptions.skipsHiddenFiles, FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants]) { (URL, Error) -> Bool in
-            
-            let err = Error as NSError
-            AppDelegate.debugLog("Error enumerating files %@", err.localizedDescription)
-            return true
-        }
-        
-        
-        
-        
-        
-        if let arch = enumerator{
-            
-            for item in arch  {
-                
-                if let url = item as? URL , !self.isDirectory(url)  || url.pathExtension == "9bm"{
-                    if url.pathExtension  != "gpx" && url.lastPathComponent != "wheels" && url.lastPathComponent != "tracks"{
-                        files.append(url)
-                    }
-                }
-                
-            }
-        }
-        
-        // OK ara hauriem de ordenar els documents
-        
-        files.sort { (url1: URL, url2: URL) -> Bool in
-            
-            let date1 = self.creationDate(url1)
-            let date2 = self.creationDate(url2)
-            
-            if let dat1 = date1, let dat2 = date2 {
-                return dat1.timeIntervalSince1970 > dat2.timeIntervalSince1970
-            }
-            else{
-                return true
-            }
-            
-        }
-        
-        self.sortFilesIntoSections(self.files)
+        self.sortFilesIntoSections()
         
         
     }
@@ -359,13 +395,13 @@ import MapKit
     /// Returns the url which correspond to an indexpath int the table
     /// - Parameter indexPath : The indexPath (section, row)
     /// - Returns : The URL from the sections table corresponding to the indexPath
-    func urlForIndexPath(_ indexPath: IndexPath) -> URL?{
+    func pathnameForIndexPath(_ indexPath: IndexPath) -> String?{
         
         if (indexPath as NSIndexPath).section < self.sections.count {
             let section = self.sections[(indexPath as NSIndexPath).section]
             if (indexPath as NSIndexPath).row < section.files.count{
-                let url = section.files[(indexPath as NSIndexPath).row]
-                return url
+                let pathname = section.files[(indexPath as NSIndexPath).row]
+                return pathname
             }
         }
         return nil
@@ -415,12 +451,12 @@ import MapKit
             })
         }
     }
-
+    
     
     /**
-        opens the running dashboard according preferences
-        - Parameter src : Source of command
-    */
+     opens the running dashboard according preferences
+     - Parameter src : Source of command
+     */
     @IBAction func startRun(_ src : AnyObject){
         
         let db = WheelDatabase.sharedInstance
@@ -430,7 +466,7 @@ import MapKit
             performSegue(withIdentifier: "selectWheelIdentifier", sender: self)
             
         } else {
-        
+            
             openRunningDashboard(self)
         }
     }
@@ -447,12 +483,12 @@ import MapKit
     }
     
     
-
+    
     /**
-        Builds and opens the general settings dialog
- 
-        - Parameter src : The origin of the event
-    */
+     Builds and opens the general settings dialog
+     
+     - Parameter src : The origin of the event
+     */
     @IBAction func openSettings(_ src : AnyObject){
         
         let but = src as? UIButton
@@ -477,6 +513,14 @@ import MapKit
         
         alert.addAction(action)
         
+        
+        action = UIAlertAction(title: "Rebuild Index".localized(comment: "Rebuild Index menu item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
+            self.rebuildIndex()
+        })
+        
+        alert.addAction(action)
+        
+        
         if testMode {
             
             action = UIAlertAction(title: "Show Local Normative".localized(comment: "Show local normative and uses"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
@@ -485,7 +529,7 @@ import MapKit
             })
             
             alert.addAction(action)
-
+            
             
             action = UIAlertAction(title: "Debug Server".localized(comment: "Debug server item"), style: UIAlertActionStyle.default, handler: { (action : UIAlertAction) -> Void in
                 
@@ -558,33 +602,41 @@ import MapKit
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "fileCellIdentifier", for: indexPath)
         
-        let urls = urlForIndexPath(indexPath)
+        let pathnames = pathnameForIndexPath(indexPath)
         
-        if let url = urls {
+        if let path = pathnames, let url = WheelTrackDatabase.sharedInstance.getObject(forKey: path)?.getURL(){
             
             let name = FileManager.default.displayName(atPath: url.path)
             //let date = self.creationDate(url)
             
             
-            let (dt, dis, wname, date, _) = WheelTrack.loadSummaryDistanceFromURL(url)
-            
-            let dh = floor(dt / 3600.0)
-            var dm = ((dt - dh * 3600) / 60.0)
-            dm.round()
-            
-            //let ds = Int(dt) % 60
-            
-            let sd = String(format: "%02.0f:%02.0f %@ %@",  dh, dm, UnitManager.sharedInstance.formatDistance(dis), wname)
-            
-            
- 
-            //let sd = ""
-            
-            // Try to get summary data
-            
-            cell.textLabel!.text = name
-            
-
+            if let wts = WheelTrackDatabase.sharedInstance.getObject(forKey: path) {
+                
+                let dt = wts.duration
+                let dis = wts.distance
+                let wname = wts.name
+                let date = wts.date
+                let adapter = wts.adapter
+                
+                //let (dt, dis, wname, date, _) = WheelTrack.loadSummaryDistanceFromURL(url)
+                
+                let dh = floor(dt / 3600.0)
+                var dm = ((dt - dh * 3600) / 60.0)
+                dm.round()
+                
+                //let ds = Int(dt) % 60
+                
+                let sd = String(format: "%02.0f:%02.0f %@ %@",  dh, dm, UnitManager.sharedInstance.formatDistance(dis), wname)
+                
+                
+                
+                //let sd = ""
+                
+                // Try to get summary data
+                
+                cell.textLabel!.text = name
+                
+                
                 
                 let fmt = DateFormatter()
                 fmt.dateStyle = DateFormatter.Style.short
@@ -593,29 +645,30 @@ import MapKit
                 let s = fmt.string(from: date)
                 
                 cell.detailTextLabel!.text = s + "  " + sd
-            
-            
-            
-            var obj : AnyObject?
-            var icon : UIImage?
-            
-            do{
-                try (url as NSURL).getPromisedItemResourceValue(&obj, forKey: URLResourceKey.thumbnailDictionaryKey)
                 
-                if let dict = obj as? NSDictionary {
+                
+                
+                var obj : AnyObject?
+                var icon : UIImage?
+                
+                do{
+                    try (url as NSURL).getPromisedItemResourceValue(&obj, forKey: URLResourceKey.thumbnailDictionaryKey)
                     
-                    icon = dict[URLThumbnailDictionaryItem.NSThumbnail1024x1024SizeKey] as? UIImage
+                    if let dict = obj as? NSDictionary {
+                        
+                        icon = dict[URLThumbnailDictionaryItem.NSThumbnail1024x1024SizeKey] as? UIImage
+                    }
+                    else {
+                        icon = UIImage(named:"9b")
+                    }
                 }
-                else {
-                    icon = UIImage(named:"9b")
+                catch {
+                    
                 }
-            }
-            catch {
-                
-            }
-            if let img = icon {
-                if let imv = cell.imageView {
-                    imv.image = img
+                if let img = icon {
+                    if let imv = cell.imageView {
+                        imv.image = img
+                    }
                 }
             }
         }
@@ -638,21 +691,25 @@ import MapKit
         
         if editingStyle == .delete {
             
-            let url = self.sections[(indexPath as NSIndexPath).section].files[(indexPath as NSIndexPath).row]
+            let pathname = self.sections[(indexPath as NSIndexPath).section].files[(indexPath as NSIndexPath).row]
             
             let mgr = FileManager.default
             do {
-                try mgr.removeItem(at: url)
-                
-                self.sections[(indexPath as NSIndexPath).section].files.remove(at: (indexPath as NSIndexPath).row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-                
-                if self.sections[(indexPath as NSIndexPath).section].files.count == 0{
-                    self.sections.remove(at: (indexPath as NSIndexPath).section)
-                    tableView.deleteSections(IndexSet(integer: (indexPath as NSIndexPath).section), with: UITableViewRowAnimation.automatic)
+                if let tr = WheelTrackDatabase.sharedInstance.getObject(forKey: pathname) {
+                    if let url = tr.getURL(){
+                        try mgr.removeItem(at: url)
+                        
+                        self.sections[(indexPath as NSIndexPath).section].files.remove(at: (indexPath as NSIndexPath).row)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
+                        
+                        if self.sections[(indexPath as NSIndexPath).section].files.count == 0{
+                            self.sections.remove(at: (indexPath as NSIndexPath).section)
+                            tableView.deleteSections(IndexSet(integer: (indexPath as NSIndexPath).section), with: UITableViewRowAnimation.automatic)
+                        }
+                    }
                 }
             }catch{
-                AppDelegate.debugLog("Error removing %@", url as CVarArg)
+                AppDelegate.debugLog("Error removing %@", pathname as CVarArg)
             }
             // Delete the row from the data source
             
@@ -666,9 +723,9 @@ import MapKit
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         
-        let urls = urlForIndexPath(indexPath)
+        let pathnames = pathnameForIndexPath(indexPath)
         
-        if let url = urls {
+        if let path = pathnames, let url = WheelTrackDatabase.sharedInstance.getObject(forKey: path)?.getURL() {
             
             self.currentFile = url
             
@@ -692,12 +749,12 @@ import MapKit
     }
     
     /**
-        Loads the contents of an url in the datos variable in the delegate
-        calling loadPackage() or loadTextFile() depending on the extension of the file (.9bm or .txt)
-    
-        - Parameter url : The url of the file
- 
-    */
+     Loads the contents of an url in the datos variable in the delegate
+     calling loadPackage() or loadTextFile() depending on the extension of the file (.9bm or .txt)
+     
+     - Parameter url : The url of the file
+     
+     */
     
     func openUrl(_ url : URL){
         self.currentFile = url
@@ -719,10 +776,13 @@ import MapKit
         
         self.tableView.deselectRow(at: indexPath, animated: true)
         
-        let urls = urlForIndexPath(indexPath)
-        
-        if let url = urls {
-            self.openUrl(url)
+        if let path = pathnameForIndexPath(indexPath){
+            
+            let urls = WheelTrackDatabase.sharedInstance.getObject(forKey: path)?.getURL()
+            
+            if let url = urls {
+                self.openUrl(url)
+            }
         }
     }
     
@@ -752,7 +812,7 @@ import MapKit
                     dash.client = dele.client
                     
                     let store = UserDefaults.standard           // Get speedAlarm
-            
+                    
                     let sa = store.double(forKey: kSpeedAlarm) * 3.6    // Speed in km/h
                     let ba = store.double(forKey: kBatteryAlarm) / 100.0    // Battery from 0 to 1
                     
@@ -771,7 +831,7 @@ import MapKit
                     
                     if let cli = dele.client{
                         
-                       if !cli.isRecording() {
+                        if !cli.isRecording() {
                             cli.start()
                         }
                     }
@@ -801,8 +861,8 @@ import MapKit
                     testC.ninebot = dele.datos
                     
                     if let url = self.currentFile{
-                       
-                            testC.titulo = url.lastPathComponent
+                        
+                        testC.titulo = url.lastPathComponent
                         
                     }
                 }
@@ -860,14 +920,14 @@ import MapKit
     // Create a file with actual data and share it. Delete is useless here. It always deletes the zip file
     
     /**
-        Creates a zip file (.9bz) from a package and shares it with the usual share dialog
- 
-        - Parameter file : The url of the package
-        - Parameter src : The object to which anchor the dialog
-        - Parameter delete : If the .9bz file shoud be deleted of not, Not used and always true
- 
-    */
- 
+     Creates a zip file (.9bz) from a package and shares it with the usual share dialog
+     
+     - Parameter file : The url of the package
+     - Parameter src : The object to which anchor the dialog
+     - Parameter delete : If the .9bz file shoud be deleted of not, Not used and always true
+     
+     */
+    
     func shareData(_ file: URL?, src:AnyObject, delete: Bool){
         
         
@@ -924,8 +984,8 @@ import MapKit
             activityViewController.modalPresentationStyle = UIModalPresentationStyle.popover
             
             self.present(activityViewController,
-                                       animated: true,
-                                       completion: nil)
+                         animated: true,
+                         completion: nil)
             
             
             
@@ -1046,7 +1106,9 @@ extension ViewController : UIViewControllerPreviewingDelegate{
         if let indexPath = tableView.indexPathForRow(at: location) {
             //This will show the cell clearly and blur the rest of the screen for our peek.
             previewingContext.sourceRect = tableView.rectForRow(at: indexPath)
-            let urls = urlForIndexPath(indexPath)
+            let path = pathnameForIndexPath(indexPath)
+            let urls = WheelTrackDatabase.sharedInstance.getObject(forKey: path!)?.getURL()!
+            //let urls = urlForIndexPath(indexPath)
             self.currentFile = urls
             if let file = self.currentFile{
                 if let dele = UIApplication.shared.delegate as? AppDelegate{
@@ -1068,7 +1130,7 @@ extension ViewController : UIViewControllerPreviewingDelegate{
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-
+        
         show(viewControllerToCommit, sender: self)
         
         

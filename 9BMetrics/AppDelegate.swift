@@ -303,9 +303,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func localApplicationDocumentsDirectory() -> URL?
     {
-        let docs = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last
+        let docx = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask)
         
-        return docs
+        return docx.last
         
     }
     

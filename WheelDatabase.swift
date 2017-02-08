@@ -49,7 +49,7 @@ public class WheelDatabase {
     static func buildUrl(_ filename : String) -> URL?{
         
         if let dele =  UIApplication.shared.delegate as? AppDelegate{
-            if let docs = dele.localApplicationDocumentsDirectory(){
+            if let docs = dele.applicationDocumentsDirectory(){
                 let url = docs.appendingPathComponent(filename)
                 return url
             }

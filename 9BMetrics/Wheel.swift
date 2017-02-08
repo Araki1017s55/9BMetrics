@@ -171,12 +171,13 @@ public class Wheel : NSObject {
         
     }
     
-    func recomputeAdjust(){
+    func recomputeAdjust(progressItem: UIProgressView?){
         
         nruns = 0
         distance_sum_xy = 0.0
         distance_sum_x2 = 0.0
         speed_sum_xy = 0.0
+        
         
         
         // Get all packages in the directory
@@ -185,7 +186,25 @@ public class Wheel : NSObject {
         
         let runs = getAllRuns()
         
+        let n  : Float = Float(runs.count) * 2.0
+        
+        var i : Float = 0.0
+        
+        if let pr = progressItem{
+            DispatchQueue.main.sync(execute: {
+                pr.setProgress(0.0, animated: false)
+            })
+        }
         for url in runs{
+            
+            i = i + 1.0
+            
+            if let pr = progressItem{
+                DispatchQueue.main.sync(execute: {
+                pr.setProgress(i/n, animated: true)
+            })
+            }
+
             
             track.loadPackage(url)
             
@@ -229,6 +248,15 @@ public class Wheel : NSObject {
         
         for url in runs{
             
+            i = i + 1.0
+            
+            if let pr = progressItem{
+                DispatchQueue.main.sync(execute: {
+                    pr.setProgress(i/n, animated: true)
+                })
+            }
+
+            
             track.loadPackage(url)
             
             // Now we have summary data loaded :
@@ -259,7 +287,7 @@ public class Wheel : NSObject {
             distance_coef = 1.0
         }
         
-        if speed_sum_xy == 0.0 && distance_sum_x2 != 0.0{
+        if speed_sum_xy != 0.0 && distance_sum_x2 != 0.0{
             speed_coef = (distance_sum_x2 / speed_sum_xy)
         } else {
             distance_sum_x2  = 1.0
@@ -310,7 +338,7 @@ public class Wheel : NSObject {
                 distance_coef = 1.0
             }
             
-            if speed_sum_xy == 0.0 && distance_sum_x2 != 0.0{
+            if speed_sum_xy != 0.0 && distance_sum_x2 != 0.0{
                 speed_coef = (distance_sum_x2 / speed_sum_xy)
             } else {
                 distance_sum_x2  = 1.0
@@ -321,7 +349,6 @@ public class Wheel : NSObject {
             
         }
     }
-    
 }
 
 

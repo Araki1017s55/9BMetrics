@@ -4,4 +4,7 @@ import UIKit
 import CoreGraphics
 
 
-5.0 ** 2.0
+var a = ["1", "a", "f", "d"]
+a.sort(by: { return $0 < $1})
+
+print(a)
