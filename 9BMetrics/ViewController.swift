@@ -552,8 +552,6 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
             })
             
             alert.addAction(action)
-            
-            
         }
         
         
@@ -706,6 +704,7 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                             self.sections.remove(at: (indexPath as NSIndexPath).section)
                             tableView.deleteSections(IndexSet(integer: (indexPath as NSIndexPath).section), with: UITableViewRowAnimation.automatic)
                         }
+                        WheelTrackDatabase.sharedInstance.removeObject(tr)
                     }
                 }
             }catch{

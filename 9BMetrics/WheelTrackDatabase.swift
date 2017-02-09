@@ -43,8 +43,7 @@ class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
                     rebuild(docs)
 
             }
-        }
-        
+        }        
     }
    
     func rebuild(_ dir : URL){
@@ -97,6 +96,16 @@ class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
         save()
         
     }
+    
+    override func read(){
+        do {
+             try super.read()
+        }catch {
+            self.rebuild()
+        }
+        
+    }
+    
     
     /// Checks if a file is a directory
     ///

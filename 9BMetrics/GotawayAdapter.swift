@@ -37,6 +37,8 @@ class GotawayAdapter : NSObject {
     
     var wheel : Wheel?
     
+    var startDistance : Double?
+    
     
     // Called when lost connection. perhaps should do something. If not forget it
     
@@ -133,8 +135,16 @@ class GotawayAdapter : NSObject {
                 let temperature = Double(Int(buffer[12]) * 256 + Int(buffer[13])) / 340.0 + 35.0 // Very strange
                 outarr.append((WheelTrack.WheelValue.Temperature, date, temperature))
                 
-                let distance = Double(Int(buffer[8]) * 256 + Int(buffer[9]))
+                var distance = Double(Int(buffer[8]) * 256 + Int(buffer[9]))
                 outarr.append((WheelTrack.WheelValue.Distance, date, distance))
+                
+                if let sd = startDistance{
+                    distance = distance - sd
+                } else {
+                    startDistance = distance
+                    distance = 0.0
+                }
+
                 
                 let voltage = Double(Int(buffer[2]) * 256 + Int(buffer[3])) / 100.0
                 outarr.append((WheelTrack.WheelValue.Voltage, date, voltage))
@@ -226,6 +236,8 @@ extension GotawayAdapter : BLEWheelAdapterProtocol{
     
     
     func startRecording(){
+        
+        startDistance = nil
         
         buffer.removeAll()
         

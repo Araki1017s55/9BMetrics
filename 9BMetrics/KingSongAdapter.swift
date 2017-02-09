@@ -1,5 +1,8 @@
 //
-//  BLENinebotOneAdapter.swift
+//  KingSongAdapter.swift
+//
+//  Seems it works OK with Rockwheel and others
+//
 //  9BMetrics
 //
 //  Created by Francisco Gorina Vanrell on 4/5/16.
@@ -40,6 +43,8 @@ class KingSongAdapter : NSObject {
     let writeChar = "FFE1"
     let readChar = "FFE1"
     
+    var startDistance : Double?
+    
     
     // Called when lost connection. perhaps should do something. If not forget it
     
@@ -64,6 +69,43 @@ class KingSongAdapter : NSObject {
         (data as NSData).getBytes(&buf, length:count * MemoryLayout<UInt8>.size)
         buffer.removeAll()
         buffer.append(contentsOf: buf)
+    }
+    
+    func voltageToBatterylevel(_ volts : Double, wheelName : String) -> Double {
+        
+        var batt = 0.0
+        
+        if wheelName.hasPrefix("ROCK"){  // Taula presa de InMotion. Realment es molt mes senzilla de lo que sembla i si hp fessim lineal la diff es petita
+            
+            if volts >= 83.50 {
+                batt = 1.0
+            }else if volts > 80.0{
+                batt = ((volts - 80.0) / 3.5) * 0.2 + 0.8
+            }else if volts > 77.0{
+                batt = ((volts - 77.0) / 3.0) * 0.2 + 0.6
+            }else if volts > 74.0{
+                batt = ((volts - 74.0) / 3.0) * 0.2 + 0.4
+            }else if volts > 71.0{
+                batt = ((volts - 71.0) / 3.0) * 0.2 + 0.2
+            }else if volts > 55.0{
+                batt = ((volts - 55.0) / 16.0) * 0.2
+            }else {
+                batt = 0.0
+            }
+        }else{
+            
+            
+            if (volts < 50.0) {
+                batt = 0.0
+            } else if (volts >= 66.0) {
+                batt = 1
+            } else {
+                batt = (volts - 50.0) / 16.0
+            }
+        }
+        
+        return batt * 100.0
+        
     }
     
     // Here we process received information.
@@ -154,34 +196,26 @@ class KingSongAdapter : NSObject {
                 }
                 
                 let avgVoltage = acumVoltage / Double(voltageArray.count)
-                var battery = 0.0
-                // Compute battery from average voltage
                 
-                if (avgVoltage < 50.0) {
-                    battery = 0.0;
-                } else if (avgVoltage >= 66.0) {
-                    battery = 100.0;
-                } else {
-                    battery = (avgVoltage - 50.0) / 16.0 * 100.0;
-                }
+                let battery = voltageToBatterylevel(avgVoltage, wheelName: name)
                 
                 
                 /* Gotaway
-                
-                if voltage <= 52.90 {
-                    battery = 0.0
-                }else if (voltage >= 65.80){
-                    battery = 100.0
-                }else {
-                    battery = ((voltage - 52.90) / 13.0) * 100.0
-                }
- */
+                 
+                 if voltage <= 52.90 {
+                 battery = 0.0
+                 }else if (voltage >= 65.80){
+                 battery = 100.0
+                 }else {
+                 battery = ((voltage - 52.90) / 13.0) * 100.0
+                 }
+                 */
                 
                 if let wh = self.wheel {
                     wh.totalDistance = totalDistance
                     WheelDatabase.sharedInstance.setWheel(wheel: wh)
                 }
-
+                
                 
                 outarr.append((WheelTrack.WheelValue.Battery, date, battery))
                 buffer.removeAll()
@@ -190,7 +224,20 @@ class KingSongAdapter : NSObject {
                 break
                 
             case 185:
-                let distance = Double( (Int(buffer[3]) * 256 + Int(buffer[2]))*65536 + (Int(buffer[5]) * 256 + Int(buffer[4]))) * distanceCorrection
+                var distance = Double( (Int(buffer[3]) * 256 + Int(buffer[2]))*65536 + (Int(buffer[5]) * 256 + Int(buffer[4]))) * distanceCorrection
+                
+                // Just to correct following case :
+                // Start wheel and begin running
+                // After a while connect to the wheel
+                // Distance is from the start of the wheel. Now here we correct it to the moment we connect
+                
+                if let sd = startDistance{
+                    distance = distance - sd
+                } else {
+                    startDistance = distance
+                    distance = 0.0
+                }
+                
                 outarr.append((WheelTrack.WheelValue.Distance, date, distance))
                 
                 let time = Double(Int(buffer[7]) * 256 + Int(buffer[6]))
@@ -203,7 +250,7 @@ class KingSongAdapter : NSObject {
                 
                 while i < 14 && block[i] != 0{
                     lname.append(Character(UnicodeScalar(block[i])))
-
+                    
                     i += 1
                 }
                 
@@ -213,10 +260,14 @@ class KingSongAdapter : NSObject {
                     wh.name = self.name
                     WheelDatabase.sharedInstance.setWheel(wheel: wh)
                 }
-
- 
+                
+                if lname.hasPrefix("ROCK"){
+                    BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
+                }
+                
+                
                 askSerial(connection)
-
+                
             case 179:
                 
                 var lserial = ""
@@ -239,9 +290,9 @@ class KingSongAdapter : NSObject {
                     wh.serialNo = self.serial
                     WheelDatabase.sharedInstance.setWheel(wheel: wh)
                 }
-
+                
                 BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
-
+                
             default:
                 break
                 
@@ -284,10 +335,8 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     
     
     func startRecording(){
-        
         buffer.removeAll()
-
-        
+        startDistance = nil
     }
     
     func stopRecording(){
@@ -329,6 +378,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
         connection.writeValue(writeChar, data : data)
         
     }
+    
     func playHorn(_ connection: BLEMimConnection){
         var command : [UInt8] = Array(repeating: 0, count: 20)
         
@@ -363,7 +413,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
             wheel!.password = "000000"
             database.setWheel(wheel: wheel!)
         }
-
+        
         
     }
     
@@ -375,7 +425,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     func giveTime(_ connection: BLEMimConnection) {
         
     }
-
+    
     
     func charUpdated(_ connection: BLEMimConnection,  char : CBCharacteristic, data: Data) -> [(WheelTrack.WheelValue, Date, Double)]?{
         
@@ -404,7 +454,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     func getMaxSpeed() -> Double {
         return 20.0
     }
-
+    
     
     func setDefaultName(_ name : String){
         self.name = name
@@ -421,7 +471,7 @@ extension KingSongAdapter : BLEWheelAdapterProtocol{
     }
     func lockWheel(_ lock : Bool){ // Lock or Unlock wheel
     }
-
+    
 }
 
 

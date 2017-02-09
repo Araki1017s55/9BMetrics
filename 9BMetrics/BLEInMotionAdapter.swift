@@ -1106,6 +1106,7 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
     
     
     func startRecording(){
+        firstDistance = nil
         state = .disconnected
         
         

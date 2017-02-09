@@ -1386,7 +1386,9 @@ class WheelTrack: NSObject {
                 
             case "Distance":
                 guard let dt = Double(fields[1].replacingOccurrences(of: " ", with: "")) else {return (0.0, 0.0 , name, date, adapter) }
-                guard let distance = Double(fields[2].replacingOccurrences(of: " ", with: "")) else {return (0.0, 0.0, name, date, adapter) }
+                guard let df  = Double(fields[2].replacingOccurrences(of: " ", with: ""))  else {return (0.0, 0.0 , name, date, adapter) }
+                guard let d0  = Double(fields[3].replacingOccurrences(of: " ", with: ""))  else {return (0.0, 0.0 , name, date, adapter) }
+                let distance = df - d0
                 return (dt, distance, name, date, adapter)
                 
             default:
@@ -1457,6 +1459,7 @@ class WheelTrack: NSObject {
                     guard let avgv = Double(fields[5].replacingOccurrences(of: " ", with: "")) else {continue }
                     guard let intv = Double(fields[6].replacingOccurrences(of: " ", with: "")) else {continue }
                     
+                     
                     if data[codi] == nil{
                         data[codi] = WheelVariable(codi: codi, timeStamp: dt, currentValue: curv , minValue: minv , maxValue: maxv , avgValue: avgv , intValue: intv, loaded: false, log: [])
                         

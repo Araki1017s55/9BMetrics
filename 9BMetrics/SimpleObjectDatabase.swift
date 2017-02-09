@@ -19,9 +19,14 @@ public class SimpleObjectDatabase<K : Hashable, T:DatabaseObjectProtocol>{
         
     }
     
-    init(url ur: URL){
+    init(url ur: URL) {
         url = ur
-        read()
+        
+        do {
+            try read()
+        }catch {
+            
+        }
     }
     
     func save(){
@@ -36,16 +41,23 @@ public class SimpleObjectDatabase<K : Hashable, T:DatabaseObjectProtocol>{
         
     }
     
-    func read(){
+    /// Reads a file with the dictionary
+    /// Throws an error if either the file is not readable or the read data is not decodable
+    func read() throws{
         
+        database = [:]
         guard url != nil else {return}
         let fm = FileManager.default
         
-        
         if fm.fileExists(atPath: url!.path){
-            if let dat = NSKeyedUnarchiver.unarchiveObject(withFile:url!.path) as? [K : T]{
+            
+            let data = try Data(contentsOf: url!)
+            
+            let dx =  try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data as NSData) as? [K : T]
+            if  let dat =  dx {
                 database = dat
             }
+            
         }
         
     }

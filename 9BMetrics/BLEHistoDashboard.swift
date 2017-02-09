@@ -539,7 +539,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                 }
                 
                 if let tit = title {
-                    tit.text = "T".localized(comment: "Temperature Title") + "ºC"
+                    tit.text = "T".localized(comment: "Temperature Title") + UnitManager.sharedInstance.temperatureUnit
                 }
                 
                 // Temperature
@@ -569,7 +569,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                     
                     tw.backImage = nil
                     
-                    tw.updateData(String(format:"%0.0f", tmax) , units: "ºC", radis: tempLevels, arcs: tempAreas, minValue: 0.0, maxValue: tempRange)
+                    tw.updateData(String(format:"%0.0f", UnitManager.sharedInstance.convertTemperature(tmax)  ) , units:  UnitManager.sharedInstance.temperatureUnit, radis: tempLevels, arcs: tempAreas, minValue: 0.0, maxValue:  UnitManager.sharedInstance.convertTemperature(tempRange))
                 }
                 
                 return cell

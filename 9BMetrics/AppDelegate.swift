@@ -23,7 +23,7 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    static var debugging = true
+    static var debugging = false
     
     static let applicationShortcutUserInfoIconKey = "applicationShortcutUserInfoIconKey"
     
@@ -296,7 +296,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NSLogv(format, $0)
             }
         }
-        
     }
     
     //MARK : Directory Management

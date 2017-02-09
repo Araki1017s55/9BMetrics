@@ -51,6 +51,8 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     var sending : Bool = false
     
+    var startDistance : Double?
+    
     
     
     // Called when lost connection. perhaps should do something. If not forget it
@@ -244,10 +246,19 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                         // Convert to SI by an scale and assign to generic variable
                         
                         
-                        //Check SpeedLimit
-                        let dv = Double(sv) * BLENinebotOneAdapter.scales[k]
+
+                        var dv = Double(sv) * BLENinebotOneAdapter.scales[k]
 
                         if let wv = BLENinebotOneAdapter.conversion[k]{
+                            
+                            if wv == .Distance{
+                                if let sd = startDistance{
+                                    dv = dv - sd
+                                }else {
+                                    startDistance = dv
+                                    dv = 0.0
+                                }
+                            }
                             outarr!.append((wv, Date(), dv))
                             
                         }
@@ -466,6 +477,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
         headersOk = false
         contadorOp = 0
         contadorOpFast = 0
+        startDistance = nil
         buffer.removeAll()
         if let qu = queryQueue {
             qu.cancelAllOperations()
