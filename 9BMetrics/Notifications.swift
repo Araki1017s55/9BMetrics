@@ -23,7 +23,7 @@ let kPassword = "password"
 let kBatteryAlarm = "battery"
 let kNotifySpeed = "notifySpeed"
 let kNotifyBattery = "notifyBattery"
-
+let kForbidSpeech = "forbidSpeech"
 
 // UserNotifications
 

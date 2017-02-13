@@ -23,8 +23,7 @@ import UIKit
 
 class SettingsViewController: UIViewController {
     
-    
-    @IBOutlet weak var refreshField: UISlider!
+    @IBOutlet weak var fAllowSpeech: UISwitch!
     @IBOutlet weak var uuidLabel: UILabel!
     
     @IBOutlet weak var fBlockSleepTimer: UISwitch!
@@ -96,6 +95,7 @@ class SettingsViewController: UIViewController {
         
         store.set(fNotifySpeed.isOn, forKey: kNotifySpeed)
         store.set(fNotifySpeed.isOn, forKey: kNotifyBattery)
+        store.set(!fAllowSpeech.isOn, forKey: kForbidSpeech)
         
         updateWheel()
         
@@ -149,8 +149,9 @@ class SettingsViewController: UIViewController {
             let store = UserDefaults.standard
             let dashboardMode = store.bool(forKey: dele.kDashboardMode)
             fGraphicDashboard.isOn = dashboardMode
-            
-            refreshField.value = Float(dele.timerStep)
+            let allowSpeech = !store.bool(forKey: kForbidSpeech)
+            fAllowSpeech.isOn = allowSpeech
+
             
             if let uuid = store.object(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey) as? String{
                 uuidLabel.text = uuid
@@ -292,14 +293,6 @@ class SettingsViewController: UIViewController {
         
     }
     
-    @IBAction func sliderValueChanged(_ src : AnyObject){
-        
-        let f = self.refreshField.value
-        
-        if let dele = delegate {
-            dele.timerStep = Double(f)
-        }
-    }
     
     
     @IBAction func setGraphicDashboard(_ src : UISwitch){

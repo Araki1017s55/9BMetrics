@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  9BMetrics
+
+  Created by Francisco Gorina Vanrell on 31/1/17.
+  Copyright © 2017 Paco Gorina. All rights reserved.
+ 
+ German translation by Michael Heller, 9/2/17 done.
+ */
+
+
+"Edit" = "Bearbeiten";
+"Done" = "Fertig";
+"New Run" = "Neu";
+
+"Speed" = "Geschwindigkeit";
+"Battery" = "Batterie";
+"Power" = "Leistung";
+"Energy" = "Energie";
+"T" = "T";
+"Temperature" = "Temperatur";
+"Roll" = "Roll";
+"Pitch" = "Pitch";
+"Voltage" = "Spannung";
+"Current" = "Strom";
+"Distance" = "Distanz";
+"Altitude" = "Höhe";
+
+"Average Value : %0.2f" = "Mittelwert : %0.2f";
+"Minimum : %0.2f Maximum : %0.2f" = "Minimum : %0.2f Maximum : %0.2f";
+"Samples %d" = "%d Abtastungen";
+
+"Options" = "Optionen";
+"Close" = "Schließen";
+"Select an option" = "Wählen Sie eine Option";
+"Settings" = "Einstellungen";
+"Show Local Normative" = "Zeige in Landessprache";
+"Debug Server" = "Debug Server";
+"Ninebot Server" = "Ninebot Server";
+"Send Notification" = "Benachrichtigung Senden";
+"About Gyrometrics" = "Über Gyrometrics";
+"Rebuild Index" = "Rebuild index";
+
+"Share Track" = "Spur Teilen";
+"Open GPX In" = "Öffne GPX mit";
+"Share GPX" = "GPX Teilen";
+
+"New Wheel" = "neues Rad";
+
+"Today" = "Heute";
+"Yesterday" = "Gestern";
+"This Week" = "Diese Woche";
+"This Month" = "Dieser Monat";
+
+"You are going too fast. Please reduce your speed" = "You are going too fast. Please reduce your speed";

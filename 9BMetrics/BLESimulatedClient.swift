@@ -26,6 +26,7 @@ import MapKit
 import WatchConnectivity
 import AudioToolbox
 import UserNotifications
+import AVFoundation
 
 class BLESimulatedClient: NSObject {
     
@@ -107,6 +108,11 @@ class BLESimulatedClient: NSObject {
     var adapter : BLEWheelAdapterProtocol?
     var wheel : Wheel?
     
+    // Speech Synthetiser
+    
+    var synt  = AVSpeechSynthesizer()
+
+    
     override init() {
         
         self.connection = BLEMimConnection()
@@ -114,6 +120,7 @@ class BLESimulatedClient: NSObject {
         self.connection.delegate = self
         self.queryQueue = OperationQueue()
         self.queryQueue!.maxConcurrentOperationCount = 1
+        synt.delegate = self
         // self.watchQueue = OperationQueue()
         // self.watchQueue!.maxConcurrentOperationCount = 1
         
@@ -398,6 +405,49 @@ class BLESimulatedClient: NSObject {
         }
     }
     
+    //MARK: Audio support
+    
+    func enableAudio(){
+        
+        let session = AVAudioSession.sharedInstance()
+        
+        do {
+    
+            try session.setCategory(AVAudioSessionCategoryPlayback, with: .duckOthers)
+            try session.setActive(true)
+        }catch{
+            AppDelegate.debugLog(error.localizedDescription)
+        }
+    }
+    
+
+    func disableAudio(){
+        
+        let session = AVAudioSession.sharedInstance()
+        
+        do {
+            try session.setActive(false)
+        }catch{
+            AppDelegate.debugLog(error.localizedDescription)
+        }
+    }
+    
+    func saySomething(message : String){
+        
+        let store = UserDefaults.standard
+        let forbidSpeech = store.bool(forKey: kForbidSpeech)
+
+        if !forbidSpeech {
+        
+            enableAudio()
+            let utt = AVSpeechUtterance(string: message)
+            let rate = AVSpeechUtteranceDefaultSpeechRate
+            utt.rate = rate
+            synt.speak(utt)
+        }
+
+    }
+
     // MARK: User Notifications support.
     // 1.- Battery crosses battery alarm  mark
     // 2.- Speed crosses speed alarm mark
@@ -842,6 +892,7 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                     lastSpeedAlarm = now
                     
                     if !speedNotificationSent && notifySpeed{
+                        saySomething(message: "You are going too fast. Please reduce your speed".localized())
                         self.sendSpeedAlertNotification(speed: wheelTrack.getCurrentValueForVariable(.Speed))
                         speedNotificationSent = true
                     }
@@ -1125,6 +1176,16 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
     }
     
+}
+
+extension BLESimulatedClient : AVSpeechSynthesizerDelegate {
+    
+    
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        disableAudio()
+        
+    }
+  
 }
 
 

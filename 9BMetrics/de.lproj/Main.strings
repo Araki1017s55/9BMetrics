@@ -1,12 +1,18 @@
+/*
+ Main(de).strings
+ 9BMetrics
+ 
+ German translation by Michael Heller, 9/2/17 done.
+ */
 
 /* Class = "UILabel"; text = "Max Power 1200 w"; ObjectID = "03O-L4-HQZ"; */
-"03O-L4-HQZ.text" = "Max Pot 1200 w";
+"03O-L4-HQZ.text" = "Max Power 1200 w";
 
 /* Class = "UINavigationItem"; title = "Gyrometrics"; ObjectID = "091-Mh-auC"; */
 "091-Mh-auC.title" = "Gyrometrics";
 
 /* Class = "UIButton"; normalTitle = "Close"; ObjectID = "1mm-Yz-bx3"; */
-"1mm-Yz-bx3.normalTitle" = "Tancar";
+"1mm-Yz-bx3.normalTitle" = "Schließen";
 
 /* Class = "UILabel"; text = "01:02:03"; ObjectID = "2Aq-d3-B0e"; */
 "2Aq-d3-B0e.text" = "01:02:03";
@@ -15,7 +21,7 @@
 "2qc-3D-L4X.text" = "0.0A";
 
 /* Class = "UILabel"; text = "Graphic Dashboard"; ObjectID = "3hC-FS-Iv8"; */
-"3hC-FS-Iv8.text" = "Panell Gràfic";
+"3hC-FS-Iv8.text" = "Grafische Übersicht";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "5Dg-G3-J7T"; */
 "5Dg-G3-J7T.text" = "Label";
@@ -24,13 +30,13 @@
 "5M3-AC-a60.text" = "km/h";
 
 /* Class = "UILabel"; text = "Route"; ObjectID = "5nm-GY-S7y"; */
-"5nm-GY-S7y.text" = "Ruta";
+"5nm-GY-S7y.text" = "Strecke";
 
 /* Class = "UILabel"; text = "20 Km/h"; ObjectID = "6BQ-c3-Zpx"; */
 "6BQ-c3-Zpx.text" = "20 Km/h";
 
 /* Class = "UILabel"; text = "Total Km"; ObjectID = "6G8-yf-gPs"; */
-"6G8-yf-gPs.text" = "Total Km";
+"6G8-yf-gPs.text" = "Gesamt km";
 
 /* Class = "UILabel"; text = "Roll"; ObjectID = "6KZ-dJ-y9x"; */
 "6KZ-dJ-y9x.text" = "Roll";
@@ -39,19 +45,19 @@
 "7kR-P2-Gga.text" = "Bluetooth UUID";
 
 /* Class = "UILabel"; text = "Speed Alarm"; ObjectID = "8QC-7N-hVX"; */
-"8QC-7N-hVX.text" = "Alarma Vel.";
+"8QC-7N-hVX.text" = "Geschwindigkeitsalarm";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "8s9-GI-B46"; */
-"8s9-GI-B46.text" = "Títol";
+"8s9-GI-B46.text" = "Bezeichnung";
 
 /* Class = "UINavigationItem"; title = "Debug connections"; ObjectID = "8sX-ah-z2z"; */
-"8sX-ah-z2z.title" = "Debug connexions";
+"8sX-ah-z2z.title" = "Verbindungsüberwachung";
 
 /* Class = "UILabel"; text = "00:00:00"; ObjectID = "9mc-c7-g0X"; */
 "9mc-c7-g0X.text" = "00:00:00";
 
 /* Class = "UILabel"; text = "Battery"; ObjectID = "AeB-g1-0m0"; */
-"AeB-g1-0m0.text" = "Bateria";
+"AeB-g1-0m0.text" = "Batterie";
 
 /* Class = "UILabel"; text = "3"; ObjectID = "Bi5-TB-PjH"; */
 "Bi5-TB-PjH.text" = "3";
@@ -60,50 +66,49 @@
 "BuC-97-6nD.text" = "Ninebot One";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "Bzy-Gr-LIs"; */
-"Bzy-Gr-LIs.text" = "Títol";
+"Bzy-Gr-LIs.text" = "Name";
 
 /* Class = "UILabel"; text = "Up 100m"; ObjectID = "CH7-fc-6qv"; */
-"CH7-fc-6qv.text" = "Fins 100m";
+"CH7-fc-6qv.text" = "Über 100m";
 
 /* Class = "UILabel"; text = "Power 110 wh"; ObjectID = "Cis-fb-uWb"; */
-"Cis-fb-uWb.text" = "Potència 110 wh";
+"Cis-fb-uWb.text" = "Leistung 110 wh";
 
 /* Class = "UILabel"; text = "Variable title"; ObjectID = "D1O-6L-5Or"; */
-"D1O-6L-5Or.text" = "Títol Var";
+"D1O-6L-5Or.text" = "Variablen";
 
 /* Class = "UILabel"; text = "Titulo"; ObjectID = "DTn-nW-YMG"; */
-"DTn-nW-YMG.text" = "Títol";
+"DTn-nW-YMG.text" = "Berechtigung";
 
 /* Class = "UILabel"; text = "Total Km"; ObjectID = "DgM-7G-0nJ"; */
-"DgM-7G-0nJ.text" = "Total Km";
+"DgM-7G-0nJ.text" = "Gesamt km";
 
 /* Class = "UILabel"; text = "Serial No"; ObjectID = "Do6-zB-1Nk"; */
-"Do6-zB-1Nk.text" = "No Sèrie";
+"Do6-zB-1Nk.text" = "Seriennummer";
 
 /* Class = "UILabel"; text = "Subtitle"; ObjectID = "F6X-W5-tVa"; */
-"F6X-W5-tVa.text" = "Subtítol";
+"F6X-W5-tVa.text" = "Untertitel";
 
 /* Class = "UILabel"; text = "T  15 ºC"; ObjectID = "FGU-rf-wXW"; */
 "FGU-rf-wXW.text" = "T  15 ºC";
 
 /* Class = "UIButton"; normalTitle = "Reset"; ObjectID = "FRO-on-t3W"; */
-"FRO-on-t3W.normalTitle" = "Reset";
-
+"FRO-on-t3W.normalTitle" = "Zurücksetzen";
 
 /* Class = "UILabel"; text = "Temperature"; ObjectID = "FSc-1g-EuR"; */
-"FSc-1g-EuR.text" = "Temperatura";
+"FSc-1g-EuR.text" = "Temperatur";
 
 /* Class = "UIButton"; normalTitle = "Recalculate Calibration"; ObjectID = "FSj-mD-1UC"; */
-"FSj-mD-1UC.normalTitle" = "Recalcular Cal.";
+"FSj-mD-1UC.normalTitle" = "Recalculate Neukalibrierung";
 
 /* Class = "UILabel"; text = "Max T 45 C"; ObjectID = "Fr4-za-RFu"; */
 "Fr4-za-RFu.text" = "Max T 45 C";
 
 /* Class = "UILabel"; text = "Average value"; ObjectID = "HXo-9u-B2v"; */
-"HXo-9u-B2v.text" = "Valor Mitjà";
+"HXo-9u-B2v.text" = "Mittelwert";
 
 /* Class = "UILabel"; text = "Number of points / Average period"; ObjectID = "ICs-3L-r3x"; */
-"ICs-3L-r3x.text" = "N Punts / Període mitjà";
+"ICs-3L-r3x.text" = "Anzahl Werte / Zeitabschnitt";
 
 /* Class = "UILabel"; text = "00:00:00"; ObjectID = "Jlx-br-CLa"; */
 "Jlx-br-CLa.text" = "00:00:00";
@@ -112,40 +117,40 @@
 "Km6-XT-bt8.text" = "100%";
 
 /* Class = "UILabel"; text = "Serial #"; ObjectID = "Kxz-Rz-1V3"; */
-"Kxz-Rz-1V3.text" = "# de Sèrie";
+"Kxz-Rz-1V3.text" = "Seriennr.";
 
 /* Class = "UILabel"; text = "12,5 Km/h"; ObjectID = "L9p-Bk-uNt"; */
-"L9p-Bk-uNt.text" = "12,5 Km/h";
+"L9p-Bk-uNt.text" = "12,5 km/h";
 
 /* Class = "UILabel"; text = "12,5 Km/h"; ObjectID = "LAq-ss-8QG"; */
-"LAq-ss-8QG.text" = "12,5 Km/h";
+"LAq-ss-8QG.text" = "12,5 km/h";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "M1S-Nm-OFJ"; */
 "M1S-Nm-OFJ.text" = "Label";
 
 /* Class = "UILabel"; text = "Serial #"; ObjectID = "MbV-m9-vtJ"; */
-"MbV-m9-vtJ.text" = "# de Sèrie";
+"MbV-m9-vtJ.text" = "Seriennr.";
 
 /* Class = "UILabel"; text = "Energy"; ObjectID = "NDy-e0-LY5"; */
-"NDy-e0-LY5.text" = "Energia";
+"NDy-e0-LY5.text" = "Energie";
 
 /* Class = "UILabel"; text = "Total Runtime"; ObjectID = "NdE-aw-Tb4"; */
-"NdE-aw-Tb4.text" = "Temps total";
+"NdE-aw-Tb4.text" = "Gesamtlaufzeit";
 
 /* Class = "UILabel"; text = "0W"; ObjectID = "Nso-OV-hQJ"; */
 "Nso-OV-hQJ.text" = "0W";
 
 /* Class = "UILabel"; text = "Password"; ObjectID = "OlJ-i5-9SV"; */
-"OlJ-i5-9SV.text" = "Password";
+"OlJ-i5-9SV.text" = "Kennwort";
 
 /* Class = "UILabel"; text = "Speed Limit Enabled"; ObjectID = "Ot0-oO-Lx5"; */
-"Ot0-oO-Lx5.text" = "Límit vel Habilitat";
+"Ot0-oO-Lx5.text" = "Geschw.-Begrenzung aktiv";
 
 /* Class = "UILabel"; text = "Subtitle"; ObjectID = "PBJ-aK-z75"; */
-"PBJ-aK-z75.text" = "Subtítol";
+"PBJ-aK-z75.text" = "Untertitel";
 
 /* Class = "UILabel"; text = "Battery 340 wh"; ObjectID = "QXx-rK-ev7"; */
-"QXx-rK-ev7.text" = "Bateria 340 wh";
+"QXx-rK-ev7.text" = "Batterie 340 wh";
 
 /* Class = "UILabel"; text = "Pitch"; ObjectID = "R4X-7A-Enh"; */
 "R4X-7A-Enh.text" = "Pitch";
@@ -154,13 +159,13 @@
 "RA5-VE-eJp.text" = "Label";
 
 /* Class = "UILabel"; text = "Wheel Locked"; ObjectID = "RJA-TH-NcR"; */
-"RJA-TH-NcR.text" = "Roda bloquejada";
+"RJA-TH-NcR.text" = "Rad sperren";
 
 /* Class = "UILabel"; text = "Enable Corrections"; ObjectID = "RpH-uf-pDI"; */
-"RpH-uf-pDI.text" = "Habilitar correccions";
+"RpH-uf-pDI.text" = "Korrekturen vornehmen";
 
 /* Class = "UILabel"; text = "Down 100m"; ObjectID = "Rpa-YD-2hk"; */
-"Rpa-YD-2hk.text" = "Sota 100m";
+"Rpa-YD-2hk.text" = "Unter 100m";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "Rpj-i3-PQN"; */
 "Rpj-i3-PQN.text" = "Label";
@@ -175,64 +180,61 @@
 "Tc7-UA-3bo.text" = "30%";
 
 /* Class = "UILabel"; text = "Speed"; ObjectID = "Tge-JP-YO5"; */
-"Tge-JP-YO5.text" = "Velocitat";
+"Tge-JP-YO5.text" = "Geschwindigkeit";
 
 /* Class = "UIButton"; normalTitle = "Delete Bluetooth UUID"; ObjectID = "VyZ-fh-kb7"; */
-"VyZ-fh-kb7.normalTitle" = "Esborrar Bluetooth UUID";
+"VyZ-fh-kb7.normalTitle" = "Bluetooth UUID Löschen";
 
 /* Class = "UINavigationItem"; title = "My Wheels"; ObjectID = "W4V-qB-ux9"; */
-"W4V-qB-ux9.title" = "Les meves rodes";
+"W4V-qB-ux9.title" = "meine Räder";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "WuF-NE-I5Q"; */
 "WuF-NE-I5Q.text" = "Label";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "XkV-Sf-b2C"; */
-"XkV-Sf-b2C.text" = "Títol";
+"XkV-Sf-b2C.text" = "Bezeichnung";
 
 /* Class = "UILabel"; text = "S/N"; ObjectID = "Yp2-8w-kmn"; */
-"Yp2-8w-kmn.text" = "N/S";
+"Yp2-8w-kmn.text" = "S/N";
 
 /* Class = "UIButton"; normalTitle = "Map"; ObjectID = "ZOU-sD-7AH"; */
-"ZOU-sD-7AH.normalTitle" = "Mapa";
+"ZOU-sD-7AH.normalTitle" = "Karte";
 
 /* Class = "UILabel"; text = "Riding Level"; ObjectID = "Zbz-gT-40b"; */
-"Zbz-gT-40b.text" = "Nivell";
+"Zbz-gT-40b.text" = "Fahrstufe";
 
 /* Class = "UILabel"; text = "Speed Limit"; ObjectID = "ZsA-t4-uD3"; */
-"ZsA-t4-uD3.text" = "Límit Vel";
+"ZsA-t4-uD3.text" = "Höchstgeschwindigkeit";
 
 /* Class = "UILabel"; text = "Ninebot"; ObjectID = "aOC-J5-FzW"; */
 "aOC-J5-FzW.text" = "Ninebot";
 
 /* Class = "UILabel"; text = "Max Current 10 A"; ObjectID = "beV-QT-kmZ"; */
-"beV-QT-kmZ.text" = "Corrent Max 10 A";
-
-/* Class = "UILabel"; text = "Refresh Time"; ObjectID = "c0Q-YZ-z5i"; */
-"c0Q-YZ-z5i.text" = "Temps act.";
+"beV-QT-kmZ.text" = "Max Strom 10 A";
 
 /* Class = "UILabel"; text = "0.0A"; ObjectID = "cR9-rK-Itf"; */
 "cR9-rK-Itf.text" = "0.0A";
 
 /* Class = "UISegmentedControl"; cUD-I9-sFG.segmentTitles[0] = "Standard"; ObjectID = "cUD-I9-sFG"; */
-"cUD-I9-sFG.segmentTitles[0]" = "Estàndard";
+"cUD-I9-sFG.segmentTitles[0]" = "Normal";
 
 /* Class = "UISegmentedControl"; cUD-I9-sFG.segmentTitles[1] = "Satellite"; ObjectID = "cUD-I9-sFG"; */
-"cUD-I9-sFG.segmentTitles[1]" = "Satèl·lit";
+"cUD-I9-sFG.segmentTitles[1]" = "Satellit";
 
 /* Class = "UISegmentedControl"; cUD-I9-sFG.segmentTitles[2] = "Hybrid"; ObjectID = "cUD-I9-sFG"; */
-"cUD-I9-sFG.segmentTitles[2]" = "Híbrid";
+"cUD-I9-sFG.segmentTitles[2]" = "Hybrid";
 
 /* Class = "UITextField"; text = "N1OPA1506A2405"; ObjectID = "cue-cu-n0z"; */
 "cue-cu-n0z.text" = "N1OPA1506A2405";
 
 /* Class = "UILabel"; text = "Wheel Name"; ObjectID = "d5f-nV-ZnB"; */
-"d5f-nV-ZnB.text" = "Nom";
+"d5f-nV-ZnB.text" = "Rad Name";
 
 /* Class = "UILabel"; text = "Batt 120 wh"; ObjectID = "dHA-J7-cA8"; */
-"dHA-J7-cA8.text" = "Bat 120 wh";
+"dHA-J7-cA8.text" = "Batterie 120 wh";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "dTg-a9-KQA"; */
-"dTg-a9-KQA.text" = "Títol";
+"dTg-a9-KQA.text" = "Bezeichnung";
 
 /* Class = "UILabel"; text = "12,5 Km"; ObjectID = "dbz-zs-Mv8"; */
 "dbz-zs-Mv8.text" = "12,5 Km";
@@ -253,20 +255,19 @@
 "efl-mc-Fmh.text" = "0.0V";
 
 /* Class = "UILabel"; text = "Enable Speech"; ObjectID = "efq-sl-Ddv"; */
-"efq-sl-Ddv.text" = "Activa parla";
-
+"efq-sl-Ddv.text" = "Enable Speech";
 
 /* Class = "UILabel"; text = "Energy"; ObjectID = "elh-1p-yfr"; */
-"elh-1p-yfr.text" = "Energia";
+"elh-1p-yfr.text" = "Energie";
 
 /* Class = "UIBarButtonItem"; title = "New Run"; ObjectID = "f4t-S6-g2X"; */
-"f4t-S6-g2X.title" = "Nou";
+"f4t-S6-g2X.title" = "Neu";
 
 /* Class = "UILabel"; text = "Total Runtime"; ObjectID = "fUk-tT-wQk"; */
-"fUk-tT-wQk.text" = "Temps Total";
+"fUk-tT-wQk.text" = "Gesamtlaufzeit";
 
 /* Class = "UILabel"; text = "Max/min values"; ObjectID = "ihq-a5-9GM"; */
-"ihq-a5-9GM.text" = "Valors Max/min";
+"ihq-a5-9GM.text" = "Max/min Werte";
 
 /* Class = "UILabel"; text = "sssss"; ObjectID = "iir-Tf-dIV"; */
 "iir-Tf-dIV.text" = "sssss";
@@ -275,19 +276,19 @@
 "kh6-pq-NHH.text" = "km/h";
 
 /* Class = "UIButton"; normalTitle = "My Wheels"; ObjectID = "khY-dq-Z5J"; */
-"khY-dq-Z5J.normalTitle" = "Les Meves Rodes";
+"khY-dq-Z5J.normalTitle" = "meine Räder";
 
 /* Class = "UILabel"; text = "42ºC"; ObjectID = "kjO-ue-Gdp"; */
 "kjO-ue-Gdp.text" = "42ºC";
 
 /* Class = "UIBarButtonItem"; title = "Stop"; ObjectID = "lUn-X7-QTj"; */
-"lUn-X7-QTj.title" = "Parar";
+"lUn-X7-QTj.title" = "Halt";
 
 /* Class = "UILabel"; text = "0.0km"; ObjectID = "mZc-1y-LfE"; */
 "mZc-1y-LfE.text" = "0.0km";
 
 /* Class = "UILabel"; text = "Block Sleep"; ObjectID = "maw-iH-mCx"; */
-"maw-iH-mCx.text" = "Bloquejar repòs";
+"maw-iH-mCx.text" = "Ruhezustand blockieren";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "rTc-yE-Jef"; */
 "rTc-yE-Jef.text" = "Label";
@@ -299,16 +300,16 @@
 "uBx-cU-HWA.text" = "00.0";
 
 /* Class = "UILabel"; text = "Avg Current 10 A"; ObjectID = "vXo-VD-KQ9"; */
-"vXo-VD-KQ9.text" = "Corrent mitjana 10 A";
+"vXo-VD-KQ9.text" = "Mittelwert Strom 10 A";
 
 /* Class = "UIButton"; normalTitle = "Save"; ObjectID = "vuT-Wf-v7s"; */
-"vuT-Wf-v7s.normalTitle" = "Guardar";
+"vuT-Wf-v7s.normalTitle" = "Speichern";
 
 /* Class = "UILabel"; text = "Distance"; ObjectID = "wSu-vZ-mVh"; */
-"wSu-vZ-mVh.text" = "Distància";
+"wSu-vZ-mVh.text" = "Distanz";
 
 /* Class = "UILabel"; text = "Power"; ObjectID = "wcd-j8-FUv"; */
-"wcd-j8-FUv.text" = "Potència";
+"wcd-j8-FUv.text" = "Leistung";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "x14-hg-EdD"; */
 "x14-hg-EdD.text" = "Label";
@@ -317,13 +318,13 @@
 "xIp-No-ULF.text" = "Label";
 
 /* Class = "UILabel"; text = "Battery Alarm"; ObjectID = "xU1-1d-TI5"; */
-"xU1-1d-TI5.text" = "Alarma Bat";
+"xU1-1d-TI5.text" = "Batteriewarnung";
 
 /* Class = "UILabel"; text = "Avg Power 350 w"; ObjectID = "y97-hp-joc"; */
-"y97-hp-joc.text" = "Pot. Mitjanar 350 w";
+"y97-hp-joc.text" = "Mittelwert Leistung 350 w";
 
 /* Class = "UILabel"; text = "Please, select a Wheel"; ObjectID = "ypJ-xX-GMO"; */
-"ypJ-xX-GMO.text" = "Seleccioneu una Roda";
+"ypJ-xX-GMO.text" = "Auswahl";
 
 /* Class = "UILabel"; text = "80% "; ObjectID = "zay-i8-3aG"; */
 "zay-i8-3aG.text" = "80% ";

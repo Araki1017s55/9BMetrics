@@ -249,6 +249,9 @@
 /* Class = "UILabel"; text = "10%"; ObjectID = "e4q-e3-ehr"; */
 "e4q-e3-ehr.text" = "10%";
 
+/* Class = "UILabel"; text = "Enable Speech"; ObjectID = "efq-sl-Ddv"; */
+"efq-sl-Ddv.text" = "Activa alocución";
+
 /* Class = "UILabel"; text = "0.0V"; ObjectID = "efl-mc-Fmh"; */
 "efl-mc-Fmh.text" = "0.0V";
 
