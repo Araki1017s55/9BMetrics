@@ -39,7 +39,7 @@
 "Ninebot Server" = "Ninebot Server";
 "Send Notification" = "Benachrichtigung Senden";
 "About Gyrometrics" = "Über Gyrometrics";
-"Rebuild Index" = "Rebuild index";
+"Rebuild Index" = "Neuaufbau Index";
 
 "Share Track" = "Spur Teilen";
 "Open GPX In" = "Öffne GPX mit";
@@ -52,4 +52,4 @@
 "This Week" = "Diese Woche";
 "This Month" = "Dieser Monat";
 
-"You are going too fast. Please reduce your speed" = "You are going too fast. Please reduce your speed";
+"You are going too fast. Please reduce your speed" = "Zu schnell! Geschwindigkeit verringern";

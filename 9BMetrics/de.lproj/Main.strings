@@ -255,7 +255,7 @@
 "efl-mc-Fmh.text" = "0.0V";
 
 /* Class = "UILabel"; text = "Enable Speech"; ObjectID = "efq-sl-Ddv"; */
-"efq-sl-Ddv.text" = "Enable Speech";
+"efq-sl-Ddv.text" = "Sprachausgabe aktiviert";
 
 /* Class = "UILabel"; text = "Energy"; ObjectID = "elh-1p-yfr"; */
 "elh-1p-yfr.text" = "Energie";

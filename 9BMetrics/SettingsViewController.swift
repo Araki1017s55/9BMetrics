@@ -357,13 +357,6 @@ class SettingsViewController: UIViewController {
             })
             
         })
-   
-        
-        
-        
-        
-        
-        
     
     }
     
