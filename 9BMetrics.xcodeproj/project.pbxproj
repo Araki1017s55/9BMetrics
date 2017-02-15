@@ -62,6 +62,8 @@
 		007CE2F81CCBD5260005828F /* KTCenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */; };
 		007D4A171E239A0D008624E6 /* WheelInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007D4A161E239A0D008624E6 /* WheelInfoCell.swift */; };
 		008BB5A31DA6A6340073B5A0 /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BB5A21DA6A6340073B5A0 /* String+Localized.swift */; };
+		008DB0F71E53002A002A4AB3 /* BLEGenericDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DB0F61E53002A002A4AB3 /* BLEGenericDashboard.swift */; };
+		008DB0F91E53088B002A4AB3 /* BLEMapDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DB0F81E53088B002A4AB3 /* BLEMapDashboard.swift */; };
 		008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */; };
 		008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */; };
 		00A4A1921D943E020058C846 /* NinebotS12Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */; };
@@ -208,6 +210,8 @@
 		007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KTCenterFlowLayout.swift; path = 9BMetrics/KTCenterFlowLayout.swift; sourceTree = "<group>"; };
 		007D4A161E239A0D008624E6 /* WheelInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelInfoCell.swift; sourceTree = "<group>"; };
 		008BB5A21DA6A6340073B5A0 /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Localized.swift"; path = "9BMetrics/String+Localized.swift"; sourceTree = "<group>"; };
+		008DB0F61E53002A002A4AB3 /* BLEGenericDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEGenericDashboard.swift; path = 9BMetrics/BLEGenericDashboard.swift; sourceTree = "<group>"; };
+		008DB0F81E53088B002A4AB3 /* BLEMapDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMapDashboard.swift; path = 9BMetrics/BLEMapDashboard.swift; sourceTree = "<group>"; };
 		008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEWheelAdapterProtocol.swift; path = 9BMetrics/BLEWheelAdapterProtocol.swift; sourceTree = "<group>"; };
 		008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotOneAdapter.swift; path = 9BMetrics/BLENinebotOneAdapter.swift; sourceTree = "<group>"; };
 		009962B81E51F59200055445 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
@@ -465,9 +469,11 @@
 				004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */,
 				007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */,
 				007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */,
+				008DB0F61E53002A002A4AB3 /* BLEGenericDashboard.swift */,
 				00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */,
 				0002C47D1CAABF0E0060CFA5 /* BLERunningDashboard.swift */,
 				003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */,
+				008DB0F81E53088B002A4AB3 /* BLEMapDashboard.swift */,
 			);
 			name = Dashboards;
 			sourceTree = "<group>";
@@ -775,9 +781,11 @@
 				007A57181C85CE49003A2030 /* AppDelegate.swift in Sources */,
 				007A31FD1CB7F04100BB928D /* BLEMapViewController.swift in Sources */,
 				007A57841C85CF39003A2030 /* BLENinebotSettingsViewController.swift in Sources */,
+				008DB0F71E53002A002A4AB3 /* BLEGenericDashboard.swift in Sources */,
 				0016670C1C9958B70048344F /* BLESimulatedNinebot.swift in Sources */,
 				00C4EE601CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift in Sources */,
 				00B9E0FE1E40956F004391EE /* UnitManager.swift in Sources */,
+				008DB0F91E53088B002A4AB3 /* BLEMapDashboard.swift in Sources */,
 				0066C8AD1D86CE0F005DE94F /* BLEMimServer.swift in Sources */,
 				007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */,
 				00AB59541CAEE64000277859 /* aescrypt.c in Sources */,

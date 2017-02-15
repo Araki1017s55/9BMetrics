@@ -8,7 +8,6 @@
  German translation by Michael Heller, 9/2/17 done.
  */
 
-
 "Edit" = "Bearbeiten";
 "Done" = "Fertig";
 "New Run" = "Neu";
@@ -51,5 +50,4 @@
 "Yesterday" = "Gestern";
 "This Week" = "Diese Woche";
 "This Month" = "Dieser Monat";
-
-"You are going too fast. Please reduce your speed" = "Zu schnell! Geschwindigkeit verringern";
+"You are going too fast. Please reduce your speed" = "Zu schnell! Geschwindigkeit verringern";

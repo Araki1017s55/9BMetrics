@@ -478,7 +478,8 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         if graphMode {
             performSegue(withIdentifier: "GraphicRunningDashboardSegue", sender: self)
         }else{
-            performSegue(withIdentifier: "runningDashboardSegue", sender: self)
+            performSegue(withIdentifier: "TestMapDashboardSegue", sender: self)
+           //performSegue(withIdentifier: "runningDashboardSegue", sender: self)
         }
     }
     
@@ -804,7 +805,23 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                 }
                 
             }
-        }else if segue.identifier == "GraphicRunningDashboardSegue" {
+        } else if segue.identifier == "TestMapDashboardSegue" {
+            if let dash = segue.destination as? BLEMapDashboard{
+                
+                if let dele = UIApplication.shared.delegate as? AppDelegate{
+                    dash.client = dele.client
+                    
+                    
+                    if let cli = dele.client{
+                        
+                        if !cli.isRecording(){
+                            cli.start()
+                        }
+                    }
+                }
+                
+            }
+        } else if segue.identifier == "GraphicRunningDashboardSegue" {
             if let dash = segue.destination as? BLEGraphicRunningDashboard{
                 
                 if let dele = UIApplication.shared.delegate as? AppDelegate{

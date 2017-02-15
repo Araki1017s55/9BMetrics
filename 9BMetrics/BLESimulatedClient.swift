@@ -817,7 +817,7 @@ class BLESimulatedClient: NSObject {
     
     
 }
-//MARK: BLENMimConnectionDelegate
+//MARK: BLEMimConnectionDelegate
 
 extension BLESimulatedClient : BLEMimConnectionDelegate{
     internal func deviceAnalyzed(_ peripheral: CBPeripheral, services: [String : BLEService]) {
@@ -1080,7 +1080,7 @@ extension BLESimulatedClient :  WCSessionDelegate{
     
 }
 
-// CLLocationManagerDelegate
+//MARK: CLLocationManagerDelegate
 
 extension BLESimulatedClient : CLLocationManagerDelegate{
     
@@ -1178,6 +1178,7 @@ extension BLESimulatedClient : CLLocationManagerDelegate{
     
 }
 
+//MARK: AVSpeechSynthesizerDelegate
 extension BLESimulatedClient : AVSpeechSynthesizerDelegate {
     
     
