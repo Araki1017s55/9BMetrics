@@ -1783,6 +1783,16 @@ class WheelTrack: NSObject {
         }
     }
     
+    func lastLocation() -> CLLocation?{
+        let p = min( countLogForVariable(.Latitude), countLogForVariable(.Longitude))
+        if p > 0{
+            return locationForPoint(p)
+        }
+        else{
+            return nil
+        }
+    }
+    
     func locationForPoint(_ p : Int) -> CLLocation {
         return CLLocation(latitude: getValueForVariable(.Latitude, atPoint: p), longitude: getValueForVariable(.Longitude, atPoint: p))
     }

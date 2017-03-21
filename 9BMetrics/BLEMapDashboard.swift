@@ -82,7 +82,26 @@ class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
     
     @IBAction func recenter(){
         self.mapView.setUserTrackingMode(.followWithHeading, animated: true)
+        
+    }
+    
+    @IBAction func whereIam(){
+        
+        if let track = client?.datos {
+            if let loc = track.lastLocation(){
+                CLGeocoder().reverseGeocodeLocation(loc,
+                                                    completionHandler: {(placemarks:[CLPlacemark]?, error:Error?) -> Void in
+                                                        if let placemarks = placemarks {
+                                                            let placemark = placemarks[0]
+                                                            
+                                                            NSLog("p : %@", placemark)
+                                                            
 
+                                                        }
+                })
+                
+            }
+        }
     }
     
     override func updateName(_ name : String){
@@ -90,7 +109,7 @@ class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
     }
     
     override func prepareForUpdate(_ track: WheelTrack) {
-
+        
     }
     
     override func updateUI(_ track : WheelTrack){
@@ -144,7 +163,7 @@ class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
             return
         }
         
-      
+        
         if let poly = polyTrack{
             mapView.remove(poly)
         }
@@ -167,7 +186,7 @@ class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
         }
         
         var locs = track.locationArray()
-
+        
         let pt0 = MKMapPointForCoordinate(locs[0])
         
         var xmin = pt0.x
@@ -196,7 +215,7 @@ class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
         let size = MKMapSize(width: (xmax-xmin), height: (ymax-ymin))
         
         fullRect = MKMapRect(origin: orig, size: size)
-
+        
         return MKPolyline(coordinates: &locs, count: locs.count)
     }
     
@@ -241,5 +260,5 @@ class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
             bRecenter.isHidden = true
         }
     }
-
+    
 }
