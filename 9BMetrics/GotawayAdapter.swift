@@ -132,7 +132,18 @@ class GotawayAdapter : NSObject {
                 outarr.append((WheelTrack.WheelValue.Speed, date, speed))
                 
                 //let temperature = Double(Int(buffer[12]) * 256 + Int(buffer[13])) / 100.0 // Very strange conversion in Kevin program
-                let temperature = Double(Int(buffer[12]) * 256 + Int(buffer[13])) / 340.0 + 35.0 // Very strange
+                
+                
+                // let temperature = Double(Int(buffer[12]) * 256 + Int(buffer[13])) / 340.0 + 35.0 // Very strange
+                
+                var intValue = Int(buffer[12]) * 256 + Int(buffer[13])
+                
+                if intValue >= 32768 {
+                    intValue = intValue - 65536
+                }
+                
+                let temperature = Double(intValue) / 340.0 + 35.0 // Seems 0 value is around 35ºC
+            
                 outarr.append((WheelTrack.WheelValue.Temperature, date, temperature))
                 
                 var distance = Double(Int(buffer[8]) * 256 + Int(buffer[9]))
