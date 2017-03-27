@@ -517,7 +517,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                     
                     ew.backImage = nil
                     
-                    ew.updateData(String(format:"%0.0f", eplus-erec) , units: "wh", radis: eLevels, arcs: eAreas, minValue: 0.0, maxValue: emax)
+                    ew.updateData(String(format:"%0.0f", eplus-erec) , units: "Wh", radis: eLevels, arcs: eAreas, minValue: 0.0, maxValue: emax)
                 }
                 
                 return cell

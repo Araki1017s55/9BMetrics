@@ -43,7 +43,7 @@ class GraphViewController: UIViewController {
   
     let scales : [Double] = [UnitManager.sharedInstance.longDistanceConverter * 3.6, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, UnitManager.sharedInstance.longDistanceConverter * 0.001, UnitManager.sharedInstance.heightConverter, 1.0, 1.0 / 3600.0]
         
-    let units : [String] = [UnitManager.sharedInstance.longDistanceUnit+"/h", "ºC", "V", "A", "%", "º", "º", UnitManager.sharedInstance.longDistanceUnit, UnitManager.sharedInstance.heightUnit, "w"  , "wh"]
+    let units : [String] = [UnitManager.sharedInstance.longDistanceUnit+"/h", "ºC", "V", "A", "%", "º", "º", UnitManager.sharedInstance.longDistanceUnit, UnitManager.sharedInstance.heightUnit, "W"  , "Wh"]
     
 
     var resampledLog : [WheelTrack.LogEntry]?
