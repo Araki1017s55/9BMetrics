@@ -461,14 +461,19 @@ class BLESimulatedClient: NSObject {
         if #available(iOS 10.0, *) {
             
             //            let notifyBefore = UNNotificationAction(identifier:"Battery low", title: "Notification", options: [])
+            
+            let oralMessage = level <= alarmBattery ? "Battery is getting low. Beware".localized() : "Battery level recovered".localized()
+            
+            saySomething(message: oralMessage)
+             
             let category = UNNotificationCategory(identifier: UserNotificationCategory.batteryLevel.rawValue, actions: [], intentIdentifiers: [], options: [])
             
             
             UNUserNotificationCenter.current().setNotificationCategories([category])
             let content = UNMutableNotificationContent()
             
-            content.title = level <= alarmBattery ?"Battery level low" : "Battery level is OK"
-            content.body = "Battery level is \(level)%"
+            content.title = level <= alarmBattery ?"Battery level low".localized() : "Battery level is OK".localized()
+            content.body = "Battery level is ".localized() + "\(level)%"
             content.sound = UNNotificationSound.default()
             content.categoryIdentifier = UserNotificationCategory.batteryLevel.rawValue
             
@@ -895,6 +900,8 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                         saySomething(message: "You are going too fast. Please reduce your speed".localized())
                         self.sendSpeedAlertNotification(speed: wheelTrack.getCurrentValueForVariable(.Speed))
                         speedNotificationSent = true
+                    } else if notifySpeed{
+                        saySomething(message: "Slow down".localized())
                     }
                 }
                 return true
@@ -903,6 +910,11 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
             }
         }
         return false
+    }
+    
+    func checkBattery() -> Bool {
+        
+        return false;
     }
     
     
@@ -960,9 +972,11 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                 }
                 let alarm = checkSpeed()
                 
+                /*
                 if Date().timeIntervalSince(self.lastWatchUpdate) > watchTimerStep {
                     self.doSendStateToWatch(alarm)
                 }
+                */
             }
         }
     }

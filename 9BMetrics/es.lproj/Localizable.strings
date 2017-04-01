@@ -50,3 +50,10 @@
 "This Month" = "Este mes";
 
 "You are going too fast. Please reduce your speed" = "No corras tanto";
+"Slow down" = "Demasiado rápido";
+"Battery is getting low. Beware" = "Batería baja. Cuidado";
+"Battery level recovered" = "El nivel de la batería se ha recuperado";
+"Battery level low" = "Batería baja";
+"Battery level is OK" = "Batería OK";
+"Battery level is " = "El nivel de la batería es ";
+

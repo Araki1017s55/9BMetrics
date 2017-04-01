@@ -49,4 +49,12 @@
 "This Week" = "Aquesta setmana";
 "This Month" = "Aquest mes";
 
-"You are going too fast. Please reduce your speed" = "Vas massa ràpid. Redueix la teva vlocitat";
+"You are going too fast. Please reduce your speed" = "Redueix la velocitat";
+"Slow down" = "Massa Ràpid";
+"Battery is getting low. Beware" = "La bateria s'està esgotant. Compte!";
+"Battery level recovered" = "La bateria s'ha recuperat";
+"Battery level low" = "Nivell bde la bateria baix";
+"Battery level is OK" = "Nivell de la bateria OK";
+"Battery level is " = "El nivell de la bateria es  ";
+
+

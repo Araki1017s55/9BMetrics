@@ -49,4 +49,11 @@
 "This Week" = "This Week";
 "This Month" = "This Month";
 
-"You are going too fast. Please reduce your speed" = "You are going too fast. Please reduce your speed";
+"You are going too fast. Please reduce your speed" = "Please, slow down";
+"Slow down" = "Slow down";
+"Battery is getting low. Beware" = "Battery is getting low. Beware";
+"Battery level recovered" = "Battery level recovered";
+"Battery level low" = "Battery level low";
+"Battery level is OK" = "Battery level is OK";
+"Battery level is " = "Battery level is ";
+
