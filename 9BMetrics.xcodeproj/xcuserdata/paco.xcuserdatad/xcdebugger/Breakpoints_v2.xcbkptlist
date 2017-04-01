@@ -127,5 +127,69 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLEGraphicRunningDashboard.swift"
+            timestampString = "512740109.070386"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "444"
+            endingLineNumber = "444"
+            landmarkName = "swipeRight()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "9BMetrics/BLEGraphicRunningDashboard.swift"
+            timestampString = "512740182.094335"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "419"
+            endingLineNumber = "419"
+            landmarkName = "prepare(for:sender:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLEGraphicRunningDashboard.prepare (for : __ObjC.UIStoryboardSegue, sender : Swift.Optional&lt;Any&gt;) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLEGraphicRunningDashboard.swift"
+                  timestampString = "512740767.082213"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "419"
+                  endingLineNumber = "419"
+                  offsetFromSymbolStart = "3152">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.BLEGraphicRunningDashboard.prepare (for : __ObjC.UIStoryboardSegue, sender : Swift.Optional&lt;Any&gt;) -&gt; ()"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/9BMetrics/BLEGraphicRunningDashboard.swift"
+                  timestampString = "512740767.086363"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "419"
+                  endingLineNumber = "419"
+                  offsetFromSymbolStart = "3276">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -495,6 +495,18 @@ class WheelTrack: NSObject {
         return n1 > 0 && n2 > 0
     }
     
+    
+    func lastLocation() -> CLLocation?{
+        if hasGPSData(){
+            let n = min(countLogForVariable(.Latitude), countLogForVariable(.Longitude))
+            
+            return CLLocation(latitude: valueAtPointForVariable(.Latitude, atPoint: n)!, longitude: valueAtPointForVariable(.Longitude, atPoint: n)!)
+    
+        }else {
+            return nil
+        }
+        
+    }
     func countLogForVariable(_ v : WheelValue) -> Int{
         
         objc_sync_enter(self);

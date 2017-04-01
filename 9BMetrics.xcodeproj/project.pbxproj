@@ -84,6 +84,8 @@
 		00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */; };
 		00B9E0FC1E3F5492004391EE /* WheelSelectorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */; };
 		00B9E0FE1E40956F004391EE /* UnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FD1E40956F004391EE /* UnitManager.swift */; };
+		00C1E9AD1E8FC0F900211452 /* BLEMapDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1E9AC1E8FC0F900211452 /* BLEMapDashboard.swift */; };
+		00C1E9AF1E8FC67900211452 /* BLEGenericDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1E9AE1E8FC67900211452 /* BLEGenericDashboard.swift */; };
 		00C2667D1DA27D86004D3B02 /* GotawayAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */; };
 		00C4EE601CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */; };
 		00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */; };
@@ -252,6 +254,8 @@
 		00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKImage.swift; path = 9BMetrics/TMKImage.swift; sourceTree = "<group>"; };
 		00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorDelegate.swift; sourceTree = "<group>"; };
 		00B9E0FD1E40956F004391EE /* UnitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UnitManager.swift; path = 9BMetrics/UnitManager.swift; sourceTree = "<group>"; };
+		00C1E9AC1E8FC0F900211452 /* BLEMapDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMapDashboard.swift; sourceTree = "<group>"; };
+		00C1E9AE1E8FC67900211452 /* BLEGenericDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEGenericDashboard.swift; sourceTree = "<group>"; };
 		00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GotawayAdapter.swift; path = 9BMetrics/GotawayAdapter.swift; sourceTree = "<group>"; };
 		00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEGraphicRunningDashboard.swift; path = 9BMetrics/BLEGraphicRunningDashboard.swift; sourceTree = "<group>"; };
 		00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKClockViewFast.swift; path = 9BMetrics/TMKClockViewFast.swift; sourceTree = "<group>"; };
@@ -465,8 +469,10 @@
 				004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */,
 				007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */,
 				007A31FC1CB7F04100BB928D /* BLEMapViewController.swift */,
+				00C1E9AE1E8FC67900211452 /* BLEGenericDashboard.swift */,
 				00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */,
 				0002C47D1CAABF0E0060CFA5 /* BLERunningDashboard.swift */,
+				00C1E9AC1E8FC0F900211452 /* BLEMapDashboard.swift */,
 				003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */,
 			);
 			name = Dashboards;
@@ -730,9 +736,11 @@
 				00C2667D1DA27D86004D3B02 /* GotawayAdapter.swift in Sources */,
 				00AB59551CAEE64000277859 /* aeskey.c in Sources */,
 				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,
+				00C1E9AF1E8FC67900211452 /* BLEGenericDashboard.swift in Sources */,
 				00AB59561CAEE64000277859 /* aestab.c in Sources */,
 				00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */,
 				00A4A1921D943E020058C846 /* NinebotS12Adapter.swift in Sources */,
+				00C1E9AD1E8FC0F900211452 /* BLEMapDashboard.swift in Sources */,
 				00AB595B1CAEE64000277859 /* pwd2key.c in Sources */,
 				00AB595C1CAEE64000277859 /* sha1.c in Sources */,
 				0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */,

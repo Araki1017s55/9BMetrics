@@ -320,7 +320,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1148" y="62"/>
+            <point key="canvasLocation" x="1201" y="135"/>
         </scene>
         <!--Doc Controller-->
         <scene sceneID="tcG-0e-qWb">
@@ -372,7 +372,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Graphic Dashboard" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hC-FS-Iv8">
-                                <rect key="frame" x="20" y="127" width="148.5" height="21"/>
+                                <rect key="frame" x="20" y="127" width="149" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -651,15 +651,15 @@
             <objects>
                 <tableViewController id="Psf-Fs-ffy" customClass="WheelSelectorTableViewController" customModule="_BMetrics" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="UMU-2n-vxc">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="700"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="wheelSelectorCellIdentifier" id="4MC-og-7uY" customClass="WheelInfoCell" customModule="_BMetrics" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="400" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4MC-og-7uY" id="PA7-ud-ATU">
-                                    <rect key="frame" x="0.0" y="0.0" width="400" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bzy-Gr-LIs">
@@ -1022,7 +1022,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="scA-Zj-1PR">
-                                <rect key="frame" x="168.5" y="16" width="38" height="34"/>
+                                <rect key="frame" x="169" y="16" width="38" height="34"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Titulo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DTn-nW-YMG">
                                         <rect key="frame" x="0.0" y="0.0" width="38" height="18"/>
@@ -1105,7 +1105,7 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cUD-I9-sFG">
-                                <rect key="frame" x="81.5" y="619" width="212" height="29"/>
+                                <rect key="frame" x="82" y="619" width="212" height="29"/>
                                 <segments>
                                     <segment title="Standard"/>
                                     <segment title="Satellite"/>
@@ -1243,14 +1243,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Pj-H7-8xH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3028" y="135"/>
+            <point key="canvasLocation" x="3308" y="135"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="06g-tC-hy4">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="p3k-PT-xWD" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="V3x-Vt-LSE">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="V3x-Vt-LSE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1423,7 +1423,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BZ2-Rc-VlV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="NrJ-T5-pos" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2814" y="1556"/>
+            <point key="canvasLocation" x="2821" y="1711"/>
         </scene>
         <!--Running Dashboard-->
         <scene sceneID="DzV-3f-svW">
@@ -1445,13 +1445,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBx-cU-HWA">
-                                <rect key="frame" x="113" y="285.5" width="165" height="96"/>
+                                <rect key="frame" x="113" y="286" width="165" height="96"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="80"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="km/h" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kh6-pq-NHH">
-                                <rect key="frame" x="154" y="381.5" width="67" height="36"/>
+                                <rect key="frame" x="154" y="382" width="67" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1506,7 +1506,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ninebot One" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TW4-lp-aJB">
-                                <rect key="frame" x="122.5" y="197" width="130" height="28"/>
+                                <rect key="frame" x="123" y="197" width="130" height="28"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1598,18 +1598,18 @@
                                         <rect key="frame" x="0.0" y="28" width="268" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qu5-om-Vjh" id="xki-Rb-w8T">
-                                            <rect key="frame" x="0.0" y="0.0" width="268" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="268" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8s9-GI-B46">
-                                                    <rect key="frame" x="15" y="6" width="31.5" height="19.5"/>
+                                                    <rect key="frame" x="15" y="5" width="32" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PBJ-aK-z75">
-                                                    <rect key="frame" x="15" y="25.5" width="40.5" height="13.5"/>
+                                                    <rect key="frame" x="15" y="25" width="41" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1643,7 +1643,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SsI-V1-UAa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1993.5999999999999" y="1656.9715142428786"/>
+            <point key="canvasLocation" x="1952" y="1666"/>
         </scene>
         <!--Test Controller-->
         <scene sceneID="qPm-EG-FA9">
@@ -1825,7 +1825,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ninebot One" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BuC-97-6nD">
-                                <rect key="frame" x="122.5" y="153" width="130" height="28"/>
+                                <rect key="frame" x="123" y="153" width="130" height="28"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1840,7 +1840,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="huQ-Ha-oN3" customClass="TMKClockViewFast" customModule="_BMetrics" customModuleProvider="target">
-                                <rect key="frame" x="62.5" y="208.5" width="250" height="250"/>
+                                <rect key="frame" x="63" y="209" width="250" height="250"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="250" id="1RZ-xS-dnv"/>
@@ -1867,7 +1867,7 @@
                                 <rect key="frame" x="329" y="600" width="30" height="30"/>
                                 <state key="normal" title="Map"/>
                                 <connections>
-                                    <segue destination="qqE-ny-9Bb" kind="presentation" identifier="graphMapSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="iMQ-He-W2A"/>
+                                    <segue destination="15T-wB-tyO" kind="show" identifier="graphMapDashboard" id="sI9-lk-JVn"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1921,7 +1921,34 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3502" y="949"/>
+            <point key="canvasLocation" x="2993" y="963"/>
+        </scene>
+        <!--Map Dashboard-->
+        <scene sceneID="o83-IL-M8i">
+            <objects>
+                <viewController id="15T-wB-tyO" customClass="BLEMapDashboard" customModule="_BMetrics" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nIZ-Pl-3lc"/>
+                        <viewControllerLayoutGuide type="bottom" id="dOd-aQ-N7Y"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="T8c-xJ-GTJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Izr-eG-mOz">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="Izr-eG-mOz" id="tVM-7b-Qu2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xzu-jh-gaq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3848.8000000000002" y="958.4707646176912"/>
         </scene>
     </scenes>
     <resources>
@@ -1935,11 +1962,10 @@
         <image name="reload" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="t9A-xb-biV"/>
         <segue reference="12P-rp-KOW"/>
-        <segue reference="NBL-0v-jxx"/>
-        <segue reference="ucI-lm-cZv"/>
-        <segue reference="JQ0-Yj-A2b"/>
-        <segue reference="hUM-98-Yy9"/>
-        <segue reference="iMQ-He-W2A"/>
+        <segue reference="nZ7-qu-ujD"/>
+        <segue reference="0GB-gO-lWT"/>
+        <segue reference="MtA-Om-95G"/>
     </inferredMetricsTieBreakers>
 </document>

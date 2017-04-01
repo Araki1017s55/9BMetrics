@@ -138,6 +138,8 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             
             //timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(BLEGraphicRunningDashboard.testSpeed(_:)), userInfo: nil, repeats: true)
             
+            
+            
         }
     
         override func didReceiveMemoryWarning() {
@@ -413,7 +415,17 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                
             }
             
-            
+            else if segue.identifier == "graphMapDashboard"{
+                if let dash = segue.destination as? BLEMapDashboard{
+                    
+                    if let dele = UIApplication.shared.delegate as? AppDelegate{
+                        dash.client = dele.client
+                        
+                    }
+                    
+                }
+                
+            }
         }
         
         @IBAction func prepareForUnwind(_ segue: UIStoryboardSegue){
@@ -424,7 +436,24 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
             }
             
         }
+    
+        // Just block swipe right for UINavigator
+    
+        @IBAction func swipeRight(){
         
+                NSLog("Hello not right swipe")
+        
+        }
+    
+        // Push map dasboard
+    
+        @IBAction func swipeLeft(){
+        
+           
+        
+        }
+
+    
         override func viewWillAppear(_ animated: Bool) {
             self.navigationController?.navigationBar.isHidden = true
             self.initNotifications()
