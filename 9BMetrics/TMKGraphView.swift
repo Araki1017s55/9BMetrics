@@ -510,7 +510,7 @@ class TMKGraphView: UIView {
         if(pt.x < self.selectionLeftUnits){
             let scx : CGFloat = (self.selectionLeft - self.leftMargin) / (self.selectionLeftUnits - self.xmin)
             
-            myPt = CGPoint(x: (x: pt.x - self.xmin ) * scx + self.leftMargin,
+            myPt = CGPoint(x: (pt.x - self.xmin ) * scx + self.leftMargin,
                 y: height - ((pt.y - ybot ) * self.sy) - self.bottomMargin)
         }
         else if pt.x >= self.selectionLeftUnits && pt.x <= self.selectionRightUnits{

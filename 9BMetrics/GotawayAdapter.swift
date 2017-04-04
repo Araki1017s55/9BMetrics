@@ -169,7 +169,7 @@ class GotawayAdapter : NSObject {
                     current = current - 65536.0
                 }
                 
-                current = current / 100.0
+                current = fabs(current / 100.0) // I have problems with sign in some wheels
                 outarr.append((WheelTrack.WheelValue.Current, date, current))
                 
                 outarr.append((WheelTrack.WheelValue.Duration, date, 0.0))

@@ -179,7 +179,14 @@ class KingSongAdapter : NSObject {
                 let voltage = Double(Int(buffer[3]) * 256 + Int(buffer[2])) / 100.0
                 outarr.append((WheelTrack.WheelValue.Voltage, date, voltage))
                 
-                let current = Double(Int(buffer[11]) * 256 + Int(buffer[10])) / 100.0
+                var current = Double(Int(buffer[11]) * 256 + Int(buffer[10])) / 100.0
+                
+                if current >= 32768.0 {
+                    current = current - 65536.0
+                }
+                
+                current = fabs(current / 100.0) // I have problems with sign in some wheels
+                
                 outarr.append((WheelTrack.WheelValue.Current, date, current))
                 
                 // filter voltage to get average voltage for battery level
