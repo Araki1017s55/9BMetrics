@@ -488,7 +488,7 @@ class BLESimulatedClient: NSObject {
             if(interval > 0){
                 UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
                     // handle the error if needed
-                    if let err = error as? NSError {
+                    if let err = error as NSError? {
                         AppDelegate.debugLog(err.localizedDescription)
                     }
                     
@@ -527,7 +527,7 @@ class BLESimulatedClient: NSObject {
             if(interval > 0){
                 UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
                     // handle the error if needed
-                    if let err = error as? NSError {
+                    if let err = error as NSError? {
                         AppDelegate.debugLog(err.localizedDescription)
                     }
                     
@@ -970,7 +970,7 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                     wheel.addValueWithDate(curDate, variable: .Energy, value: E)
                     
                 }
-                let alarm = checkSpeed()
+                _ = checkSpeed()
                 
                 /*
                 if Date().timeIntervalSince(self.lastWatchUpdate) > watchTimerStep {

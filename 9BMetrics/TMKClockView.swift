@@ -122,7 +122,7 @@ class TMKClockView: UIView {
     }
     
     func d2R(_ degs : Double ) -> CGFloat{
-        return CGFloat(degs / 180.0 * M_PI)
+        return CGFloat(degs / 180.0 * .pi)
     }
     
     func valueToAngle(_ val : Double) -> CGFloat{

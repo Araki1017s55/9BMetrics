@@ -64,6 +64,12 @@
 		008BB5A31DA6A6340073B5A0 /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BB5A21DA6A6340073B5A0 /* String+Localized.swift */; };
 		008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */; };
 		008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */; };
+		009B34851E93EEED0064F787 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009B34841E93EEED0064F787 /* IntentHandler.swift */; };
+		009B348E1E93EEEE0064F787 /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B348D1E93EEEE0064F787 /* IntentsUI.framework */; };
+		009B34911E93EEEE0064F787 /* IntentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009B34901E93EEEE0064F787 /* IntentViewController.swift */; };
+		009B34941E93EEEE0064F787 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 009B34921E93EEEE0064F787 /* MainInterface.storyboard */; };
+		009B34981E93EEEE0064F787 /* GyrometricsUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 009B348B1E93EEED0064F787 /* GyrometricsUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		009B349B1E93EEEE0064F787 /* Gyrometrics.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 009B34821E93EEED0064F787 /* Gyrometrics.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		00A4A1921D943E020058C846 /* NinebotS12Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */; };
 		00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
 		00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
@@ -121,6 +127,20 @@
 			remoteGlobalIDString = 007A57341C85CE49003A2030;
 			remoteInfo = "9BMetrics WatchKit Extension";
 		};
+		009B34961E93EEEE0064F787 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A570C1C85CE49003A2030 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 009B348A1E93EEED0064F787;
+			remoteInfo = GyrometricsUI;
+		};
+		009B34991E93EEEE0064F787 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A570C1C85CE49003A2030 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 009B34811E93EEED0064F787;
+			remoteInfo = Gyrometrics;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -144,6 +164,18 @@
 				007A57271C85CE49003A2030 /* 9BMetrics WatchKit App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009B34A21E93EEEE0064F787 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				009B34981E93EEEE0064F787 /* GyrometricsUI.appex in Embed App Extensions */,
+				009B349B1E93EEEE0064F787 /* Gyrometrics.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -216,6 +248,14 @@
 		009962B91E51F59200055445 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		009962BA1E51F59200055445 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		009962BB1E51F59200055445 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		009B34821E93EEED0064F787 /* Gyrometrics.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Gyrometrics.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		009B34841E93EEED0064F787 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
+		009B34861E93EEED0064F787 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		009B348B1E93EEED0064F787 /* GyrometricsUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GyrometricsUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		009B348D1E93EEEE0064F787 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
+		009B34901E93EEEE0064F787 /* IntentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentViewController.swift; sourceTree = "<group>"; };
+		009B34931E93EEEE0064F787 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		009B34951E93EEEE0064F787 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NinebotS12Adapter.swift; path = 9BMetrics/NinebotS12Adapter.swift; sourceTree = "<group>"; };
 		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zip.h; sourceTree = "<group>"; };
 		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
@@ -303,6 +343,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		009B347F1E93EEED0064F787 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009B34881E93EEED0064F787 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				009B348E1E93EEEE0064F787 /* IntentsUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -321,6 +376,9 @@
 				007A57161C85CE49003A2030 /* 9BMetrics */,
 				007A572A1C85CE49003A2030 /* 9BMetrics WatchKit App */,
 				007A57391C85CE49003A2030 /* 9BMetrics WatchKit Extension */,
+				009B34831E93EEED0064F787 /* Gyrometrics */,
+				009B348F1E93EEEE0064F787 /* GyrometricsUI */,
+				009B348C1E93EEEE0064F787 /* Frameworks */,
 				007A57151C85CE49003A2030 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -331,6 +389,8 @@
 				007A57141C85CE49003A2030 /* 9BMetrics.app */,
 				007A57261C85CE49003A2030 /* 9BMetrics WatchKit App.app */,
 				007A57351C85CE49003A2030 /* 9BMetrics WatchKit Extension.appex */,
+				009B34821E93EEED0064F787 /* Gyrometrics.appex */,
+				009B348B1E93EEED0064F787 /* GyrometricsUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -391,6 +451,33 @@
 				0029253E1CBA3B3400AEA843 /* Notes.rtf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		009B34831E93EEED0064F787 /* Gyrometrics */ = {
+			isa = PBXGroup;
+			children = (
+				009B34841E93EEED0064F787 /* IntentHandler.swift */,
+				009B34861E93EEED0064F787 /* Info.plist */,
+			);
+			path = Gyrometrics;
+			sourceTree = "<group>";
+		};
+		009B348C1E93EEEE0064F787 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				009B348D1E93EEEE0064F787 /* IntentsUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		009B348F1E93EEEE0064F787 /* GyrometricsUI */ = {
+			isa = PBXGroup;
+			children = (
+				009B34901E93EEEE0064F787 /* IntentViewController.swift */,
+				009B34921E93EEEE0064F787 /* MainInterface.storyboard */,
+				009B34951E93EEEE0064F787 /* Info.plist */,
+			);
+			path = GyrometricsUI;
 			sourceTree = "<group>";
 		};
 		00AB592A1CAEE5CA00277859 /* Zip */ = {
@@ -562,11 +649,14 @@
 				007A57111C85CE49003A2030 /* Frameworks */,
 				007A57121C85CE49003A2030 /* Resources */,
 				007A574A1C85CE49003A2030 /* Embed Watch Content */,
+				009B34A21E93EEEE0064F787 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				007A57291C85CE49003A2030 /* PBXTargetDependency */,
+				009B34971E93EEEE0064F787 /* PBXTargetDependency */,
+				009B349A1E93EEEE0064F787 /* PBXTargetDependency */,
 			);
 			name = 9BMetrics;
 			productName = 9BMetrics;
@@ -607,13 +697,47 @@
 			productReference = 007A57351C85CE49003A2030 /* 9BMetrics WatchKit Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
+		009B34811E93EEED0064F787 /* Gyrometrics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 009B349F1E93EEEE0064F787 /* Build configuration list for PBXNativeTarget "Gyrometrics" */;
+			buildPhases = (
+				009B347E1E93EEED0064F787 /* Sources */,
+				009B347F1E93EEED0064F787 /* Frameworks */,
+				009B34801E93EEED0064F787 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Gyrometrics;
+			productName = Gyrometrics;
+			productReference = 009B34821E93EEED0064F787 /* Gyrometrics.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		009B348A1E93EEED0064F787 /* GyrometricsUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 009B349C1E93EEEE0064F787 /* Build configuration list for PBXNativeTarget "GyrometricsUI" */;
+			buildPhases = (
+				009B34871E93EEED0064F787 /* Sources */,
+				009B34881E93EEED0064F787 /* Frameworks */,
+				009B34891E93EEED0064F787 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GyrometricsUI;
+			productName = GyrometricsUI;
+			productReference = 009B348B1E93EEED0064F787 /* GyrometricsUI.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		007A570C1C85CE49003A2030 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Paco Gorina";
 				TargetAttributes = {
@@ -627,6 +751,9 @@
 								enabled = 1;
 							};
 							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+							com.apple.Siri = {
 								enabled = 1;
 							};
 							com.apple.iCloud = {
@@ -644,6 +771,16 @@
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = N72U6DTDRE;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
+					};
+					009B34811E93EEED0064F787 = {
+						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = N72U6DTDRE;
+						ProvisioningStyle = Automatic;
+					};
+					009B348A1E93EEED0064F787 = {
+						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = N72U6DTDRE;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -668,6 +805,8 @@
 				007A57131C85CE49003A2030 /* 9BMetrics */,
 				007A57251C85CE49003A2030 /* 9BMetrics WatchKit App */,
 				007A57341C85CE49003A2030 /* 9BMetrics WatchKit Extension */,
+				009B34811E93EEED0064F787 /* Gyrometrics */,
+				009B348A1E93EEED0064F787 /* GyrometricsUI */,
 			);
 		};
 /* End PBXProject section */
@@ -710,6 +849,21 @@
 			files = (
 				007A573F1C85CE49003A2030 /* Assets.xcassets in Resources */,
 				00F28D521E48DD3C00346A24 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009B34801E93EEED0064F787 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009B34891E93EEED0064F787 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				009B34941E93EEEE0064F787 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +958,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		009B347E1E93EEED0064F787 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				009B34851E93EEED0064F787 /* IntentHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		009B34871E93EEED0064F787 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				009B34911E93EEEE0064F787 /* IntentViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -816,6 +986,16 @@
 			isa = PBXTargetDependency;
 			target = 007A57341C85CE49003A2030 /* 9BMetrics WatchKit Extension */;
 			targetProxy = 007A57371C85CE49003A2030 /* PBXContainerItemProxy */;
+		};
+		009B34971E93EEEE0064F787 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 009B348A1E93EEED0064F787 /* GyrometricsUI */;
+			targetProxy = 009B34961E93EEEE0064F787 /* PBXContainerItemProxy */;
+		};
+		009B349A1E93EEEE0064F787 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 009B34811E93EEED0064F787 /* Gyrometrics */;
+			targetProxy = 009B34991E93EEEE0064F787 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -842,6 +1022,14 @@
 				009962B91E51F59200055445 /* de */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		009B34921E93EEEE0064F787 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				009B34931E93EEEE0064F787 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 		00DAD9C31E412063007E1762 /* InfoPlist.strings */ = {
@@ -1059,6 +1247,7 @@
 		007A574C1C85CE49003A2030 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = 9BMetrics/9BMetrics.entitlements;
@@ -1086,6 +1275,7 @@
 		007A574D1C85CE49003A2030 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = 9BMetrics/9BMetrics.entitlements;
@@ -1105,6 +1295,94 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "9BMetrics-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		009B349D1E93EEEE0064F787 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = N72U6DTDRE;
+				INFOPLIST_FILE = GyrometricsUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics.GyrometricsUI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		009B349E1E93EEEE0064F787 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = N72U6DTDRE;
+				INFOPLIST_FILE = GyrometricsUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics.GyrometricsUI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		009B34A01E93EEEE0064F787 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = N72U6DTDRE;
+				INFOPLIST_FILE = Gyrometrics/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics.Gyrometrics";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		009B34A11E93EEEE0064F787 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = N72U6DTDRE;
+				INFOPLIST_FILE = Gyrometrics/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics.Gyrometrics";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -1144,6 +1422,24 @@
 			buildConfigurations = (
 				007A574C1C85CE49003A2030 /* Debug */,
 				007A574D1C85CE49003A2030 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		009B349C1E93EEEE0064F787 /* Build configuration list for PBXNativeTarget "GyrometricsUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				009B349D1E93EEEE0064F787 /* Debug */,
+				009B349E1E93EEEE0064F787 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		009B349F1E93EEEE0064F787 /* Build configuration list for PBXNativeTarget "Gyrometrics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				009B34A01E93EEEE0064F787 /* Debug */,
+				009B34A11E93EEEE0064F787 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

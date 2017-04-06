@@ -14,6 +14,16 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>Gyrometrics.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>GyrometricsUI.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -23,6 +33,16 @@
 			<true/>
 		</dict>
 		<key>007A57251C85CE49003A2030</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>009B34811E93EEED0064F787</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>009B348A1E93EEED0064F787</key>
 		<dict>
 			<key>primary</key>
 			<true/>
