@@ -103,7 +103,7 @@ class TMKLevelView: UIView {
     }
     
     func d2R(_ degs : Double ) -> CGFloat{
-        return CGFloat(degs / 180.0 * M_PI)
+        return CGFloat(degs / 180.0 * .pi)
     }
     
     func drawCursor(_ value : Double, len : CGFloat, width : CGFloat, color : UIColor, center : CGPoint ){
@@ -179,7 +179,7 @@ class TMKLevelView: UIView {
         var bz = UIBezierPath()
         bz.lineWidth = sphereWidth
         
-        bz.addArc(withCenter: center, radius: r, startAngle:0.0, endAngle:CGFloat(2.0 * M_PI), clockwise: true)
+        bz.addArc(withCenter: center, radius: r, startAngle:0.0, endAngle:CGFloat(2.0 * .pi), clockwise: true)
         
         bz.stroke()
         
