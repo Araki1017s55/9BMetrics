@@ -223,6 +223,8 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 if let nb = cli.datos{
                     self.fSeriaNumber.text = nb.getName()
                 }
+                (self.distanceCorrection, self.speedCorrection) = cli.getCorrections()
+
             }
         })
     }

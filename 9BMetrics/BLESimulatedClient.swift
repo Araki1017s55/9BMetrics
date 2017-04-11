@@ -403,6 +403,17 @@ class BLESimulatedClient: NSObject {
                 } )
             }
         }
+        
+
+    }
+    
+    // For easy work, get the distance and speed corrections
+    func getCorrections() -> (Double, Double){
+        
+        let dcorrection = wheel?.getDistanceCorrection() ?? 1.0
+        let scorrection = wheel?.getSpeedCorrection() ?? 1.0
+        
+        return (dcorrection, scorrection)
     }
     
     //MARK: Audio support
@@ -535,6 +546,7 @@ class BLESimulatedClient: NSObject {
             }
         }
     }
+    
     
     //MARK: AppleWatch Support
     

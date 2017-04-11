@@ -44,8 +44,6 @@ class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
     let tempOK = 60.0
     
     
-    var distanceCorrection = 1.0
-    var speedCorrection = 1.0
     
     var tempAreas : [TMKClockView.arc] = []
     var battAreas : [TMKClockView.arc] = []

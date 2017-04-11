@@ -319,7 +319,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    //MARK: Message
+    //MARK: Handoff
+    
+    func application(_ application: UIApplication, didUpdate userActivity: NSUserActivity) {
+        
+        // here start recording
+        
+        
+
+    
+    }
+    
+    func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+        
+        switch userActivityType {
+            
+        case "Start":
+            
+            guard  let nav : UINavigationController = window?.rootViewController  as? UINavigationController else {return false }
+            
+            guard let wc = nav.topViewController as? ViewController   else {return false}
+            wc.openRunningDashboard(wc)
+            self.setShortcutItems(true)
+            return true
+            
+            
+        case "Stop":
+            
+            guard let cli = self.client   else {return false}
+            
+            cli.stop()
+            self.setShortcutItems(false)
+
+            
+        default:
+            break
+        }
+        
+        return false
+        
+    }
+    
+    func application(_ application: UIApplication, didFailToContinueUserActivityWithType userActivityType: String, error: Error) {
+        
+        
+        
+    }
+    
     //MARK: - Utilities
     
     static func alert(_ title: String, format: String, _ args: CVarArg...){

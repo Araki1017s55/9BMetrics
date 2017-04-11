@@ -82,10 +82,7 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     var deviceName : String = ""
     
     required init?(coder aDecoder: NSCoder) {
-        
-  
-        
-
+   
         super.init(coder: aDecoder)
         
     }
@@ -312,6 +309,8 @@ class BLEGraphicRunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
                     if let nb = cli.datos{
                         self.fSeriaNumber.text = nb.getName()
                     }
+                    
+                    (self.distanceCorrection, self.speedCorrection) = cli.getCorrections()
                 }
             })
         }

@@ -29,6 +29,8 @@
 			<key>IntentsSupported</key>
 			<array>
 				<string>INStartWorkoutIntent</string>
+				<string>INEndWorkoutIntent</string>
+				<string>INGetCarPowerLevelStatusIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>

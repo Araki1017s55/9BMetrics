@@ -17,8 +17,8 @@ import Intents
 // "<myApp> John saying hello"
 // "Search for messages in <myApp>"
 
-class IntentHandler: INExtension, INStartWorkoutIntentHandling
-//, INPauseWorkoutIntentHandling, INResumeWorkoutIntentHandling, INCancelWorkoutIntentHandling, INEndWorkoutIntentHandling 
+class IntentHandler: INExtension, INStartWorkoutIntentHandling, INEndWorkoutIntentHandling, INGetCarPowerLevelStatusIntentHandling
+//, INPauseWorkoutIntentHandling, INResumeWorkoutIntentHandling, INCancelWorkoutIntentHandling
 {
     
     override func handler(for intent: INIntent) -> Any {
@@ -67,11 +67,58 @@ class IntentHandler: INExtension, INStartWorkoutIntentHandling
     
     func handle(startWorkout intent: INStartWorkoutIntent, completion: @escaping (INStartWorkoutIntentResponse) -> Void) {
         
-        let intentResponse = INStartWorkoutIntentResponse.init(code: .continueInApp, userActivity: nil)
+        
+        let ua = NSUserActivity(activityType: "Start")
+        let intentResponse = INStartWorkoutIntentResponse.init(code: .continueInApp, userActivity: ua)
         completion(intentResponse)
         
     }
     
+    // MARK: - INEndWorkoutIntentHandling
+    
+    
+    func resolveWorkoutName(forEndWorkout intent: INEndWorkoutIntent, with completion: @escaping (INSpeakableStringResolutionResult) -> Void) {
+        let spkStr = INSpeakableString(spokenPhrase: "NOE003 Paco")
+        
+        let resolutionResult = INSpeakableStringResolutionResult.success(with: spkStr)//.disambiguation(with: [spkStr])
+        completion(resolutionResult)
+        
+    }
+    
+    func confirm(endWorkout intent: INEndWorkoutIntent, completion: @escaping (INEndWorkoutIntentResponse) -> Void) {
+        let response = INEndWorkoutIntentResponse(code: .ready, userActivity: nil)
+        completion(response)
+        
+    }
+    
+    func handle(endWorkout intent: INEndWorkoutIntent, completion: @escaping (INEndWorkoutIntentResponse) -> Void) {
+        let ua = NSUserActivity(activityType: "Stop")
+        let intentResponse = INEndWorkoutIntentResponse.init(code: .continueInApp, userActivity: ua)
+        completion(intentResponse)
+    }
+    
+    
+    //MARK: INGetCarPowerLevelStatusIntenHandling
+    
+    
+    func resolveCarName(forGetCarPowerLevelStatus intent: INGetCarPowerLevelStatusIntent, with completion: @escaping (INSpeakableStringResolutionResult) -> Void){
+        let spkStr = INSpeakableString(spokenPhrase: "Actual Wheel")
+        let resolutionResult = INSpeakableStringResolutionResult.success(with: spkStr)
+        completion(resolutionResult)
+        
+    }
+    
+    func confirm(getCarPowerLevelStatus intent: INGetCarPowerLevelStatusIntent, completion: @escaping (INGetCarPowerLevelStatusIntentResponse) -> Void){
+        let response = INGetCarPowerLevelStatusIntentResponse(code: .ready, userActivity: nil)
+        completion(response)
+    }
+    
+    func handle(getCarPowerLevelStatus intent: INGetCarPowerLevelStatusIntent, completion: @escaping (INGetCarPowerLevelStatusIntentResponse) -> Void){
+        
+        let intentResponse = INGetCarPowerLevelStatusIntentResponse(code: .success, userActivity: nil)
+        intentResponse.chargePercentRemaining = 15.0
+        completion(intentResponse)
+    }
     
   }
 

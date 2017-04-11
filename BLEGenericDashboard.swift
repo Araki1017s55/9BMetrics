@@ -43,6 +43,10 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
     // Managing state
     var headersReceived = false
     
+    var distanceCorrection = 1.0
+    var speedCorrection = 1.0
+
+    
     enum connectionState {
         case stopped
         case connecting
@@ -206,6 +210,8 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 if let track = cli.datos{
                     self.updateName(track.getName())
                 }
+                (self.distanceCorrection, self.speedCorrection) = cli.getCorrections()
+
             }
         })
     }
