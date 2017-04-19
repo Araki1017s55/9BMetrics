@@ -169,7 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         wheelSelector.registerAdapter(BLEInMotionAdapter())
         wheelSelector.registerAdapter(KingSongAdapter())
         wheelSelector.registerAdapter(GotawayAdapter())
-        wheelSelector.registerAdapter(NinebotS12Adapter())
+        //wheelSelector.registerAdapter(NinebotS12Adapter())
         wheelSelector.registerAdapter(BLENinebotOneAdapter())
 
     }

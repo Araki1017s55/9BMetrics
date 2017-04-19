@@ -250,7 +250,7 @@ extension BLESimulatedNinebot : BLENinebotServerDelegate{
     
     func writeReceived(_ char : CBCharacteristic, data: Data){
         
-        if let msg = BLENinebotMessage(data: data){
+        if let msg = BLENinebotMessage(data: data , fixed: 0x09){
         
             let v = msg.command // Primera variable
             let l = msg.data[0] // Número de variables * 2
@@ -318,7 +318,7 @@ extension BLESimulatedNinebot : BLENinebotServerDelegate{
 
             }
             
-            let answer = BLENinebotMessage(com: v, dat: buff)
+            let answer = BLENinebotMessage(com: v, dat: buff, fixed: 0x09)
             
             if let dat = answer?.toNSData(){
                 

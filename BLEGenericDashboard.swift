@@ -36,6 +36,8 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
     weak var client : BLESimulatedClient?
     var devSelector : BLEDeviceSelector?
     
+    var devSelectorSegue = "deviceSelectorSegue"
+    
     // For BLEDeviceSelectorDelegate
     var devList = [CBPeripheral]()
     var searching = false
@@ -288,7 +290,7 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 self.devList.removeAll()    // Remove old ones
                 self.devList.append(contentsOf: devs)
                 
-                self.performSegue(withIdentifier: "deviceSelectorSegue", sender: self)
+                self.performSegue(withIdentifier: devSelectorSegue, sender: self)
             }
             else{
                 if let vc = self.devSelector{
@@ -304,7 +306,7 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "deviceSelectorSegue" {
+        if segue.identifier == devSelectorSegue {
             
             if let vc = segue.destination as? BLEDeviceSelector{
                 
@@ -353,8 +355,8 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
         let store = UserDefaults.standard
         let testMode = store.bool(forKey: kTextMode)
         
-        //self.fSettingsButton.isHidden = !testMode
-        //self.fSettingsButton.isEnabled = testMode
+        self.fSettingsButton.isHidden = !testMode
+        self.fSettingsButton.isEnabled = testMode
         
         super.viewWillAppear(animated)
         

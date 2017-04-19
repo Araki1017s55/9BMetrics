@@ -17,83 +17,33 @@
 //
 //    You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+// NB S2 tenim
+
+//
+//  Service FEE7 Char FEC7 (w)
+// Service 6E400001-B5A3-F393-E0A9-E50E24DCCA9E
+//      Chars 6E400003-B5A3-F393-E0A9-E50E24DCCA9E (n)
+//            6E400002-B5A3-F393-E0A9-E50E24DCCA9E (wx)
+//  Service ???? Char FEC8(i)
+//
+
+
 
 import Foundation
 import CoreBluetooth
 
+
 class NinebotS12Adapter : BLENinebotOneAdapter {
     
+    // Service 6E400001-B5A3-F393-E0A9-E50E24DCCA9E (Nordic)
     
-    //MARK: Sending Requests
     
-    override func sendData(_ connection : BLEMimConnection, message : BLENinebotMessage?){
-        
-        
-        if self.headersOk {  // Get normal data
-            
-            
-            for (op, l) in listaOpFast{
-                let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-                if let dat = message?.toNSData(){
-                    connection.writeValue("FEC7", data:dat)
-                }
-            }
-            
-            let (op, l) = listaOp[contadorOp]
-            contadorOp += 1
-            
-            if contadorOp >= listaOp.count{
-                contadorOp = 0
-            }
-            
-            let message = BLENinebotMessage(com: op, dat:[ l * 2] )
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue("FEC7", data:dat)
-            }
-        }else {    // Get One time data (S/N, etc.)
-            
-            
-            var message = BLENinebotMessage(com: UInt8(16), dat: [UInt8(22)])
-            if let dat = message?.toNSData(){
-                connection.writeValue("FEC7", data:dat)
-            }
-            
-            // Get riding Level and max speeds
-            
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat: [UInt8(4)])
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue("FEC7", data:dat)
-            }
-            
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat: [UInt8(2)])
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue("FEC7", data:dat)
-            }
-            
-        }
+    override init(){
+        super.init()
+        readChar = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"  // FEC8  //
+        writeChar = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"  // FEC7
     }
-    
-    // MARK: NSOperationSupport
-    
-    override func injectRequest(_ tim : Timer){
-        
-        if let connection = tim.userInfo as? BLEMimConnection {
-            self.sendNewRequest(connection)
-        }
-    }
-    
-    override func sendNewRequest(_ connection : BLEMimConnection){
-        
-        let request = BLERequestOperation(adapter: self, connection: connection)
-        
-        if let q = self.queryQueue{
-            q.addOperation(request)
-        }
-    }
-    
     
 
 //MARK: BLEWheelAdapterProtocol Extension
@@ -106,124 +56,29 @@ class NinebotS12Adapter : BLENinebotOneAdapter {
     override func isComptatible(services : [String : BLEService]) -> Bool{
         
         
-        // De moment deixem el warning per si hem d'analitzar millor.
+        // Atenció, l'ordre es significatiu. Probablement podem incorporar el normal.
         
-        if let srv = services["FEE7"]{
+        if let srv = services["FEE7"]{      // Tambe podria ser 0x0001 i les readChar i writeChar
             if let _ = srv.characteristics["FEC7"], let _ = srv.characteristics["FEC8"], let _ = srv.characteristics["FEC9"] {
+                
+                readChar = "FEC8"
+                writeChar = "FEC7"
                 return true
                 
             }
         }
-        
+        else if let srv = services["6E400001-B5A3-F393-E0A9-E50E24DCCA9E"]{
+            if let _ = srv.characteristics["6E400003-B5A3-F393-E0A9-E50E24DCCA9"], let _ = srv.characteristics["6E400002-B5A3-F393-E0A9-E50E24DCCA9E"], let _ = srv.characteristics["FEC9"] {
+                
+                readChar = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+                writeChar = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+                return true
+                
+            }
+        }
         return false
     }
     
-    
-    override func startRecording(){
-        headersOk = true
-        contadorOp = 0
-        contadorOpFast = 0
-        buffer.removeAll()
-        if let qu = queryQueue {
-            qu.cancelAllOperations()
-        }
-        
-    }
-    
-    override func stopRecording(){
-        headersOk = false
-        contadorOp = 0
-        contadorOpFast = 0
-        buffer.removeAll()
-        if let qu = queryQueue {
-            qu.cancelAllOperations()
-        }
-        if let tim  = sendTimer {
-            tim.invalidate()
-            sendTimer = nil
-        }
-    }
-    
-    override func deviceConnected(_ connection: BLEMimConnection, peripheral : CBPeripheral ){
-        
-        // OK, subscribe to characteristif FFE1
-        
-        connection.subscribeToChar("FEC8")
-        
-        self.contadorOp = 0
-        self.headersOk = false
-        
-        self.sendNewRequest(connection)
-        
-        
-        
-        // Just to be sure we start another timer to correct cases where we loose all requests
-        // Will inject one request every timerStep
-        
-        self.sendTimer = Timer.scheduledTimer(timeInterval: timerStep, target: self, selector:#selector(BLENinebotOneAdapter.injectRequest(_:)), userInfo: connection, repeats: true)
-        
-        
-    }
-    
-    
-    
-    override func getName() -> String{
-        return "Ninebot S1/S2"
-    }
-    
-    override func getVersion() -> String{
-        
-        let clean = values[BLENinebot.kVersion] & 4095
-        
-        let v0 = clean / 256
-        let v1 = (clean - (v0 * 256) ) / 16
-        let v2 = clean % 16
-        
-        return String(format: "%d.%d.%d",v0, v1, v2)
-    }
-    
-    override func getSN() -> String{
-        
-        if !self.checkHeaders(){
-            return ""
-        }
-        
-        var no = ""
-        
-        
-        
-        for i in 16 ..< 23{
-            
-            
-            let v = values[i]
-            
-            
-            let v1 = v % 256
-            let v2 = v / 256
-            
-            let ch1 = Character(UnicodeScalar(v1)!)
-            let ch2 = Character(UnicodeScalar( v2)!)
-            
-            no.append(ch1)
-            no.append(ch2)
-        }
-        
-        return no
-    }
-    override func getRidingLevel() -> Int{
-        return 0
-    }
-    
-    override func getMaxSpeed() -> Double {
-        return 20.0
-    }
-
-    
-    override func setDefaultName(_ name : String){
-        self.name = name
-    }
-    override func setLimitSpeed(_ speed : Double){
-    }
-}
+ }
 
 

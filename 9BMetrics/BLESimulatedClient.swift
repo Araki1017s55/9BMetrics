@@ -722,7 +722,7 @@ class BLESimulatedClient: NSObject {
             let count = dat.count / MemoryLayout<UInt8>.size
             var array = [UInt8](repeating: 0, count: count)
             (dat as NSData).getBytes(&array, length: count * MemoryLayout<UInt8>.size)
-            var message = BLENinebotMessage(commandToWrite: UInt8(16), dat:array )
+            var message = BLENinebotMessage(commandToWrite: UInt8(16), dat:array  , fixed: 0x09)
             
             
             if let st = message?.toString(){
@@ -734,14 +734,14 @@ class BLESimulatedClient: NSObject {
                 //self.connection.writeValue(dat)
             }
             
-            message = BLENinebotMessage(com: UInt8(16), dat:[UInt8(14)] )
+            message = BLENinebotMessage(com: UInt8(16), dat:[UInt8(14)] , fixed:0x09)
             
             if let dat = message?.toNSData(){
                 self.connection.writeValue("FFE1", data:dat)
             }
             
             
-            message = BLENinebotMessage(com: UInt8(27), dat:[UInt8(14)] )
+            message = BLENinebotMessage(com: UInt8(27), dat:[UInt8(14)], fixed: 0x09 )
             
             if let dat = message?.toNSData(){
                 self.connection.writeValue("FFE1", data:dat)
@@ -777,7 +777,7 @@ class BLESimulatedClient: NSObject {
         
         // That write riding level
         
-        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[b0, b1] )
+        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[b0, b1] , fixed: 0x09 )
         
         if let st = message?.toString(){
             AppDelegate.debugLog("Command : %@", st)
@@ -790,7 +790,7 @@ class BLESimulatedClient: NSObject {
         
         // Get value to see if it is OK
         
-        message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[UInt8(2)] )
+        message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[UInt8(2)], fixed:0x09 )
         
         if let dat = message?.toNSData(){
             self.connection.writeValue("FFE1", data:dat)

@@ -63,13 +63,13 @@ class BLENinebotMessage: NSObject {
         super.init()
     }
     
-    init?(com : UInt8, dat : [UInt8]){
+    init?(com : UInt8, dat : [UInt8], fixed: UInt8){
         super.init()
         
         if dat.count > 253 {    // Max buffer size must be 253
             return nil
         }
-        
+        self.fixed1 = fixed
         self.command = com
         self.data = dat
         self.len = UInt8(dat.count + 2)
@@ -96,7 +96,7 @@ class BLENinebotMessage: NSObject {
     
     // Aquest cas es per enviar ua comanda de escriptura. buff[4] = 03
     
-    init?(commandToWrite command : UInt8, dat : [UInt8]){
+    init?(commandToWrite command : UInt8, dat : [UInt8], fixed: UInt8){
         super.init()
         
         if dat.count > 253 {    // Max buffer size must be 253
@@ -106,6 +106,7 @@ class BLENinebotMessage: NSObject {
         self.command = command
         self.data = dat
         self.len = UInt8(dat.count + 2)
+        self.fixed1 = fixed
         self.fixed2 = 0x03  // Writing values
         
         // OK build a buffer, compute checks and store
@@ -128,9 +129,10 @@ class BLENinebotMessage: NSObject {
         
     }
     
-    init?(buffer : [UInt8]){
+    init?(buffer : [UInt8],fixed: UInt8){
         
         super.init()
+        self.fixed1 = fixed
         
         if !self.parseBuffer(buffer) {
             return nil
@@ -138,9 +140,10 @@ class BLENinebotMessage: NSObject {
         
     }
     
-    init?(data : Data){
+    init?(data : Data, fixed: UInt8){
         
         super.init()
+        self.fixed1 = fixed
         let count = data.count
         var buffer = [UInt8](repeating: 0, count: count)
         (data as NSData).getBytes(&buffer, length:count * MemoryLayout<UInt8>.size)
@@ -152,10 +155,10 @@ class BLENinebotMessage: NSObject {
     
     // Inicialitza amb un Hex String
     
-    init?(string : String){
+    init?(string : String, fixed: UInt8){
         
         super.init()
-        
+        self.fixed1 = fixed
         let chars = string.characters
         let n = chars.count
         
@@ -300,9 +303,7 @@ class BLENinebotMessage: NSObject {
         
         var dict = [Int : Int]()
         
-        if fixed1 == 9 && fixed2 == 1 {
-            
-            
+        
             let l = Int(self.len-2)
             var k = Int(self.command)
             
@@ -317,11 +318,8 @@ class BLENinebotMessage: NSObject {
                 i=i+2
                 
             }
-        }
         
         return dict
         
     }
-    
-
 }
