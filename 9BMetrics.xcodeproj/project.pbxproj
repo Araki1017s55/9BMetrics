@@ -70,7 +70,6 @@
 		009B34941E93EEEE0064F787 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 009B34921E93EEEE0064F787 /* MainInterface.storyboard */; };
 		009B34981E93EEEE0064F787 /* GyrometricsUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 009B348B1E93EEED0064F787 /* GyrometricsUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		009B349B1E93EEEE0064F787 /* Gyrometrics.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 009B34821E93EEED0064F787 /* Gyrometrics.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		00A4A1921D943E020058C846 /* NinebotS12Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */; };
 		00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
 		00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
 		00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
@@ -256,7 +255,6 @@
 		009B34901E93EEEE0064F787 /* IntentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentViewController.swift; sourceTree = "<group>"; };
 		009B34931E93EEEE0064F787 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		009B34951E93EEEE0064F787 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NinebotS12Adapter.swift; path = 9BMetrics/NinebotS12Adapter.swift; sourceTree = "<group>"; };
 		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zip.h; sourceTree = "<group>"; };
 		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
 		00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipUtilities.swift; sourceTree = "<group>"; };
@@ -590,7 +588,6 @@
 				008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */,
 				0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */,
 				0079E98A1D927A0E004A09BB /* KingSongAdapter.swift */,
-				00A4A1911D943E020058C846 /* NinebotS12Adapter.swift */,
 				00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */,
 				00649CF41DD346FC00790DE3 /* BLEInMotionAdapter.swift */,
 			);
@@ -893,7 +890,6 @@
 				00C1E9AF1E8FC67900211452 /* BLEGenericDashboard.swift in Sources */,
 				00AB59561CAEE64000277859 /* aestab.c in Sources */,
 				00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */,
-				00A4A1921D943E020058C846 /* NinebotS12Adapter.swift in Sources */,
 				00C1E9AD1E8FC0F900211452 /* BLEMapDashboard.swift in Sources */,
 				00AB595B1CAEE64000277859 /* pwd2key.c in Sources */,
 				00AB595C1CAEE64000277859 /* sha1.c in Sources */,
