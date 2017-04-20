@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class Wheel : NSObject {
+public class Wheel : NSObject, DatabaseObjectProtocol {
     
     var uuid : String = ""
     var name : String = ""
@@ -49,7 +49,9 @@ public class Wheel : NSObject {
         self.name = name
     }
     
-    func initWithCoder(_ decoder : NSCoder){
+    //MARK: DatabaseAccessProtocol
+    
+    public func initWithCoder(_ decoder : NSCoder){
         
         self.uuid = decoder.decodeObject(forKey: "uuid") as? String ?? ""
         self.name = decoder.decodeObject(forKey: "name") as? String ?? ""
@@ -79,7 +81,7 @@ public class Wheel : NSObject {
         
     }
     
-    func encodeWithCoder(_ encoder: NSCoder){
+    public func encodeWithCoder(_ encoder: NSCoder){
         
         encoder.encode(uuid, forKey:"uuid")
         encoder.encode(name, forKey:"name")
@@ -95,7 +97,7 @@ public class Wheel : NSObject {
         encoder.encode(batteryAlarm, forKey:"batteryAlarm")
         encoder.encode(notifyBattery, forKey:"notifyBattery")
         encoder.encode(totalDistance, forKey:"totalDistance")
- 
+        
         encoder.encode(nruns, forKey:"nruns")
         encoder.encode(distance_sum_xy, forKey:"distance_sum_xy")
         encoder.encode(distance_sum_x2, forKey:"distance_sum_x2")
@@ -103,8 +105,15 @@ public class Wheel : NSObject {
         encoder.encode(distance_coef, forKey:"distance_coef")
         encoder.encode(speed_coef, forKey:"speed_coef")
         encoder.encode(enableCorrections, forKey:"enableCorrections")
-
+        
     }
+    public func getKey() -> String{
+        
+        return uuid
+        
+    }
+
+    //MARK: Some specific functions 
     
     func getSpeedCorrection() -> Double{
         
@@ -154,6 +163,7 @@ public class Wheel : NSObject {
         
     }
     
+    //MARK: Calibration
     /**
         Computes distance adjust with GPS data
         sets nruns, sum_xy, sum_x2 and coef values in wheel
@@ -350,5 +360,6 @@ public class Wheel : NSObject {
         }
     }
 }
+
 
 

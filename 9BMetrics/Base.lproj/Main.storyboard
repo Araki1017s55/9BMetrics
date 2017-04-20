@@ -821,7 +821,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xkv-ez-ag8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1636" y="931"/>
+            <point key="canvasLocation" x="1498" y="931"/>
         </scene>
         <!--Histo Dashboard-->
         <scene sceneID="wNv-RA-Cti">

@@ -79,6 +79,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         lpgr.delegate = self
         lpgr.delaysTouchesBegan = true
         self.collectionView?.addGestureRecognizer(lpgr)
+
         
         if let nb = self.ninebot {
             

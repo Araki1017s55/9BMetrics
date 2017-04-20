@@ -9,67 +9,62 @@
 import Foundation
 import UIKit
 
-public class WheelDatabase {
+public class WheelDatabase :  SimpleObjectDatabase<String, Wheel> {
     
     static let sharedInstance = WheelDatabase()
     
-    var database : [String : Wheel] = [:]
-    
     var filename = "wheels"
-    var databaseUrl : URL?
 
     
-    init(){
-        
-        read()
-    }
-    
-    func read(){
-        let fm = FileManager.default
-        if let url = WheelDatabase.buildUrl(filename) {
-            if fm.fileExists(atPath: url.path){
-                if let dat = NSKeyedUnarchiver.unarchiveObject(withFile:url.path) as? [String : Wheel]{
-                    database = dat
-                }
-            }
-        }
-    }
-    func save(){
-         if let url = WheelDatabase.buildUrl(filename) {
-            
-            let path = url.path
-            let success = NSKeyedArchiver.archiveRootObject(database, toFile: path)
-            
-            if !success {
-               AppDelegate.debugLog("Error al gravar diccionari")
-            }
-        }
-    }
-    
-    static func buildUrl(_ filename : String) -> URL?{
-        
+    override init(){
+        // Load archive
         if let dele =  UIApplication.shared.delegate as? AppDelegate{
             if let docs = dele.applicationDocumentsDirectory(){
                 let url = docs.appendingPathComponent(filename)
-                return url
+                
+                super.init(url: url)
+                
+            } else {
+                super.init()
             }
+        } else {
+            super.init()
         }
-        return nil
-        
     }
-    func getWheelFromUUID(uuid : String) -> Wheel? {
-        return database[uuid]
+    
+//    func read(){
+//        let fm = FileManager.default
+//        if let url = WheelDatabase.buildUrl(filename) {
+//            if fm.fileExists(atPath: url.path){
+//                if let dat = NSKeyedUnarchiver.unarchiveObject(withFile:url.path) as? [String : Wheel]{
+//                    database = dat
+//                }
+//            }
+//        }
+//    }
+//    func save(){
+//         if let url = WheelDatabase.buildUrl(filename) {
+//            
+//            let path = url.path
+//            let success = NSKeyedArchiver.archiveRootObject(database, toFile: path)
+//            
+//            if !success {
+//               AppDelegate.debugLog("Error al gravar diccionari")
+//            }
+//        }
+//    }
+    
+     func getWheelFromUUID(uuid : String) -> Wheel? {
+        return getObject(forKey: uuid)
     }
     
     func setWheel(wheel : Wheel){
-        database[wheel.uuid] = wheel
-        save()
+        addObject(wheel)
     }
     
     func removeWheel(wheel : Wheel){
         
-        database.removeValue(forKey: wheel.uuid)
-        save()
+        removeObject(wheel)
     }
     
     

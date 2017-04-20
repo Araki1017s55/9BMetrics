@@ -175,5 +175,98 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WheelDatabase.swift"
+            timestampString = "514391270.140307"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "12"
+            endingLineNumber = "12"
+            landmarkName = "WheelDatabase"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.WheelDatabase.__deallocating_deinit"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/WheelDatabase.swift"
+                  timestampString = "514391644.215243"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.WheelDatabase.__ivar_destroyer"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/WheelDatabase.swift"
+                  timestampString = "514391644.216767"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.WheelDatabase.deinit"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/WheelDatabase.swift"
+                  timestampString = "514391644.218157"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.WheelDatabase.init (url : Foundation.URL) -&gt; _BMetrics.WheelDatabase"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/WheelDatabase.swift"
+                  timestampString = "514391644.219538"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "12"
+                  endingLineNumber = "12"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "_BMetrics.WheelDatabase.__allocating_init (url : Foundation.URL) -&gt; _BMetrics.WheelDatabase"
+                  moduleName = "9BMetrics"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paco/Documents/XCode%20Projects/9BMetrics/WheelDatabase.swift"
+                  timestampString = "514391644.220918"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

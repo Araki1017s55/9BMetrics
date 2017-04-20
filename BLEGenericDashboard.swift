@@ -415,6 +415,8 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate, UIGestur
     override func viewWillDisappear(_ animated: Bool) {
         self.removeNotifications()
         super.viewWillDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+
     }
     
     
