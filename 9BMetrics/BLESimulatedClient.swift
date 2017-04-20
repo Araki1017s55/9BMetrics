@@ -777,7 +777,7 @@ class BLESimulatedClient: NSObject {
         
         // That write riding level
         
-        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[b0, b1] , fixed: 0x09 )
+        var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebotOneAdapter.kAbsoluteSpeedLimit), dat:[b0, b1] , fixed: 0x09 )
         
         if let st = message?.toString(){
             AppDelegate.debugLog("Command : %@", st)
@@ -790,7 +790,7 @@ class BLESimulatedClient: NSObject {
         
         // Get value to see if it is OK
         
-        message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat:[UInt8(2)], fixed:0x09 )
+        message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kAbsoluteSpeedLimit), dat:[UInt8(2)], fixed:0x09 )
         
         if let dat = message?.toNSData(){
             self.connection.writeValue("FFE1", data:dat)

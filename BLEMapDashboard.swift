@@ -102,6 +102,10 @@ class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
         }
     }
     
+    @IBAction func back(){
+        navigationController?.popViewController(animated: true)
+    }
+    
     override func updateName(_ name : String){
         self.mapView.userTrackingMode = .followWithHeading
     }

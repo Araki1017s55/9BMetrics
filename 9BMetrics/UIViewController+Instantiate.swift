@@ -40,8 +40,6 @@ extension UIViewController {
         
         if let className = String(NSStringFromClass(self).components(separatedBy: ".").last!){
             
-            // Clear className go get just the name
-
             let storyboard = UIStoryboard(name: className, bundle: nil)
         
             return storyboard.instantiateInitialViewController()

@@ -23,6 +23,58 @@ import CoreBluetooth
 
 class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
+    static let kAltitude = 0        // Obte les dades de CMAltimeterManager. 0 es l'inici i serveix per variacions unicament
+    static let kPower = 1           // Calculada com V * I
+    static let kEnergy = 2          // Total Energy = Integral (Power, dt)
+    static let kLatitude = 3          // Latitut del GPS * 100000
+    static let kLongitude = 4          // Longitut dek GPS * 100000
+    static let kAltitudeGPS = 5          // Altitut GPS en m
+    static let kSpeedGPS = 6          // Velocitat del GPS * 1000 (m/s * 1000)
+    static let kSerialNo = 16       // 16-22
+    static let kPinCode = 23        // 23-25
+    static let kVersion = 26
+    static let kError = 27
+    static let kWarn = 28
+    static let kWorkMode = 31
+    static let kvPowerRemaining = 34
+    static let kRemainingDistance = 37
+    static let kvSpeed = 38
+    static let kvTotalMileage0 = 41
+    static let kvTotalMileage1 = 42
+    static let kTotalRuntime0 = 50
+    static let kTotalRuntime1 = 51
+    static let kSingleRuntime = 58
+    static let kTemperature = 62
+    static let kvDriveVoltage = 71
+    static let kElectricVoltage12v = 74
+    static let kvCurrent = 80
+    static let kPitchAngle = 97
+    static let kRollAngle = 98
+    static let kPitchAngleVelocity = 99
+    static let kRollAngleVelocity = 100
+    static let kLockWheel = 112
+    static let kEnableSpeedLimit = 114
+    static let kAbsoluteSpeedLimit = 115
+    static let kSpeedLimit = 116
+    
+    static let kvCodeError = 176
+    static let kvCodeWarning = 177
+    static let kvFlags = 178
+    static let kvWorkMode = 179
+    static let kBattery = 180
+    static let kCurrentSpeed = 181
+    static let kvAverageSpeed = 182
+    static let kTotalMileage0 = 183
+    static let kTotalMileage1 = 184
+    static let kvSingleMileage = 185
+    static let kvTemperature = 187
+    static let kVoltage = 188
+    static let kCurrent = 189
+    static let kvPitchAngle = 190
+    static let kvMaxSpeed = 191
+    static let kvRideMode = 210
+
+    
     var headersOk = false
     var sendTimer : Timer?    // Timer per enviar les dades periodicament
     var timerStep = 0.1        // Get data every step
@@ -76,57 +128,57 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     static func initConversion(){
         
-        conversion[BLENinebot.kAltitude] = WheelTrack.WheelValue.Altitude
-        conversion[BLENinebot.kPower] = WheelTrack.WheelValue.Power
-        conversion[BLENinebot.kEnergy] = WheelTrack.WheelValue.Energy
-        conversion[BLENinebot.kLatitude] = WheelTrack.WheelValue.Latitude
-        conversion[BLENinebot.kLongitude] = WheelTrack.WheelValue.Longitude
-        conversion[BLENinebot.kAltitudeGPS] = WheelTrack.WheelValue.AltitudeGPS
-        conversion[BLENinebot.kvPowerRemaining] = WheelTrack.WheelValue.Battery
-        conversion[BLENinebot.kvSpeed] = WheelTrack.WheelValue.Speed
-        conversion[BLENinebot.kSingleRuntime] = WheelTrack.WheelValue.Duration
-        conversion[BLENinebot.kTemperature] = WheelTrack.WheelValue.Temperature
-        conversion[BLENinebot.kvDriveVoltage] = WheelTrack.WheelValue.Voltage
-        conversion[BLENinebot.kvCurrent] = WheelTrack.WheelValue.Current
-        conversion[BLENinebot.kPitchAngle] = WheelTrack.WheelValue.Pitch
-        conversion[BLENinebot.kRollAngle] = WheelTrack.WheelValue.Roll
-        conversion[BLENinebot.kAbsoluteSpeedLimit] = WheelTrack.WheelValue.MaxSpeed
-        conversion[BLENinebot.kSpeedLimit] = WheelTrack.WheelValue.LimitSpeed
-        conversion[BLENinebot.kBattery] = WheelTrack.WheelValue.Battery
-        conversion[BLENinebot.kCurrentSpeed] = WheelTrack.WheelValue.Speed
-        conversion[BLENinebot.kvSingleMileage] = WheelTrack.WheelValue.Distance
-        conversion[BLENinebot.kvTemperature] = WheelTrack.WheelValue.Temperature
-        conversion[BLENinebot.kVoltage] = WheelTrack.WheelValue.Voltage
-        conversion[BLENinebot.kCurrent] = WheelTrack.WheelValue.Current
-        conversion[BLENinebot.kvPitchAngle] = WheelTrack.WheelValue.Pitch
-        conversion[BLENinebot.kvMaxSpeed] = WheelTrack.WheelValue.MaxSpeed
-        conversion[BLENinebot.kvRideMode] = WheelTrack.WheelValue.RidingLevel
-        conversion[BLENinebot.kEnableSpeedLimit] = WheelTrack.WheelValue.limitSpeedEnabled
-        conversion[BLENinebot.kLockWheel] = WheelTrack.WheelValue.lockEnabled
+        conversion[kAltitude] = WheelTrack.WheelValue.Altitude
+        conversion[kPower] = WheelTrack.WheelValue.Power
+        conversion[kEnergy] = WheelTrack.WheelValue.Energy
+        conversion[kLatitude] = WheelTrack.WheelValue.Latitude
+        conversion[kLongitude] = WheelTrack.WheelValue.Longitude
+        conversion[kAltitudeGPS] = WheelTrack.WheelValue.AltitudeGPS
+        conversion[kvPowerRemaining] = WheelTrack.WheelValue.Battery
+        conversion[kvSpeed] = WheelTrack.WheelValue.Speed
+        conversion[kSingleRuntime] = WheelTrack.WheelValue.Duration
+        conversion[kTemperature] = WheelTrack.WheelValue.Temperature
+        conversion[kvDriveVoltage] = WheelTrack.WheelValue.Voltage
+        conversion[kvCurrent] = WheelTrack.WheelValue.Current
+        conversion[kPitchAngle] = WheelTrack.WheelValue.Pitch
+        conversion[kRollAngle] = WheelTrack.WheelValue.Roll
+        conversion[kAbsoluteSpeedLimit] = WheelTrack.WheelValue.MaxSpeed
+        conversion[kSpeedLimit] = WheelTrack.WheelValue.LimitSpeed
+        conversion[kBattery] = WheelTrack.WheelValue.Battery
+        conversion[kCurrentSpeed] = WheelTrack.WheelValue.Speed
+        conversion[kvSingleMileage] = WheelTrack.WheelValue.Distance
+        conversion[kvTemperature] = WheelTrack.WheelValue.Temperature
+        conversion[kVoltage] = WheelTrack.WheelValue.Voltage
+        conversion[kCurrent] = WheelTrack.WheelValue.Current
+        conversion[kvPitchAngle] = WheelTrack.WheelValue.Pitch
+        conversion[kvMaxSpeed] = WheelTrack.WheelValue.MaxSpeed
+        conversion[kvRideMode] = WheelTrack.WheelValue.RidingLevel
+        conversion[kEnableSpeedLimit] = WheelTrack.WheelValue.limitSpeedEnabled
+        conversion[kLockWheel] = WheelTrack.WheelValue.lockEnabled
        
         
-        scales[BLENinebot.kvSpeed] = 1.0 / 3600.0
-        scales[BLENinebot.kTemperature] = 0.1
-        scales[BLENinebot.kvDriveVoltage] = 0.01
-        scales[BLENinebot.kvCurrent] = 0.01
-        scales[BLENinebot.kPitchAngle] = 0.01
-        scales[BLENinebot.kRollAngle] = 0.01
-        scales[BLENinebot.kAbsoluteSpeedLimit] = 1.0 / 3600.0
-        scales[BLENinebot.kSpeedLimit] = 1.0 / 3600.0
-        scales[BLENinebot.kCurrentSpeed] = 1.0 / 3600.0
-        scales[BLENinebot.kvSingleMileage] = 10.0
-        scales[BLENinebot.kvTemperature] = 0.1
-        scales[BLENinebot.kVoltage] = 0.01
-        scales[BLENinebot.kCurrent] = 0.01
-        scales[BLENinebot.kvPitchAngle] = 0.01
-        scales[BLENinebot.kvMaxSpeed] = 1.0 / 3600.0
+        scales[kvSpeed] = 1.0 / 3600.0
+        scales[kTemperature] = 0.1
+        scales[kvDriveVoltage] = 0.01
+        scales[kvCurrent] = 0.01
+        scales[kPitchAngle] = 0.01
+        scales[kRollAngle] = 0.01
+        scales[kAbsoluteSpeedLimit] = 1.0 / 3600.0
+        scales[kSpeedLimit] = 1.0 / 3600.0
+        scales[kCurrentSpeed] = 1.0 / 3600.0
+        scales[kvSingleMileage] = 10.0
+        scales[kvTemperature] = 0.1
+        scales[kVoltage] = 0.01
+        scales[kCurrent] = 0.01
+        scales[kvPitchAngle] = 0.01
+        scales[kvMaxSpeed] = 1.0 / 3600.0
         
-        signed[BLENinebot.kPitchAngle] = true
-        signed[BLENinebot.kRollAngle] = true
-        signed[BLENinebot.kPitchAngleVelocity] = true
-        signed[BLENinebot.kRollAngleVelocity] = true
-        signed[BLENinebot.kCurrent] = true
-        signed[BLENinebot.kvPitchAngle] = true
+        signed[kPitchAngle] = true
+        signed[kRollAngle] = true
+        signed[kPitchAngleVelocity] = true
+        signed[kRollAngleVelocity] = true
+        signed[kCurrent] = true
+        signed[kvPitchAngle] = true
         
     }
     
@@ -240,9 +292,9 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                         //TODO: Verify that conversion is OK. First treat two Ninebot variables
                         // For the moment not found any value
                         
-                        if k == BLENinebot.kError{
+                        if k == BLENinebotOneAdapter.kError{
                             AppDelegate.debugLog("Error %d ", v)
-                        }else if k == BLENinebot.kWarn{
+                        }else if k == BLENinebotOneAdapter.kWarn{
                             AppDelegate.debugLog("Warning %d", v)
                         }
                         // Convert to SI by an scale and assign to generic variable
@@ -270,7 +322,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                    }
                 // Check special case for total distance
                 
-                if let v0 = d[BLENinebot.kTotalMileage0], let v1 = d[BLENinebot.kTotalMileage1]{
+                if let v0 = d[BLENinebotOneAdapter.kTotalMileage0], let v1 = d[BLENinebotOneAdapter.kTotalMileage1]{
                     
                     let total = Double(v1) * 65536.0 + Double(v0)
                     outarr!.append(WheelTrack.WheelValue.AcumDistance, Date(), total)
@@ -303,15 +355,15 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             }
         }
         
-        if values[BLENinebot.kSpeedLimit] == -1{
+        if values[BLENinebotOneAdapter.kSpeedLimit] == -1{
             filled = false
         }
         
-        if values[BLENinebot.kAbsoluteSpeedLimit] == -1{
+        if values[BLENinebotOneAdapter.kAbsoluteSpeedLimit] == -1{
             filled = false
         }
         
-        if values[BLENinebot.kvRideMode] == -1{
+        if values[BLENinebotOneAdapter.kvRideMode] == -1{
             filled = false
         }
         
@@ -394,32 +446,32 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             
             // Get riding Level and max speeds
             
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat: [UInt8(4)] , fixed: fixed)
+            message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kSpeedLimit), dat: [UInt8(4)] , fixed: fixed)
             
             if let dat = message?.toNSData(){
                 connection.writeValue(writeChar, data:dat)
             }
             
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kAbsoluteSpeedLimit), dat: [UInt8(4)] , fixed: fixed)
+            message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kAbsoluteSpeedLimit), dat: [UInt8(4)] , fixed: fixed)
             
             if let dat = message?.toNSData(){
                 connection.writeValue(writeChar, data:dat)
             }
             
             
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat: [UInt8(2)] , fixed: fixed)
-            
-            if let dat = message?.toNSData(){
-                connection.writeValue(writeChar, data:dat)
-            }
-
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kEnableSpeedLimit), dat: [UInt8(2)] , fixed: fixed)
+            message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kvRideMode), dat: [UInt8(2)] , fixed: fixed)
             
             if let dat = message?.toNSData(){
                 connection.writeValue(writeChar, data:dat)
             }
 
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kLockWheel), dat: [UInt8(2)] , fixed: fixed)
+            message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kEnableSpeedLimit), dat: [UInt8(2)] , fixed: fixed)
+            
+            if let dat = message?.toNSData(){
+                connection.writeValue(writeChar, data:dat)
+            }
+
+            message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kLockWheel), dat: [UInt8(2)] , fixed: fixed)
             
             if let dat = message?.toNSData(){
                 connection.writeValue(writeChar, data:dat)
@@ -615,7 +667,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
     
     func getVersion() -> String{
         
-        let clean = values[BLENinebot.kVersion] & 4095
+        let clean = values[BLENinebotOneAdapter.kVersion] & 4095
         
         let v0 = clean / 256
         let v1 = (clean - (v0 * 256) ) / 16
@@ -707,7 +759,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             
             // That write riding level
             
-            var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kvRideMode), dat:[UInt8(level), UInt8(0)]  , fixed: fixed)
+            var message = BLENinebotMessage(commandToWrite: UInt8(BLENinebotOneAdapter.kvRideMode), dat:[UInt8(level), UInt8(0)]  , fixed: fixed)
             
             if let st = message?.toString(){
                 AppDelegate.debugLog("Command : %@", st)
@@ -720,7 +772,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             
             // Get value to see if it is OK
             
-            message = BLENinebotMessage(com: UInt8(BLENinebot.kvRideMode), dat:[UInt8(2)] , fixed: fixed )
+            message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kvRideMode), dat:[UInt8(2)] , fixed: fixed )
             
             if let dat = message?.toNSData(){
                 connection.writeValue(writeChar, data:dat)
@@ -750,7 +802,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             
             // That write riding level
             
-            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kSpeedLimit), dat:[b0, b1]  , fixed: fixed){
+            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebotOneAdapter.kSpeedLimit), dat:[b0, b1]  , fixed: fixed){
                 
                 let st = message.toString()
                 AppDelegate.debugLog("Command : %@", st)
@@ -767,7 +819,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             
             // Get value to see if it is OK
             
-            if let message = BLENinebotMessage(com: UInt8(BLENinebot.kSpeedLimit), dat:[UInt8(2)]  , fixed: fixed){
+            if let message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kSpeedLimit), dat:[UInt8(2)]  , fixed: fixed){
                 let request = BLERequestOperation(adapter: self, connection: connection, message: message)
                 
                 if let q = self.queryQueue{
@@ -788,7 +840,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                 b = 1
             }
             
-            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kEnableSpeedLimit), dat:[b]  , fixed: fixed){
+            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebotOneAdapter.kEnableSpeedLimit), dat:[b]  , fixed: fixed){
                 if let q = self.queryQueue{
                     sending = false
                     q.isSuspended = true
@@ -807,7 +859,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
             
             // Get value to see if it is OK
             
-            if let message = BLENinebotMessage(com: UInt8(BLENinebot.kEnableSpeedLimit), dat:[UInt8(2)]  , fixed: fixed){
+            if let message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kEnableSpeedLimit), dat:[UInt8(2)]  , fixed: fixed){
                 if let q = self.queryQueue{
                     
                     for _ in 0..<1{
@@ -832,7 +884,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                 b = 1
             }
             
-            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebot.kLockWheel), dat:[b]  , fixed: fixed) {
+            if let message = BLENinebotMessage(commandToWrite: UInt8(BLENinebotOneAdapter.kLockWheel), dat:[b]  , fixed: fixed) {
                 if let q = self.queryQueue{
                     
                     sending = false
@@ -850,7 +902,7 @@ class BLENinebotOneAdapter : NSObject, BLEWheelAdapterProtocol {
                 }
                 
             }
-            if let message = BLENinebotMessage(com: UInt8(BLENinebot.kLockWheel), dat:[UInt8(2)]  , fixed: fixed){
+            if let message = BLENinebotMessage(com: UInt8(BLENinebotOneAdapter.kLockWheel), dat:[UInt8(2)]  , fixed: fixed){
                 if let q = self.queryQueue{
                     
                     for _ in 0..<1{

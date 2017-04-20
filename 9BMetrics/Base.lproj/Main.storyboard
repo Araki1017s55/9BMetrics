@@ -1215,10 +1215,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="huQ-Ha-oN3" customClass="TMKClockViewFast" customModule="_BMetrics" customModuleProvider="target">
                                 <rect key="frame" x="63" y="209" width="250" height="250"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="250" id="1RZ-xS-dnv"/>
                                     <constraint firstAttribute="width" constant="250" id="gQG-Du-79M"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Sf5-hA-Lll" appends="YES" id="t1n-R6-bTW"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nD3-J4-Uo1" customClass="TMKClockView" customModule="_BMetrics" customModuleProvider="target">
                                 <rect key="frame" x="263" y="473" width="100" height="100"/>
@@ -1245,6 +1249,7 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="ZOU-sD-7AH" firstAttribute="trailing" secondItem="X8t-8n-GuC" secondAttribute="trailingMargin" id="33u-Pf-Ymb"/>
                             <constraint firstItem="euG-U3-PYv" firstAttribute="top" secondItem="iKP-76-ilx" secondAttribute="bottom" constant="27" id="5tW-EM-XNt"/>
@@ -1290,6 +1295,11 @@
                         <action selector="showFastGraphic" destination="8DG-Nk-Z4r" id="hjO-FT-KaV"/>
                     </connections>
                 </tapGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="Sf5-hA-Lll">
+                    <connections>
+                        <action selector="swipeRight" destination="8DG-Nk-Z4r" id="1RS-fd-y36"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3017" y="931"/>
         </scene>

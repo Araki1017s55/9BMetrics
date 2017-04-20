@@ -24,7 +24,7 @@
 import UIKit
 import CoreBluetooth
 
-class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
+class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate, UIGestureRecognizerDelegate {
     
     // These buttons are mandatory!!!
     
@@ -82,6 +82,8 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 connectionStarted(Notification(name: Notification.Name(rawValue: BLESimulatedClient.kStartConnection), object: ["state" : "connecting"]))
             }
         }
+        
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
         // Do any additional setup after loading the view.
     }

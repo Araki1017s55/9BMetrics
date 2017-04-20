@@ -31,6 +31,11 @@
 //  Usually there is just one object just for the current wheel
 //
 //
+// *******************************************
+//
+//  IT IS JUST USED BY SimulatedNinebot FOR READING AN ANCIENT LOG. IT IS SUPERSEED BY WheelTrack and BLENinenotOneAdapter
+//
+// *******************************************
 
 import UIKit
 import MapKit

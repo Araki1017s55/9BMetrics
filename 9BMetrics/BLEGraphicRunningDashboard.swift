@@ -166,7 +166,7 @@ class BLEGraphicRunningDashboard: BLEGenericDashboard {
     
     @IBAction func swipeRight(){
         
-        NSLog("Hello not right swipe")
+        NSLog("Hello right swipe")
         
     }
     
@@ -174,6 +174,7 @@ class BLEGraphicRunningDashboard: BLEGenericDashboard {
     
     @IBAction func swipeLeft(){
         
+        NSLog("Hello left swipe")
         
         
     }

@@ -154,8 +154,8 @@ class WheelTrack: NSObject {
     
     //MARK: Conversion variables
     
-    static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
-    static var scales = Array<Double>(repeating: 1.0, count: 256)
+    //static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
+    //static var scales = Array<Double>(repeating: 1.0, count: 256)
     
     
     //MARK: .gpx export variables
@@ -169,7 +169,7 @@ class WheelTrack: NSObject {
         return "<trk>\n<name>$</name>\n\n<trkseg>\n"
     }
     //MARK: Auxiliary functions
-    
+    /*
     static func initConversion(){
         
         conversion[BLENinebot.kAltitude] = WheelTrack.WheelValue.Altitude
@@ -221,14 +221,14 @@ class WheelTrack: NSObject {
         
         
     }
-    
+    */
     
     var otherFormatter : DateFormatter = DateFormatter()
     
     override init(){
         super.init()
         
-        WheelTrack.initConversion()
+        //WheelTrack.initConversion()
         
         otherFormatter.locale = Locale(identifier: "en_US_POSIX")
         
@@ -2242,7 +2242,7 @@ class WheelTrack: NSObject {
     }
     
     func wheelValueFor9Bvalue(_ nbValue : Int) -> WheelValue?{
-        if let wv = WheelTrack.conversion[nbValue] {
+        if let wv = BLENinebotOneAdapter.conversion[nbValue] {
             return wv
         }else{
             return nil
@@ -2311,7 +2311,7 @@ class WheelTrack: NSObject {
                     
                     if let t = time, let i = variable, let v = value {
                         if let wh = wheelValueFor9Bvalue(i){
-                            let vd = Double(v) * WheelTrack.scales[i]
+                            let vd = Double(v) * BLENinebotOneAdapter.scales[i]
                             
                             self.addValueWithTimeInterval(t, variable: wh, value: vd, forced: true, silent: true)
                         }
@@ -2337,7 +2337,7 @@ class WheelTrack: NSObject {
                         
                         if  let v = value {
                             if let wh = wheelValueFor9Bvalue(variable){
-                                let vd = Double(v) * WheelTrack.scales[variable]
+                                let vd = Double(v) * BLENinebotOneAdapter.scales[variable]
                                 
                                 self.addValueWithDate(t, variable: wh, value: vd, forced: true, silent: true)
                             }
