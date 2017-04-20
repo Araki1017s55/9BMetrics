@@ -44,7 +44,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var fEnableCorrectionsSwitch: UISwitch!
     
     @IBOutlet weak var fSpeedUnitsLabel: UILabel!
-     
+    
     @IBOutlet weak var fProgressCalibration: UIProgressView!
     
     @IBOutlet weak var fRecalculateButton: UIButton!
@@ -151,7 +151,7 @@ class SettingsViewController: UIViewController {
             fGraphicDashboard.isOn = dashboardMode
             let allowSpeech = !store.bool(forKey: kForbidSpeech)
             fAllowSpeech.isOn = allowSpeech
-
+            
             
             if let uuid = store.object(forKey: BLESimulatedClient.kLast9BDeviceAccessedKey) as? String{
                 uuidLabel.text = uuid
@@ -353,18 +353,10 @@ class SettingsViewController: UIViewController {
                 self.fProgressCalibration.isHidden = true
                 self.fRecalculateButton.isHidden = false
                 self.loadData()
-
+                
             })
             
         })
-   
-        
-        
-        
-        
-        
-        
-    
     }
     
     @IBAction func resetCalibration(){
@@ -378,6 +370,14 @@ class SettingsViewController: UIViewController {
                 loadData()
             }
         }
+        
+    }
+    
+    @IBAction func selectWheel(){
+        
+        if let vc = WheelSelectorTableViewController.instantiate() as?  WheelSelectorTableViewController{
+            navigationController?.pushViewController(vc, animated: true)
+         }
         
     }
     

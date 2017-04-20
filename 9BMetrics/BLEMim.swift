@@ -79,7 +79,17 @@ class BLEMim: UIViewController {
         self.iPhoneButton.isEnabled = false
         self.ninebotButton.isEnabled = false
         
-        performSegue(withIdentifier: "debugDeviceSelector", sender: self)
+        if let dv = BLEDeviceSelector.instantiate() as? BLEDeviceSelector {
+            deviceSelector = dv
+            dv.delegate = self
+            client.startScanning()
+            present(dv, animated: true, completion: { 
+                
+                
+            })
+            
+        }
+
     }
     
     func deviceDiscovered(_ not : Notification){
@@ -254,20 +264,6 @@ class BLEMim: UIViewController {
         
         return out
         
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "debugDeviceSelector" {
-            
-            if let dv = segue.destination as? BLEDeviceSelector {
-                deviceSelector = dv
-                dv.delegate = self
-                client.startScanning()
-
-            }
-            
-        }
     }
 
 }

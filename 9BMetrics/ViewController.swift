@@ -463,7 +463,10 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         
         if db.database.count > 1 {
             
-            performSegue(withIdentifier: "selectWheelIdentifier", sender: self)
+            if let selector = WheelSelectorTableViewController.instantiate() as? WheelSelectorTableViewController{
+                selector.delegate = self
+                navigationController?.pushViewController(selector, animated: true)
+            }
             
         } else {
             
@@ -850,9 +853,9 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         else if segue.identifier == "settingsSegue"{
             
             if let settings = segue.destination as? SettingsViewController{
-                
                 settings.delegate = self
             }
+            
         }else if segue.identifier == "testBLESegue"{
             if let testC = segue.destination as? BLEHistoDashboard{
                 if let dele = UIApplication.shared.delegate as? AppDelegate{
@@ -865,11 +868,6 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
                         
                     }
                 }
-            }
-        }else if segue.identifier == "selectWheelIdentifier"{
-            
-            if let selector = segue.destination as? WheelSelectorTableViewController{
-                selector.delegate = self
             }
         }else if segue.identifier == "localUsesSegue" {
             

@@ -142,27 +142,6 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier! {
-            
-        case "otherMapSegue": //graphMapSegue
-            if let vc = segue.destination as? BLEMapViewController  {
-                vc.dades = self.ninebot
-            }
-            
-        case "graphicSegue":
-            
-            if let vc = segue.destination as? GraphViewController  {
-                
-                vc.ninebot = self.ninebot
-                vc.shownVariable = self.graphToShow
-            }
-            
-        default:
-            break
-        }
-    }
-    
     @IBAction func prepareForUnwind(_ segue: UIStoryboardSegue){
         
         self.dismiss(animated: true) {
@@ -199,7 +178,14 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         let indexPath : IndexPath = (self.collectionView?.indexPathForItem(at: p))!
             //do whatever you need to do
         if (indexPath as NSIndexPath).row == 0{
-            self.performSegue(withIdentifier: "otherMapSegue", sender: self)
+            
+             if let vc = BLEMapViewController.instantiate() as? BLEMapViewController  {
+                vc.dades = self.ninebot
+                present(vc, animated: true, completion: { 
+                    
+                    
+                })
+            }
         }
         
     }
@@ -324,8 +310,13 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
             default:
                 graphToShow = self.graphValue[row]
                 
-                performSegue(withIdentifier: "graphicSegue", sender: self)
-                
+                if let vc = GraphViewController.instantiate() as? GraphViewController  {
+                    
+                    vc.ninebot = self.ninebot
+                    vc.shownVariable = self.graphToShow
+                    
+                    navigationController?.pushViewController(vc, animated: true)
+                }
                 
             }
         }
@@ -647,8 +638,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                     
                 case 0:
                     
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    if let  mpc = storyboard.instantiateViewController(withIdentifier: "mapViewControllerIdentifier") as? BLEMapViewController{
+                    if let  mpc = BLEMapViewController.instantiate() as? BLEMapViewController{
                         
                         mpc.dades = self.ninebot
                         return mpc
@@ -656,8 +646,7 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
                     
                 default:
                     
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    if let  gc = storyboard.instantiateViewController(withIdentifier: "graphViewControllerIdentifier") as? GraphViewController{
+                    if let  gc = GraphViewController.instantiate() as? GraphViewController{
                         
                         gc.ninebot = self.ninebot
                         graphToShow = self.graphValue[(indexPath as NSIndexPath).row]

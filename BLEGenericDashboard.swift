@@ -29,7 +29,7 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
     // These buttons are mandatory!!!
     
     @IBOutlet weak var fStartStopButton: UIButton!
-    @IBOutlet weak var fSettingsButton: UIButton!
+    @IBOutlet weak var fSettingsButton: UIButton?
     
     // The source of all our data
     
@@ -47,6 +47,8 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     var distanceCorrection = 1.0
     var speedCorrection = 1.0
+    
+    let delta = 5.0 // minuts que mostra el gràfic de velocitat en el moment que el treiem desde el dashboard
 
     
     enum connectionState {
@@ -65,6 +67,10 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let but = fSettingsButton{
+            but.addTarget(self, action: #selector(BLEGenericDashboard.showRunningSettings), for: .primaryActionTriggered)
+        }
         
         self.initNotifications()
         
@@ -258,6 +264,46 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
         
     }
     
+    //MARK: Navigation options
+    
+    // Shows a graphic of speed of last delta minutes
+    
+    @IBAction func showFastGraphic(){
+        if let vc = GraphViewController.instantiate() as? GraphViewController {
+            if let nb = self.client?.datos {
+                vc.shownVariable = 0
+                vc.ninebot = nb
+                vc.from = fmax(nb.getLastTimeValueForVariable(.Speed) - delta * 60.0, 0.0)
+                vc.enabledMagnitudeSwitch = false
+                navigationController?.pushViewController(vc, animated: true)
+                
+            }
+        }
+    }
+    
+    @IBAction func showMapDashboard(){
+
+        if let dash = BLEMapDashboard.instantiate() as? BLEMapDashboard{
+            
+            if let dele = UIApplication.shared.delegate as? AppDelegate{
+                dash.client = dele.client
+                navigationController?.pushViewController(dash, animated: true)
+            }
+        }
+    }
+
+    func showRunningSettings(){
+        
+        if let vc = BLENinebotSettingsViewController.instantiate() as? BLENinebotSettingsViewController{
+            vc.ninebotClient = self.client
+            present(vc, animated: true, completion: { 
+                
+                
+            })
+        }
+        
+    }
+    
     
     //MARK: BLEDeviceSelectorDelegate
     
@@ -290,7 +336,21 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
                 self.devList.removeAll()    // Remove old ones
                 self.devList.append(contentsOf: devs)
                 
-                self.performSegue(withIdentifier: devSelectorSegue, sender: self)
+                self.devSelector = BLEDeviceSelector.instantiate() as? BLEDeviceSelector
+                
+                if let vc = self.devSelector{
+                    self.devSelector = vc
+                    vc.addDevices(self.devList)
+                    vc.delegate = self
+                    self.devList.removeAll()
+                    self.searching = true
+                    present(vc, animated: true, completion: { 
+                        
+                        
+                    })
+                }
+                
+                
             }
             else{
                 if let vc = self.devSelector{
@@ -306,20 +366,7 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == devSelectorSegue {
-            
-            if let vc = segue.destination as? BLEDeviceSelector{
-                
-                self.devSelector = vc
-                vc.addDevices(self.devList)
-                vc.delegate = self
-                self.devList.removeAll()
-                self.searching = true
-                
-            }
-        }
-            
-        else if segue.identifier == "graphSegueIdentifier" {
+        if segue.identifier == "graphSegueIdentifier" {
             if let vc = segue.destination as? GraphViewController  {
                 if let nb = self.client?.datos {
                     nb.buildEnergy()
@@ -355,9 +402,10 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate {
         let store = UserDefaults.standard
         let testMode = store.bool(forKey: kTextMode)
         
-        self.fSettingsButton.isHidden = !testMode
-        self.fSettingsButton.isEnabled = testMode
-        
+        if let but = fSettingsButton {
+            but.isHidden = !testMode
+            but.isEnabled = testMode
+        }
         super.viewWillAppear(animated)
         
     }

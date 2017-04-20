@@ -47,7 +47,6 @@ class BLEGraphicRunningDashboard: BLEGenericDashboard {
     var speedTop = 30.0
     var speedOK = 23.0
     
-    let delta = 5.0 // minuts que mostra el gràfic de velocitat en el moment que el treiem desde el dashboard
     
     var tempAreas : [TMKClockView.arc] = []
     var battAreas : [TMKClockView.arc] = []
@@ -65,9 +64,6 @@ class BLEGraphicRunningDashboard: BLEGenericDashboard {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        devSelectorSegue = "grDeviceSelectorSegue"
-        
         
         battAreas = [TMKClockView.arc(start: 0.0, end: batOk/batTop, color: UIColor.red),
                      TMKClockView.arc(start: batOk/batTop, end: 1.0, color: UIColor.green)]
@@ -165,56 +161,6 @@ class BLEGraphicRunningDashboard: BLEGenericDashboard {
     
     
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if let id = segue.identifier{
-            
-            switch id {
-                
-            case "fastGraphSegue" :
-                if let vc = segue.destination as? GraphViewController  {
-                    if let nb = self.client?.datos {
-                        vc.shownVariable = 0
-                        vc.ninebot = nb
-                        vc.from = fmax(nb.getLastTimeValueForVariable(.Speed) - delta * 60.0, 0.0)
-                        vc.enabledMagnitudeSwitch = false
-                        
-                    }
-                }
-                
-                
-            case "graphicSettingsSegue":
-                if let vc = segue.destination as? BLENinebotSettingsViewController{
-                    vc.ninebotClient = self.client
-                    
-                }
-                
-                
-            case "graphMapSegue":
-                if let vc = segue.destination as? BLEMapViewController,
-                    let nb = self.client?.datos{
-                    vc.dades = nb
-                }
-                
-                
-                
-            case "graphMapDashboard":
-                if let dash = segue.destination as? BLEMapDashboard{
-                    
-                    if let dele = UIApplication.shared.delegate as? AppDelegate{
-                        dash.client = dele.client
-                        
-                    }
-                    
-                }
-            default:
-                super.prepare(for: segue, sender: sender)
-            }
-            
-            
-        }
-        
-    }
     
     // Just block swipe right for UINavigator
     

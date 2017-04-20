@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16F43c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="3tZ-PP-rbU">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Map View Controller-->
+        <scene sceneID="g99-Pq-Bg1">
+            <objects>
+                <viewController storyboardIdentifier="mapViewControllerIdentifier" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3tZ-PP-rbU" customClass="BLEMapViewController" customModule="_BMetrics" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="aQT-IQ-8FV"/>
+                        <viewControllerLayoutGuide type="bottom" id="QUy-e3-BxI"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UyC-jq-6Ud">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="jxW-vN-6To">
+                                <rect key="frame" x="-4" y="20" width="383" height="647"/>
+                                <connections>
+                                    <outlet property="delegate" destination="3tZ-PP-rbU" id="IHt-vf-eJq"/>
+                                </connections>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jPS-N2-mVA">
+                                <rect key="frame" x="16" y="40" width="27" height="27"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="27" id="ipq-Ax-LiO"/>
+                                    <constraint firstAttribute="height" constant="27" id="oLN-Jg-4Eo"/>
+                                </constraints>
+                                <state key="normal" image="close"/>
+                                <connections>
+                                    <segue destination="RbF-Wc-DAv" kind="unwind" unwindAction="prepareForUnwind:" id="ufg-cr-feE"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERJ-CF-L1V">
+                                <rect key="frame" x="332" y="40" width="27" height="27"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="27" id="HKm-Pu-sqZ"/>
+                                    <constraint firstAttribute="width" constant="27" id="sKr-J9-KVc"/>
+                                </constraints>
+                                <state key="normal" image="reload"/>
+                                <connections>
+                                    <action selector="reload:" destination="3tZ-PP-rbU" eventType="primaryActionTriggered" id="f5J-k7-RZD"/>
+                                </connections>
+                            </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oeP-dN-Ugv">
+                                <rect key="frame" x="82" y="619" width="212" height="29"/>
+                                <segments>
+                                    <segment title="Standard"/>
+                                    <segment title="Satellite"/>
+                                    <segment title="Hybrid"/>
+                                </segments>
+                                <connections>
+                                    <action selector="selectMap:" destination="3tZ-PP-rbU" eventType="valueChanged" id="M9j-qP-Q50"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="jxW-vN-6To" firstAttribute="top" secondItem="aQT-IQ-8FV" secondAttribute="bottom" id="07e-iw-UdE"/>
+                            <constraint firstItem="ERJ-CF-L1V" firstAttribute="top" secondItem="aQT-IQ-8FV" secondAttribute="bottom" constant="20" id="0P7-aE-dyW"/>
+                            <constraint firstItem="jPS-N2-mVA" firstAttribute="trailing" secondItem="UyC-jq-6Ud" secondAttribute="trailingMargin" id="4UZ-8k-kLX"/>
+                            <constraint firstItem="jPS-N2-mVA" firstAttribute="leading" secondItem="UyC-jq-6Ud" secondAttribute="leadingMargin" id="7cI-9j-IDf"/>
+                            <constraint firstItem="jPS-N2-mVA" firstAttribute="top" secondItem="aQT-IQ-8FV" secondAttribute="bottom" constant="20" id="Ijf-YP-d7y"/>
+                            <constraint firstItem="QUy-e3-BxI" firstAttribute="top" secondItem="jxW-vN-6To" secondAttribute="bottom" id="PWd-ja-jva"/>
+                            <constraint firstItem="jxW-vN-6To" firstAttribute="leading" secondItem="UyC-jq-6Ud" secondAttribute="leadingMargin" constant="-20" id="U5u-Q8-YiF"/>
+                            <constraint firstItem="QUy-e3-BxI" firstAttribute="top" secondItem="oeP-dN-Ugv" secondAttribute="bottom" constant="20" id="YQv-vV-Kcj"/>
+                            <constraint firstItem="oeP-dN-Ugv" firstAttribute="centerX" secondItem="UyC-jq-6Ud" secondAttribute="centerX" id="g9I-sz-ec4"/>
+                            <constraint firstItem="ERJ-CF-L1V" firstAttribute="leading" secondItem="UyC-jq-6Ud" secondAttribute="leadingMargin" id="gb6-LR-bVD"/>
+                            <constraint firstItem="ERJ-CF-L1V" firstAttribute="trailing" secondItem="UyC-jq-6Ud" secondAttribute="trailingMargin" id="r0p-l0-JYx"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="jxW-vN-6To" secondAttribute="trailing" constant="-20" id="t9V-GX-9De"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="4UZ-8k-kLX"/>
+                                <exclude reference="gb6-LR-bVD"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ao9-Cb-7Tl"/>
+                    <connections>
+                        <outlet property="mapView" destination="jxW-vN-6To" id="Jpe-1d-xI7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zTo-py-xDm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="RbF-Wc-DAv" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="3400.8000000000002" y="-637.33133433283365"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="close" width="32" height="32"/>
+        <image name="reload" width="32" height="32"/>
+    </resources>
+</document>

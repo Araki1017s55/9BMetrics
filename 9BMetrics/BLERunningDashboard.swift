@@ -9,7 +9,7 @@
 import UIKit
 import CoreBluetooth
 
-class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
+class BLERunningDashboard: BLEGenericDashboard {
     
     @IBOutlet weak var fTime: UILabel!
     @IBOutlet weak var fDistance: UILabel!
@@ -19,48 +19,14 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     @IBOutlet weak var fSpeedUnits: UILabel!
     @IBOutlet weak var fBattery: UILabel!
     @IBOutlet weak var fTemperature: UILabel!
-    @IBOutlet weak var fStartStopButton: UIButton!
     @IBOutlet weak var fVoltage: UILabel!
     @IBOutlet weak var fSeriaNumber: UILabel!
-    @IBOutlet weak var fSettingsButton: UIButton!
-
     
-    let kTextMode = "enabled_test"
-
-    weak var client : BLESimulatedClient?
     
-    var devSelector : BLEDeviceSelector?
-    var devList = [CBPeripheral]()
-    
-    var searching = false
-    
-    var headersReceived = false
-    
-    var distanceCorrection = 1.0
-    var speedCorrection = 1.0
-
-    
-    enum connectionState {
-        case stopped
-        case connecting
-        case connected
-    }
-    
-    var state : connectionState = connectionState.stopped
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.initNotifications()
-        
-        // Just check if we are already connecting
-        
-        if let cli = self.client {
-            if cli.connection.state == .connecting {
-                
-                self.connectionStarted(Notification(name: Notification.Name(rawValue: BLESimulatedClient.kStartConnection), object: ["state" : "connecting"]))
-            }
-        }
         
         fSpeedUnits.text = UnitManager.sharedInstance.longDistanceUnit+"/h"
         
@@ -74,287 +40,41 @@ class BLERunningDashboard: UIViewController, BLEDeviceSelectorDelegate {
     
     
     
-    func initNotifications(){
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.connectionStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kStartConnection), object: nil)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.hasStopped(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kStoppedRecording), object: nil)
-
-        
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kHeaderDataReadyNotification), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kNinebotDataUpdatedNotification), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.listDevices(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kdevicesDiscoveredNotification), object: nil)
-  
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.recordingStarted(_:)), name: NSNotification.Name(rawValue: BLESimulatedClient.kConnectionReadyNotification), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(BLERunningDashboard.dataUpdated(_:)), name: NSNotification.Name(rawValue: kWheelVariableChangedNotification), object: nil)
-       
-        
-
-    }
-    
-    func removeNotifications(){
-        
-        NotificationCenter.default.removeObserver(self)
+    override func updateName(_ name : String){
+        self.fSeriaNumber.text = name
         
     }
     
-    @IBAction func startStop(_ src : AnyObject){
+    override func updateUI(_ track: WheelTrack){
         
-        if let cl = self.client {
-            
-            if cl.isRecording(){
-                cl.stop()
-             }
-            else{
-                cl.start()
-            }
-        }
+        //cell.detailTextLabel!.text =
+        self.fVoltage.text = String(format:"%0.2fV", track.getCurrentValueForVariable(.Voltage))
         
-    }
-    
-    func hasStopped(_ not : Notification){
-        let img = UIImage(named: "record")
-        self.fStartStopButton.setImage(img, for: UIControlState())
-        self.state = connectionState.stopped
-        self.navigationController!.popViewController(animated: true)
-        self.headersReceived = false
-    }
-
-    
-    func dataUpdated(_ not : Notification){
-        
-        if !(UIApplication.shared.applicationState == UIApplicationState.active) {
-            return
-        }
-        
-        DispatchQueue.main.async(execute: { () -> Void in
-            
-            if let cli = self.client{
-                if let nb = cli.datos{
-                    
-                    if !nb.getName().isEmpty && !self.headersReceived{
-                        self.headersReceived = true
-                        self.fSeriaNumber.text = nb.getName()
-                    }
-                    
-                    //cell.detailTextLabel!.text = 
-                    self.fVoltage.text = String(format:"%0.2fV", nb.getCurrentValueForVariable(.Voltage))
-                    
-                    self.fCurrent.text = String(format:"%0.2fA", nb.getCurrentValueForVariable(.Current))
-                    self.fPower.text = String(format:"%0.0fW", nb.getCurrentValueForVariable(.Power))
-                    self.fDistance.text = String(format:"%@", UnitManager.sharedInstance.formatDistance(nb.getCurrentValueForVariable(.Distance) * self.distanceCorrection)) // In m, yd, or km, mi
-                    let (h, m, s) = nb.HMSfromSeconds(nb.getCurrentValueForVariable(.Duration))
-                    self.fTime.text = String(format:"%02d:%02d:%02d", h, m, s)
-                    self.fBattery.text = String(format:"%4.0f%%", nb.getCurrentValueForVariable(.Battery))
-                    self.fTemperature.text = UnitManager.sharedInstance.formatTemperature(nb.getCurrentValueForVariable(.Temperature))
-                       
-                    
-                    
-                    
-                    let v =  nb.getCurrentValueForVariable(.Speed) * 3.6  * self.speedCorrection // In Km/h
-                    let vc = UnitManager.sharedInstance.convertSpeed(nb.getCurrentValueForVariable(.Speed) * self.speedCorrection)
-                    
-                    self.fSpeed.text = String(format:"%0.2f", vc)
-                    
-                    if v >= 15.0 && v < 20.0{
-                        self.fSpeed.textColor = UIColor.orange
-                    }else if v > 20.0 {
-                        self.fSpeed.textColor = UIColor.red
-                    }else {
-                        self.fSpeed.textColor = UIColor.black
-
-                    }
-
-                }
-                
-            }
-        })
-    }
-    
-    
- 
-    func updateScreen(){
+        self.fCurrent.text = String(format:"%0.2fA", track.getCurrentValueForVariable(.Current))
+        self.fPower.text = String(format:"%0.0fW", track.getCurrentValueForVariable(.Power))
+        self.fDistance.text = String(format:"%@", UnitManager.sharedInstance.formatDistance(track.getCurrentValueForVariable(.Distance) * self.distanceCorrection)) // In m, yd, or km, mi
+        let (h, m, s) = track.HMSfromSeconds(track.getCurrentValueForVariable(.Duration))
+        self.fTime.text = String(format:"%02d:%02d:%02d", h, m, s)
+        self.fBattery.text = String(format:"%4.0f%%", track.getCurrentValueForVariable(.Battery))
+        self.fTemperature.text = UnitManager.sharedInstance.formatTemperature(track.getCurrentValueForVariable(.Temperature))
         
         
         
-    }
-    
-    func connectionStarted(_ not: Notification){
         
-        self.state = connectionState.connecting
+        let v =  track.getCurrentValueForVariable(.Speed) * 3.6  * self.speedCorrection // In Km/h
+        let vc = UnitManager.sharedInstance.convertSpeed(track.getCurrentValueForVariable(.Speed) * self.speedCorrection)
         
-        DispatchQueue.main.async(execute: { () -> Void in
-            
-            var imageArray : [UIImage] = [UIImage]()
-            
-            for i in 0...9 {
-                
-                if let img = UIImage(named: String(format:"record_%d", i)){
-                    imageArray.append(img)
-                }
-            }
-            
-            self.fStartStopButton.setImage(UIImage(named:"record_0"), for: UIControlState())
-            
-            if let iv = self.fStartStopButton.imageView{
-                iv.animationImages = imageArray
-                iv.animationDuration = 0.5
-                iv.startAnimating()
-                
-            }
-        })
-    }
-    
-    func recordingStarted(_ not: Notification){
+        self.fSpeed.text = String(format:"%0.2f", vc)
         
-        self.state = connectionState.connected
-        
-        DispatchQueue.main.async(execute: { () -> Void in
-        
-            self.stopAnimation()
-            let img = UIImage(named: "recordOn")
-            self.fStartStopButton.setImage(img, for: UIControlState())
-            if let cli = self.client{
-                if let nb = cli.datos{
-                    self.fSeriaNumber.text = nb.getName()
-                }
-                (self.distanceCorrection, self.speedCorrection) = cli.getCorrections()
-
-            }
-        })
-    }
-    
-    func recordingStopped(_ not: Notification){
-        DispatchQueue.main.async(execute: { () -> Void in
-        
-            let img = UIImage(named: "record")
-            self.fStartStopButton.setImage(img, for: UIControlState())
-        })
-    }
-    
-    func stopAnimation(){
-        if let iv = self.fStartStopButton.imageView{
-            iv.stopAnimating()
-            iv.animationImages = []
-            iv.animationDuration = 0.5
-            
-        }
-    }
-    
-    func connectToPeripheral(_ peripheral : CBPeripheral){
-        
-        
-        if let cli = self.client {
-            cli.connection.connectPeripheral(peripheral)
-        }
-        self.dismiss(animated: true) { () -> Void in
-            
-            self.searching = false
-            self.devSelector = nil
-            self.devList.removeAll()
-        }
-        
-    }
-    
-    
-    func listDevices(_ notification: Notification){
-        
-        let devices = (notification as NSNotification).userInfo?["peripherals"] as? [CBPeripheral]
-        
-        // if searching is false we must create a selector
-        
-        if let devs = devices {
-            
-            if !self.searching {
-                
-                self.devList.removeAll()    // Remove old ones
-                self.devList.append(contentsOf: devs)
-                
-                self.performSegue(withIdentifier: "deviceSelectorSegue", sender: self)
-            }
-            else{
-                if let vc = self.devSelector{
-                    vc.addDevices(devs)
-                }
-                
-            }
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "deviceSelectorSegue" {
-            
-            if let vc = segue.destination as? BLEDeviceSelector{
-                
-                self.devSelector = vc
-                vc.addDevices(self.devList)
-                vc.delegate = self
-                self.devList.removeAll()
-                self.searching = true
-                
-            }
-        }
-        
-        else if segue.identifier == "graphSegueIdentifier" {
-            if let vc = segue.destination as? GraphViewController  {
-                if let nb = self.client?.datos {
-                    nb.buildEnergy()
-                
-                    vc.ninebot = nb
-            }
-            }
-            
-        }
-        else if segue.identifier == "ninebotSettingsSegue"{
-            if let vc = segue.destination as? BLENinebotSettingsViewController{
-                vc.ninebotClient = self.client
-                
-            }
-        }
-
-
-    }
-    
-    @IBAction func prepareForUnwind(_ segue: UIStoryboardSegue){
-        
-        self.dismiss(animated: true) { 
-            
+        if v >= 15.0 && v < 20.0{
+            self.fSpeed.textColor = UIColor.orange
+        }else if v > 20.0 {
+            self.fSpeed.textColor = UIColor.red
+        }else {
+            self.fSpeed.textColor = UIColor.black
             
         }
         
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isHidden = true
-        self.initNotifications()
-        
-        let store = UserDefaults.standard
-        let testMode = store.bool(forKey: kTextMode)
-        
-        self.fSettingsButton.isHidden = !testMode
-        self.fSettingsButton.isEnabled = testMode
-
-        super.viewWillAppear(animated)
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        self.removeNotifications()
-        super.viewWillDisappear(animated)
-    }
-    
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        if size.width > size.height{
-           // self.performSegueWithIdentifier("graphSegueIdentifier", sender: self)
-        }
-    }
-
     
 }
