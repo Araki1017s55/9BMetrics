@@ -74,6 +74,7 @@
 		009B34981E93EEEE0064F787 /* GyrometricsUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 009B348B1E93EEED0064F787 /* GyrometricsUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		009B349B1E93EEEE0064F787 /* Gyrometrics.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 009B34821E93EEED0064F787 /* Gyrometrics.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		00A8FAB71EA8F7B9000F398D /* BLENinebot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A8FAB61EA8F7B9000F398D /* BLENinebot.swift */; };
+		00A8FAB81EA9023C000F398D /* GraphViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00A8FABA1EA9023C000F398D /* GraphViewController.storyboard */; };
 		00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
 		00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
 		00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
@@ -93,7 +94,6 @@
 		00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */; };
 		00B9E0FC1E3F5492004391EE /* WheelSelectorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */; };
 		00B9E0FE1E40956F004391EE /* UnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FD1E40956F004391EE /* UnitManager.swift */; };
-		00C196C81EA76926002C5F2A /* GraphViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00C196C71EA76926002C5F2A /* GraphViewController.storyboard */; };
 		00C196CA1EA7B7B8002C5F2A /* UIViewController+Instantiate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C196C91EA7B7B8002C5F2A /* UIViewController+Instantiate.swift */; };
 		00C196CC1EA7C352002C5F2A /* BLEMapDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00C196CB1EA7C352002C5F2A /* BLEMapDashboard.storyboard */; };
 		00C1E9AD1E8FC0F900211452 /* BLEMapDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C1E9AC1E8FC0F900211452 /* BLEMapDashboard.swift */; };
@@ -266,6 +266,12 @@
 		009B34931E93EEEE0064F787 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		009B34951E93EEEE0064F787 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00A8FAB61EA8F7B9000F398D /* BLENinebot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebot.swift; path = 9BMetrics/BLENinebot.swift; sourceTree = "<group>"; };
+		00A8FAB91EA9023C000F398D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/GraphViewController.storyboard; sourceTree = "<group>"; };
+		00A8FABC1EA90242000F398D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/GraphViewController.strings; sourceTree = "<group>"; };
+		00A8FABE1EA90247000F398D /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/GraphViewController.strings; sourceTree = "<group>"; };
+		00A8FAC01EA90248000F398D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/GraphViewController.strings; sourceTree = "<group>"; };
+		00A8FAC21EA90249000F398D /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/GraphViewController.strings; sourceTree = "<group>"; };
+		00A8FAC41EA9024A000F398D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GraphViewController.strings; sourceTree = "<group>"; };
 		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zip.h; sourceTree = "<group>"; };
 		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
 		00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipUtilities.swift; sourceTree = "<group>"; };
@@ -303,7 +309,6 @@
 		00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKImage.swift; path = 9BMetrics/TMKImage.swift; sourceTree = "<group>"; };
 		00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorDelegate.swift; sourceTree = "<group>"; };
 		00B9E0FD1E40956F004391EE /* UnitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UnitManager.swift; path = 9BMetrics/UnitManager.swift; sourceTree = "<group>"; };
-		00C196C71EA76926002C5F2A /* GraphViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = GraphViewController.storyboard; sourceTree = "<group>"; };
 		00C196C91EA7B7B8002C5F2A /* UIViewController+Instantiate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+Instantiate.swift"; path = "9BMetrics/UIViewController+Instantiate.swift"; sourceTree = "<group>"; };
 		00C196CB1EA7C352002C5F2A /* BLEMapDashboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BLEMapDashboard.storyboard; sourceTree = "<group>"; };
 		00C1E9AC1E8FC0F900211452 /* BLEMapDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMapDashboard.swift; sourceTree = "<group>"; };
@@ -552,7 +557,7 @@
 		00C196CD1EA8A69B002C5F2A /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				00C196C71EA76926002C5F2A /* GraphViewController.storyboard */,
+				00A8FABA1EA9023C000F398D /* GraphViewController.storyboard */,
 				00C196CB1EA7C352002C5F2A /* BLEMapDashboard.storyboard */,
 				001C7AD31EA8A85400E91E4C /* BLEDeviceSelector.storyboard */,
 				001C7AD51EA8AECA00E91E4C /* BLENinebotSettingsViewController.storyboard */,
@@ -610,11 +615,11 @@
 				00FFEEFF1D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift */,
 				0066C8B01D885EB3005DE94F /* BLEMimConnectionDelegate.swift */,
 				0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */,
+				0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */,
 				008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */,
 				007A57681C85CF39003A2030 /* BLENinebotMessage.swift */,
 				0036EDA51C9B0BB500B7597A /* BLERequestOperation.swift */,
 				008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */,
-				0079E9881D8E8071004A09BB /* BLEWheelSelector.swift */,
 				0079E98A1D927A0E004A09BB /* KingSongAdapter.swift */,
 				00C2667C1DA27D86004D3B02 /* GotawayAdapter.swift */,
 				00649CF41DD346FC00790DE3 /* BLEInMotionAdapter.swift */,
@@ -625,13 +630,13 @@
 		00CF64391CE4C85F00C5E029 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */,
-				00F822311E19814D0080C644 /* Wheel.swift */,
-				00F822331E19856A0080C644 /* WheelDatabase.swift */,
 				00F28D581E48E41300346A24 /* DatabaseObjectProtocol.swift */,
 				00F28D5A1E48E5F400346A24 /* SimpleObjectDatabase.swift */,
-				00DAD9CB1E4368C4007E1762 /* WheelTrackDatabase.swift */,
+				00F822311E19814D0080C644 /* Wheel.swift */,
+				00F822331E19856A0080C644 /* WheelDatabase.swift */,
+				00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */,
 				00F28D5E1E49C8F000346A24 /* WheelTrackSummary.swift */,
+				00DAD9CB1E4368C4007E1762 /* WheelTrackDatabase.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -851,7 +856,7 @@
 				007BEE731E40BB4D00A811FA /* Localizable.strings in Resources */,
 				001C7AD61EA8AECA00E91E4C /* BLENinebotSettingsViewController.storyboard in Resources */,
 				007A57561C85CE69003A2030 /* icon_ipad.png in Resources */,
-				00C196C81EA76926002C5F2A /* GraphViewController.storyboard in Resources */,
+				00A8FAB81EA9023C000F398D /* GraphViewController.storyboard in Resources */,
 				007BEE701E40BB3B00A811FA /* Main.storyboard in Resources */,
 				001C7AD81EA8BB7100E91E4C /* BLEMapViewController.storyboard in Resources */,
 				007A57591C85CE69003A2030 /* nb_512.png in Resources */,
@@ -1062,6 +1067,19 @@
 				009B34931E93EEEE0064F787 /* Base */,
 			);
 			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		00A8FABA1EA9023C000F398D /* GraphViewController.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				00A8FAB91EA9023C000F398D /* Base */,
+				00A8FABC1EA90242000F398D /* en */,
+				00A8FABE1EA90247000F398D /* ca */,
+				00A8FAC01EA90248000F398D /* es */,
+				00A8FAC21EA90249000F398D /* fr */,
+				00A8FAC41EA9024A000F398D /* de */,
+			);
+			name = GraphViewController.storyboard;
 			sourceTree = "<group>";
 		};
 		00DAD9C31E412063007E1762 /* InfoPlist.strings */ = {

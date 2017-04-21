@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "8lH-KV-aV5"; */
+"8lH-KV-aV5.text" = "Label";
+
+/* Class = "UILabel"; text = "Average value"; ObjectID = "9aX-jW-o0X"; */
+"9aX-jW-o0X.text" = "Valor Mitjà";
+
+/* Class = "UILabel"; text = "Variable title"; ObjectID = "Gnc-ih-tqu"; */
+"Gnc-ih-tqu.text" = "Títol Var";
+
+/* Class = "UILabel"; text = "Number of points / Average period"; ObjectID = "JG1-aT-fiO"; */
+"JG1-aT-fiO.text" = "N Punts / Període mitjà";
+
+/* Class = "UILabel"; text = "Max/min values"; ObjectID = "dlc-dl-am4"; */
+"dlc-dl-am4.text" = "Valors Max/min";

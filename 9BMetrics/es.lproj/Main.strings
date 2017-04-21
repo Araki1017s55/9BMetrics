@@ -112,7 +112,7 @@
 "Km6-XT-bt8.text" = "100%";
 
 /* Class = "UILabel"; text = "Serial #"; ObjectID = "Kxz-Rz-1V3"; */
-"Kxz-Rz-1V3.text" = "Serie #";
+"Kxz-Rz-1V3.text" = "# Serie";
 
 /* Class = "UILabel"; text = "12,5 Km/h"; ObjectID = "L9p-Bk-uNt"; */
 "L9p-Bk-uNt.text" = "12,5 Km/h";
@@ -124,13 +124,13 @@
 "M1S-Nm-OFJ.text" = "Label";
 
 /* Class = "UILabel"; text = "Serial #"; ObjectID = "MbV-m9-vtJ"; */
-"MbV-m9-vtJ.text" = "Serie #";
+"MbV-m9-vtJ.text" = "#Serie ";
 
 /* Class = "UILabel"; text = "Energy"; ObjectID = "NDy-e0-LY5"; */
-"NDy-e0-LY5.text" = "Energia";
+"NDy-e0-LY5.text" = "Energía";
 
 /* Class = "UILabel"; text = "Total Runtime"; ObjectID = "NdE-aw-Tb4"; */
-"NdE-aw-Tb4.text" = "Temps total";
+"NdE-aw-Tb4.text" = "Duración";
 
 /* Class = "UILabel"; text = "0W"; ObjectID = "Nso-OV-hQJ"; */
 "Nso-OV-hQJ.text" = "0W";
@@ -139,13 +139,13 @@
 "OlJ-i5-9SV.text" = "Password";
 
 /* Class = "UILabel"; text = "Speed Limit Enabled"; ObjectID = "Ot0-oO-Lx5"; */
-"Ot0-oO-Lx5.text" = "Habilitar límit de velocitat";
+"Ot0-oO-Lx5.text" = "Habilitar límite de velocidad";
 
 /* Class = "UILabel"; text = "Subtitle"; ObjectID = "PBJ-aK-z75"; */
 "PBJ-aK-z75.text" = "Subtitle";
 
 /* Class = "UILabel"; text = "Battery 340 wh"; ObjectID = "QXx-rK-ev7"; */
-"QXx-rK-ev7.text" = "Bateria 340 wh";
+"QXx-rK-ev7.text" = "Batería 340 wh";
 
 /* Class = "UILabel"; text = "Pitch"; ObjectID = "R4X-7A-Enh"; */
 "R4X-7A-Enh.text" = "Pitch";
@@ -154,7 +154,7 @@
 "RA5-VE-eJp.text" = "Label";
 
 /* Class = "UILabel"; text = "Wheel Locked"; ObjectID = "RJA-TH-NcR"; */
-"RJA-TH-NcR.text" = "Roda bloquejada";
+"RJA-TH-NcR.text" = "Rueda bloqueada";
 
 /* Class = "UILabel"; text = "Enable Corrections"; ObjectID = "RpH-uf-pDI"; */
 "RpH-uf-pDI.text" = "Habilitar correcciones";

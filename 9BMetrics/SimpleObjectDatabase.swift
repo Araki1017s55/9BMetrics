@@ -5,6 +5,13 @@
 //  Created by Francisco Gorina Vanrell on 6/2/17.
 //  Copyright © 2017 Paco Gorina. All rights reserved.
 //
+// A very simple Database. Objects are retrieved by a key.
+//
+// The database is stored in memory as a Dictionary.
+//
+// It is Saved/Retrieved by means if a NSKeyedArchiver/Unarchiver
+//
+
 
 import Foundation
 
