@@ -23,6 +23,7 @@
 // we should reduce limitSpeed automatically. Will think about
 
 import UIKit
+import GyrometricsDataModel
 
 class BLENinebotSettingsViewController: UIViewController {
     

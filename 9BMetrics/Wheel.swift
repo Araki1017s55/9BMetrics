@@ -11,20 +11,20 @@ import UIKit
 
 public class Wheel : NSObject, DatabaseObjectProtocol {
     
-    var uuid : String = ""
-    var name : String = ""
-    var password : String  = "000000"
-    var brand : String = ""
-    var serialNo : String = ""
-    var model : String = ""
-    var version : String = "1.1.1"
-    var maxSpeed : Double = 8.33    // Max speed m/s
-    var limitSpeed : Double = 8.33  // Limited speed (from the wheel)
-    var alarmSpeed : Double = 5.56  // Applcation Alarm Speed 
-    var notifySpeed : Bool = false
-    var batteryAlarm : Double = 20 // Battery alarm. 20%
-    var notifyBattery : Bool = true
-    var totalDistance : Double = 0.0    // Just to get the total distance. Updated with every run
+    public var uuid : String = ""
+    public var name : String = ""
+    public var password : String  = "000000"
+    public var brand : String = ""
+    public var serialNo : String = ""
+    public var model : String = ""
+    public var version : String = "1.1.1"
+    public var maxSpeed : Double = 8.33    // Max speed m/s
+    public var limitSpeed : Double = 8.33  // Limited speed (from the wheel)
+    public var alarmSpeed : Double = 5.56  // Applcation Alarm Speed
+    public var notifySpeed : Bool = false
+    public var batteryAlarm : Double = 20 // Battery alarm. 20%
+    public var notifyBattery : Bool = true
+    public var totalDistance : Double = 0.0    // Just to get the total distance. Updated with every run
     
     
     // Distance adjustment
@@ -35,15 +35,15 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
     
     var distance_sum_xy : Double = 1.0    // sum (distanceGPS * distance)
     var distance_sum_x2  : Double = 1.0   // sum (distanceGPS ^2)
-    var distance_coef : Double = 1.0      // distance = distanceGPS/coef  o distance real = distance *  coef
+    public var distance_coef : Double = 1.0      // distance = distanceGPS/coef  o distance real = distance *  coef
     
     
     var speed_sum_xy : Double = 1.0    // sum (distanceGPS * speed integral)
-    var speed_coef : Double = 1.0      // speed_real = speed * coef
+    public var speed_coef : Double = 1.0      // speed_real = speed * coef
     
-    var enableCorrections : Bool = false // If corrections are enabled or not
+    public var enableCorrections : Bool = false // If corrections are enabled or not
     
-    init(uuid : String, name : String){
+    public init(uuid : String, name : String){
         //super.init()
         self.uuid = uuid
         self.name = name
@@ -115,12 +115,12 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
 
     //MARK: Some specific functions 
     
-    func getSpeedCorrection() -> Double{
+    public func getSpeedCorrection() -> Double{
         
         return enableCorrections ? speed_coef : 1.0
     }
     
-    func getDistanceCorrection() -> Double{
+    public func getDistanceCorrection() -> Double{
         
         return enableCorrections ? distance_coef : 1.0
     }
@@ -129,8 +129,8 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
         
         var runs : [URL] = []
         
-            if let dele = UIApplication.shared.delegate as? AppDelegate{
-                if let docs = dele.applicationDocumentsDirectory(){
+
+                if let docs = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last{
 
                 
                     let mgr = FileManager()
@@ -138,7 +138,7 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
                     let enumerator = mgr.enumerator(at: docs, includingPropertiesForKeys: nil, options: [FileManager.DirectoryEnumerationOptions.skipsHiddenFiles, FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants]) { (URL, Error) -> Bool in
                 
                         let err = Error as NSError
-                        AppDelegate.debugLog("Error enumerating files %@", err.localizedDescription)
+                        //AppDelegate.debugLog("Error enumerating files %@", err.localizedDescription)
                         return false
                     }
                     
@@ -157,7 +157,7 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
                     }
                    
                 }
-        }
+        
         
         return runs
         
@@ -170,7 +170,7 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
  
     */
     
-    func resetCalibration(){
+    public func resetCalibration(){
         
         nruns = 0
         distance_sum_xy = 1.0
@@ -181,7 +181,7 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
         
     }
     
-    func recomputeAdjust(progressItem: UIProgressView?){
+    public func recomputeAdjust(progressItem: UIProgressView?){
         
         nruns = 0
         distance_sum_xy = 0.0
@@ -246,7 +246,7 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
             speed_coef = 1.0
         }
         
-        AppDelegate.debugLog("Runs %d dCoef %f sCoef %f", nruns, distance_coef, speed_coef)
+        //AppDelegate.debugLog("Runs %d dCoef %f sCoef %f", nruns, distance_coef, speed_coef)
         
         nruns = 0
         distance_sum_xy = 0.0
@@ -306,7 +306,7 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
 
         }
         
-        AppDelegate.debugLog("Runs %d dCoef %f sCoef %f", nruns, distance_coef, speed_coef)
+       // AppDelegate.debugLog("Runs %d dCoef %f sCoef %f", nruns, distance_coef, speed_coef)
       
     }
     
@@ -318,7 +318,7 @@ public class Wheel : NSObject, DatabaseObjectProtocol {
     //  Wheel data is always available
     //
     
-    func updateRun(_ track : WheelTrack){
+    public func updateRun(_ track : WheelTrack){
         
         
         if track.getUUID() == uuid && enableCorrections {

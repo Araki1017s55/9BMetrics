@@ -20,7 +20,7 @@
 
 import UIKit
 
-class TMKImage: UIImage {
+public class TMKImage: UIImage {
     
     //
     //  TMKImage.m
@@ -32,7 +32,7 @@ class TMKImage: UIImage {
     
     
     
-    class func  beginImageContextWithSize(_ size:CGSize)
+    public class func  beginImageContextWithSize(_ size:CGSize)
     {
         if UIScreen.main.responds(to: #selector(NSDecimalNumberBehaviors.scale)) {
             if UIScreen.main.scale == 2.0 {
@@ -45,12 +45,12 @@ class TMKImage: UIImage {
         }
     }
     
-    class func endImageContext()
+    public class func endImageContext()
     {
         UIGraphicsEndImageContext()
     }
     
-    class func imageFromView(_ view : UIView) -> UIImage
+    public class func imageFromView(_ view : UIView) -> UIImage
     {
         self.beginImageContextWithSize(view.bounds.size)
         let hidden = view.isHidden
@@ -62,7 +62,7 @@ class TMKImage: UIImage {
         return image!
     }
     
-    class func imageWithImage(_ image:UIImage,  scaledToSize newSize:CGSize) -> UIImage
+    public class func imageWithImage(_ image:UIImage,  scaledToSize newSize:CGSize) -> UIImage
     {
         self.beginImageContextWithSize(newSize)
         image.draw(in: CGRect(x: 0,y: 0,width: newSize.width,height: newSize.height))
@@ -72,7 +72,7 @@ class TMKImage: UIImage {
     }
     
     
-    class func imageFromView( _ view: UIView,  scaledToSize newSize:(CGSize)) -> UIImage
+    public class func imageFromView( _ view: UIView,  scaledToSize newSize:(CGSize)) -> UIImage
     {
         var image = self.imageFromView(view)
         if view.bounds.size.width != newSize.width ||

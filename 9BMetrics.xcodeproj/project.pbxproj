@@ -21,7 +21,40 @@
 		003CC9161CCA79C50020F83B /* BLEHistoDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003CC9151CCA79C50020F83B /* BLEHistoDashboard.swift */; };
 		004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */; };
 		004A297E1CCA36F300D6A9A1 /* TMKLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */; };
+		004D729D1EABD64900E893D0 /* pwd2key.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59501CAEE64000277859 /* pwd2key.c */; };
+		004D729E1EABD65C00E893D0 /* minizip.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59361CAEE61700277859 /* minizip.c */; };
 		004F45CB1CAD9DE10071B7C4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004F45CA1CAD9DE10071B7C4 /* MapKit.framework */; };
+		0056A39F1EA9FCED0016A201 /* GyrometricsDataModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 0056A39D1EA9FCED0016A201 /* GyrometricsDataModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		0056A3A21EA9FCED0016A201 /* GyrometricsDataModel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0056A39B1EA9FCED0016A201 /* GyrometricsDataModel.framework */; };
+		0056A3A31EA9FCED0016A201 /* GyrometricsDataModel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0056A39B1EA9FCED0016A201 /* GyrometricsDataModel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0056A3A81EA9FD5B0016A201 /* DatabaseObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D581E48E41300346A24 /* DatabaseObjectProtocol.swift */; };
+		0056A3A91EA9FD720016A201 /* SimpleObjectDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D5A1E48E5F400346A24 /* SimpleObjectDatabase.swift */; };
+		0056A3AA1EA9FD760016A201 /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822311E19814D0080C644 /* Wheel.swift */; };
+		0056A3AB1EA9FD790016A201 /* WheelDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822331E19856A0080C644 /* WheelDatabase.swift */; };
+		0056A3AC1EA9FD7E0016A201 /* WheelTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */; };
+		0056A3AD1EA9FD810016A201 /* WheelTrackSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D5E1E49C8F000346A24 /* WheelTrackSummary.swift */; };
+		0056A3AE1EA9FD850016A201 /* WheelTrackDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DAD9CB1E4368C4007E1762 /* WheelTrackDatabase.swift */; };
+		0056A3BF1EAA03ED0016A201 /* TMKImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */; };
+		0056A3D81EAA31DC0016A201 /* MiniZipPackage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0056A3D11EAA31DB0016A201 /* MiniZipPackage.framework */; };
+		0056A3D91EAA31DC0016A201 /* MiniZipPackage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0056A3D11EAA31DB0016A201 /* MiniZipPackage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0056A3DE1EAA327C0016A201 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59411CAEE64000277859 /* aescrypt.c */; };
+		0056A3DF1EAA32800016A201 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59421CAEE64000277859 /* aeskey.c */; };
+		0056A3E01EAA32840016A201 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59441CAEE64000277859 /* aestab.c */; };
+		0056A3E31EAA32960016A201 /* entropy.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59481CAEE64000277859 /* entropy.c */; };
+		0056A3E41EAA329D0016A201 /* fileenc.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594A1CAEE64000277859 /* fileenc.c */; };
+		0056A3E51EAA32A20016A201 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594C1CAEE64000277859 /* hmac.c */; };
+		0056A3E61EAA32A80016A201 /* prng.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594E1CAEE64000277859 /* prng.c */; };
+		0056A3E81EAA32B20016A201 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59521CAEE64000277859 /* sha1.c */; };
+		0056A3E91EAA32B80016A201 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59341CAEE61700277859 /* unzip.c */; };
+		0056A3EB1EAA32C50016A201 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59391CAEE61700277859 /* ioapi.c */; };
+		0056A3EC1EAA32CC0016A201 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
+		0056A3ED1EAA32CF0016A201 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
+		0056A3EE1EAA32D20016A201 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
+		0056A3EF1EAA32D60016A201 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB595D1CAEE65E00277859 /* libz.tbd */; };
+		0056A3F01EAA376B0016A201 /* minizip.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AB59371CAEE61700277859 /* minizip.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0056A3F11EAA37A00016A201 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AB593A1CAEE61700277859 /* ioapi.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0056A3F21EAA37A70016A201 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AB59381CAEE61700277859 /* crypt.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0056A3F31EAA37AD0016A201 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AB59351CAEE61700277859 /* unzip.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00649CF51DD346FC00790DE3 /* BLEInMotionAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00649CF41DD346FC00790DE3 /* BLEInMotionAdapter.swift */; };
 		0066C8AD1D86CE0F005DE94F /* BLEMimServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */; };
 		0066C8AF1D86CE93005DE94F /* BLEMimConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */; };
@@ -73,25 +106,11 @@
 		009B34941E93EEEE0064F787 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 009B34921E93EEEE0064F787 /* MainInterface.storyboard */; };
 		009B34981E93EEEE0064F787 /* GyrometricsUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 009B348B1E93EEED0064F787 /* GyrometricsUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		009B349B1E93EEEE0064F787 /* Gyrometrics.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 009B34821E93EEED0064F787 /* Gyrometrics.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		00A47B231EABDB8E000248E9 /* MiniZipPackage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0056A3D31EAA31DC0016A201 /* MiniZipPackage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00A47B251EABDF9A000248E9 /* my_zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A47B241EABDF9A000248E9 /* my_zlib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00A47B271EABE0F9000248E9 /* my_zconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A47B261EABE0F9000248E9 /* my_zconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00A8FAB71EA8F7B9000F398D /* BLENinebot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A8FAB61EA8F7B9000F398D /* BLENinebot.swift */; };
 		00A8FAB81EA9023C000F398D /* GraphViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00A8FABA1EA9023C000F398D /* GraphViewController.storyboard */; };
-		00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
-		00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
-		00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
-		00AB593B1CAEE61700277859 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59341CAEE61700277859 /* unzip.c */; };
-		00AB593C1CAEE61700277859 /* minizip.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59361CAEE61700277859 /* minizip.c */; };
-		00AB593D1CAEE61700277859 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59391CAEE61700277859 /* ioapi.c */; };
-		00AB59541CAEE64000277859 /* aescrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59411CAEE64000277859 /* aescrypt.c */; };
-		00AB59551CAEE64000277859 /* aeskey.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59421CAEE64000277859 /* aeskey.c */; };
-		00AB59561CAEE64000277859 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59441CAEE64000277859 /* aestab.c */; };
-		00AB59571CAEE64000277859 /* entropy.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59481CAEE64000277859 /* entropy.c */; };
-		00AB59581CAEE64000277859 /* fileenc.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594A1CAEE64000277859 /* fileenc.c */; };
-		00AB59591CAEE64000277859 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594C1CAEE64000277859 /* hmac.c */; };
-		00AB595A1CAEE64000277859 /* prng.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB594E1CAEE64000277859 /* prng.c */; };
-		00AB595B1CAEE64000277859 /* pwd2key.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59501CAEE64000277859 /* pwd2key.c */; };
-		00AB595C1CAEE64000277859 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AB59521CAEE64000277859 /* sha1.c */; };
-		00AB595E1CAEE65E00277859 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB595D1CAEE65E00277859 /* libz.tbd */; };
-		00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */; };
 		00B9E0FC1E3F5492004391EE /* WheelSelectorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */; };
 		00B9E0FE1E40956F004391EE /* UnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FD1E40956F004391EE /* UnitManager.swift */; };
 		00C196CA1EA7B7B8002C5F2A /* UIViewController+Instantiate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C196C91EA7B7B8002C5F2A /* UIViewController+Instantiate.swift */; };
@@ -102,23 +121,30 @@
 		00C4EE601CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C4EE5F1CE076F3000C1C34 /* BLEGraphicRunningDashboard.swift */; };
 		00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CF64331CE4C5BD00C5E029 /* TMKClockViewFast.swift */; };
 		00DAD9C11E412063007E1762 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00DAD9C31E412063007E1762 /* InfoPlist.strings */; };
-		00DAD9CC1E4368C4007E1762 /* WheelTrackDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DAD9CB1E4368C4007E1762 /* WheelTrackDatabase.swift */; };
-		00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB801CD1D5B200EB66FB /* WheelTrack.swift */; };
 		00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00DCEB821CD1E5F200EB66FB /* Notifications.swift */; };
 		00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1A95D1CC9132E00D8EB27 /* TMKClockView.swift */; };
 		00F28D4E1E48DB4800346A24 /* UnitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9E0FD1E40956F004391EE /* UnitManager.swift */; };
 		00F28D4F1E48DCF800346A24 /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BB5A21DA6A6340073B5A0 /* String+Localized.swift */; };
 		00F28D521E48DD3C00346A24 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00F28D541E48DD3C00346A24 /* Localizable.strings */; };
-		00F28D5F1E49C8F000346A24 /* WheelTrackSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D5E1E49C8F000346A24 /* WheelTrackSummary.swift */; };
-		00F28D601E49CAAE00346A24 /* DatabaseObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D581E48E41300346A24 /* DatabaseObjectProtocol.swift */; };
-		00F28D611E49CAAE00346A24 /* SimpleObjectDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F28D5A1E48E5F400346A24 /* SimpleObjectDatabase.swift */; };
-		00F822321E19814D0080C644 /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822311E19814D0080C644 /* Wheel.swift */; };
-		00F822341E19856A0080C644 /* WheelDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822331E19856A0080C644 /* WheelDatabase.swift */; };
 		00F822371E1AB9700080C644 /* WheelSelectorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F822361E1AB9700080C644 /* WheelSelectorTableViewController.swift */; };
 		00FFEF001D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FFEEFF1D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0056A3A01EA9FCED0016A201 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A570C1C85CE49003A2030 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0056A39A1EA9FCED0016A201;
+			remoteInfo = GyrometricsDataModel;
+		};
+		0056A3D61EAA31DC0016A201 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 007A570C1C85CE49003A2030 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0056A3D01EAA31DB0016A201;
+			remoteInfo = MiniZip;
+		};
 		007A57281C85CE49003A2030 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 007A570C1C85CE49003A2030 /* Project object */;
@@ -150,6 +176,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		0056A3A71EA9FCED0016A201 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0056A3A31EA9FCED0016A201 /* GyrometricsDataModel.framework in Embed Frameworks */,
+				0056A3D91EAA31DC0016A201 /* MiniZipPackage.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		007A57461C85CE49003A2030 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -202,6 +240,12 @@
 		004A297B1CCA2D0A00D6A9A1 /* TMKVerticalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKVerticalView.swift; path = 9BMetrics/TMKVerticalView.swift; sourceTree = "<group>"; };
 		004A297D1CCA36F300D6A9A1 /* TMKLevelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKLevelView.swift; path = 9BMetrics/TMKLevelView.swift; sourceTree = "<group>"; };
 		004F45CA1CAD9DE10071B7C4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		0056A39B1EA9FCED0016A201 /* GyrometricsDataModel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GyrometricsDataModel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0056A39D1EA9FCED0016A201 /* GyrometricsDataModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GyrometricsDataModel.h; sourceTree = "<group>"; };
+		0056A39E1EA9FCED0016A201 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0056A3D11EAA31DB0016A201 /* MiniZipPackage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiniZipPackage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0056A3D31EAA31DC0016A201 /* MiniZipPackage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MiniZipPackage.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/MiniZipPackage.h"; sourceTree = DEVELOPER_DIR; };
+		0056A3D41EAA31DC0016A201 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/Info.plist"; sourceTree = DEVELOPER_DIR; };
 		00649CF41DD346FC00790DE3 /* BLEInMotionAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEInMotionAdapter.swift; path = 9BMetrics/BLEInMotionAdapter.swift; sourceTree = "<group>"; };
 		0066C8AC1D86CE0F005DE94F /* BLEMimServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEMimServer.swift; sourceTree = "<group>"; };
 		0066C8AE1D86CE93005DE94F /* BLEMimConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEMimConnection.swift; path = 9BMetrics/BLEMimConnection.swift; sourceTree = "<group>"; };
@@ -265,6 +309,8 @@
 		009B34901E93EEEE0064F787 /* IntentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentViewController.swift; sourceTree = "<group>"; };
 		009B34931E93EEEE0064F787 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		009B34951E93EEEE0064F787 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00A47B241EABDF9A000248E9 /* my_zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = my_zlib.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/my_zlib.h"; sourceTree = DEVELOPER_DIR; };
+		00A47B261EABE0F9000248E9 /* my_zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = my_zconf.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/my_zconf.h"; sourceTree = DEVELOPER_DIR; };
 		00A8FAB61EA8F7B9000F398D /* BLENinebot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebot.swift; path = 9BMetrics/BLENinebot.swift; sourceTree = "<group>"; };
 		00A8FAB91EA9023C000F398D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/GraphViewController.storyboard; sourceTree = "<group>"; };
 		00A8FABC1EA90242000F398D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/GraphViewController.strings; sourceTree = "<group>"; };
@@ -272,40 +318,40 @@
 		00A8FAC01EA90248000F398D /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/GraphViewController.strings; sourceTree = "<group>"; };
 		00A8FAC21EA90249000F398D /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/GraphViewController.strings; sourceTree = "<group>"; };
 		00A8FAC41EA9024A000F398D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GraphViewController.strings; sourceTree = "<group>"; };
-		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zip.h; sourceTree = "<group>"; };
-		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zip.swift; sourceTree = "<group>"; };
-		00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipUtilities.swift; sourceTree = "<group>"; };
-		00AB592E1CAEE5EC00277859 /* QuickZip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickZip.swift; sourceTree = "<group>"; };
+		00AB592B1CAEE5EC00277859 /* Zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Zip.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/Zip.h"; sourceTree = DEVELOPER_DIR; };
+		00AB592C1CAEE5EC00277859 /* Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Zip.swift; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/Zip.swift"; sourceTree = DEVELOPER_DIR; };
+		00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ZipUtilities.swift; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/ZipUtilities.swift"; sourceTree = DEVELOPER_DIR; };
+		00AB592E1CAEE5EC00277859 /* QuickZip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QuickZip.swift; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/QuickZip.swift"; sourceTree = DEVELOPER_DIR; };
 		00AB59331CAEE61600277859 /* 9BMetrics-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "9BMetrics-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
-		00AB59341CAEE61700277859 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
-		00AB59351CAEE61700277859 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
-		00AB59361CAEE61700277859 /* minizip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = minizip.c; sourceTree = "<group>"; };
-		00AB59371CAEE61700277859 /* minizip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minizip.h; sourceTree = "<group>"; };
-		00AB59381CAEE61700277859 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
-		00AB59391CAEE61700277859 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
-		00AB593A1CAEE61700277859 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
-		00AB593F1CAEE64000277859 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
-		00AB59401CAEE64000277859 /* aes_via_ace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes_via_ace.h; sourceTree = "<group>"; };
-		00AB59411CAEE64000277859 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aescrypt.c; sourceTree = "<group>"; };
-		00AB59421CAEE64000277859 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aeskey.c; sourceTree = "<group>"; };
-		00AB59431CAEE64000277859 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aesopt.h; sourceTree = "<group>"; };
-		00AB59441CAEE64000277859 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aestab.c; sourceTree = "<group>"; };
-		00AB59451CAEE64000277859 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aestab.h; sourceTree = "<group>"; };
-		00AB59461CAEE64000277859 /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_endian.h; sourceTree = "<group>"; };
-		00AB59471CAEE64000277859 /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = brg_types.h; sourceTree = "<group>"; };
-		00AB59481CAEE64000277859 /* entropy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = entropy.c; sourceTree = "<group>"; };
-		00AB59491CAEE64000277859 /* entropy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entropy.h; sourceTree = "<group>"; };
-		00AB594A1CAEE64000277859 /* fileenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fileenc.c; sourceTree = "<group>"; };
-		00AB594B1CAEE64000277859 /* fileenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileenc.h; sourceTree = "<group>"; };
-		00AB594C1CAEE64000277859 /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac.c; sourceTree = "<group>"; };
-		00AB594D1CAEE64000277859 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
-		00AB594E1CAEE64000277859 /* prng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prng.c; sourceTree = "<group>"; };
-		00AB594F1CAEE64000277859 /* prng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prng.h; sourceTree = "<group>"; };
-		00AB59501CAEE64000277859 /* pwd2key.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pwd2key.c; sourceTree = "<group>"; };
-		00AB59511CAEE64000277859 /* pwd2key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pwd2key.h; sourceTree = "<group>"; };
-		00AB59521CAEE64000277859 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
-		00AB59531CAEE64000277859 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
-		00AB595D1CAEE65E00277859 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		00AB59341CAEE61700277859 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = unzip.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/unzip.c"; sourceTree = DEVELOPER_DIR; };
+		00AB59351CAEE61700277859 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unzip.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/unzip.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59361CAEE61700277859 /* minizip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minizip.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/minizip.c"; sourceTree = DEVELOPER_DIR; };
+		00AB59371CAEE61700277859 /* minizip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = minizip.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/minizip.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59381CAEE61700277859 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crypt.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/crypt.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59391CAEE61700277859 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ioapi.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/ioapi.c"; sourceTree = DEVELOPER_DIR; };
+		00AB593A1CAEE61700277859 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioapi.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/ioapi.h"; sourceTree = DEVELOPER_DIR; };
+		00AB593F1CAEE64000277859 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aes.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/aes.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59401CAEE64000277859 /* aes_via_ace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aes_via_ace.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/aes_via_ace.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59411CAEE64000277859 /* aescrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = aescrypt.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/aescrypt.c"; sourceTree = DEVELOPER_DIR; };
+		00AB59421CAEE64000277859 /* aeskey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = aeskey.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/aeskey.c"; sourceTree = DEVELOPER_DIR; };
+		00AB59431CAEE64000277859 /* aesopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aesopt.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/aesopt.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59441CAEE64000277859 /* aestab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = aestab.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/aestab.c"; sourceTree = DEVELOPER_DIR; };
+		00AB59451CAEE64000277859 /* aestab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aestab.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/aestab.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59461CAEE64000277859 /* brg_endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = brg_endian.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/brg_endian.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59471CAEE64000277859 /* brg_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = brg_types.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/brg_types.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59481CAEE64000277859 /* entropy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = entropy.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/entropy.c"; sourceTree = DEVELOPER_DIR; };
+		00AB59491CAEE64000277859 /* entropy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entropy.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/entropy.h"; sourceTree = DEVELOPER_DIR; };
+		00AB594A1CAEE64000277859 /* fileenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fileenc.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/fileenc.c"; sourceTree = DEVELOPER_DIR; };
+		00AB594B1CAEE64000277859 /* fileenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileenc.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/fileenc.h"; sourceTree = DEVELOPER_DIR; };
+		00AB594C1CAEE64000277859 /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hmac.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/hmac.c"; sourceTree = DEVELOPER_DIR; };
+		00AB594D1CAEE64000277859 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hmac.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/hmac.h"; sourceTree = DEVELOPER_DIR; };
+		00AB594E1CAEE64000277859 /* prng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = prng.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/prng.c"; sourceTree = DEVELOPER_DIR; };
+		00AB594F1CAEE64000277859 /* prng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prng.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/prng.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59501CAEE64000277859 /* pwd2key.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pwd2key.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/pwd2key.c"; sourceTree = DEVELOPER_DIR; };
+		00AB59511CAEE64000277859 /* pwd2key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pwd2key.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/pwd2key.h"; sourceTree = DEVELOPER_DIR; };
+		00AB59521CAEE64000277859 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha1.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/sha1.c"; sourceTree = DEVELOPER_DIR; };
+		00AB59531CAEE64000277859 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha1.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/sha1.h"; sourceTree = DEVELOPER_DIR; };
+		00AB595D1CAEE65E00277859 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
 		00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKImage.swift; path = 9BMetrics/TMKImage.swift; sourceTree = "<group>"; };
 		00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorDelegate.swift; sourceTree = "<group>"; };
 		00B9E0FD1E40956F004391EE /* UnitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UnitManager.swift; path = 9BMetrics/UnitManager.swift; sourceTree = "<group>"; };
@@ -344,11 +390,27 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0056A3971EA9FCED0016A201 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0056A3CD1EAA31DB0016A201 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0056A3EF1EAA32D60016A201 /* libz.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		007A57111C85CE49003A2030 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00AB595E1CAEE65E00277859 /* libz.tbd in Frameworks */,
+				0056A3D81EAA31DC0016A201 /* MiniZipPackage.framework in Frameworks */,
+				0056A3A21EA9FCED0016A201 /* GyrometricsDataModel.framework in Frameworks */,
 				004F45CB1CAD9DE10071B7C4 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,16 +440,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0056A39C1EA9FCED0016A201 /* GyrometricsDataModel */ = {
+			isa = PBXGroup;
+			children = (
+				00CF64391CE4C85F00C5E029 /* Model */,
+				0056A39D1EA9FCED0016A201 /* GyrometricsDataModel.h */,
+				0056A39E1EA9FCED0016A201 /* Info.plist */,
+			);
+			path = GyrometricsDataModel;
+			sourceTree = "<group>";
+		};
+		0056A3D21EAA31DC0016A201 /* MiniZipPackage */ = {
+			isa = PBXGroup;
+			children = (
+				00AB592A1CAEE5CA00277859 /* Zip */,
+				0056A3D31EAA31DC0016A201 /* MiniZipPackage.h */,
+				0056A3D41EAA31DC0016A201 /* Info.plist */,
+			);
+			name = MiniZipPackage;
+			path = MiniZip;
+			sourceTree = "<group>";
+		};
 		007A570B1C85CE49003A2030 = {
 			isa = PBXGroup;
 			children = (
 				00CF643A1CE4C88800C5E029 /* Auxiliar */,
-				00CF64391CE4C85F00C5E029 /* Model */,
 				00CF64381CE4C81E00C5E029 /* Communications */,
 				00CF64371CE4C7CA00C5E029 /* Simulation */,
 				00CF64361CE4C77C00C5E029 /* Dashboards */,
 				00CF64351CE4C74E00C5E029 /* Graphics */,
-				00AB592A1CAEE5CA00277859 /* Zip */,
 				007A574E1C85CE5D003A2030 /* Resources */,
 				00F822351E1AB92E0080C644 /* Settings */,
 				007A57161C85CE49003A2030 /* 9BMetrics */,
@@ -395,6 +476,8 @@
 				007A57391C85CE49003A2030 /* 9BMetrics WatchKit Extension */,
 				009B34831E93EEED0064F787 /* Gyrometrics */,
 				009B348F1E93EEEE0064F787 /* GyrometricsUI */,
+				0056A39C1EA9FCED0016A201 /* GyrometricsDataModel */,
+				0056A3D21EAA31DC0016A201 /* MiniZipPackage */,
 				009B348C1E93EEEE0064F787 /* Frameworks */,
 				007A57151C85CE49003A2030 /* Products */,
 			);
@@ -408,6 +491,8 @@
 				007A57351C85CE49003A2030 /* 9BMetrics WatchKit Extension.appex */,
 				009B34821E93EEED0064F787 /* Gyrometrics.appex */,
 				009B348B1E93EEED0064F787 /* GyrometricsUI.appex */,
+				0056A39B1EA9FCED0016A201 /* GyrometricsDataModel.framework */,
+				0056A3D11EAA31DB0016A201 /* MiniZipPackage.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -501,6 +586,8 @@
 		00AB592A1CAEE5CA00277859 /* Zip */ = {
 			isa = PBXGroup;
 			children = (
+				00A47B261EABE0F9000248E9 /* my_zconf.h */,
+				00A47B241EABDF9A000248E9 /* my_zlib.h */,
 				00AB59321CAEE60100277859 /* minizip */,
 				00AB592B1CAEE5EC00277859 /* Zip.h */,
 				00AB592C1CAEE5EC00277859 /* Zip.swift */,
@@ -509,6 +596,7 @@
 				00AB595D1CAEE65E00277859 /* libz.tbd */,
 			);
 			name = Zip;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		00AB59321CAEE60100277859 /* minizip */ = {
@@ -630,6 +718,7 @@
 		00CF64391CE4C85F00C5E029 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */,
 				00F28D581E48E41300346A24 /* DatabaseObjectProtocol.swift */,
 				00F28D5A1E48E5F400346A24 /* SimpleObjectDatabase.swift */,
 				00F822311E19814D0080C644 /* Wheel.swift */,
@@ -639,6 +728,7 @@
 				00DAD9CB1E4368C4007E1762 /* WheelTrackDatabase.swift */,
 			);
 			name = Model;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		00CF643A1CE4C88800C5E029 /* Auxiliar */ = {
@@ -647,7 +737,6 @@
 				00A8FAB61EA8F7B9000F398D /* BLENinebot.swift */,
 				00DCEB821CD1E5F200EB66FB /* Notifications.swift */,
 				008BB5A21DA6A6340073B5A0 /* String+Localized.swift */,
-				00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */,
 				007A57661C85CF39003A2030 /* PickerActivity.swift */,
 				007A57731C85CF39003A2030 /* DocController.swift */,
 				00B9E0FD1E40956F004391EE /* UnitManager.swift */,
@@ -671,7 +760,68 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		0056A3981EA9FCED0016A201 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0056A39F1EA9FCED0016A201 /* GyrometricsDataModel.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0056A3CE1EAA31DB0016A201 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00A47B231EABDB8E000248E9 /* MiniZipPackage.h in Headers */,
+				0056A3F01EAA376B0016A201 /* minizip.h in Headers */,
+				00A47B251EABDF9A000248E9 /* my_zlib.h in Headers */,
+				0056A3F31EAA37AD0016A201 /* unzip.h in Headers */,
+				00A47B271EABE0F9000248E9 /* my_zconf.h in Headers */,
+				0056A3F11EAA37A00016A201 /* ioapi.h in Headers */,
+				0056A3F21EAA37A70016A201 /* crypt.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		0056A39A1EA9FCED0016A201 /* GyrometricsDataModel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0056A3A61EA9FCED0016A201 /* Build configuration list for PBXNativeTarget "GyrometricsDataModel" */;
+			buildPhases = (
+				0056A3961EA9FCED0016A201 /* Sources */,
+				0056A3971EA9FCED0016A201 /* Frameworks */,
+				0056A3981EA9FCED0016A201 /* Headers */,
+				0056A3991EA9FCED0016A201 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GyrometricsDataModel;
+			productName = GyrometricsDataModel;
+			productReference = 0056A39B1EA9FCED0016A201 /* GyrometricsDataModel.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		0056A3D01EAA31DB0016A201 /* MiniZip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0056A3DA1EAA31DC0016A201 /* Build configuration list for PBXNativeTarget "MiniZip" */;
+			buildPhases = (
+				0056A3CC1EAA31DB0016A201 /* Sources */,
+				0056A3CD1EAA31DB0016A201 /* Frameworks */,
+				0056A3CE1EAA31DB0016A201 /* Headers */,
+				0056A3CF1EAA31DB0016A201 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MiniZip;
+			productName = MiniZip;
+			productReference = 0056A3D11EAA31DB0016A201 /* MiniZipPackage.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		007A57131C85CE49003A2030 /* 9BMetrics */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 007A574B1C85CE49003A2030 /* Build configuration list for PBXNativeTarget "9BMetrics" */;
@@ -681,6 +831,7 @@
 				007A57121C85CE49003A2030 /* Resources */,
 				007A574A1C85CE49003A2030 /* Embed Watch Content */,
 				009B34A21E93EEEE0064F787 /* Embed App Extensions */,
+				0056A3A71EA9FCED0016A201 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -688,6 +839,8 @@
 				007A57291C85CE49003A2030 /* PBXTargetDependency */,
 				009B34971E93EEEE0064F787 /* PBXTargetDependency */,
 				009B349A1E93EEEE0064F787 /* PBXTargetDependency */,
+				0056A3A11EA9FCED0016A201 /* PBXTargetDependency */,
+				0056A3D71EAA31DC0016A201 /* PBXTargetDependency */,
 			);
 			name = 9BMetrics;
 			productName = 9BMetrics;
@@ -772,6 +925,14 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Paco Gorina";
 				TargetAttributes = {
+					0056A39A1EA9FCED0016A201 = {
+						CreatedOnToolsVersion = 8.3.1;
+						ProvisioningStyle = Automatic;
+					};
+					0056A3D01EAA31DB0016A201 = {
+						CreatedOnToolsVersion = 8.3.1;
+						ProvisioningStyle = Automatic;
+					};
 					007A57131C85CE49003A2030 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = N72U6DTDRE;
@@ -838,11 +999,27 @@
 				007A57341C85CE49003A2030 /* 9BMetrics WatchKit Extension */,
 				009B34811E93EEED0064F787 /* Gyrometrics */,
 				009B348A1E93EEED0064F787 /* GyrometricsUI */,
+				0056A39A1EA9FCED0016A201 /* GyrometricsDataModel */,
+				0056A3D01EAA31DB0016A201 /* MiniZip */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0056A3991EA9FCED0016A201 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0056A3CF1EAA31DB0016A201 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		007A57121C85CE49003A2030 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -907,14 +1084,47 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0056A3961EA9FCED0016A201 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0056A3AB1EA9FD790016A201 /* WheelDatabase.swift in Sources */,
+				0056A3AA1EA9FD760016A201 /* Wheel.swift in Sources */,
+				0056A3A81EA9FD5B0016A201 /* DatabaseObjectProtocol.swift in Sources */,
+				0056A3AE1EA9FD850016A201 /* WheelTrackDatabase.swift in Sources */,
+				0056A3AC1EA9FD7E0016A201 /* WheelTrack.swift in Sources */,
+				0056A3AD1EA9FD810016A201 /* WheelTrackSummary.swift in Sources */,
+				0056A3BF1EAA03ED0016A201 /* TMKImage.swift in Sources */,
+				0056A3A91EA9FD720016A201 /* SimpleObjectDatabase.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0056A3CC1EAA31DB0016A201 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				004D729E1EABD65C00E893D0 /* minizip.c in Sources */,
+				004D729D1EABD64900E893D0 /* pwd2key.c in Sources */,
+				0056A3E51EAA32A20016A201 /* hmac.c in Sources */,
+				0056A3ED1EAA32CF0016A201 /* ZipUtilities.swift in Sources */,
+				0056A3DE1EAA327C0016A201 /* aescrypt.c in Sources */,
+				0056A3E81EAA32B20016A201 /* sha1.c in Sources */,
+				0056A3E01EAA32840016A201 /* aestab.c in Sources */,
+				0056A3EB1EAA32C50016A201 /* ioapi.c in Sources */,
+				0056A3DF1EAA32800016A201 /* aeskey.c in Sources */,
+				0056A3EC1EAA32CC0016A201 /* Zip.swift in Sources */,
+				0056A3E91EAA32B80016A201 /* unzip.c in Sources */,
+				0056A3E41EAA329D0016A201 /* fileenc.c in Sources */,
+				0056A3EE1EAA32D20016A201 /* QuickZip.swift in Sources */,
+				0056A3E61EAA32A80016A201 /* prng.c in Sources */,
+				0056A3E31EAA32960016A201 /* entropy.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		007A57101C85CE49003A2030 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00F28D601E49CAAE00346A24 /* DatabaseObjectProtocol.swift in Sources */,
-				00F28D611E49CAAE00346A24 /* SimpleObjectDatabase.swift in Sources */,
-				00DCEB811CD1D5B200EB66FB /* WheelTrack.swift in Sources */,
-				00AB59581CAEE64000277859 /* fileenc.c in Sources */,
 				007A577A1C85CF39003A2030 /* BLENinebotMessage.swift in Sources */,
 				007A57751C85CF39003A2030 /* TMKGraphContentView.swift in Sources */,
 				00F1A95E1CC9132E00D8EB27 /* TMKClockView.swift in Sources */,
@@ -923,50 +1133,33 @@
 				007A577C1C85CF39003A2030 /* BLENinebotServerDelegate.swift in Sources */,
 				007A57781C85CF39003A2030 /* PickerActivity.swift in Sources */,
 				00FFEF001D1F13B500E839AB /* BLEDeviceSelectorDelegate.swift in Sources */,
-				00AB59311CAEE5EC00277859 /* QuickZip.swift in Sources */,
 				00C2667D1DA27D86004D3B02 /* GotawayAdapter.swift in Sources */,
-				00AB59551CAEE64000277859 /* aeskey.c in Sources */,
 				007A57811C85CF39003A2030 /* BLEDeviceSelector.swift in Sources */,
 				00C1E9AF1E8FC67900211452 /* BLEGenericDashboard.swift in Sources */,
 				00A8FAB71EA8F7B9000F398D /* BLENinebot.swift in Sources */,
-				00AB59561CAEE64000277859 /* aestab.c in Sources */,
 				00CF64341CE4C5BD00C5E029 /* TMKClockViewFast.swift in Sources */,
 				00C1E9AD1E8FC0F900211452 /* BLEMapDashboard.swift in Sources */,
-				00AB595B1CAEE64000277859 /* pwd2key.c in Sources */,
-				00AB595C1CAEE64000277859 /* sha1.c in Sources */,
 				0066C8B11D885EB4005DE94F /* BLEMimConnectionDelegate.swift in Sources */,
-				00F822341E19856A0080C644 /* WheelDatabase.swift in Sources */,
 				007A577F1C85CF39003A2030 /* BLESimulatedServer.swift in Sources */,
 				007A57851C85CF39003A2030 /* DocController.swift in Sources */,
-				00AB593C1CAEE61700277859 /* minizip.c in Sources */,
 				008BB5A31DA6A6340073B5A0 /* String+Localized.swift in Sources */,
 				008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */,
-				00AB593D1CAEE61700277859 /* ioapi.c in Sources */,
-				00AB59591CAEE64000277859 /* hmac.c in Sources */,
-				00F28D5F1E49C8F000346A24 /* WheelTrackSummary.swift in Sources */,
 				0036EDA61C9B0BB500B7597A /* BLERequestOperation.swift in Sources */,
 				007A577E1C85CF39003A2030 /* BLESimulatedClient.swift in Sources */,
 				0079E98B1D927A0E004A09BB /* KingSongAdapter.swift in Sources */,
 				00DCEB831CD1E5F200EB66FB /* Notifications.swift in Sources */,
-				00AB595A1CAEE64000277859 /* prng.c in Sources */,
 				007A57821C85CF39003A2030 /* BLEMim.swift in Sources */,
 				0066C8AF1D86CE93005DE94F /* BLEMimConnection.swift in Sources */,
 				007A571A1C85CE49003A2030 /* ViewController.swift in Sources */,
 				0002C47E1CAABF0E0060CFA5 /* BLERunningDashboard.swift in Sources */,
 				007A57771C85CF39003A2030 /* GraphViewController.swift in Sources */,
-				00AB59571CAEE64000277859 /* entropy.c in Sources */,
 				007CE2F81CCBD5260005828F /* KTCenterFlowLayout.swift in Sources */,
 				007A57741C85CF39003A2030 /* TMKGraphViewDataSource.swift in Sources */,
-				00AB593B1CAEE61700277859 /* unzip.c in Sources */,
-				00DAD9CC1E4368C4007E1762 /* WheelTrackDatabase.swift in Sources */,
-				00AB59301CAEE5EC00277859 /* ZipUtilities.swift in Sources */,
 				003CC9161CCA79C50020F83B /* BLEHistoDashboard.swift in Sources */,
 				007D4A171E239A0D008624E6 /* WheelInfoCell.swift in Sources */,
 				0079E9891D8E8071004A09BB /* BLEWheelSelector.swift in Sources */,
 				004A297C1CCA2D0A00D6A9A1 /* TMKVerticalView.swift in Sources */,
-				00B266361CC3FF4F00FCDAC5 /* TMKImage.swift in Sources */,
 				00649CF51DD346FC00790DE3 /* BLEInMotionAdapter.swift in Sources */,
-				00F822321E19814D0080C644 /* Wheel.swift in Sources */,
 				00F822371E1AB9700080C644 /* WheelSelectorTableViewController.swift in Sources */,
 				008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */,
 				00B9E0FC1E3F5492004391EE /* WheelSelectorDelegate.swift in Sources */,
@@ -979,8 +1172,6 @@
 				00C196CA1EA7B7B8002C5F2A /* UIViewController+Instantiate.swift in Sources */,
 				0066C8AD1D86CE0F005DE94F /* BLEMimServer.swift in Sources */,
 				007A57831C85CF39003A2030 /* SettingsViewController.swift in Sources */,
-				00AB59541CAEE64000277859 /* aescrypt.c in Sources */,
-				00AB592F1CAEE5EC00277859 /* Zip.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1014,6 +1205,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0056A3A11EA9FCED0016A201 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0056A39A1EA9FCED0016A201 /* GyrometricsDataModel */;
+			targetProxy = 0056A3A01EA9FCED0016A201 /* PBXContainerItemProxy */;
+		};
+		0056A3D71EAA31DC0016A201 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0056A3D01EAA31DB0016A201 /* MiniZip */;
+			targetProxy = 0056A3D61EAA31DC0016A201 /* PBXContainerItemProxy */;
+		};
 		007A57291C85CE49003A2030 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 007A57251C85CE49003A2030 /* 9BMetrics WatchKit App */;
@@ -1110,10 +1311,130 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0056A3A41EA9FCED0016A201 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = GyrometricsDataModel/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = es.gorina.GyrometricsDataModel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		0056A3A51EA9FCED0016A201 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = GyrometricsDataModel/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = es.gorina.GyrometricsDataModel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		0056A3DB1EAA31DC0016A201 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = MiniZipPackage/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "-lz";
+				PRODUCT_BUNDLE_IDENTIFIER = es.gorina.MiniZipPackage;
+				PRODUCT_NAME = "$(TARGET_NAME)Package";
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Swiftzlib";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		0056A3DC1EAA31DC0016A201 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = MiniZipPackage/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "-lz";
+				PRODUCT_BUNDLE_IDENTIFIER = es.gorina.MiniZipPackage;
+				PRODUCT_NAME = "$(TARGET_NAME)Package";
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Swiftzlib";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		007A57411C85CE49003A2030 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1156,7 +1477,9 @@
 				PROVISIONING_PROFILE = "a358aa2d-ea89-454f-9f89-f480db6e2458";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Swiftzlib";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1166,6 +1489,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1202,7 +1526,9 @@
 				PROVISIONING_PROFILE = "a358aa2d-ea89-454f-9f89-f480db6e2458";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Swiftzlib";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1440,6 +1766,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0056A3A61EA9FCED0016A201 /* Build configuration list for PBXNativeTarget "GyrometricsDataModel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0056A3A41EA9FCED0016A201 /* Debug */,
+				0056A3A51EA9FCED0016A201 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0056A3DA1EAA31DC0016A201 /* Build configuration list for PBXNativeTarget "MiniZip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0056A3DB1EAA31DC0016A201 /* Debug */,
+				0056A3DC1EAA31DC0016A201 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		007A570F1C85CE49003A2030 /* Build configuration list for PBXProject "9BMetrics" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

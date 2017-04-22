@@ -10,15 +10,14 @@ import Foundation
 import Foundation
 import UIKit
 
-class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
+public class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
     
-    static let sharedInstance = WheelTrackDatabase()
+    public static let sharedInstance = WheelTrackDatabase()
     
     override init(){
         
         // Load archive
-        if let dele =  UIApplication.shared.delegate as? AppDelegate{
-            if let docs = dele.applicationDocumentsDirectory(){
+             if let docs = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last{
                 let url = docs.appendingPathComponent("tracks")
 
                 super.init(url: url)
@@ -31,22 +30,19 @@ class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
             } else {
                 super.init()
             }
-        } else {
-            super.init()
-        }
         
     }
     
-    func rebuild(){
-        if let dele =  UIApplication.shared.delegate as? AppDelegate{
-            if let docs = dele.applicationDocumentsDirectory(){
+    public func rebuild(){
+
+            if let docs = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last{
                     rebuild(docs)
 
             }
-        }        
+            
     }
    
-    func rebuild(_ dir : URL){
+    public func rebuild(_ dir : URL){
         
         removeAll()
         
@@ -59,7 +55,7 @@ class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
         let enumerator = mgr.enumerator(at: dir, includingPropertiesForKeys: nil, options: [FileManager.DirectoryEnumerationOptions.skipsHiddenFiles, FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants]) { (URL, Error) -> Bool in
                 
             let err = Error as NSError
-                AppDelegate.debugLog("Error enumerating files %@", err.localizedDescription)
+                //AppDelegate.debugLog("Error enumerating files %@", err.localizedDescription)
                 return true
         }
             
@@ -135,7 +131,7 @@ class WheelTrackDatabase  : SimpleObjectDatabase<String, WheelTrackSummary>{
             try (url as NSURL).getResourceValue(&rsrc, forKey: URLResourceKey.creationDateKey)
         }
         catch{
-            AppDelegate.debugLog("Error reading creation date of file %", url as CVarArg)
+            //AppDelegate.debugLog("Error reading creation date of file %", url as CVarArg)
         }
         
         let date = rsrc as? Date

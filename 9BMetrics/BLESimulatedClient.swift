@@ -27,6 +27,7 @@ import WatchConnectivity
 import AudioToolbox
 import UserNotifications
 import AVFoundation
+import GyrometricsDataModel
 
 class BLESimulatedClient: NSObject {
     

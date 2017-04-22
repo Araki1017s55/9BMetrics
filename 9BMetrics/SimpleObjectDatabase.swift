@@ -18,7 +18,7 @@ import Foundation
 
 public class SimpleObjectDatabase<K : Hashable, T:DatabaseObjectProtocol>{
     
-    var database : [K:T] = [:]
+    public var database : [K:T] = [:]
     var url : URL?
     
     
@@ -69,12 +69,12 @@ public class SimpleObjectDatabase<K : Hashable, T:DatabaseObjectProtocol>{
         
     }
     
-    func getObject(forKey key :K) -> T?{
+    public func getObject(forKey key :K) -> T?{
         
         return database[key]
     }
     
-    func addObject(_ object: T){
+    public func addObject(_ object: T){
         
         if let key : K = object.getKey() as? K {
             database[key] = object
@@ -82,13 +82,13 @@ public class SimpleObjectDatabase<K : Hashable, T:DatabaseObjectProtocol>{
         }
     }
     
-    func addObjectWithoutSaving(_ object: T){
+    public func addObjectWithoutSaving(_ object: T){
         if let key : K = object.getKey() as? K {
             database[key] = object
         }
     }
     
-    func removeObject(_ object : T){
+    public func removeObject(_ object : T){
         
         if let key : K = object.getKey() as? K {
             database.removeValue(forKey: key)
@@ -96,7 +96,7 @@ public class SimpleObjectDatabase<K : Hashable, T:DatabaseObjectProtocol>{
         }
     }
     
-    func count() -> Int{
+    public func count() -> Int{
         return database.count
     }
     

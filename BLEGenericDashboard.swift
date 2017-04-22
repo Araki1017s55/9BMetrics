@@ -23,6 +23,7 @@
 
 import UIKit
 import CoreBluetooth
+import GyrometricsDataModel
 
 class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate, UIGestureRecognizerDelegate {
     

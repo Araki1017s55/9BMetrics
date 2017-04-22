@@ -14,6 +14,7 @@ import UIKit
 import CoreBluetooth
 import MapKit
 import AVFoundation
+import GyrometricsDataModel
 
 class BLEMapDashboard : BLEGenericDashboard, MKMapViewDelegate {
     

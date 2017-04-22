@@ -50,6 +50,7 @@
 //
 import Foundation
 import CoreBluetooth
+import GyrometricsDataModel
 
 // Types of known wheels
 

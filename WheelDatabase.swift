@@ -11,15 +11,15 @@ import UIKit
 
 public class WheelDatabase :  SimpleObjectDatabase<String, Wheel> {
     
-    static let sharedInstance = WheelDatabase()
+    public static let sharedInstance = WheelDatabase()
     
     var filename = "wheels"
 
     
     override init(){
         // Load archive
-        if let dele =  UIApplication.shared.delegate as? AppDelegate{
-            if let docs = dele.applicationDocumentsDirectory(){
+ 
+            if let docs = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last{
                 let url = docs.appendingPathComponent(filename)
                 
                 super.init(url: url)
@@ -27,9 +27,7 @@ public class WheelDatabase :  SimpleObjectDatabase<String, Wheel> {
             } else {
                 super.init()
             }
-        } else {
-            super.init()
-        }
+
     }
     
 //    func read(){
@@ -54,21 +52,21 @@ public class WheelDatabase :  SimpleObjectDatabase<String, Wheel> {
 //        }
 //    }
     
-     func getWheelFromUUID(uuid : String) -> Wheel? {
+     public func getWheelFromUUID(uuid : String) -> Wheel? {
         return getObject(forKey: uuid)
     }
     
-    func setWheel(wheel : Wheel){
+    public func setWheel(wheel : Wheel){
         addObject(wheel)
     }
     
-    func removeWheel(wheel : Wheel){
+    public func removeWheel(wheel : Wheel){
         
         removeObject(wheel)
     }
     
     
-    func updatePassword(_ password : String, uuid: String){
+    public func updatePassword(_ password : String, uuid: String){
         
         let wheel = getWheelFromUUID(uuid: uuid)
         if let wh = wheel {
@@ -78,7 +76,7 @@ public class WheelDatabase :  SimpleObjectDatabase<String, Wheel> {
         }
     }
     
-    func updateAlarmSpeed(_ speed : Double, uuid: String){
+    public func updateAlarmSpeed(_ speed : Double, uuid: String){
         
         let wheel = getWheelFromUUID(uuid: uuid)
         if let wh = wheel {
@@ -88,7 +86,7 @@ public class WheelDatabase :  SimpleObjectDatabase<String, Wheel> {
         }
     }
     
-    func updateSerialNumber(_ sn : String, uuid: String){
+    public func updateSerialNumber(_ sn : String, uuid: String){
         
         let wheel = getWheelFromUUID(uuid: uuid)
         if let wh = wheel {
@@ -99,7 +97,7 @@ public class WheelDatabase :  SimpleObjectDatabase<String, Wheel> {
     }
     
     
-    func updateModel(_ model : String, uuid: String){
+    public func updateModel(_ model : String, uuid: String){
         
         let wheel = getWheelFromUUID(uuid: uuid)
         if let wh = wheel {
@@ -109,7 +107,7 @@ public class WheelDatabase :  SimpleObjectDatabase<String, Wheel> {
         }
     }
 
-    func updateVersion(_ version : String, uuid: String){
+    public func updateVersion(_ version : String, uuid: String){
         
         let wheel = getWheelFromUUID(uuid: uuid)
         if let wh = wheel {

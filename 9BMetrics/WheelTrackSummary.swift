@@ -9,20 +9,20 @@
 import Foundation
 import UIKit
 
-class WheelTrackSummary : NSObject, DatabaseObjectProtocol {
+public class WheelTrackSummary : NSObject, DatabaseObjectProtocol {
     
-    typealias KeyType = String
+    public typealias KeyType = String
     
 
-    var name : String = ""
-    var adapter : String = ""
-    var date : Date = Date()
-    var distance : Double = 0.0
-    var duration : Double = 0.0
-    var pathname : String = ""
+    public var name : String = ""
+    public var adapter : String = ""
+    public var date : Date = Date()
+    public var distance : Double = 0.0
+    public var duration : Double = 0.0
+    public var pathname : String = ""
     
     
-    func initWithCoder(_ decoder : NSCoder){
+    public func initWithCoder(_ decoder : NSCoder){
         
         
         self.name = decoder.decodeObject(forKey: "name") as? String ?? ""
@@ -35,7 +35,7 @@ class WheelTrackSummary : NSObject, DatabaseObjectProtocol {
   
     }
     
-    func encodeWithCoder(_ encoder: NSCoder){
+    public func encodeWithCoder(_ encoder: NSCoder){
         
         encoder.encode(name, forKey:"name")
         encoder.encode(adapter, forKey:"adapter")
@@ -47,15 +47,14 @@ class WheelTrackSummary : NSObject, DatabaseObjectProtocol {
         
     }
     
-    func getKey() -> KeyType {
+    public func getKey() -> KeyType {
         return pathname
     }
     
-    func getURL() -> URL?{
+    public func getURL() -> URL?{
     
-        guard let delegate = UIApplication.shared.delegate as? AppDelegate else {return nil}
-        
-        guard let docsURL = delegate.applicationDocumentsDirectory() else {return nil}
+         
+        guard let docsURL = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last else {return nil}
         
         return docsURL.appendingPathComponent(pathname)
     }

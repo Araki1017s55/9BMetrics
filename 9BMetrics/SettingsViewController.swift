@@ -20,6 +20,7 @@
 
 
 import UIKit
+import GyrometricsDataModel
 
 class SettingsViewController: UIViewController {
     

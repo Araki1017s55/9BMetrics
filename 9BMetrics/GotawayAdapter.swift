@@ -21,6 +21,7 @@
 
 import Foundation
 import CoreBluetooth
+import GyrometricsDataModel
 
 class GotawayAdapter : NSObject {
     

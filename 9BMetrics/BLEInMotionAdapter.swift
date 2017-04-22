@@ -20,6 +20,7 @@
 
 import Foundation
 import CoreBluetooth
+import GyrometricsDataModel
 
 class BLEInMotionUnpacker {
     

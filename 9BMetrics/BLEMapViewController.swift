@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import GyrometricsDataModel
 
 class BLEMapViewController: UIViewController, MKMapViewDelegate{
     

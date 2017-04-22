@@ -24,12 +24,70 @@
 
 import UIKit
 import MapKit
+import MiniZipPackage
+
+let kWheelVariableChangedNotification = "wheelVariableChanged"
 
 
-class WheelTrack: NSObject {
+public class WheelTrack: NSObject {
+    
+    // This old constants are used just in legacy process. Will never change
+    // The current ones are the ones i BLENinebotOneAdapter
+    
+    static let kAltitude = 0        // Obte les dades de CMAltimeterManager. 0 es l'inici i serveix per variacions unicament
+    static let kPower = 1           // Calculada com V * I
+    static let kEnergy = 2          // Total Energy = Integral (Power, dt)
+    static let kLatitude = 3          // Latitut del GPS * 100000
+    static let kLongitude = 4          // Longitut dek GPS * 100000
+    static let kAltitudeGPS = 5          // Altitut GPS en m
+    static let kSpeedGPS = 6          // Velocitat del GPS * 1000 (m/s * 1000)
+    static let kSerialNo = 16       // 16-22
+    static let kPinCode = 23        // 23-25
+    static let kVersion = 26
+    static let kError = 27
+    static let kWarn = 28
+    static let kWorkMode = 31
+    static let kvPowerRemaining = 34
+    static let kRemainingDistance = 37
+    static let kvSpeed = 38
+    static let kvTotalMileage0 = 41
+    static let kvTotalMileage1 = 42
+    static let kTotalRuntime0 = 50
+    static let kTotalRuntime1 = 51
+    static let kSingleRuntime = 58
+    static let kTemperature = 62
+    static let kvDriveVoltage = 71
+    static let kElectricVoltage12v = 74
+    static let kvCurrent = 80
+    static let kPitchAngle = 97
+    static let kRollAngle = 98
+    static let kPitchAngleVelocity = 99
+    static let kRollAngleVelocity = 100
+    static let kLockWheel = 112
+    static let kEnableSpeedLimit = 114
+    static let kAbsoluteSpeedLimit = 115
+    static let kSpeedLimit = 116
+    
+    static let kvCodeError = 176
+    static let kvCodeWarning = 177
+    static let kvFlags = 178
+    static let kvWorkMode = 179
+    static let kBattery = 180
+    static let kCurrentSpeed = 181
+    static let kvAverageSpeed = 182
+    static let kTotalMileage0 = 183
+    static let kTotalMileage1 = 184
+    static let kvSingleMileage = 185
+    static let kvTemperature = 187
+    static let kVoltage = 188
+    static let kCurrent = 189
+    static let kvPitchAngle = 190
+    static let kvMaxSpeed = 191
+    static let kvRideMode = 210
+
     
     
-    enum WheelValue : String{
+    public enum WheelValue : String{
         
         case StartDate
         case Name
@@ -84,12 +142,12 @@ class WheelTrack: NSObject {
     
     
     
-    struct LogEntry {
-        var timestamp : TimeInterval
-        var value : Double
+    public struct LogEntry {
+        public var timestamp : TimeInterval
+        public var value : Double
     }
     
-    struct WheelVariable {
+    public struct WheelVariable {
         var codi : WheelValue      // Meaning
         var timeStamp : TimeInterval     // Last Update since firstDate
         var currentValue : Double         // Value
@@ -129,7 +187,7 @@ class WheelTrack: NSObject {
         .Temperature : .Celsius_Degrees]
     
     
-    var url : URL?
+    public var url : URL?
     fileprivate var name : String?
     fileprivate var serialNo : String?
     fileprivate var version : String?
@@ -141,7 +199,7 @@ class WheelTrack: NSObject {
     
     fileprivate var data = [WheelValue : WheelVariable]()
     
-    var firstDate : Date?
+    public var firstDate : Date?
     
     fileprivate var distOffset = 0.0  // Just to support stop start without affecting total distance. We supose we start at same place we stopped
     
@@ -152,10 +210,10 @@ class WheelTrack: NSObject {
     fileprivate var energyRecovered : Double?
     fileprivate var batCapacity : Double = 340.0 * 3600.0
     
-    //MARK: Conversion variables
+    //MARK: Legacy Conversion variables
     
-    //static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
-    //static var scales = Array<Double>(repeating: 1.0, count: 256)
+    static var conversion = Array<WheelTrack.WheelValue?>(repeating: nil, count: 256)
+    static var scales = Array<Double>(repeating: 1.0, count: 256)
     
     
     //MARK: .gpx export variables
@@ -169,66 +227,66 @@ class WheelTrack: NSObject {
         return "<trk>\n<name>$</name>\n\n<trkseg>\n"
     }
     //MARK: Auxiliary functions
-    /*
+    
     static func initConversion(){
         
-        conversion[BLENinebot.kAltitude] = WheelTrack.WheelValue.Altitude
-        conversion[BLENinebot.kPower] = WheelTrack.WheelValue.Power
-        conversion[BLENinebot.kEnergy] = WheelTrack.WheelValue.Energy
-        conversion[BLENinebot.kLatitude] = WheelTrack.WheelValue.Latitude
-        conversion[BLENinebot.kLongitude] = WheelTrack.WheelValue.Longitude
-        conversion[BLENinebot.kAltitudeGPS] = WheelTrack.WheelValue.AltitudeGPS
-        conversion[BLENinebot.kvPowerRemaining] = WheelTrack.WheelValue.Battery
-        conversion[BLENinebot.kvSpeed] = WheelTrack.WheelValue.Speed
-        conversion[BLENinebot.kSingleRuntime] = WheelTrack.WheelValue.Duration
-        conversion[BLENinebot.kTemperature] = WheelTrack.WheelValue.Temperature
-        conversion[BLENinebot.kvDriveVoltage] = WheelTrack.WheelValue.Voltage
-        conversion[BLENinebot.kvCurrent] = WheelTrack.WheelValue.Current
-        conversion[BLENinebot.kPitchAngle] = WheelTrack.WheelValue.Pitch
-        conversion[BLENinebot.kRollAngle] = WheelTrack.WheelValue.Roll
-        conversion[BLENinebot.kAbsoluteSpeedLimit] = WheelTrack.WheelValue.MaxSpeed
-        conversion[BLENinebot.kSpeedLimit] = WheelTrack.WheelValue.LimitSpeed
-        conversion[BLENinebot.kBattery] = WheelTrack.WheelValue.Battery
-        conversion[BLENinebot.kCurrentSpeed] = WheelTrack.WheelValue.Speed
-        conversion[BLENinebot.kvSingleMileage] = WheelTrack.WheelValue.Distance
-        conversion[BLENinebot.kvTemperature] = WheelTrack.WheelValue.Temperature
-        conversion[BLENinebot.kVoltage] = WheelTrack.WheelValue.Voltage
-        conversion[BLENinebot.kCurrent] = WheelTrack.WheelValue.Current
-        conversion[BLENinebot.kvPitchAngle] = WheelTrack.WheelValue.Pitch
-        conversion[BLENinebot.kvMaxSpeed] = WheelTrack.WheelValue.MaxSpeed
-        conversion[BLENinebot.kvRideMode] = WheelTrack.WheelValue.RidingLevel
+        conversion[kAltitude] = WheelTrack.WheelValue.Altitude
+        conversion[kPower] = WheelTrack.WheelValue.Power
+        conversion[kEnergy] = WheelTrack.WheelValue.Energy
+        conversion[kLatitude] = WheelTrack.WheelValue.Latitude
+        conversion[kLongitude] = WheelTrack.WheelValue.Longitude
+        conversion[kAltitudeGPS] = WheelTrack.WheelValue.AltitudeGPS
+        conversion[kvPowerRemaining] = WheelTrack.WheelValue.Battery
+        conversion[kvSpeed] = WheelTrack.WheelValue.Speed
+        conversion[kSingleRuntime] = WheelTrack.WheelValue.Duration
+        conversion[kTemperature] = WheelTrack.WheelValue.Temperature
+        conversion[kvDriveVoltage] = WheelTrack.WheelValue.Voltage
+        conversion[kvCurrent] = WheelTrack.WheelValue.Current
+        conversion[kPitchAngle] = WheelTrack.WheelValue.Pitch
+        conversion[kRollAngle] = WheelTrack.WheelValue.Roll
+        conversion[kAbsoluteSpeedLimit] = WheelTrack.WheelValue.MaxSpeed
+        conversion[kSpeedLimit] = WheelTrack.WheelValue.LimitSpeed
+        conversion[kBattery] = WheelTrack.WheelValue.Battery
+        conversion[kCurrentSpeed] = WheelTrack.WheelValue.Speed
+        conversion[kvSingleMileage] = WheelTrack.WheelValue.Distance
+        conversion[kvTemperature] = WheelTrack.WheelValue.Temperature
+        conversion[kVoltage] = WheelTrack.WheelValue.Voltage
+        conversion[kCurrent] = WheelTrack.WheelValue.Current
+        conversion[kvPitchAngle] = WheelTrack.WheelValue.Pitch
+        conversion[kvMaxSpeed] = WheelTrack.WheelValue.MaxSpeed
+        conversion[kvRideMode] = WheelTrack.WheelValue.RidingLevel
         
-        scales[BLENinebot.kLatitude] = 0.00001
-        scales[BLENinebot.kLongitude] = 0.00001
-        scales[BLENinebot.kAltitude] = 0.01
-        scales[BLENinebot.kPower] = 1.0
-        scales[BLENinebot.kEnergy] = 0.01 * 3600.0
-        scales[BLENinebot.kvSpeed] = 1.0 / 3600.0
-        scales[BLENinebot.kTemperature] = 0.1
-        scales[BLENinebot.kvDriveVoltage] = 0.01
-        scales[BLENinebot.kvCurrent] = 0.01
-        scales[BLENinebot.kPitchAngle] = 0.01
-        scales[BLENinebot.kRollAngle] = 0.01
-        scales[BLENinebot.kAbsoluteSpeedLimit] = 1.0 / 3600.0
-        scales[BLENinebot.kSpeedLimit] = 1.0 / 3600.0
-        scales[BLENinebot.kCurrentSpeed] = 1.0 / 3600.0
-        scales[BLENinebot.kvSingleMileage] = 10.0
-        scales[BLENinebot.kvTemperature] = 0.1
-        scales[BLENinebot.kVoltage] = 0.01
-        scales[BLENinebot.kCurrent] = 0.01
-        scales[BLENinebot.kvPitchAngle] = 0.01
-        scales[BLENinebot.kvMaxSpeed] = 1.0 / 3600.0
+        scales[kLatitude] = 0.00001
+        scales[kLongitude] = 0.00001
+        scales[kAltitude] = 0.01
+        scales[kPower] = 1.0
+        scales[kEnergy] = 0.01 * 3600.0
+        scales[kvSpeed] = 1.0 / 3600.0
+        scales[kTemperature] = 0.1
+        scales[kvDriveVoltage] = 0.01
+        scales[kvCurrent] = 0.01
+        scales[kPitchAngle] = 0.01
+        scales[kRollAngle] = 0.01
+        scales[kAbsoluteSpeedLimit] = 1.0 / 3600.0
+        scales[kSpeedLimit] = 1.0 / 3600.0
+        scales[kCurrentSpeed] = 1.0 / 3600.0
+        scales[kvSingleMileage] = 10.0
+        scales[kvTemperature] = 0.1
+        scales[kVoltage] = 0.01
+        scales[kCurrent] = 0.01
+        scales[kvPitchAngle] = 0.01
+        scales[kvMaxSpeed] = 1.0 / 3600.0
         
         
     }
-    */
+    
     
     var otherFormatter : DateFormatter = DateFormatter()
     
-    override init(){
+    public override init(){
         super.init()
         
-        //WheelTrack.initConversion()
+        WheelTrack.initConversion()
         
         otherFormatter.locale = Locale(identifier: "en_US_POSIX")
         
@@ -236,7 +294,7 @@ class WheelTrack: NSObject {
         otherFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'.000Z'"
     }
     
-    func clearVariable(_ vr : WheelValue){
+    public func clearVariable(_ vr : WheelValue){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
 
@@ -246,7 +304,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func clearAll(){
+    public func clearAll(){
         
         url = nil
         data.removeAll()
@@ -263,7 +321,7 @@ class WheelTrack: NSObject {
         trackImg = nil
     }
     
-    func HMSfromSeconds(_ secs : TimeInterval) -> (Int, Int, Int) {
+    public func HMSfromSeconds(_ secs : TimeInterval) -> (Int, Int, Int) {
         
         let hours =  floor(secs / 3600.0)
         let minutes = floor((secs - (hours * 3600.0)) / 60.0)
@@ -282,7 +340,7 @@ class WheelTrack: NSObject {
         NotificationCenter.default.post(not)
     }
     
-    func computeDistanceCorrection(){
+    public func computeDistanceCorrection(){
         let dGPS = getCurrentValueForVariable(.DistanceGPS)
         let dWheel = getCurrentValueForVariable(.Distance)
         
@@ -312,7 +370,7 @@ class WheelTrack: NSObject {
     // That is diferent from older versions in which the wheel values where respected
     //
     
-    func addValueWithDate(_ dat: Date, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
+    public func addValueWithDate(_ dat: Date, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
         
         // First value of all sets firstDate!!!
         
@@ -394,21 +452,21 @@ class WheelTrack: NSObject {
     
     // Auxiliary addValue functions
     
-    func addValue(_ variable:WheelValue, value:Double){
+    public func addValue(_ variable:WheelValue, value:Double){
         addValueWithDate(Date(), variable : variable, value : value, forced : false, silent: false)
     }
     
-    func addValueWithDate(_ dat: Date, variable : WheelValue, value : Double){
+    public func addValueWithDate(_ dat: Date, variable : WheelValue, value : Double){
         addValueWithDate(dat, variable : variable, value : value, forced : false, silent: false)
     }
     
     
-    func addValueWithTimeInterval(_ time: TimeInterval, variable : WheelValue, value : Double){
+    public func addValueWithTimeInterval(_ time: TimeInterval, variable : WheelValue, value : Double){
         
         addValueWithTimeInterval(time, variable : variable, value : value, forced : false, silent: false)
     }
     
-    func addValueWithTimeInterval(_ time: TimeInterval, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
+    public func addValueWithTimeInterval(_ time: TimeInterval, variable : WheelValue, value : Double, forced : Bool, silent: Bool){
         
         if firstDate == nil {
             firstDate = Date().addingTimeInterval(-time)
@@ -419,7 +477,7 @@ class WheelTrack: NSObject {
         self.addValueWithDate(date, variable: variable, value: value, forced: forced, silent: silent)
     }
     
-    func addLogValue(_ time: TimeInterval, variable : WheelValue, value : Double){
+    public func addLogValue(_ time: TimeInterval, variable : WheelValue, value : Double){
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -434,31 +492,31 @@ class WheelTrack: NSObject {
     
     // Setting general information
     
-    func setName(_ name : String){
+    public func setName(_ name : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
         
         self.name = name
     }
-    func setSerialNo(_ serialNo : String){
+    public func setSerialNo(_ serialNo : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
         
         self.serialNo = serialNo
     }
-    func setVersion(_ version : String){
+    public func setVersion(_ version : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
         
         self.version = version
     }
-    func setAdapter(_ adapter : String){
+    public func setAdapter(_ adapter : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
         
         self.adapter = adapter
     }
-    func setUUID(_ device : String){
+    public func setUUID(_ device : String){
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
         
@@ -469,7 +527,7 @@ class WheelTrack: NSObject {
     // MARK: Query Functions
     
     
-    func hasDataInVariable(_ v : WheelValue) -> Bool{
+    public func hasDataInVariable(_ v : WheelValue) -> Bool{
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
         
@@ -477,14 +535,14 @@ class WheelTrack: NSObject {
         return true
     }
     
-    func hasData()->Bool{       // Returns true if we have logged at least current data
+    public func hasData()->Bool{       // Returns true if we have logged at least current data
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
         
         return hasDataInVariable(.Current)
     }
     
-    func hasGPSData() -> Bool{
+    public func hasGPSData() -> Bool{
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -496,7 +554,7 @@ class WheelTrack: NSObject {
     }
     
     
-    func lastLocation() -> CLLocation?{
+    public func lastLocation() -> CLLocation?{
         if hasGPSData(){
             let n = min(countLogForVariable(.Latitude), countLogForVariable(.Longitude))
             
@@ -507,7 +565,7 @@ class WheelTrack: NSObject {
         }
         
     }
-    func countLogForVariable(_ v : WheelValue) -> Int{
+    public func countLogForVariable(_ v : WheelValue) -> Int{
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -524,7 +582,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func currentValueForVariable(_ v : WheelValue) -> Double?{
+    public func currentValueForVariable(_ v : WheelValue) -> Double?{
         
         if let vv = data[v] {
             return vv.currentValue
@@ -533,7 +591,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func entryAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> LogEntry?{
+    public func entryAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> LogEntry?{
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -553,7 +611,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func valueAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> Double?{
+    public func valueAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> Double?{
         if let e = entryAtPointForVariable(v, atPoint : point){
             return e.value
         }else {
@@ -561,7 +619,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func timeAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> TimeInterval?{
+    public func timeAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> TimeInterval?{
         if let e = entryAtPointForVariable(v, atPoint : point){
             return e.timestamp
         }else {
@@ -569,7 +627,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func dateAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> Date?{
+    public func dateAtPointForVariable(_ v : WheelValue, atPoint point : Int) -> Date?{
         if let e = entryAtPointForVariable(v, atPoint : point), let date = firstDate{
             return date.addingTimeInterval(e.timestamp)
         }else {
@@ -579,7 +637,7 @@ class WheelTrack: NSObject {
     
     
     
-    func value(_ variable : WheelValue,  forTime t:TimeInterval) -> LogEntry?{
+    public func value(_ variable : WheelValue,  forTime t:TimeInterval) -> LogEntry?{
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -646,7 +704,7 @@ class WheelTrack: NSObject {
     
     // Returns min, max, avg and acum (integral trapezoidal)
     
-    func getFirstLast(_ variable: WheelValue) -> (Double, Double){
+    public func getFirstLast(_ variable: WheelValue) -> (Double, Double){
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -665,7 +723,7 @@ class WheelTrack: NSObject {
         return (0.0, 0.0)
     }
     
-    func getCurrentStats(_ variable : WheelValue) -> (Double, Double, Double, Double){
+    public func getCurrentStats(_ variable : WheelValue) -> (Double, Double, Double, Double){
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -677,7 +735,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func stats(_ variable : WheelValue,  from t:TimeInterval, to t1: TimeInterval) -> (Double, Double, Double, Double){
+    public func stats(_ variable : WheelValue,  from t:TimeInterval, to t1: TimeInterval) -> (Double, Double, Double, Double){
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -808,7 +866,7 @@ class WheelTrack: NSObject {
     }
     
     
-    func buildPower(){
+    public func buildPower(){
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -830,7 +888,7 @@ class WheelTrack: NSObject {
         }
         
     }
-    func buildEnergy(){
+    public func buildEnergy(){
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -864,7 +922,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func getLastTimeValueForVariable(_ variable: WheelValue) -> TimeInterval{
+    public func getLastTimeValueForVariable(_ variable: WheelValue) -> TimeInterval{
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -876,7 +934,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getTimeIntervalForVariable(_ variable: WheelValue, toDate: Date) -> TimeInterval{
+    public func getTimeIntervalForVariable(_ variable: WheelValue, toDate: Date) -> TimeInterval{
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -893,7 +951,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getCurrentValueForVariable(_ variable: WheelValue) -> Double{
+    public func getCurrentValueForVariable(_ variable: WheelValue) -> Double{
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -917,7 +975,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getValueForVariable(_ variable:WheelValue, atPoint: Int) -> Double{
+    public func getValueForVariable(_ variable:WheelValue, atPoint: Int) -> Double{
         
         switch variable{
             //case .Power:
@@ -935,7 +993,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getValueForVariable(_ variable:WheelValue, time: TimeInterval) -> Double {
+    public func getValueForVariable(_ variable:WheelValue, time: TimeInterval) -> Double {
         
         switch variable{
         case .Power:
@@ -956,7 +1014,7 @@ class WheelTrack: NSObject {
     
     //MARK Specific functions
     
-    func getName() -> String{
+    public func getName() -> String{
         if let v = self.name{
             return v
         }else{
@@ -964,7 +1022,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getSerialNo() -> String{
+    public func getSerialNo() -> String{
         
         if let v = self.serialNo{
             return v
@@ -973,7 +1031,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getVersion() -> String{
+    public func getVersion() -> String{
         if let v = self.version{
             return v
         }else{
@@ -981,14 +1039,14 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getAdapter() -> String{
+    public func getAdapter() -> String{
         if let v = self.adapter{
             return v
         }else{
             return ""
         }
     }
-    func getUUID() -> String{
+    public func getUUID() -> String{
         if let v = self.uuid{
             return v
         }else{
@@ -997,7 +1055,7 @@ class WheelTrack: NSObject {
     }
     
     
-    func getAscent() -> Double {
+    public func getAscent() -> Double {
         
         if ascent == nil{
             
@@ -1014,7 +1072,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getDescent() -> Double {
+    public func getDescent() -> Double {
         
         
         if descent == nil{
@@ -1030,14 +1088,14 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getBatteryEnergy() -> Double{
+    public func getBatteryEnergy() -> Double{
         let (b0, b1) = getFirstLast(.Battery)
         
         return batCapacity * (b0 - b1) / 100.0
         
     }
     
-    func getEnergyUsed() -> Double{
+    public func getEnergyUsed() -> Double{
         
         
         if energyUsed == nil{
@@ -1053,7 +1111,7 @@ class WheelTrack: NSObject {
         }
     }
     
-    func getEnergyRecovered() -> Double{
+    public func getEnergyRecovered() -> Double{
         
         if energyRecovered == nil{
             let (eu, er) = energyDetails(from: 0.0, to: 1E80)
@@ -1067,7 +1125,7 @@ class WheelTrack: NSObject {
             return 0.0
         }
     }
-    func getImage() -> UIImage?{
+    public func getImage() -> UIImage?{
         if let img = self.trackImg{
             return img
         }else {
@@ -1078,7 +1136,7 @@ class WheelTrack: NSObject {
             
         }
     }
-    func energyDetails(from t0: TimeInterval, to t1: TimeInterval) -> (Double, Double){
+    public func energyDetails(from t0: TimeInterval, to t1: TimeInterval) -> (Double, Double){
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -1121,7 +1179,7 @@ class WheelTrack: NSObject {
     }
     
     
-    func computeAscentDescent() -> (ascent : Double, descent : Double){
+    public func computeAscentDescent() -> (ascent : Double, descent : Double){
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -1165,7 +1223,7 @@ class WheelTrack: NSObject {
     // resample resamples a subset of the variable generating a new log with
     // samples distanced a fixed amount.
     
-    func resample(_ variable:WheelValue, from:TimeInterval, to:TimeInterval, step:Double) -> [LogEntry]?{
+    public func resample(_ variable:WheelValue, from:TimeInterval, to:TimeInterval, step:Double) -> [LogEntry]?{
         
         objc_sync_enter(self);
         defer { objc_sync_exit(self) }
@@ -1220,7 +1278,7 @@ class WheelTrack: NSObject {
     }
     //MARK: Access to some files
     
-    func getGPXURL() -> URL?{
+    public func getGPXURL() -> URL?{
         
         if let myUrl = self.url {
             let gpxURL = myUrl.appendingPathComponent("track.gpx")
@@ -1242,36 +1300,29 @@ class WheelTrack: NSObject {
     
     // Exports a subset of data to a csv, excel compatible file
     
-    func createCSVFileFrom(_ from : TimeInterval, to: TimeInterval) -> URL?{
+    public func createCSVFileFrom(_ from : TimeInterval, to: TimeInterval) -> URL?{
         // Format first date into a filepath
         
         let newName : String
+        
         let ldateFormatter = DateFormatter()
         let enUSPOSIXLocale = Locale(identifier: "en_US_POSIX")
         
         ldateFormatter.locale = enUSPOSIXLocale
         ldateFormatter.dateFormat = "'Sel_'yyyyMMdd'_'HHmmss'.csv'"
+        
         if let date = firstDate{
             newName = ldateFormatter.string(from: date)
         }else{
             newName = ldateFormatter.string(from: Date())
         }
         
-        let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        
         var path : String = ""
         
-        if let dele = appDelegate {
-            let docs = dele.applicationDocumentsDirectory()
-            
-            if let d = docs {
-                path = d.path
-            }
+        if let d = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last {
+           path = d.path
         }
-        else
-        {
-            return nil
-        }
+        
         
         let tempFile = (path + "/" ) + newName
         
@@ -1333,11 +1384,11 @@ class WheelTrack: NSObject {
             
         }
         catch{
-            if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to get handle for %@".localized(), file.absoluteString)
-            }
+            //if let dele = UIApplication.shared.delegate as? AppDelegate{
+            //    dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to get handle for %@".localized(), file.absoluteString)
+            //}
             
-            AppDelegate.debugLog("Error al obtenir File Handle")
+            //AppDelegate.debugLog("Error al obtenir File Handle")
         }
         
         return nil
@@ -1346,7 +1397,7 @@ class WheelTrack: NSObject {
     
     // Version 4 uses variable names standardized for all wheels and uses SI units
     
-    func createSummaryFile() -> String?{
+    public func createSummaryFile() -> String?{
         
         guard let date = firstDate else {return nil}    // Timestamps have no sens without firstDate
         
@@ -1412,7 +1463,7 @@ class WheelTrack: NSObject {
     }
 
     
-    func loadSummary(_ str : String) {
+    public func loadSummary(_ str : String) {
         
         let lines = str.components(separatedBy: CharacterSet.newlines)
         for line in lines {
@@ -1494,7 +1545,7 @@ class WheelTrack: NSObject {
     
     
     
-    func variableLogtoString(_ variable : WheelValue) -> String?{
+    public func variableLogtoString(_ variable : WheelValue) -> String?{
         
         guard let v = data[variable] , v.log.count > 0 else {return nil}
         
@@ -1505,7 +1556,7 @@ class WheelTrack: NSObject {
         var buff = version
         
         
-        AppDelegate.debugLog("Gravant file log per %@", varName)
+        //AppDelegate.debugLog("Gravant file log per %@", varName)
         
         for item in v.log {
             let t = item.timestamp
@@ -1515,7 +1566,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func addValuesFromString(_ s : String, clear : Bool) {
+    public func addValuesFromString(_ s : String, clear : Bool) {
         
         
         let lines = s.components(separatedBy: CharacterSet.newlines)
@@ -1550,7 +1601,7 @@ class WheelTrack: NSObject {
                             self.firstDate = date0
                             
                         } else {
-                            AppDelegate.debugLog("Error amb version %d", v)
+                            //AppDelegate.debugLog("Error amb version %d", v)
                             lineNumber += 1
                             return
                         }
@@ -1558,7 +1609,7 @@ class WheelTrack: NSObject {
                     
                     
                 } else {
-                    AppDelegate.debugLog("Incorrect Format")
+                    //AppDelegate.debugLog("Incorrect Format")
                     lineNumber += 1
                     return
                 }
@@ -1581,9 +1632,9 @@ class WheelTrack: NSObject {
         }
     }
     
-    func packageURL(_ name: String) -> URL?{
+    public func packageURL(_ name: String) -> URL?{
         
-        guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+        guard let docDir = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last else {return nil}
         
         let ext = "9bm"
         let fm = FileManager.default
@@ -1607,7 +1658,7 @@ class WheelTrack: NSObject {
         return nil
     }
     
-    func appendToPackage(_ name: String){
+    public func appendToPackage(_ name: String){
         
         
         //guard let url = packageURL(name) else { _ = createPackage(name) ; return}
@@ -1621,9 +1672,9 @@ class WheelTrack: NSObject {
     
     
     
-    func createPackage(_ name : String) -> URL?{
+    public func createPackage(_ name : String) -> URL?{
         
-        guard let docDir = (UIApplication.shared.delegate as! AppDelegate).applicationDocumentsDirectory() else {return nil}
+        guard let docDir = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last else {return nil}
         
         if let url = createPackage(name, inDirectory: docDir, snapshot: false){
         
@@ -1646,7 +1697,7 @@ class WheelTrack: NSObject {
     }
     
     
-    func createPackage(_ name : String, inDirectory: URL, snapshot : Bool) -> URL?{
+    public func createPackage(_ name : String, inDirectory: URL, snapshot : Bool) -> URL?{
         
         let ext : String
         
@@ -1664,7 +1715,7 @@ class WheelTrack: NSObject {
         
         if !snapshot {
             for(_, v) in self.data {
-                AppDelegate.debugLog("Data %@, %.2f", v.codi.rawValue, v.currentValue)
+               // AppDelegate.debugLog("Data %@, %.2f", v.codi.rawValue, v.currentValue)
                 
             }
             
@@ -1733,8 +1784,8 @@ class WheelTrack: NSObject {
             try contents.write(to: pkgURL, options: .withNameUpdating, originalContentsURL: pkgURL)
         }catch let err as NSError{
             
-            AppDelegate.alert("Error when saving data", format: "Error %@ when writing data", err.description)
-            AppDelegate.debugLog("Error al gravar arxius %@", err.description)
+            //AppDelegate.alert("Error when saving data", format: "Error %@ when writing data", err.description)
+            //AppDelegate.debugLog("Error al gravar arxius %@", err.description)
             return nil
         }
         
@@ -1745,7 +1796,7 @@ class WheelTrack: NSObject {
         return pkgURL
     }
     
-    func loadVariableFromPackage(_ variable: WheelValue){
+    public func loadVariableFromPackage(_ variable: WheelValue){
         
         if let vari = data[variable], vari.loaded{
             return
@@ -1795,15 +1846,15 @@ class WheelTrack: NSObject {
         }
     }
     
-    func locationForPoint(_ p : Int) -> CLLocation {
+    public func locationForPoint(_ p : Int) -> CLLocation {
         return CLLocation(latitude: getValueForVariable(.Latitude, atPoint: p), longitude: getValueForVariable(.Longitude, atPoint: p))
     }
     
-    func location2DForPoint(_ p : Int) -> CLLocationCoordinate2D {
+    public func location2DForPoint(_ p : Int) -> CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: getValueForVariable(.Latitude, atPoint: p), longitude: getValueForVariable(.Longitude, atPoint: p))
     }
     
-    func angle(p0 : MKMapPoint, p1 : MKMapPoint, p2 : MKMapPoint) -> Double{
+    public func angle(p0 : MKMapPoint, p1 : MKMapPoint, p2 : MKMapPoint) -> Double{
         
         let dx0 = p1.x - p0.x
         let dy0 = p1.y - p0.y
@@ -1816,7 +1867,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func getStraightEnoughSegments() -> [(from : Int, to : Int, length: Double)] {
+    public func getStraightEnoughSegments() -> [(from : Int, to : Int, length: Double)] {
         
         if !hasGPSData() {
             return []
@@ -1887,7 +1938,7 @@ class WheelTrack: NSObject {
         return (0.0, 0.0, "", Date(timeIntervalSince1970: 0.0), "")
     }
 
-    func loadPackage(_ url : URL) {
+    public func loadPackage(_ url : URL) {
         
         clearAll()
         
@@ -1912,11 +1963,11 @@ class WheelTrack: NSObject {
                             let wheelDistance = getCurrentValueForVariable(.Distance)
                             let (_, _, _, anotherDistance) = getCurrentStats(.Speed)
                             
-                            AppDelegate.debugLog("GPS Distance %f Wheel Distance %f Another Distance %f", distanceGPX, wheelDistance, anotherDistance)
+                            //AppDelegate.debugLog("GPS Distance %f Wheel Distance %f Another Distance %f", distanceGPX, wheelDistance, anotherDistance)
                             
                             if distanceGPX > 0.0 {
-                                AppDelegate.debugLog("Correction %f", wheelDistance / distanceGPX)
-                                AppDelegate.debugLog("Speed Correction %f", anotherDistance / distanceGPX)
+                                //AppDelegate.debugLog("Correction %f", wheelDistance / distanceGPX)
+                                //AppDelegate.debugLog("Speed Correction %f", anotherDistance / distanceGPX)
                             }
                         }
                         
@@ -1949,11 +2000,11 @@ class WheelTrack: NSObject {
                     
                     
                     if let v = self.data[.Latitude]{
-                        AppDelegate.debugLog("Latitut %d", v.log.count)
+                        //AppDelegate.debugLog("Latitut %d", v.log.count)
                     }
 
                     if let v = self.data[.Longitude]{
-                        AppDelegate.debugLog("Longitut %d", v.log.count)
+                        //AppDelegate.debugLog("Longitut %d", v.log.count)
                     }
 
                     
@@ -2018,7 +2069,7 @@ class WheelTrack: NSObject {
     
     
     
-    static func createZipFile(_ pkgUrl : URL) -> URL?{
+    public static func createZipFile(_ pkgUrl : URL) -> URL?{
         
         
         let name = pkgUrl.deletingPathExtension().lastPathComponent
@@ -2045,16 +2096,16 @@ class WheelTrack: NSObject {
             }
             
             try Zip.zipFiles(files, zipFilePath: zipURL, password: nil, progress: { (progress) -> () in
-                AppDelegate.debugLog("Zip %f", progress)
+                //AppDelegate.debugLog("Zip %f", progress)
             })
             
             return zipURL
         }catch{
-            if let dele = UIApplication.shared.delegate as? AppDelegate{
-                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to create zip file %@".localized(), zipURL as CVarArg)
-            }
-            AppDelegate.debugLog("Error al crear zip file")
-            
+//            if let dele = UIApplication.shared.delegate as? AppDelegate{
+//                dele.displayMessageWithTitle("Error".localized(comment: "Standard ERROR message"),format:"Error when trying to create zip file %@".localized(), zipURL as CVarArg)
+//            }
+//            AppDelegate.debugLog("Error al crear zip file")
+//            
             return nil
         }
     }
@@ -2168,7 +2219,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func locationArray() -> [CLLocationCoordinate2D] {
+    public func locationArray() -> [CLLocationCoordinate2D] {
         
         var locs = [CLLocationCoordinate2D]()
         
@@ -2204,7 +2255,7 @@ class WheelTrack: NSObject {
     }
     
     
-    func getGPXDistance() -> Double{
+    public func getGPXDistance() -> Double{
         
         let arr = self.locationArray()
         
@@ -2230,7 +2281,7 @@ class WheelTrack: NSObject {
     
     //MARK: Legacy
     
-    func checkBattery(){
+    public func checkBattery(){
         let batt = getBatteryEnergy()
         let used = getEnergyUsed()
         let recovered = getEnergyRecovered()
@@ -2238,11 +2289,11 @@ class WheelTrack: NSObject {
         let power = used - recovered
         let eficiency = power/batt
         
-        AppDelegate.debugLog("Bateria : %f  Power %f Eficiency %f", batt, power, eficiency)
+        //AppDelegate.debugLog("Bateria : %f  Power %f Eficiency %f", batt, power, eficiency)
     }
     
-    func wheelValueFor9Bvalue(_ nbValue : Int) -> WheelValue?{
-        if let wv = BLENinebotOneAdapter.conversion[nbValue] {
+    public func wheelValueFor9Bvalue(_ nbValue : Int) -> WheelValue?{
+        if let wv = WheelTrack.conversion[nbValue] {
             return wv
         }else{
             return nil
@@ -2250,7 +2301,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func loadTextFile(_ url:URL){
+    public func loadTextFile(_ url:URL){
         
         self.clearAll()
         self.url = url
@@ -2283,7 +2334,7 @@ class WheelTrack: NSObject {
                                 self.firstDate = date0
                                 
                             } else {
-                                AppDelegate.debugLog("Error amb version %d", v)
+                                //AppDelegate.debugLog("Error amb version %d", v)
                                 lineNumber += 1
                                 return
                             }
@@ -2292,7 +2343,7 @@ class WheelTrack: NSObject {
                     } else if fields[0] == "Time"{
                         version = 1
                     } else {
-                        AppDelegate.debugLog("Incorrect Format")
+                        //AppDelegate.debugLog("Incorrect Format")
                         lineNumber += 1
                         return
                     }
@@ -2311,7 +2362,7 @@ class WheelTrack: NSObject {
                     
                     if let t = time, let i = variable, let v = value {
                         if let wh = wheelValueFor9Bvalue(i){
-                            let vd = Double(v) * BLENinebotOneAdapter.scales[i]
+                            let vd = Double(v) * WheelTrack.scales[i]
                             
                             self.addValueWithTimeInterval(t, variable: wh, value: vd, forced: true, silent: true)
                         }
@@ -2337,7 +2388,7 @@ class WheelTrack: NSObject {
                         
                         if  let v = value {
                             if let wh = wheelValueFor9Bvalue(variable){
-                                let vd = Double(v) * BLENinebotOneAdapter.scales[variable]
+                                let vd = Double(v) * WheelTrack.scales[variable]
                                 
                                 self.addValueWithDate(t, variable: wh, value: vd, forced: true, silent: true)
                             }
@@ -2361,9 +2412,9 @@ class WheelTrack: NSObject {
         let name = url.deletingPathExtension().lastPathComponent
         let newName = name.replacingOccurrences(of: "9B_", with: "")
         if let url = createPackage(newName){
-            AppDelegate.debugLog("Package %@ created", url as CVarArg)
+           // AppDelegate.debugLog("Package %@ created", url as CVarArg)
         }else{
-            AppDelegate.debugLog("Error al crear Package")
+            //AppDelegate.debugLog("Error al crear Package")
         }
         
         
@@ -2371,7 +2422,7 @@ class WheelTrack: NSObject {
     
     //MARK: Image and gps track manipulation
     
-    func computeTrackSize() -> (l0 : CLLocation?, l1 : CLLocation? ){
+    public func computeTrackSize() -> (l0 : CLLocation?, l1 : CLLocation? ){
         
         if countLogForVariable(.Latitude) <= 0{
             return (nil, nil)
@@ -2405,7 +2456,7 @@ class WheelTrack: NSObject {
         
     }
     
-    func setThumbImage(_ url : URL){
+    public func setThumbImage(_ url : URL){
         
         var thumb : UIImage?
         
@@ -2423,7 +2474,7 @@ class WheelTrack: NSObject {
                                                  forKey:URLResourceKey.thumbnailDictionaryKey)
         }
         catch _{
-            AppDelegate.debugLog("No puc gravar la imatge :)")
+            //AppDelegate.debugLog("No puc gravar la imatge :)")
         }
         
         

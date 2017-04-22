@@ -23,6 +23,7 @@
 
 import Foundation
 import CoreBluetooth
+import GyrometricsDataModel
 
 class KingSongAdapter : NSObject {
     

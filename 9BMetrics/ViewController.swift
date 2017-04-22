@@ -23,6 +23,7 @@ import UIKit
 import UserNotifications
 import CoreMotion
 import MapKit
+import GyrometricsDataModel
 
 /**
  Main Class shows a list of runs ordered by date.
