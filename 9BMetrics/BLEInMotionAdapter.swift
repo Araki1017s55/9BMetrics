@@ -113,7 +113,8 @@ class CANMessage{
     
     init(_ bArr : [UInt8]){
         
-        let rw = (((UInt(bArr[3]) * 256) + UInt(bArr[2])) * 256 + UInt(bArr[1])) * 256 + UInt(bArr[0])
+        var rw = (((UInt(bArr[3]) * 256) + UInt(bArr[2])) * 256 + UInt(bArr[1])) * 256
+        rw = rw + UInt(bArr[0])
         
         id = .NoOp
         if let mid = IDValue(rawValue: rw) {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0002C47E1CAABF0E0060CFA5 /* BLERunningDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0002C47D1CAABF0E0060CFA5 /* BLERunningDashboard.swift */; };
+		0004A1271F78173A00D89B0D /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0004A1261F78173A00D89B0D /* libz.1.dylib */; };
 		0016670C1C9958B70048344F /* BLESimulatedNinebot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */; };
 		0016670E1C995A290048344F /* simulated_log.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0016670D1C995A290048344F /* simulated_log.txt */; };
 		001667101C9967290048344F /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0016670F1C9967290048344F /* Settings.bundle */; };
@@ -50,7 +51,6 @@
 		0056A3EC1EAA32CC0016A201 /* Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592C1CAEE5EC00277859 /* Zip.swift */; };
 		0056A3ED1EAA32CF0016A201 /* ZipUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */; };
 		0056A3EE1EAA32D20016A201 /* QuickZip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AB592E1CAEE5EC00277859 /* QuickZip.swift */; };
-		0056A3EF1EAA32D60016A201 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AB595D1CAEE65E00277859 /* libz.tbd */; };
 		0056A3F01EAA376B0016A201 /* minizip.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AB59371CAEE61700277859 /* minizip.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0056A3F11EAA37A00016A201 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AB593A1CAEE61700277859 /* ioapi.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0056A3F21EAA37A70016A201 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AB59381CAEE61700277859 /* crypt.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -97,6 +97,8 @@
 		007BEE731E40BB4D00A811FA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 007BEE751E40BB4D00A811FA /* Localizable.strings */; };
 		007CE2F81CCBD5260005828F /* KTCenterFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */; };
 		007D4A171E239A0D008624E6 /* WheelInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007D4A161E239A0D008624E6 /* WheelInfoCell.swift */; };
+		007FB84D1EB0ED8200339182 /* BLEGraphicRunningDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007FB84C1EB0ED8200339182 /* BLEGraphicRunningDashboard.storyboard */; };
+		007FB84F1EB0EDD800339182 /* BLERunningDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007FB84E1EB0EDD800339182 /* BLERunningDashboard.storyboard */; };
 		008BB5A31DA6A6340073B5A0 /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BB5A21DA6A6340073B5A0 /* String+Localized.swift */; };
 		008E3D891CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */; };
 		008E3D8B1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */; };
@@ -226,6 +228,8 @@
 
 /* Begin PBXFileReference section */
 		0002C47D1CAABF0E0060CFA5 /* BLERunningDashboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLERunningDashboard.swift; path = 9BMetrics/BLERunningDashboard.swift; sourceTree = "<group>"; };
+		0004A1261F78173A00D89B0D /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
+		0004A1281F7991CE00D89B0D /* Gyrometrics.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gyrometrics.entitlements; sourceTree = "<group>"; };
 		0016670B1C9958B70048344F /* BLESimulatedNinebot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLESimulatedNinebot.swift; path = 9BMetrics/BLESimulatedNinebot.swift; sourceTree = "<group>"; };
 		0016670D1C995A290048344F /* simulated_log.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = simulated_log.txt; sourceTree = "<group>"; };
 		0016670F1C9967290048344F /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -294,6 +298,8 @@
 		007BEE771E40BB9C00A811FA /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
 		007CE2F71CCBD5260005828F /* KTCenterFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KTCenterFlowLayout.swift; path = 9BMetrics/KTCenterFlowLayout.swift; sourceTree = "<group>"; };
 		007D4A161E239A0D008624E6 /* WheelInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelInfoCell.swift; sourceTree = "<group>"; };
+		007FB84C1EB0ED8200339182 /* BLEGraphicRunningDashboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BLEGraphicRunningDashboard.storyboard; sourceTree = "<group>"; };
+		007FB84E1EB0EDD800339182 /* BLERunningDashboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BLERunningDashboard.storyboard; sourceTree = "<group>"; };
 		008BB5A21DA6A6340073B5A0 /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Localized.swift"; path = "9BMetrics/String+Localized.swift"; sourceTree = "<group>"; };
 		008E3D881CDA7B2C0010A5D4 /* BLEWheelAdapterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLEWheelAdapterProtocol.swift; path = 9BMetrics/BLEWheelAdapterProtocol.swift; sourceTree = "<group>"; };
 		008E3D8A1CDA7D670010A5D4 /* BLENinebotOneAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BLENinebotOneAdapter.swift; path = 9BMetrics/BLENinebotOneAdapter.swift; sourceTree = "<group>"; };
@@ -351,7 +357,6 @@
 		00AB59511CAEE64000277859 /* pwd2key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pwd2key.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/pwd2key.h"; sourceTree = DEVELOPER_DIR; };
 		00AB59521CAEE64000277859 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha1.c; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/sha1.c"; sourceTree = DEVELOPER_DIR; };
 		00AB59531CAEE64000277859 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha1.h; path = "../../../../Users/paco/Documents/XCode Projects/9BMetrics/MiniZipPackage/sha1.h"; sourceTree = DEVELOPER_DIR; };
-		00AB595D1CAEE65E00277859 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
 		00B266351CC3FF4F00FCDAC5 /* TMKImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TMKImage.swift; path = 9BMetrics/TMKImage.swift; sourceTree = "<group>"; };
 		00B9E0FB1E3F5492004391EE /* WheelSelectorDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelSelectorDelegate.swift; sourceTree = "<group>"; };
 		00B9E0FD1E40956F004391EE /* UnitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UnitManager.swift; path = 9BMetrics/UnitManager.swift; sourceTree = "<group>"; };
@@ -401,7 +406,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0056A3EF1EAA32D60016A201 /* libz.tbd in Frameworks */,
+				0004A1271F78173A00D89B0D /* libz.1.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,6 +564,7 @@
 		009B34831E93EEED0064F787 /* Gyrometrics */ = {
 			isa = PBXGroup;
 			children = (
+				0004A1281F7991CE00D89B0D /* Gyrometrics.entitlements */,
 				009B34841E93EEED0064F787 /* IntentHandler.swift */,
 				009B34861E93EEED0064F787 /* Info.plist */,
 			);
@@ -568,6 +574,7 @@
 		009B348C1E93EEEE0064F787 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0004A1261F78173A00D89B0D /* libz.1.dylib */,
 				009B348D1E93EEEE0064F787 /* IntentsUI.framework */,
 			);
 			name = Frameworks;
@@ -593,7 +600,6 @@
 				00AB592C1CAEE5EC00277859 /* Zip.swift */,
 				00AB592D1CAEE5EC00277859 /* ZipUtilities.swift */,
 				00AB592E1CAEE5EC00277859 /* QuickZip.swift */,
-				00AB595D1CAEE65E00277859 /* libz.tbd */,
 			);
 			name = Zip;
 			path = ..;
@@ -651,6 +657,8 @@
 				001C7AD51EA8AECA00E91E4C /* BLENinebotSettingsViewController.storyboard */,
 				001C7AD71EA8BB7100E91E4C /* BLEMapViewController.storyboard */,
 				001C7AD91EA8C55700E91E4C /* WheelSelectorTableViewController.storyboard */,
+				007FB84C1EB0ED8200339182 /* BLEGraphicRunningDashboard.storyboard */,
+				007FB84E1EB0EDD800339182 /* BLERunningDashboard.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -937,8 +945,11 @@
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = N72U6DTDRE;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
@@ -969,6 +980,11 @@
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = N72U6DTDRE;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					009B348A1E93EEED0064F787 = {
 						CreatedOnToolsVersion = 8.3;
@@ -1036,10 +1052,12 @@
 				00A8FAB81EA9023C000F398D /* GraphViewController.storyboard in Resources */,
 				007BEE701E40BB3B00A811FA /* Main.storyboard in Resources */,
 				001C7AD81EA8BB7100E91E4C /* BLEMapViewController.storyboard in Resources */,
+				007FB84F1EB0EDD800339182 /* BLERunningDashboard.storyboard in Resources */,
 				007A57591C85CE69003A2030 /* nb_512.png in Resources */,
 				007A57581C85CE69003A2030 /* about.html in Resources */,
 				00389AFF1C9986A4007BADDC /* Default-568h@2x.png in Resources */,
 				007A57551C85CE69003A2030 /* icon_ipad@2x.png in Resources */,
+				007FB84D1EB0ED8200339182 /* BLEGraphicRunningDashboard.storyboard in Resources */,
 				007A57611C85CF0A003A2030 /* Assets.xcassets in Resources */,
 				0016670E1C995A290048344F /* simulated_log.txt in Resources */,
 				001667101C9967290048344F /* Settings.bundle in Resources */,
@@ -1629,7 +1647,8 @@
 				CODE_SIGN_ENTITLEMENTS = 9BMetrics/9BMetrics.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = N72U6DTDRE;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1639,8 +1658,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "45021ad2-12a4-48d0-bca9-b48572051590";
+				PROVISIONING_PROFILE_SPECIFIER = "9BMetrics Development Profile";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "9BMetrics-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1656,8 +1675,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = 9BMetrics/9BMetrics.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = N72U6DTDRE;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1667,8 +1687,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "es.gorina.9BMetrics.-BMetrics";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "f82b095e-f4e7-4a3d-9f40-b3d2830b03ba";
+				PROVISIONING_PROFILE_SPECIFIER = "9BMetrics Distribution Profile";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "9BMetrics-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
@@ -1725,6 +1745,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_ENTITLEMENTS = Gyrometrics/Gyrometrics.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1748,6 +1769,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_ENTITLEMENTS = Gyrometrics/Gyrometrics.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Francisco Gorina Vanrell (N72U6DTDRE)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = N72U6DTDRE;

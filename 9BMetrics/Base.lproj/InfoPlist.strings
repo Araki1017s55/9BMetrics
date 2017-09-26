@@ -6,4 +6,6 @@
   Copyright © 2017 Paco Gorina. All rights reserved.
 */
 "NSBluetoothPeripheralUsageDescription" ="Enable Gyrometrics to connect to the wheels using Bluetooth";
-"NSLocationAlwaysUsageDescription" = "Enable to allow Gyrometrics to store position data and create tracks";
+"NSLocationAlwaysUsageDescription" = "Enable to allow Gyrometrics to store position data and create tracks even in background";
+"NSLocationWhenInUseUsageDescription" = "Enable to allow Gyrometrics to store position data and create tracks only when active. Will fail when in background.";
+"NSSpeechRecognitionUsageDescription" = "Enable Gyrometrics to answer questions about battery level, speed";

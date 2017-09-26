@@ -149,8 +149,8 @@ class BLEHistoDashboard: UIViewController , UIGestureRecognizerDelegate{
         self.dismiss(animated: true) {
             
         }
-        
     }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if size.width > size.height{
             // graphToShow = graphValue[0]

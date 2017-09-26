@@ -154,20 +154,15 @@ class BLEGenericDashboard: UIViewController, BLEDeviceSelectorDelegate, UIGestur
     
     func dataUpdated(_ not : Notification){
         
-        if !(UIApplication.shared.applicationState == UIApplicationState.active) {
-            return
-        }
-        
-        if let cli = self.client{
-            if let track = cli.datos{
-                    prepareForUpdate(track)
-            }
-        }
         
         DispatchQueue.main.async(execute: { () -> Void in
-            
+            if !(UIApplication.shared.applicationState == UIApplicationState.active) {
+                return
+            }
+
             if let cli = self.client{
                 if let track = cli.datos{
+                    self.prepareForUpdate(track)
                      if !track.getName().isEmpty && !self.headersReceived{
                         self.headersReceived = true
                         self.updateName(track.getName())

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We use Speech Recognition to ask questions about battery, speed... from the wheel</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -109,6 +111,10 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Enable Gyrometrics to connect to the wheels using Bluetooth</string>
 	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Enable to allow Gyrometrics to store position data and create tracks</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Enable to allow Gyrometrics to store position data and create tracks</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Enable to allow Gyrometrics to store position data and create tracks</string>
 	<key>UIBackgroundModes</key>
 	<array>

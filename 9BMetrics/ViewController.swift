@@ -480,9 +480,57 @@ class ViewController: UIViewController , UITableViewDataSource, UITableViewDeleg
         let graphMode = store.bool(forKey: kDashboardMode)
         
         if graphMode {
-            performSegue(withIdentifier: "GraphicRunningDashboardSegue", sender: self)
+        
+            if let dash = BLEGraphicRunningDashboard.instantiate() as?BLEGraphicRunningDashboard{
+                
+                if let dele = UIApplication.shared.delegate as? AppDelegate{
+                    dash.client = dele.client
+                    
+                    let store = UserDefaults.standard           // Get speedAlarm
+                    
+                    let sa = store.double(forKey: kSpeedAlarm) * 3.6    // Speed in km/h
+                    let ba = store.double(forKey: kBatteryAlarm) / 100.0    // Battery from 0 to 1
+                    
+                    if sa > 0.0 {
+                        
+                        dash.speedOK = sa
+                    }
+                    
+                    if dash.speedTop <= dash.speedOK {
+                        dash.speedTop = dash.speedOK * 1.5
+                    }
+                    
+                    if ba > 0.0 {
+                        dash.batOk = ba
+                    }
+                    
+                    if let cli = dele.client{
+                        
+                        if !cli.isRecording() {
+                            cli.start()
+                        }
+                    }
+                }
+                self.navigationController?.pushViewController(dash, animated: true)
+                
+            }
+            //performSegue(withIdentifier: "GraphicRunningDashboardSegue", sender: self)
         }else{
-            performSegue(withIdentifier: "runningDashboardSegue", sender: self)
+            
+            if let dash = BLERunningDashboard.instantiate() as? BLERunningDashboard{
+                
+                if let dele = UIApplication.shared.delegate as? AppDelegate{
+                    dash.client = dele.client
+                    if let cli = dele.client{
+                        
+                        if !cli.isRecording(){
+                            cli.start()
+                        }
+                    }
+                }
+                self.navigationController?.pushViewController(dash, animated: true)
+            }
+            //performSegue(withIdentifier: "runningDashboardSegue", sender: self)
         }
     }
     

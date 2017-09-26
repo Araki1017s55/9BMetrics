@@ -958,6 +958,15 @@ extension BLESimulatedClient : BLEMimConnectionDelegate{
                                 }
                             }
                         }
+                        
+                        // Store battery data in default store
+                        
+                        
+                        if let store = UserDefaults(suiteName: "group.gyrometrics"){
+                            store.set(Float(val), forKey: "Battery Level")
+                        }
+                     
+                        
                     }
                     
                     wheel.addValueWithDate(date, variable: vari, value: val)

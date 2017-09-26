@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16F43c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="9Je-p9-2Tk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="9Je-p9-2Tk">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -81,12 +81,25 @@
                                     <constraint firstAttribute="trailing" secondItem="JG1-aT-fiO" secondAttribute="trailing" constant="8" id="rYW-iF-A7c"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXG-UM-ly9">
+                                <rect key="frame" x="316" y="618" width="27" height="27"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="27" id="DfV-v6-IY9"/>
+                                    <constraint firstAttribute="height" constant="27" id="VDU-U1-SgF"/>
+                                </constraints>
+                                <state key="normal" image="close"/>
+                                <connections>
+                                    <action selector="closeGraphics" destination="9Je-p9-2Tk" eventType="primaryActionTriggered" id="qWB-Dt-aTV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="kEg-pT-Pmx" firstAttribute="top" secondItem="NRc-Jl-Ub1" secondAttribute="bottom" constant="150" id="91f-JN-p64"/>
                             <constraint firstItem="Ta6-hs-24R" firstAttribute="top" secondItem="NRc-Jl-Ub1" secondAttribute="bottom" id="APu-uA-TFH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="aXG-UM-ly9" secondAttribute="trailing" constant="16" id="CTP-Df-yxA"/>
                             <constraint firstItem="NRc-Jl-Ub1" firstAttribute="leading" secondItem="pK2-iZ-Gfe" secondAttribute="leadingMargin" constant="-20" id="KHy-QL-zQM"/>
+                            <constraint firstItem="kEg-pT-Pmx" firstAttribute="top" secondItem="aXG-UM-ly9" secondAttribute="bottom" constant="22" id="KWI-Eh-Fwa"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ta6-hs-24R" secondAttribute="trailing" constant="-20" id="Y6i-tU-uqQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="NRc-Jl-Ub1" secondAttribute="trailing" constant="-20" id="hMm-Xx-1b4"/>
                             <constraint firstItem="Ta6-hs-24R" firstAttribute="leading" secondItem="pK2-iZ-Gfe" secondAttribute="leadingMargin" constant="-20" id="ifW-JH-Ryp"/>
@@ -105,7 +118,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HKu-it-XeK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3308" y="135"/>
+            <point key="canvasLocation" x="3308" y="134.48275862068968"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="close" width="32" height="32"/>
+    </resources>
 </document>

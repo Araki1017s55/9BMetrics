@@ -7,3 +7,4 @@
 */
 "NSBluetoothPeripheralUsageDescription" = "Permet a Gyrometrics connectar-se a la roda";
 "NSLocationAlwaysUsageDescription" = "Permet a Gyrometrics obtenir la posició i crear les traces";
+"NSSpeechRecognitionUsageDescription" = "Permet a Gyropmetrics respondre a preguntes sobre la bateria, velocitat,e tc.";

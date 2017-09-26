@@ -289,7 +289,6 @@ public class WheelTrack: NSObject {
         WheelTrack.initConversion()
         
         otherFormatter.locale = Locale(identifier: "en_US_POSIX")
-        
         otherFormatter.timeZone = TimeZone(abbreviation: "UTC")
         otherFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'.000Z'"
     }

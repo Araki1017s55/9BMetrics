@@ -114,9 +114,16 @@ class IntentHandler: INExtension, INStartWorkoutIntentHandling, INEndWorkoutInte
     }
     
     func handle(getCarPowerLevelStatus intent: INGetCarPowerLevelStatusIntent, completion: @escaping (INGetCarPowerLevelStatusIntentResponse) -> Void){
-        
+
         let intentResponse = INGetCarPowerLevelStatusIntentResponse(code: .success, userActivity: nil)
-        intentResponse.chargePercentRemaining = 15.0
+        var val:Float = 0.0
+        
+        if let store = UserDefaults(suiteName: "group.gyrometrics"){
+            val = store.float(forKey: "Battery Level") .rounded();
+        }
+        val = val / 100.0
+        NSLog("Battery Recovered %f", val)
+        intentResponse.chargePercentRemaining = val
         completion(intentResponse)
     }
     

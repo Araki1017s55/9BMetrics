@@ -46,6 +46,8 @@ class KingSongAdapter : NSObject {
     
     var startDistance : Double?
     
+    let rockwheelPrefix = "ROCK";
+    
     
     // Called when lost connection. perhaps should do something. If not forget it
     
@@ -76,7 +78,7 @@ class KingSongAdapter : NSObject {
         
         var batt = 0.0
         
-        if wheelName.hasPrefix("ROCK"){  // Taula presa de InMotion. Realment es molt mes senzilla de lo que sembla i si hp fessim lineal la diff es petita
+        if wheelName.hasPrefix(rockwheelPrefix){  // Taula presa de InMotion. Realment es molt mes senzilla de lo que sembla i si ho fessim lineal la diff es petita
             
             if volts >= 83.50 {
                 batt = 1.0
@@ -174,7 +176,9 @@ class KingSongAdapter : NSObject {
                 let temperature = Double(Int(buffer[13]) * 256 + Int(buffer[12])) / 100.0 // Very strange conversion in Kevin program
                 outarr.append((WheelTrack.WheelValue.Temperature, date, temperature))
                 
-                let totalDistance = Double( ((Int(buffer[7]) * 256 + Int(buffer[6])) * 256 + Int(buffer[9]) ) * 256 + Int(buffer[8])) * distanceCorrection
+                var totalDistance = Double( ((Int(buffer[7]) * 256 + Int(buffer[6])) * 256 + Int(buffer[9]) ) * 256)
+                    
+                totalDistance += Double(Int(buffer[8])) * distanceCorrection
                 outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
                 
                 let voltage = Double(Int(buffer[3]) * 256 + Int(buffer[2])) / 100.0
@@ -186,7 +190,7 @@ class KingSongAdapter : NSObject {
                     current = current - 65536.0
                 }
                 
-                current = fabs(current / 100.0) // I have problems with sign in some wheels
+                current = fabs(current) // I have problems with sign in some wheels Had / 100 for kingsong. True?
                 
                 outarr.append((WheelTrack.WheelValue.Current, date, current))
                 
@@ -269,7 +273,7 @@ class KingSongAdapter : NSObject {
                     WheelDatabase.sharedInstance.setWheel(wheel: wh)
                 }
                 
-                if lname.hasPrefix("ROCK"){
+                if lname.hasPrefix("ROCK") {
                     BLESimulatedClient.sendNotification(BLESimulatedClient.kHeaderDataReadyNotification, data:nil)
                 }
                 

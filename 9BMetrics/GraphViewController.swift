@@ -76,6 +76,11 @@ class GraphViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func closeGraphics(){
+        if let nav = self.navigationController{
+            nav.popViewController(animated: true)
+        }
+    }
 
     func updateStats(){
         if self.ninebot != nil{
@@ -88,7 +93,6 @@ class GraphViewController: UIViewController {
             fNumberOfValues.text = String(format:"Samples %d".localized(), originalCountLog(shownVariable))
             
         }
-        
     }
     /*
     // MARK: - Navigation

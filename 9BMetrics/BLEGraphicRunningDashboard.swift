@@ -179,4 +179,32 @@ class BLEGraphicRunningDashboard: BLEGenericDashboard {
         
         
     }
+    
+    override func remoteControlReceived(with event: UIEvent?) {
+        if event?.type == UIEventType.remoteControl{
+            if event?.subtype == .remoteControlPlay{
+                
+                
+            }
+
+         }
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        if self.canBecomeFirstResponder{
+            becomeFirstResponder()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        resignFirstResponder()
+        
+        UIApplication.shared.endReceivingRemoteControlEvents()
+    }
 }
+
+

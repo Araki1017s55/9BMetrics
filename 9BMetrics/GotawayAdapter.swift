@@ -109,7 +109,8 @@ class GotawayAdapter : NSObject {
         case 10:
             
             
-            let totalDistance = Double( (Int(buffer[2]) * 256 + Int(buffer[3]))*65536 + (Int(buffer[4]) * 256 + Int(buffer[5])))
+            var  totalDistance = Double( (Int(buffer[2]) * 256 + Int(buffer[3]))*65536)
+            totalDistance += Double((Int(buffer[4]) * 256 + Int(buffer[5])))
             outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
             
             if let wh = self.wheel {
