@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 /// Zip error type
 public enum ZipError: Error {
     /// File not found

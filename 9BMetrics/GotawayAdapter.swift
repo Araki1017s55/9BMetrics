@@ -53,8 +53,7 @@ class GotawayAdapter : NSObject {
         super.init()
         
     }
-    
-    
+     
     //MARK: Receiving Data. Append data to buffer
     
     func appendToBuffer(_ data : Data){

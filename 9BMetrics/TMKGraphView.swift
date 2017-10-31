@@ -31,7 +31,7 @@ class TMKGraphView: UIView {
     
     //    var document : TMKDocument?
     var topMargin : CGFloat = 30.0
-    var bottomMargin : CGFloat = 30.0
+    var bottomMargin : CGFloat = 46.0
     var leftMargin : CGFloat = 50.0
     var rightMargin : CGFloat = 40.0
     
@@ -630,12 +630,12 @@ class TMKGraphView: UIView {
         
         
         
-        var sCons = NSLayoutConstraint(item:but, attribute:NSLayoutAttribute.top, relatedBy:NSLayoutRelation.equal, toItem:self, attribute:NSLayoutAttribute.top, multiplier:1.0, constant:7)
+        var sCons = NSLayoutConstraint(item:but, attribute:NSLayoutAttribute.bottom, relatedBy:NSLayoutRelation.equal, toItem:self, attribute:NSLayoutAttribute.bottom, multiplier:1.0, constant:0)
         
         self.addConstraint(sCons)
         
         
-        sCons = NSLayoutConstraint(item:but, attribute:NSLayoutAttribute.right, relatedBy:NSLayoutRelation.equal, toItem:self, attribute:NSLayoutAttribute.right, multiplier:1.0, constant:-5.0)
+        sCons = NSLayoutConstraint(item:but, attribute:NSLayoutAttribute.right, relatedBy:NSLayoutRelation.equal, toItem:self, attribute:NSLayoutAttribute.right, multiplier:1.0, constant:-16.0)
         
         self.addConstraint(sCons)
         
@@ -789,7 +789,7 @@ class TMKGraphView: UIView {
         self.addConstraint(sCons)
         
         
-        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.right, relatedBy:NSLayoutRelation.equal, toItem:self, attribute:NSLayoutAttribute.right, multiplier:1.0, constant: -self.rightMargin)
+        sCons = NSLayoutConstraint(item:tf, attribute:NSLayoutAttribute.right, relatedBy:NSLayoutRelation.equal, toItem:self, attribute:NSLayoutAttribute.right, multiplier:1.0, constant: -self.rightMargin-12)
         
         self.addConstraint(sCons)
         

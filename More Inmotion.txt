@@ -1,0 +1,24 @@
+Hi, all.
+I've learned Inmotion protocol more detailed,
+temperature can be found in 32, and 34 byte of ex_data,
+ and in 33 byte is always similar to 32 byte, 
+ so we can see to different temperature in inmotion V8, 
+ and maybe 3 different in others.
+Also, I found this:
+
+case DontKnow = 0x0F780101
+It is diffrent Alerts, I was able to figure out the meaning of some of them.
+For example:
+0101780F20021601341A0000080201 this is Low Battery Alert (when the wheel lifts the pedals)
+
+after IDValue goes Alert ID, so 0x20 is Battery low, after it always goes 0x02, then goes two 16-bit additional digit, in case "low battery" I don't know what in first, but second is voltage, for example there 6708 -> 67.08 volt
+Also i know alert ids:
+21 - speed cut-off (at 38-43 km/h), first digit -don't know, second - current speed calculated as usual
+06 - speed limit (usual 30, but when battery below 40% - it is falls), first - speed limit (int/1000) , second - current speed (usual speed calculating)
+19 - fall down (Be careful alert), first -don't know, second - don't know
+05 - something like "starting after idle", when you release carry button, first - starting angle, second - current speed (usual)
+26 - something like "overcurrent", usual happens when you trying speed up too fast (at speed over 20), first - maybe current (int/1000), usual in range 24-26 (Amps), but I don't realy know, second - current speed (usual).
+
+Also, I find time and date in 53-59 bytes, date is corrent but time isn't. There are RTC with battery in wheel controller, so, maybe App should correct it, but I don't know how.
+
+@ILYA2606 , @fgorina I think will be great to log this in yours Apps, it may help, to understood what happened. And I trying to find JumpMaster and Cedric Hauber, to add it in android WheelLog (this topic ), but looks like they disappeared from April and February.

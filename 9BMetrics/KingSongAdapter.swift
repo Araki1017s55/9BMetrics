@@ -154,7 +154,9 @@ class KingSongAdapter : NSObject {
         case 10:
             
             
-            let totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536 + (Int(buffer[7]) * 256 + Int(buffer[6]))) * distanceCorrection
+            var totalDistance = Double( (Int(buffer[9]) * 256 + Int(buffer[8]))*65536  )
+            totalDistance += Double((Int(buffer[7]) * 256 + Int(buffer[6])))
+            totalDistance = totalDistance * distanceCorrection
             outarr.append((WheelTrack.WheelValue.AcumDistance, date, totalDistance))
             
             if let wh = self.wheel {
@@ -236,7 +238,9 @@ class KingSongAdapter : NSObject {
                 break
                 
             case 185:
-                var distance = Double( (Int(buffer[3]) * 256 + Int(buffer[2]))*65536 + (Int(buffer[5]) * 256 + Int(buffer[4]))) * distanceCorrection
+                var distance = Double( (Int(buffer[3]) * 256 + Int(buffer[2]))*65536)
+                distance += Double((Int(buffer[5]) * 256 + Int(buffer[4])))
+                distance = distance * distanceCorrection
                 
                 // Just to correct following case :
                 // Start wheel and begin running

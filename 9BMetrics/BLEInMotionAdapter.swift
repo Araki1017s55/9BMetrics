@@ -379,14 +379,16 @@ class CANMessage{
             
             var distance = Double(BLEInMotionAdapter.IntFromBytes(bytes, starting: 44))
             
+            let temperature = Double(bytes[34])
+            
             if BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "1") ||
                 BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "5") ||
                 BLEInMotionAdapter.IsCarTypeBelongToInputType(carType: model.rawValue, type: "8"){
                 distance = Double(BLEInMotionAdapter.LongFromBytes(bytes, starting: 44))
-                    
+                
             }else if model == .R0 {
                 distance = Double(BLEInMotionAdapter.LongFromBytes(bytes, starting: 44))
-                    
+                
                 
             }else if model == .L6 {
                 distance = Double(BLEInMotionAdapter.LongFromBytes(bytes, starting: 44)) * 100.0
@@ -414,6 +416,7 @@ class CANMessage{
                     (WheelTrack.WheelValue.Current, d, current),
                     (WheelTrack.WheelValue.Power, d, power),
                     (WheelTrack.WheelValue.AcumDistance, d, distance),
+                    (WheelTrack.WheelValue.Temperature, d, temperature),
                     (WheelTrack.WheelValue.lockEnabled, d, lock)
                 
                 
@@ -1240,9 +1243,48 @@ class BLEInMotionAdapter : NSObject, BLEWheelAdapterProtocol {
                             
                             state = .connected
                             
+                        case .DontKnow:     // Seems they are alarms. Perhaps change name
+                            
+                            let alarmType = data.data[0]
+                            
+                            switch (alarmType){
+                                
+                            case 0x20:      // Battery Low
+                                
+                                //16 bit integer from data[4]
+                                
+                                break;
+                                
+                            case 0x21:  // Seed cutoff
+                                
+                                
+                                break;
+                                
+                            case 0x06:  // Speed Limit
+                                
+                                
+                                break;
+                                
+                            case 0x19:  // fall down
+                                
+                                
+                                break;
+                                
+                                
+                            case 0x26:  // Overcurrent
+                                
+                                
+                                break;
+                                
+                                
+                            default:
+                                break
+                                
+                            }
+                            
                             
                         default:
-                            break;
+                            break
                             
                         }
                         

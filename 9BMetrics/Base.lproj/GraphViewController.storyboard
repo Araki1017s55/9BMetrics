@@ -5,7 +5,8 @@
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,14 +24,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NRc-Jl-Ub1" customClass="TMKGraphView" customModule="_BMetrics" customModuleProvider="target">
-                                <rect key="frame" x="-4" y="20" width="383" height="497"/>
+                                <rect key="frame" x="-4" y="36" width="383" height="511"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="dataSource" destination="9Je-p9-2Tk" id="BY3-G4-PmY"/>
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ta6-hs-24R">
-                                <rect key="frame" x="-4" y="517" width="383" height="150"/>
+                                <rect key="frame" x="-4" y="547" width="383" height="120"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Variable title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gnc-ih-tqu">
                                         <rect key="frame" x="17" y="8" width="358" height="21"/>
@@ -74,7 +75,7 @@
                                     <constraint firstItem="9aX-jW-o0X" firstAttribute="leading" secondItem="Ta6-hs-24R" secondAttribute="leading" constant="17" id="dfj-bq-6gQ"/>
                                     <constraint firstItem="dlc-dl-am4" firstAttribute="top" secondItem="9aX-jW-o0X" secondAttribute="bottom" constant="6" id="iN8-Tk-eAe"/>
                                     <constraint firstItem="JG1-aT-fiO" firstAttribute="leading" secondItem="Ta6-hs-24R" secondAttribute="leading" constant="17" id="jGy-H6-CaV"/>
-                                    <constraint firstAttribute="height" constant="150" id="jr7-K2-yDb"/>
+                                    <constraint firstAttribute="height" constant="120" id="jr7-K2-yDb"/>
                                     <constraint firstItem="9aX-jW-o0X" firstAttribute="top" secondItem="Gnc-ih-tqu" secondAttribute="bottom" constant="8" id="koc-bn-Wvx"/>
                                     <constraint firstAttribute="trailing" secondItem="Gnc-ih-tqu" secondAttribute="trailing" constant="8" id="mSP-E9-DMe"/>
                                     <constraint firstItem="JG1-aT-fiO" firstAttribute="top" secondItem="dlc-dl-am4" secondAttribute="bottom" constant="8" id="r7z-M1-tYL"/>
@@ -82,7 +83,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXG-UM-ly9">
-                                <rect key="frame" x="316" y="618" width="27" height="27"/>
+                                <rect key="frame" x="328" y="36" width="27" height="27"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="27" id="DfV-v6-IY9"/>
                                     <constraint firstAttribute="height" constant="27" id="VDU-U1-SgF"/>
@@ -95,19 +96,18 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="kEg-pT-Pmx" firstAttribute="top" secondItem="NRc-Jl-Ub1" secondAttribute="bottom" constant="150" id="91f-JN-p64"/>
                             <constraint firstItem="Ta6-hs-24R" firstAttribute="top" secondItem="NRc-Jl-Ub1" secondAttribute="bottom" id="APu-uA-TFH"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="aXG-UM-ly9" secondAttribute="trailing" constant="16" id="CTP-Df-yxA"/>
+                            <constraint firstItem="aXG-UM-ly9" firstAttribute="trailing" secondItem="NRc-Jl-Ub1" secondAttribute="trailingMargin" constant="-16" id="CTP-Df-yxA"/>
                             <constraint firstItem="NRc-Jl-Ub1" firstAttribute="leading" secondItem="pK2-iZ-Gfe" secondAttribute="leadingMargin" constant="-20" id="KHy-QL-zQM"/>
-                            <constraint firstItem="kEg-pT-Pmx" firstAttribute="top" secondItem="aXG-UM-ly9" secondAttribute="bottom" constant="22" id="KWI-Eh-Fwa"/>
+                            <constraint firstItem="e4p-QC-wQx" firstAttribute="bottom" secondItem="aXG-UM-ly9" secondAttribute="top" constant="-16" id="KWI-Eh-Fwa"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ta6-hs-24R" secondAttribute="trailing" constant="-20" id="Y6i-tU-uqQ"/>
+                            <constraint firstItem="kEg-pT-Pmx" firstAttribute="top" secondItem="Ta6-hs-24R" secondAttribute="bottom" id="ckd-qK-USQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="NRc-Jl-Ub1" secondAttribute="trailing" constant="-20" id="hMm-Xx-1b4"/>
                             <constraint firstItem="Ta6-hs-24R" firstAttribute="leading" secondItem="pK2-iZ-Gfe" secondAttribute="leadingMargin" constant="-20" id="ifW-JH-Ryp"/>
-                            <constraint firstItem="NRc-Jl-Ub1" firstAttribute="top" secondItem="e4p-QC-wQx" secondAttribute="bottom" id="m5A-lA-b6w"/>
+                            <constraint firstItem="NRc-Jl-Ub1" firstAttribute="top" secondItem="e4p-QC-wQx" secondAttribute="bottom" constant="16" id="m5A-lA-b6w"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="bottomConstraint" destination="91f-JN-p64" id="pqm-I4-i8l"/>
                         <outlet property="fAverageValue" destination="9aX-jW-o0X" id="8Lk-Q7-kQG"/>
                         <outlet property="fDataView" destination="Ta6-hs-24R" id="E2J-kT-Ltx"/>
                         <outlet property="fExtremeValues" destination="dlc-dl-am4" id="peH-fT-KSn"/>

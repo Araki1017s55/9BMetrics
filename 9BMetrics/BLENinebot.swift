@@ -39,6 +39,7 @@
 
 import UIKit
 import MapKit
+import MiniZipPackage
 import GyrometricsDataModel
 
 

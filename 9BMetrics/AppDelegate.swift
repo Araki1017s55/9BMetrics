@@ -20,6 +20,7 @@
 
 import UIKit
 import GyrometricsDataModel
+import MiniZipPackage
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
